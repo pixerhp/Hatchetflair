@@ -234,13 +234,11 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="IP" type="TextEdit" parent="Menus/MultiplayerScreen/Multiplayer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="IP" type="LineEdit" parent="Menus/MultiplayerScreen/Multiplayer"]
 layout_mode = 2
-placeholder_text = "New Server Name"
+placeholder_text = "New Server IP"
 
-[node name="Name" type="TextEdit" parent="Menus/MultiplayerScreen/Multiplayer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="Name" type="LineEdit" parent="Menus/MultiplayerScreen/Multiplayer"]
 layout_mode = 2
 placeholder_text = "New Server Name"
 
