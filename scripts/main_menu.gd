@@ -14,7 +14,7 @@ func open_screen(screen_name: String):
 	get_node("Menus/" + screen_name).visible = true
 
 func start_game(is_hosting: bool = false) -> void:
-	pass # Replace with function body.
+	NetworkManager.start_game(not as_server_toggle.button_pressed or not is_hosting, is_hosting, allow_players_toggle.button_pressed or not is_hosting)
 
 func toggle_multiplayer_joining(value: bool):
 	as_server_toggle.disabled = not value
