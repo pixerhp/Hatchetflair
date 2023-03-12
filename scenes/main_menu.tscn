@@ -41,6 +41,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MenuScreen" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -283,7 +284,6 @@ size_flags_horizontal = 0
 text = "Back"
 
 [node name="SettingsScreen" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -308,8 +308,8 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
-text = "[center]There is no need to change anything
-The game is perfect as it is[/center]"
+text = "[center]There is no need to change anything.
+The game is perfect as it is.[/center]"
 fit_content = true
 autowrap_mode = 0
 
