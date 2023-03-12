@@ -385,5 +385,5 @@ text = "Back"
 [connection signal="pressed" from="Menus/MenuScreen/MainButtons/Quit" to="." method="quit"]
 [connection signal="pressed" from="Menus/MultiplayerScreen/MultiplayerButtons/HBoxContainer/Back" to="." method="open_screen" binds= ["MenuScreen"]]
 [connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_screen" binds= ["MenuScreen"]]
-[connection signal="pressed" from="Menus/SaveSelectScreen/SaveSelectButtons/HBoxContainer/Back" to="." method="open_screen"]
+[connection signal="pressed" from="Menus/SaveSelectScreen/SaveSelectButtons/HBoxContainer/Back" to="." method="open_screen" binds= ["MenuScreen"]]
 [connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="open_screen" binds= ["MenuScreen"]]
