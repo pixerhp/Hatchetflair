@@ -103,7 +103,7 @@ text = "Credits"
 layout_mode = 2
 text = "Quit"
 
-[node name="SaveSelectScreen" type="Control" parent="Menus"]
+[node name="WorldScreen" type="Control" parent="Menus"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -112,7 +112,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="RichTextLabel" parent="Menus/SaveSelectScreen"]
+[node name="Title" type="RichTextLabel" parent="Menus/WorldScreen"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -129,11 +129,11 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
-text = "[center]Saves[/center]"
+text = "[center]Worlds[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="SaveSelect" type="VBoxContainer" parent="Menus/SaveSelectScreen"]
+[node name="WorldSelect" type="VBoxContainer" parent="Menus/WorldScreen"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -147,45 +147,47 @@ offset_bottom = 85.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Toggles" type="HBoxContainer" parent="Menus/SaveSelectScreen/SaveSelect"]
-layout_mode = 2
-
-[node name="AsServer" type="CheckButton" parent="Menus/SaveSelectScreen/SaveSelect/Toggles"]
-layout_mode = 2
-text = "As server"
-
-[node name="AllowPlayers" type="CheckButton" parent="Menus/SaveSelectScreen/SaveSelect/Toggles"]
-layout_mode = 2
-text = "Allow other players"
-
-[node name="Saves" type="ItemList" parent="Menus/SaveSelectScreen/SaveSelect"]
+[node name="Worlds" type="ItemList" parent="Menus/WorldScreen/WorldSelect"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
-item_count = 3
+item_count = 4
 item_0/text = "Game saves will go here"
 item_1/text = "The style of everything is subject to change"
-item_2/text = "The two buttons on the left don't work yet"
+item_2/text = "Some buttons may not work"
+item_3/text = "Scrollbar test."
 
-[node name="Buttons" type="HBoxContainer" parent="Menus/SaveSelectScreen/SaveSelect"]
+[node name="Toggles" type="HBoxContainer" parent="Menus/WorldScreen/WorldSelect"]
 layout_mode = 2
 
-[node name="Play" type="Button" parent="Menus/SaveSelectScreen/SaveSelect/Buttons"]
+[node name="AllowPlayers" type="CheckButton" parent="Menus/WorldScreen/WorldSelect/Toggles"]
+layout_mode = 2
+text = "Multiplayer"
+
+[node name="AsServer" type="CheckButton" parent="Menus/WorldScreen/WorldSelect/Toggles"]
+layout_mode = 2
+disabled = true
+text = "Host without playing"
+
+[node name="Buttons" type="HBoxContainer" parent="Menus/WorldScreen/WorldSelect"]
+layout_mode = 2
+
+[node name="Play" type="Button" parent="Menus/WorldScreen/WorldSelect/Buttons"]
 layout_mode = 2
 text = "Play"
 
-[node name="NewSave" type="Button" parent="Menus/SaveSelectScreen/SaveSelect/Buttons"]
+[node name="NewWorld" type="Button" parent="Menus/WorldScreen/WorldSelect/Buttons"]
 layout_mode = 2
-text = "New Save"
+text = "New World"
 
-[node name="DeleteSave" type="Button" parent="Menus/SaveSelectScreen/SaveSelect/Buttons"]
+[node name="DeleteWorld" type="Button" parent="Menus/WorldScreen/WorldSelect/Buttons"]
 layout_mode = 2
-text = "Delete Save"
+text = "Delete World"
 
-[node name="Control" type="Control" parent="Menus/SaveSelectScreen/SaveSelect/Buttons"]
+[node name="Control" type="Control" parent="Menus/WorldScreen/WorldSelect/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Back" type="Button" parent="Menus/SaveSelectScreen/SaveSelect/Buttons"]
+[node name="Back" type="Button" parent="Menus/WorldScreen/WorldSelect/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Back"
@@ -234,21 +236,27 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="IP" type="LineEdit" parent="Menus/MultiplayerScreen/Multiplayer"]
-layout_mode = 2
-placeholder_text = "New Server IP"
-
-[node name="Name" type="LineEdit" parent="Menus/MultiplayerScreen/Multiplayer"]
-layout_mode = 2
-placeholder_text = "New Server Name"
-
 [node name="SavedServersList" type="ItemList" parent="Menus/MultiplayerScreen/Multiplayer"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
-item_count = 3
+item_count = 4
 item_0/text = "Saved servers will go here"
 item_1/text = "The style of everything is subject to change"
-item_2/text = "The two buttons on the left don't work yet"
+item_2/text = "Some buttons may not work"
+item_3/text = "Scrollbar test."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/MultiplayerScreen/Multiplayer"]
+layout_mode = 2
+
+[node name="IP" type="LineEdit" parent="Menus/MultiplayerScreen/Multiplayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "New Server IP"
+
+[node name="Name" type="LineEdit" parent="Menus/MultiplayerScreen/Multiplayer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "New Server Name"
 
 [node name="Buttons" type="HBoxContainer" parent="Menus/MultiplayerScreen/Multiplayer"]
 layout_mode = 2
@@ -401,13 +409,14 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Back"
 
-[connection signal="pressed" from="Menus/MenuScreen/MainButtons/Play" to="." method="open_screen" binds= ["SaveSelectScreen"]]
+[connection signal="pressed" from="Menus/MenuScreen/MainButtons/Play" to="." method="open_screen" binds= ["WorldScreen"]]
 [connection signal="pressed" from="Menus/MenuScreen/MainButtons/Multiplayer" to="." method="open_screen" binds= ["MultiplayerScreen"]]
 [connection signal="pressed" from="Menus/MenuScreen/MainButtons/Settings" to="." method="open_screen" binds= ["SettingsScreen"]]
 [connection signal="pressed" from="Menus/MenuScreen/MainButtons/Credits" to="." method="open_screen" binds= ["CreditsScreen"]]
 [connection signal="pressed" from="Menus/MenuScreen/MainButtons/Quit" to="." method="quit"]
-[connection signal="pressed" from="Menus/SaveSelectScreen/SaveSelect/Buttons/Play" to="." method="start_game" binds= [true]]
-[connection signal="pressed" from="Menus/SaveSelectScreen/SaveSelect/Buttons/Back" to="." method="open_screen" binds= ["MenuScreen"]]
+[connection signal="toggled" from="Menus/WorldScreen/WorldSelect/Toggles/AllowPlayers" to="." method="toggle_multiplayer_joining"]
+[connection signal="pressed" from="Menus/WorldScreen/WorldSelect/Buttons/Play" to="." method="start_game" binds= [true]]
+[connection signal="pressed" from="Menus/WorldScreen/WorldSelect/Buttons/Back" to="." method="open_screen" binds= ["MenuScreen"]]
 [connection signal="pressed" from="Menus/MultiplayerScreen/Multiplayer/Buttons/JoinGame" to="." method="start_game" binds= [false]]
 [connection signal="pressed" from="Menus/MultiplayerScreen/Multiplayer/Buttons/Back" to="." method="open_screen" binds= ["MenuScreen"]]
 [connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_screen" binds= ["MenuScreen"]]
