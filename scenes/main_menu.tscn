@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bbwhtlk15abxa"]
+[gd_scene load_steps=6 format=3 uid="uid://bbwhtlk15abxa"]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_224c0"]
+[ext_resource type="Script" path="res://scripts/worlds.gd" id="2_6i0vr"]
 
 [sub_resource type="Gradient" id="Gradient_skhgw"]
 interpolation_mode = 2
@@ -128,6 +129,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_6i0vr")
 
 [node name="Title" type="RichTextLabel" parent="Menus/WorldScreen/WorldSelect"]
 layout_mode = 2
@@ -187,6 +189,65 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Back"
+
+[node name="NewWorldPopup" type="Panel" parent="Menus/WorldScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/WorldScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Name new world[/center]"
+fit_content = true
+
+[node name="TextEdit" type="TextEdit" parent="Menus/WorldScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -18.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "World name"
+
+[node name="Okay" type="Button" parent="Menus/WorldScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 48.0
+grow_vertical = 0
+text = "Okay"
+
+[node name="Cancel" type="Button" parent="Menus/WorldScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Cancel"
 
 [node name="MultiplayerScreen" type="Control" parent="Menus"]
 visible = false
