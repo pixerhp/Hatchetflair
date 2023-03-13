@@ -12,6 +12,17 @@ extends Control
 func _ready() -> void:
 	NetworkManager.network_status_update.connect(self.network_status_update)
 
+# Called every frame
+func _process(_delta: float) -> void:
+	# Code to handle some shortcuts to quickly start the game for testing.
+	if Input.is_action_just_pressed("QuickstartGame"):
+		as_server_toggle.button_pressed = false
+		allow_players_toggle.button_pressed = true
+		start_game(true)
+	if Input.is_action_just_pressed("QuickJoinLocalhost"):
+		server_ip_box.text = "127.0.0.1"
+		start_game(false)
+
 # Display the current connecting status.
 func network_status_update(message: String, should_display: bool, show_back_button: bool):
 	$Menus/NetworkInfoOverlay.visible = should_display
