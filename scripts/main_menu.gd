@@ -8,6 +8,16 @@ extends Control
 @onready var server_ip_box: LineEdit = $Menus/MultiplayerScreen/Multiplayer/HBoxContainer/IP
 @onready var server_name_box: LineEdit = $Menus/MultiplayerScreen/Multiplayer/HBoxContainer/Name
 
+# Called when script is loaded into scene.
+func _ready() -> void:
+	NetworkManager.network_status_update.connect(self.network_status_update)
+
+# Display the current connecting status.
+func network_status_update(message: String, should_display: bool, show_back_button: bool):
+	$Menus/NetworkInfoOverlay.visible = should_display
+	$Menus/NetworkInfoOverlay/RichTextLabel.text = message
+	$Menus/NetworkInfoOverlay/BackButton.visible = show_back_button
+
 # Open one of the screens on the menu and close all others.
 func open_screen(screen_name: String) -> void:
 	for child in $Menus.get_children():

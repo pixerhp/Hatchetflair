@@ -1,5 +1,7 @@
 extends Node
 
+signal network_status_update(message: String, should_display: bool, show_back_button: bool)
+
 # Called when script is loaded.
 func _ready() -> void:
 	# Setup signals and callbacks.
@@ -18,9 +20,11 @@ func _ready() -> void:
 func start_game(is_player: bool, is_server: bool, allow_others: bool, ip_address: String = "") -> void:
 	if is_server:
 		start_server()
+		network_status_update.emit("Server started.", true, false)
 		if is_player:
 			# Spawn a player for the host.
 			player_connected(multiplayer.get_unique_id())
+			network_status_update.emit("Playing as host.", true, false)
 		multiplayer.multiplayer_peer.refuse_new_connections = not allow_others
 	else:
 		start_client(ip_address)
@@ -35,19 +39,23 @@ func start_client(ip: String) -> void:
 	# Connect to the server.
 	peer.create_client(ip, 1324)
 	multiplayer.set_multiplayer_peer(peer)
-	print("Client start")
+	print("Connecting to server...")
+	network_status_update.emit("Connecting to server...", true, false)
 
 # Called once authentication of this client is complete.
 func connected_to_server():
-	print("Connected")
+	print("Connected to server.")
+	network_status_update.emit("Connected to server.", true, false)
 
 # Called in any situation where the client is disconnected from the server.
 func disconnected_from_server():
-	print("Disconnected from server")
+	print("Disconnected from server.")
+	network_status_update.emit("Disconnected from server.", true, true)
 
 # Called upon failing to connect to the server.
 func connection_failed():
-	print("Connection failed")
+	print("Connection to server failed.")
+	network_status_update.emit("Connection to server failed.", true, true)
 
 ###########################
 # Server code
@@ -84,6 +92,7 @@ func player_disconnected(id: int) -> void:
 func peer_authenticating(sender_id: int) -> void:
 	if sender_id == 1: # If the sender_id is the server, then this is running as a client.
 		print("Starting authentication with server...")
+		network_status_update.emit("Starting authentication with server...", true, false)
 	else: # If the sender_id is not the server, then this is running as the server.
 		print("Player %d is authenticating..."%sender_id)
 		# Ask the client to authenticate.
@@ -93,6 +102,7 @@ func peer_authenticating(sender_id: int) -> void:
 func peer_authentication_failed(sender_id: int) -> void:
 	if sender_id == 1: # If the sender_id is the server, then this is running as a client.
 		print("Failed to authenticate with server.")
+		network_status_update.emit("Failed to authenticate with server.", true, true)
 	else: # If the sender_id is not the server, then this is running as the server.
 		print("Player %d failed to authenticate."%sender_id)
 
