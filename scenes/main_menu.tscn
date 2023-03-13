@@ -48,16 +48,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="RichTextLabel" parent="Menus/MenuScreen"]
+[node name="MainButtons" type="VBoxContainer" parent="Menus/MenuScreen"]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -157.0
-offset_top = 69.0
-offset_right = 157.0
-offset_bottom = 138.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spacer" type="Control" parent="Menus/MenuScreen/MainButtons"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Title" type="RichTextLabel" parent="Menus/MenuScreen/MainButtons"]
+layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 6
@@ -65,43 +69,48 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
-text = "[rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=2 amp=50]Hatchetflare[/wave][/rainbow]"
+text = "[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=2 amp=50]Hatchetflare[/wave][/rainbow][/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="MainButtons" type="VBoxContainer" parent="Menus/MenuScreen"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Spacer2" type="Control" parent="Menus/MenuScreen/MainButtons"]
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="Play" type="Button" parent="Menus/MenuScreen/MainButtons"]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Play"
 
 [node name="Multiplayer" type="Button" parent="Menus/MenuScreen/MainButtons"]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Multiplayer"
 
 [node name="Settings" type="Button" parent="Menus/MenuScreen/MainButtons"]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Settings"
 
 [node name="Credits" type="Button" parent="Menus/MenuScreen/MainButtons"]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Credits"
 
 [node name="Quit" type="Button" parent="Menus/MenuScreen/MainButtons"]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Quit"
+
+[node name="Spacer3" type="Control" parent="Menus/MenuScreen/MainButtons"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
 
 [node name="WorldScreen" type="Control" parent="Menus"]
 visible = false
@@ -112,16 +121,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="RichTextLabel" parent="Menus/WorldScreen"]
+[node name="WorldSelect" type="VBoxContainer" parent="Menus/WorldScreen"]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -157.0
-offset_top = 69.0
-offset_right = 157.0
-offset_bottom = 138.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="RichTextLabel" parent="Menus/WorldScreen/WorldSelect"]
+layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 6
@@ -133,23 +142,10 @@ text = "[center]Worlds[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="WorldSelect" type="VBoxContainer" parent="Menus/WorldScreen"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -85.0
-offset_right = 250.0
-offset_bottom = 85.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="Worlds" type="ItemList" parent="Menus/WorldScreen/WorldSelect"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
+size_flags_vertical = 3
 item_count = 4
 item_0/text = "Game saves will go here"
 item_1/text = "The style of everything is subject to change"
@@ -201,16 +197,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="RichTextLabel" parent="Menus/MultiplayerScreen"]
+[node name="Multiplayer" type="VBoxContainer" parent="Menus/MultiplayerScreen"]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -157.0
-offset_top = 69.0
-offset_right = 157.0
-offset_bottom = 138.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="RichTextLabel" parent="Menus/MultiplayerScreen/Multiplayer"]
+layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 6
@@ -222,23 +218,10 @@ text = "[center]Multiplayer[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="Multiplayer" type="VBoxContainer" parent="Menus/MultiplayerScreen"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="SavedServersList" type="ItemList" parent="Menus/MultiplayerScreen/Multiplayer"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
+size_flags_vertical = 3
 item_count = 4
 item_0/text = "Saved servers will go here"
 item_1/text = "The style of everything is subject to change"
