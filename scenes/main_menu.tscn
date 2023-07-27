@@ -165,7 +165,7 @@ layout_mode = 2
 
 [node name="AllowPlayers" type="CheckButton" parent="Menus/WorldsScreen/WorldSelect/Toggles"]
 layout_mode = 2
-text = "Multiplayer"
+text = "Host Multiplayer"
 
 [node name="AsServer" type="CheckButton" parent="Menus/WorldsScreen/WorldSelect/Toggles"]
 layout_mode = 2

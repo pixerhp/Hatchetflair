@@ -1,8 +1,8 @@
 extends Control
 
 # Save select screen inputs
-@onready var as_server_toggle: CheckButton = $Menus/WorldScreen/WorldSelect/Toggles/AsServer
-@onready var allow_players_toggle: CheckButton = $Menus/WorldScreen/WorldSelect/Toggles/AllowPlayers
+@onready var as_server_toggle: CheckButton = $Menus/WorldsScreen/WorldSelect/Toggles/AsServer
+@onready var allow_players_toggle: CheckButton = $Menus/WorldsScreen/WorldSelect/Toggles/AllowPlayers
 
 # Multiplayer select screen inputs
 @onready var server_ip_box: LineEdit = $Menus/MultiplayerScreen/Multiplayer/HBoxContainer/IP
