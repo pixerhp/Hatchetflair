@@ -1,8 +1,8 @@
 extends Control
 
 # Worlds selection screen inputs
-@onready var host_without_playing_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/HostWithoutPlay
 @onready var allow_multiplayer_joining_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining
+@onready var host_without_playing_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/HostWithoutPlay
 
 # Servers selection screen inputs
 @onready var server_ip_box: LineEdit = $Menus/MultiplayerScreen/MultiplayerScreenUI/HBoxContainer/IP
