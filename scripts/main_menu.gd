@@ -1,8 +1,8 @@
 extends Control
 
 # Save select screen inputs
-@onready var as_server_toggle: CheckButton = $Menus/WorldScreen/WorldSelect/Toggles/AsServer
-@onready var allow_players_toggle: CheckButton = $Menus/WorldScreen/WorldSelect/Toggles/AllowPlayers
+@onready var as_server_toggle: CheckButton = $Menus/WorldsScreen/WorldSelect/Toggles/AsServer
+@onready var allow_players_toggle: CheckButton = $Menus/WorldsScreen/WorldSelect/Toggles/AllowPlayers
 
 # Multiplayer select screen inputs
 @onready var server_ip_box: LineEdit = $Menus/MultiplayerScreen/Multiplayer/HBoxContainer/IP
@@ -15,6 +15,7 @@ func _ready() -> void:
 # Called every frame
 func _process(_delta: float) -> void:
 	# Code to handle some shortcuts to quickly start the game for testing.
+	# As of typing this, the keys are F1 and F2.
 	if Input.is_action_just_pressed("QuickstartGame"):
 		as_server_toggle.button_pressed = false
 		allow_players_toggle.button_pressed = true

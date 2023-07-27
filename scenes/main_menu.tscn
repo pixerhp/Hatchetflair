@@ -41,7 +41,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MenuScreen" type="Control" parent="Menus"]
+[node name="TitleScreen" type="Control" parent="Menus"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -49,7 +49,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MainButtons" type="VBoxContainer" parent="Menus/MenuScreen"]
+[node name="TitlescreenButtons" type="VBoxContainer" parent="Menus/TitleScreen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,11 +57,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Spacer" type="Control" parent="Menus/MenuScreen/MainButtons"]
+[node name="Spacer1" type="Control" parent="Menus/TitleScreen/TitlescreenButtons"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Title" type="RichTextLabel" parent="Menus/MenuScreen/MainButtons"]
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/TitleScreen/TitlescreenButtons"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -74,46 +74,46 @@ text = "[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=2 amp=50]Hatch
 fit_content = true
 autowrap_mode = 0
 
-[node name="Spacer2" type="Control" parent="Menus/MenuScreen/MainButtons"]
+[node name="Spacer2" type="Control" parent="Menus/TitleScreen/TitlescreenButtons"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Play" type="Button" parent="Menus/MenuScreen/MainButtons"]
+[node name="StartWorld" type="Button" parent="Menus/TitleScreen/TitlescreenButtons"]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Play"
+text = "Start World"
 
-[node name="Multiplayer" type="Button" parent="Menus/MenuScreen/MainButtons"]
+[node name="JoinWorld" type="Button" parent="Menus/TitleScreen/TitlescreenButtons"]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Multiplayer"
+text = "Join World"
 
-[node name="Settings" type="Button" parent="Menus/MenuScreen/MainButtons"]
+[node name="Settings" type="Button" parent="Menus/TitleScreen/TitlescreenButtons"]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Settings"
 
-[node name="Credits" type="Button" parent="Menus/MenuScreen/MainButtons"]
+[node name="Credits" type="Button" parent="Menus/TitleScreen/TitlescreenButtons"]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Credits"
 
-[node name="Quit" type="Button" parent="Menus/MenuScreen/MainButtons"]
+[node name="Quit" type="Button" parent="Menus/TitleScreen/TitlescreenButtons"]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Quit"
 
-[node name="Spacer3" type="Control" parent="Menus/MenuScreen/MainButtons"]
+[node name="Spacer3" type="Control" parent="Menus/TitleScreen/TitlescreenButtons"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
-[node name="WorldScreen" type="Control" parent="Menus"]
+[node name="WorldsScreen" type="Control" parent="Menus"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -123,7 +123,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_6i0vr")
 
-[node name="WorldSelect" type="VBoxContainer" parent="Menus/WorldScreen"]
+[node name="WorldSelect" type="VBoxContainer" parent="Menus/WorldsScreen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -131,7 +131,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="RichTextLabel" parent="Menus/WorldScreen/WorldSelect"]
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/WorldsScreen/WorldSelect"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -140,55 +140,54 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
-text = "[center]Worlds[/center]"
+text = "[center]Worlds List[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="Worlds" type="ItemList" parent="Menus/WorldScreen/WorldSelect"]
+[node name="BackButton" type="HBoxContainer" parent="Menus/WorldsScreen/WorldSelect"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="Menus/WorldsScreen/WorldSelect/BackButton"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Back"
+
+[node name="Worlds" type="ItemList" parent="Menus/WorldsScreen/WorldSelect"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 item_count = 4
-item_0/text = "Game saves will go here"
-item_1/text = "The style of everything is subject to change"
+item_0/text = "Saved worlds will be listed here"
+item_1/text = "Formatting is subject to change"
 item_2/text = "Some buttons may not work"
-item_3/text = "Scrollbar test."
+item_3/text = "(Theoretically this list should have a scrollbar if it has enough items)"
 
-[node name="Toggles" type="HBoxContainer" parent="Menus/WorldScreen/WorldSelect"]
+[node name="Toggles" type="HBoxContainer" parent="Menus/WorldsScreen/WorldSelect"]
 layout_mode = 2
 
-[node name="AllowPlayers" type="CheckButton" parent="Menus/WorldScreen/WorldSelect/Toggles"]
+[node name="AllowPlayers" type="CheckButton" parent="Menus/WorldsScreen/WorldSelect/Toggles"]
 layout_mode = 2
-text = "Multiplayer"
+text = "Host Multiplayer"
 
-[node name="AsServer" type="CheckButton" parent="Menus/WorldScreen/WorldSelect/Toggles"]
+[node name="AsServer" type="CheckButton" parent="Menus/WorldsScreen/WorldSelect/Toggles"]
 layout_mode = 2
 disabled = true
 text = "Host without playing"
 
-[node name="Buttons" type="HBoxContainer" parent="Menus/WorldScreen/WorldSelect"]
+[node name="WorldButtons" type="HBoxContainer" parent="Menus/WorldsScreen/WorldSelect"]
 layout_mode = 2
 
-[node name="Play" type="Button" parent="Menus/WorldScreen/WorldSelect/Buttons"]
-layout_mode = 2
-text = "Play"
-
-[node name="NewWorld" type="Button" parent="Menus/WorldScreen/WorldSelect/Buttons"]
+[node name="NewWorld" type="Button" parent="Menus/WorldsScreen/WorldSelect/WorldButtons"]
 layout_mode = 2
 text = "New World"
 
-[node name="DeleteWorld" type="Button" parent="Menus/WorldScreen/WorldSelect/Buttons"]
+[node name="DeleteWorld" type="Button" parent="Menus/WorldsScreen/WorldSelect/WorldButtons"]
 layout_mode = 2
 text = "Delete World"
 
-[node name="Control" type="Control" parent="Menus/WorldScreen/WorldSelect/Buttons"]
+[node name="Play" type="Button" parent="Menus/WorldsScreen/WorldSelect/WorldButtons"]
 layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Back" type="Button" parent="Menus/WorldScreen/WorldSelect/Buttons"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Back"
+text = "Play"
 
 [node name="NewWorldPopup" type="Panel" parent="Menus/WorldScreen"]
 visible = false
@@ -267,7 +266,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="RichTextLabel" parent="Menus/MultiplayerScreen/Multiplayer"]
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/MultiplayerScreen/Multiplayer"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -276,9 +275,17 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
-text = "[center]Multiplayer[/center]"
+text = "[center]Server IPs List[/center]"
 fit_content = true
 autowrap_mode = 0
+
+[node name="BackButton" type="HBoxContainer" parent="Menus/MultiplayerScreen/Multiplayer"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="Menus/MultiplayerScreen/Multiplayer/BackButton"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Back"
 
 [node name="SavedServersList" type="ItemList" parent="Menus/MultiplayerScreen/Multiplayer"]
 custom_minimum_size = Vector2(500, 100)
@@ -303,29 +310,24 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "New Server Name"
 
-[node name="Buttons" type="HBoxContainer" parent="Menus/MultiplayerScreen/Multiplayer"]
+[node name="Server Buttons" type="HBoxContainer" parent="Menus/MultiplayerScreen/Multiplayer"]
 layout_mode = 2
 
-[node name="JoinGame" type="Button" parent="Menus/MultiplayerScreen/Multiplayer/Buttons"]
-layout_mode = 2
-text = "Join Game"
-
-[node name="AddServer" type="Button" parent="Menus/MultiplayerScreen/Multiplayer/Buttons"]
+[node name="AddServer" type="Button" parent="Menus/MultiplayerScreen/Multiplayer/Server Buttons"]
 layout_mode = 2
 text = "Add Server"
 
-[node name="RemoveServer" type="Button" parent="Menus/MultiplayerScreen/Multiplayer/Buttons"]
+[node name="RemoveServer" type="Button" parent="Menus/MultiplayerScreen/Multiplayer/Server Buttons"]
 layout_mode = 2
 text = "Remove Server"
 
-[node name="Control" type="Control" parent="Menus/MultiplayerScreen/Multiplayer/Buttons"]
+[node name="JoinGame" type="Button" parent="Menus/MultiplayerScreen/Multiplayer/Server Buttons"]
+layout_mode = 2
+text = "Join Game"
+
+[node name="Control" type="Control" parent="Menus/MultiplayerScreen/Multiplayer/Server Buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="Back" type="Button" parent="Menus/MultiplayerScreen/Multiplayer/Buttons"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Back"
 
 [node name="SettingsScreen" type="Control" parent="Menus"]
 visible = false
@@ -336,7 +338,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="RichTextLabel" parent="Menus/SettingsScreen"]
+[node name="TitleText" type="RichTextLabel" parent="Menus/SettingsScreen"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -385,7 +387,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title" type="RichTextLabel" parent="Menus/CreditsScreen"]
+[node name="TitleText" type="RichTextLabel" parent="Menus/CreditsScreen"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -402,7 +404,7 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 30
 bbcode_enabled = true
-text = "Hatchetflare was made possible by these lovely people:"
+text = "Hatchetflare is made possible by these lovely people:"
 fit_content = true
 autowrap_mode = 0
 
@@ -503,16 +505,16 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Back"
 
-[connection signal="pressed" from="Menus/MenuScreen/MainButtons/Play" to="." method="open_screen" binds= ["WorldScreen"]]
-[connection signal="pressed" from="Menus/MenuScreen/MainButtons/Multiplayer" to="." method="open_screen" binds= ["MultiplayerScreen"]]
-[connection signal="pressed" from="Menus/MenuScreen/MainButtons/Settings" to="." method="open_screen" binds= ["SettingsScreen"]]
-[connection signal="pressed" from="Menus/MenuScreen/MainButtons/Credits" to="." method="open_screen" binds= ["CreditsScreen"]]
-[connection signal="pressed" from="Menus/MenuScreen/MainButtons/Quit" to="." method="quit"]
-[connection signal="toggled" from="Menus/WorldScreen/WorldSelect/Toggles/AllowPlayers" to="." method="toggle_multiplayer_joining"]
-[connection signal="pressed" from="Menus/WorldScreen/WorldSelect/Buttons/Play" to="." method="start_game" binds= [true]]
-[connection signal="pressed" from="Menus/WorldScreen/WorldSelect/Buttons/Back" to="." method="open_screen" binds= ["MenuScreen"]]
-[connection signal="pressed" from="Menus/MultiplayerScreen/Multiplayer/Buttons/JoinGame" to="." method="start_game" binds= [false]]
-[connection signal="pressed" from="Menus/MultiplayerScreen/Multiplayer/Buttons/Back" to="." method="open_screen" binds= ["MenuScreen"]]
-[connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_screen" binds= ["MenuScreen"]]
-[connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="open_screen" binds= ["MenuScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitlescreenButtons/StartWorld" to="." method="open_screen" binds= ["WorldsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitlescreenButtons/JoinWorld" to="." method="open_screen" binds= ["MultiplayerScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitlescreenButtons/Settings" to="." method="open_screen" binds= ["SettingsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitlescreenButtons/Credits" to="." method="open_screen" binds= ["CreditsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitlescreenButtons/Quit" to="." method="quit"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldSelect/BackButton/Back" to="." method="open_screen" binds= ["TitleScreen"]]
+[connection signal="toggled" from="Menus/WorldsScreen/WorldSelect/Toggles/AllowPlayers" to="." method="toggle_multiplayer_joining"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldSelect/WorldButtons/Play" to="." method="start_game"]
+[connection signal="pressed" from="Menus/MultiplayerScreen/Multiplayer/BackButton/Back" to="." method="open_screen" binds= ["TitleScreen"]]
+[connection signal="pressed" from="Menus/MultiplayerScreen/Multiplayer/Server Buttons/JoinGame" to="." method="start_game"]
+[connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_screen" binds= ["TitleScreen"]]
+[connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="open_screen" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/NetworkInfoOverlay/BackButton" to="." method="network_status_update" binds= ["Pressed back button", false, false]]
