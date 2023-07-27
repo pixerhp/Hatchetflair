@@ -1,8 +1,8 @@
 extends Control
 
 var worlds = ["bojler", "eladó"]
-@onready var worlds_text = get_node("WorldSelect/Worlds")
-@onready var new_world = get_node("WorldSelect/Buttons/NewWorld")
+@onready var worlds_text = get_node("WorldsScreenUI/Worlds")
+@onready var new_world = get_node("WorldsScreenUI/WorldButtons/NewWorld")
 @onready var new_world_popup = get_node("NewWorldPopup")
 
 # Called when the node enters the scene tree for the first time.
