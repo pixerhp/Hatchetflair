@@ -163,11 +163,11 @@ item_3/text = "(Theoretically this list should have a scrollbar if it has enough
 [node name="Toggles" type="HBoxContainer" parent="Menus/WorldsScreen/WorldsScreenUI"]
 layout_mode = 2
 
-[node name="AllowPlayers" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
+[node name="AllowJoining" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
 layout_mode = 2
 text = "Host Multiplayer"
 
-[node name="AsServer" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
+[node name="HostWithoutPlay" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
 layout_mode = 2
 disabled = true
 text = "Host without playing"
@@ -445,7 +445,7 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Credits" to="." method="open_screen" binds= ["CreditsScreen"]]
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Quit" to="." method="quit"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="open_screen" binds= ["TitleScreen"]]
-[connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowPlayers" to="." method="toggle_multiplayer_joining"]
+[connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="." method="toggle_multiplayer_joining"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/Play" to="." method="start_game"]
 [connection signal="pressed" from="Menus/MultiplayerScreen/MultiplayerScreenUI/BackButton/Back" to="." method="open_screen" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/MultiplayerScreen/MultiplayerScreenUI/Server Buttons/JoinGame" to="." method="start_game"]

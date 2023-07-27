@@ -1,14 +1,14 @@
 extends Control
 
 # Worlds selection screen inputs
-@onready var host_without_playing_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/AsServer
-@onready var allow_multiplayer_joining_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowPlayers
+@onready var host_without_playing_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/HostWithoutPlay
+@onready var allow_multiplayer_joining_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining
 
 # Servers selection screen inputs
 @onready var server_ip_box: LineEdit = $Menus/MultiplayerScreen/MultiplayerScreenUI/HBoxContainer/IP
 @onready var server_name_box: LineEdit = $Menus/MultiplayerScreen/MultiplayerScreenUI/HBoxContainer/Name
 
-# Called when this script is loaded into the scene.
+# Called when this script is loaded into the scene
 func _ready() -> void:
 	NetworkManager.network_status_update.connect(self.network_status_update)
 
@@ -24,7 +24,7 @@ func _process(_delta: float) -> void:
 		server_ip_box.text = "127.0.0.1"
 		start_game(false)
 
-# Display the current connecting status.
+# Display the current connecting status
 func network_status_update(message: String, should_display: bool, show_back_button: bool):
 	$Menus/NetworkInfoOverlay.visible = should_display
 	$Menus/NetworkInfoOverlay/RichTextLabel.text = message
@@ -36,17 +36,17 @@ func open_screen(screen_name: String) -> void:
 		child.visible = false
 	get_node("Menus/" + screen_name).visible = true
 
-# Host or join a game.
+# Host or join a game
 func start_game(is_hosting: bool = false) -> void:
 	if is_hosting:
 		NetworkManager.start_game(not host_without_playing_toggle.button_pressed, true, allow_multiplayer_joining_toggle.button_pressed)
 	else:
 		NetworkManager.start_game(true, false, true, server_ip_box.text)
 
-# Disable the host_without_playing_toggle if multiplaer joining is turned off.
-func toggle_multiplayer_joining(value: bool) -> void:
-	host_without_playing_toggle.disabled = not value
-	if not value:
+# Disables the host_without_playing_toggle if multiplaer joining is turned off.
+func toggle_multiplayer_joining(button_value: bool) -> void:
+	host_without_playing_toggle.disabled = not button_value
+	if not button_value:
 		host_without_playing_toggle.button_pressed = false
 
 # Close the game.
