@@ -165,11 +165,11 @@ item_3/text = "(Theoretically this list should have a scrollbar if it has enough
 [node name="Toggles" type="HBoxContainer" parent="Menus/WorldsScreen/WorldsScreenUI"]
 layout_mode = 2
 
-[node name="AllowPlayers" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
+[node name="AllowJoining" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
 layout_mode = 2
 text = "Host Multiplayer"
 
-[node name="AsServer" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
+[node name="HostWithoutPlay" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
 layout_mode = 2
 disabled = true
 text = "Host without playing"
