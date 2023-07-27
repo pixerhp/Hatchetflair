@@ -1,12 +1,12 @@
 extends Control
 
-# Save select screen inputs
-@onready var as_server_toggle: CheckButton = $Menus/WorldsScreen/WorldSelect/Toggles/AsServer
-@onready var allow_players_toggle: CheckButton = $Menus/WorldsScreen/WorldSelect/Toggles/AllowPlayers
+# Worlds selection screen inputs
+@onready var as_server_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/AsServer
+@onready var allow_players_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowPlayers
 
-# Multiplayer select screen inputs
-@onready var server_ip_box: LineEdit = $Menus/MultiplayerScreen/Multiplayer/HBoxContainer/IP
-@onready var server_name_box: LineEdit = $Menus/MultiplayerScreen/Multiplayer/HBoxContainer/Name
+# Servers selection screen inputs
+@onready var server_ip_box: LineEdit = $Menus/MultiplayerScreen/MultiplayerScreenUI/HBoxContainer/IP
+@onready var server_name_box: LineEdit = $Menus/MultiplayerScreen/MultiplayerScreenUI/HBoxContainer/Name
 
 # Called when script is loaded into scene.
 func _ready() -> void:
