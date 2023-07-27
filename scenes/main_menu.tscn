@@ -189,7 +189,7 @@ text = "Delete World"
 layout_mode = 2
 text = "Play"
 
-[node name="NewWorldPopup" type="Panel" parent="Menus/WorldScreen"]
+[node name="NewWorldPopup" type="Panel" parent="Menus/WorldsScreen"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -204,7 +204,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Menus/WorldScreen/NewWorldPopup"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -214,7 +214,7 @@ bbcode_enabled = true
 text = "[center]Name new world[/center]"
 fit_content = true
 
-[node name="TextEdit" type="TextEdit" parent="Menus/WorldScreen/NewWorldPopup"]
+[node name="TextEdit" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -226,7 +226,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "World name"
 
-[node name="Okay" type="Button" parent="Menus/WorldScreen/NewWorldPopup"]
+[node name="Okay" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -236,7 +236,7 @@ offset_right = 48.0
 grow_vertical = 0
 text = "Okay"
 
-[node name="Cancel" type="Button" parent="Menus/WorldScreen/NewWorldPopup"]
+[node name="Cancel" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
