@@ -211,7 +211,7 @@ anchor_right = 1.0
 offset_bottom = 23.0
 grow_horizontal = 2
 bbcode_enabled = true
-text = "[center]Name new world[/center]"
+text = "[center]What will you name your new world?[/center]"
 fit_content = true
 
 [node name="TextEdit" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
@@ -224,28 +224,28 @@ offset_top = -18.0
 offset_bottom = 18.0
 grow_horizontal = 2
 grow_vertical = 2
-placeholder_text = "World name"
+placeholder_text = "[world name]"
 
 [node name="Okay" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -31.0
-offset_right = 48.0
-grow_vertical = 0
-text = "Okay"
-
-[node name="Cancel" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -60.0
+offset_left = -48.0
 offset_top = -31.0
 grow_horizontal = 0
+grow_vertical = 0
+text = "Okay"
+
+[node name="Cancel" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
 grow_vertical = 0
 text = "Cancel"
 
