@@ -1,6 +1,6 @@
 extends Control
 
-var worlds = ["bojler", "eladó"]
+var worlds_list = ["bojler", "eladó"]
 @onready var worlds_text = get_node("WorldsScreenUI/Worlds")
 @onready var new_world = get_node("WorldsScreenUI/WorldButtons/NewWorld")
 @onready var new_world_popup = get_node("NewWorldPopup")
@@ -19,12 +19,12 @@ func open_make_world_popup():
 
 # Actually add the world to the internal array and hide the make world popup.
 func confirm_make_world():
-	worlds.append(new_world_popup.get_node("TextEdit").text)
+	worlds_list.append(new_world_popup.get_node("TextEdit").text)
 	update_worlds_list()
 	new_world_popup.hide()
 
 # Update the visible list for the player.
 func update_worlds_list():
 	worlds_text.clear()
-	for world in worlds:
+	for world in worlds_list:
 		worlds_text.add_item(world)
