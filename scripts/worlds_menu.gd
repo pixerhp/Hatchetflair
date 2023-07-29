@@ -1,5 +1,8 @@
 extends Control
 
+@onready var allow_multiplayer_joining_toggle: CheckButton = $WorldsScreenUI/Toggles/AllowJoining
+@onready var host_without_playing_toggle: CheckButton = $WorldsScreenUI/Toggles/HostWithoutPlay
+
 var worlds_list = ["bojler", "eladó"]
 @onready var worlds_text = get_node("WorldsScreenUI/Worlds")
 @onready var new_world = get_node("WorldsScreenUI/WorldButtons/NewWorld")
@@ -11,6 +14,12 @@ func _ready():
 	new_world_popup.get_node("Okay").pressed.connect(self.confirm_make_world)
 	new_world_popup.get_node("Cancel").pressed.connect(new_world_popup.hide)
 	update_worlds_list()
+
+# Disables the host_without_playing_toggle if multiplaer joining is turned off.
+func toggle_multiplayer_joining(button_value: bool) -> void:
+	host_without_playing_toggle.disabled = not button_value
+	if not button_value:
+		host_without_playing_toggle.button_pressed = false
 
 # Open the new world popup.
 func open_make_world_popup():

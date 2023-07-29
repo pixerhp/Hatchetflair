@@ -249,7 +249,7 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Cancel"
 
-[node name="MultiplayerScreen" type="Control" parent="Menus"]
+[node name="JoinScreen" type="Control" parent="Menus"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -258,7 +258,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MultiplayerScreenUI" type="VBoxContainer" parent="Menus/MultiplayerScreen"]
+[node name="JoinScreenUI" type="VBoxContainer" parent="Menus/JoinScreen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -266,7 +266,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MenuTitle" type="RichTextLabel" parent="Menus/MultiplayerScreen/MultiplayerScreenUI"]
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/JoinScreen/JoinScreenUI"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -279,15 +279,15 @@ text = "[center]Server IPs List[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="BackButton" type="HBoxContainer" parent="Menus/MultiplayerScreen/MultiplayerScreenUI"]
+[node name="BackButton" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
 layout_mode = 2
 
-[node name="Back" type="Button" parent="Menus/MultiplayerScreen/MultiplayerScreenUI/BackButton"]
+[node name="Back" type="Button" parent="Menus/JoinScreen/JoinScreenUI/BackButton"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Back"
 
-[node name="SavedServersList" type="ItemList" parent="Menus/MultiplayerScreen/MultiplayerScreenUI"]
+[node name="SavedServersList" type="ItemList" parent="Menus/JoinScreen/JoinScreenUI"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
@@ -297,31 +297,31 @@ item_1/text = "The style of everything is subject to change"
 item_2/text = "Some buttons may not work"
 item_3/text = "Scrollbar test."
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Menus/MultiplayerScreen/MultiplayerScreenUI"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
 layout_mode = 2
 
-[node name="IP" type="LineEdit" parent="Menus/MultiplayerScreen/MultiplayerScreenUI/HBoxContainer"]
+[node name="IP" type="LineEdit" parent="Menus/JoinScreen/JoinScreenUI/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "New Server IP"
 
-[node name="Name" type="LineEdit" parent="Menus/MultiplayerScreen/MultiplayerScreenUI/HBoxContainer"]
+[node name="Name" type="LineEdit" parent="Menus/JoinScreen/JoinScreenUI/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "New Server Name"
 
-[node name="Server Buttons" type="HBoxContainer" parent="Menus/MultiplayerScreen/MultiplayerScreenUI"]
+[node name="Server Buttons" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
 layout_mode = 2
 
-[node name="AddServer" type="Button" parent="Menus/MultiplayerScreen/MultiplayerScreenUI/Server Buttons"]
+[node name="AddServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/Server Buttons"]
 layout_mode = 2
 text = "Add Server"
 
-[node name="RemoveServer" type="Button" parent="Menus/MultiplayerScreen/MultiplayerScreenUI/Server Buttons"]
+[node name="RemoveServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/Server Buttons"]
 layout_mode = 2
 text = "Remove Server"
 
-[node name="JoinGame" type="Button" parent="Menus/MultiplayerScreen/MultiplayerScreenUI/Server Buttons"]
+[node name="JoinGame" type="Button" parent="Menus/JoinScreen/JoinScreenUI/Server Buttons"]
 layout_mode = 2
 text = "Join Game"
 
@@ -501,16 +501,16 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Back"
 
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/StartWorld" to="." method="open_screen" binds= ["WorldsScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/JoinWorld" to="." method="open_screen" binds= ["MultiplayerScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Settings" to="." method="open_screen" binds= ["SettingsScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Credits" to="." method="open_screen" binds= ["CreditsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/StartWorld" to="." method="open_menu" binds= ["WorldsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/JoinWorld" to="." method="open_menu" binds= ["JoinScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Settings" to="." method="open_menu" binds= ["SettingsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Credits" to="." method="open_menu" binds= ["CreditsScreen"]]
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Quit" to="." method="quit"]
-[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="open_screen" binds= ["TitleScreen"]]
-[connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="." method="toggle_multiplayer_joining"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
+[connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_multiplayer_joining"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/Play" to="." method="start_game" binds= [true]]
-[connection signal="pressed" from="Menus/MultiplayerScreen/MultiplayerScreenUI/BackButton/Back" to="." method="open_screen" binds= ["TitleScreen"]]
-[connection signal="pressed" from="Menus/MultiplayerScreen/MultiplayerScreenUI/Server Buttons/JoinGame" to="." method="start_game"]
-[connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_screen" binds= ["TitleScreen"]]
-[connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="open_screen" binds= ["TitleScreen"]]
+[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
+[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/Server Buttons/JoinGame" to="." method="start_game"]
+[connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_menu" binds= ["TitleScreen"]]
+[connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/NetworkInfoOverlay/BackButton" to="." method="network_status_update" binds= ["Pressed back button", false, false]]
