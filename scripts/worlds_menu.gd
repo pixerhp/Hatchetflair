@@ -33,7 +33,7 @@ func confirm_new_world():
 	new_world_popup.hide()
 
 func delete_world():
-	worlds_list.pop_back()
+	worlds_list.erase(worlds_list[worlds_text.get_selected_items()[0]])
 	update_worlds_list()
 
 # Update the visible list for the player.

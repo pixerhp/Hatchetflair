@@ -42,6 +42,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleScreen" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -114,7 +115,6 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
 [node name="WorldsScreen" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
