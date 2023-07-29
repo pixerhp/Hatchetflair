@@ -508,6 +508,7 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Quit" to="." method="quit"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_multiplayer_joining"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="delete_world"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/Play" to="." method="start_game" binds= [true]]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/Server Buttons/JoinGame" to="." method="start_game"]
