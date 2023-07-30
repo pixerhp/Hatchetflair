@@ -42,7 +42,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleScreen" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -115,6 +114,7 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 
 [node name="WorldsScreen" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -240,6 +240,55 @@ grow_vertical = 0
 text = "Okay"
 
 [node name="Cancel" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
+
+[node name="DeleteWorldPopup" type="Panel" parent="Menus/WorldsScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/WorldsScreen/DeleteWorldPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Are you sure you want to delete that world? 
+(This action cannot be undone.)[/center]"
+fit_content = true
+
+[node name="Confirm" type="Button" parent="Menus/WorldsScreen/DeleteWorldPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Okay"
+
+[node name="Cancel" type="Button" parent="Menus/WorldsScreen/DeleteWorldPopup"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -507,8 +556,9 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Credits" to="." method="open_menu" binds= ["CreditsScreen"]]
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Quit" to="." method="quit"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
+[connection signal="item_selected" from="Menus/WorldsScreen/WorldsScreenUI/Worlds" to="Menus/WorldsScreen" method="world_list_item_clicked" unbinds=1]
 [connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_multiplayer_joining"]
-[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="delete_world"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="open_delete_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/Play" to="." method="start_game" binds= [true]]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/Server Buttons/JoinGame" to="." method="start_game"]
