@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bbwhtlk15abxa"]
+[gd_scene load_steps=7 format=3 uid="uid://bbwhtlk15abxa"]
 
-[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_224c0"]
-[ext_resource type="Script" path="res://scripts/worlds_menu.gd" id="2_5vdwx"]
+[ext_resource type="Script" path="res://scripts/menu_main.gd" id="1_11rs3"]
+[ext_resource type="Script" path="res://scripts/menu_worlds.gd" id="2_mt2au"]
+[ext_resource type="Script" path="res://scripts/menu_join.gd" id="3_6ghq1"]
 
 [sub_resource type="Gradient" id="Gradient_skhgw"]
 interpolation_mode = 2
@@ -22,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_224c0")
+script = ExtResource("1_11rs3")
 
 [node name="BackgroundTexture" type="TextureRect" parent="."]
 layout_mode = 1
@@ -121,7 +122,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_5vdwx")
+script = ExtResource("2_mt2au")
 
 [node name="WorldsScreenUI" type="VBoxContainer" parent="Menus/WorldsScreen"]
 layout_mode = 1
@@ -308,6 +309,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_6ghq1")
 
 [node name="JoinScreenUI" type="VBoxContainer" parent="Menus/JoinScreen"]
 layout_mode = 1
