@@ -348,19 +348,6 @@ item_1/text = "The style of everything is subject to change"
 item_2/text = "Some buttons may not work"
 item_3/text = "Scrollbar test."
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
-layout_mode = 2
-
-[node name="IP" type="LineEdit" parent="Menus/JoinScreen/JoinScreenUI/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "New Server IP"
-
-[node name="Name" type="LineEdit" parent="Menus/JoinScreen/JoinScreenUI/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "New Server Name"
-
 [node name="Server Buttons" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
 layout_mode = 2
 

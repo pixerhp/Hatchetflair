@@ -4,10 +4,6 @@ extends Control
 @onready var allow_multiplayer_joining_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining
 @onready var host_without_playing_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/HostWithoutPlay
 
-# Servers selection screen inputs
-@onready var server_ip_box: LineEdit = $Menus/JoinScreen/JoinScreenUI/HBoxContainer/IP
-@onready var server_name_box: LineEdit = $Menus/JoinScreen/JoinScreenUI/HBoxContainer/Name
-
 # Called when this script is loaded into the scene
 func _ready() -> void:
 	NetworkManager.network_status_update.connect(self.network_status_update)
@@ -21,7 +17,6 @@ func _process(_delta: float) -> void:
 		allow_multiplayer_joining_toggle.button_pressed = true
 		start_game(true)
 	if Input.is_action_just_pressed("QuickJoinLocalhost"):
-		server_ip_box.text = "127.0.0.1"
 		start_game(false)
 
 # Display the current connecting status
@@ -41,7 +36,7 @@ func start_game(is_hosting: bool = false) -> void:
 	if is_hosting:
 		NetworkManager.start_game(not host_without_playing_toggle.button_pressed, true, allow_multiplayer_joining_toggle.button_pressed)
 	else:
-		NetworkManager.start_game(true, false, true, server_ip_box.text)
+		NetworkManager.start_game(true, false, true, "127.0.0.1")
 
 # Close the game.
 func quit() -> void:
