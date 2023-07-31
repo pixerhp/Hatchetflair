@@ -11,6 +11,7 @@ var worlds_list = ["bojler", "eladó"]
 @onready var new_world_popup = get_node("NewWorldPopup")
 @onready var delete_world_popup = get_node("DeleteWorldPopup")
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	new_world_button.pressed.connect(self.open_new_world_popup)

@@ -350,19 +350,21 @@ item_1/text = "The style of everything is subject to change"
 item_2/text = "Some buttons may not work"
 item_3/text = "Scrollbar test."
 
-[node name="Server Buttons" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
+[node name="ServerButtons" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
 layout_mode = 2
 
-[node name="AddServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/Server Buttons"]
+[node name="AddServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
 layout_mode = 2
 text = "Add Server"
 
-[node name="RemoveServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/Server Buttons"]
+[node name="RemoveServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
 layout_mode = 2
+disabled = true
 text = "Remove Server"
 
-[node name="JoinGame" type="Button" parent="Menus/JoinScreen/JoinScreenUI/Server Buttons"]
+[node name="JoinGame" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
 layout_mode = 2
+disabled = true
 text = "Join Game"
 
 [node name="SettingsScreen" type="Control" parent="Menus"]
@@ -552,7 +554,7 @@ text = "Back"
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="open_delete_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/Play" to="." method="start_game" binds= [true]]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
-[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/Server Buttons/JoinGame" to="." method="start_game"]
+[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/JoinGame" to="." method="start_game"]
 [connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/NetworkInfoOverlay/BackButton" to="." method="network_status_update" binds= ["Pressed back button", false, false]]
