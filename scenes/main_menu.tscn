@@ -183,10 +183,12 @@ text = "New World"
 
 [node name="DeleteWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
 layout_mode = 2
+disabled = true
 text = "Delete World"
 
 [node name="Play" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
 layout_mode = 2
+disabled = true
 text = "Play"
 
 [node name="NewWorldPopup" type="Panel" parent="Menus/WorldsScreen"]

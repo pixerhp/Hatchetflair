@@ -2,6 +2,8 @@ extends Control
 
 @onready var allow_multiplayer_joining_toggle: CheckButton = $WorldsScreenUI/Toggles/AllowJoining
 @onready var host_without_playing_toggle: CheckButton = $WorldsScreenUI/Toggles/HostWithoutPlay
+@onready var delete_world_button: Button = $WorldsScreenUI/WorldButtons/DeleteWorld
+@onready var play_world_button: Button = $WorldsScreenUI/WorldButtons/Play
 
 var worlds_list = ["bojler", "eladó"]
 @onready var worlds_text = get_node("WorldsScreenUI/Worlds")
@@ -48,9 +50,10 @@ func confirm_delete_world():
 		delete_world_popup.hide()
 	update_worlds_list()
 
-# This is done to prevent changing which item you're deleting after the deletion popup already named a world.
 func world_list_item_clicked():
-	delete_world_popup.hide()
+	delete_world_popup.hide() # Prevents changing which item you're deleting without the deletion popup updating.
+	delete_world_button.disabled = false
+	play_world_button.disabled = false
 
 # Update the visible list for the player.
 func update_worlds_list():
