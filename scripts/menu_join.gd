@@ -13,6 +13,8 @@ func _process(delta):
 	pass
 
 
+# Attempts to join the selected server.
 func join_server():
+	# UPDATE THIS TO WORK WITH THE SELECTED SERVER IP LATER.
 	NetworkManager.start_game(true, false, true, "127.0.0.1")
 	pass

@@ -182,6 +182,11 @@ layout_mode = 2
 disabled = true
 text = "Delete World"
 
+[node name="EditWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+layout_mode = 2
+disabled = true
+text = "Edit World"
+
 [node name="Play" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
 layout_mode = 2
 disabled = true
@@ -198,31 +203,42 @@ anchor_bottom = 0.5
 offset_left = -200.0
 offset_top = -100.0
 offset_right = 200.0
-offset_bottom = 20.0
+offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 23.0
 grow_horizontal = 2
 bbcode_enabled = true
-text = "[center]What will you name your new world?[/center]"
+text = "[center]Create a new world:[/center]"
 fit_content = true
 
-[node name="TextEdit" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="WorldName" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -18.0
-offset_bottom = 18.0
+offset_top = -40.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[world name]"
+
+[node name="Seed" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[world generation seed]"
 
 [node name="Okay" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
@@ -247,6 +263,77 @@ offset_right = 60.0
 grow_vertical = 0
 text = "Cancel"
 
+[node name="EditWorldPopup" type="Panel" parent="Menus/WorldsScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsScreen/EditWorldPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Edit world:[/center]"
+fit_content = true
+
+[node name="WorldName" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[world name]"
+
+[node name="Seed" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[world generation seed]"
+
+[node name="Okay" type="Button" parent="Menus/WorldsScreen/EditWorldPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Okay"
+
+[node name="Cancel" type="Button" parent="Menus/WorldsScreen/EditWorldPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
+
 [node name="DeleteWorldPopup" type="Panel" parent="Menus/WorldsScreen"]
 visible = false
 layout_mode = 1
@@ -262,7 +349,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Menus/WorldsScreen/DeleteWorldPopup"]
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsScreen/DeleteWorldPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -284,7 +371,7 @@ offset_left = -48.0
 offset_top = -31.0
 grow_horizontal = 0
 grow_vertical = 0
-text = "Okay"
+text = "Yes"
 
 [node name="Cancel" type="Button" parent="Menus/WorldsScreen/DeleteWorldPopup"]
 layout_mode = 1
@@ -357,10 +444,207 @@ layout_mode = 2
 disabled = true
 text = "Remove Server"
 
+[node name="EditServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
+layout_mode = 2
+disabled = true
+text = "Edit Server"
+
 [node name="JoinGame" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
 layout_mode = 2
 disabled = true
 text = "Join Game"
+
+[node name="NewServerPopup" type="Panel" parent="Menus/JoinScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/NewServerPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]New server:[/center]"
+fit_content = true
+
+[node name="ServerIP" type="TextEdit" parent="Menus/JoinScreen/NewServerPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[server ipv4 or ipv6 address]"
+
+[node name="ServerNickname" type="TextEdit" parent="Menus/JoinScreen/NewServerPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[personal nickname for this server]"
+
+[node name="Okay" type="Button" parent="Menus/JoinScreen/NewServerPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Okay"
+
+[node name="Cancel" type="Button" parent="Menus/JoinScreen/NewServerPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
+
+[node name="EditServerPopup" type="Panel" parent="Menus/JoinScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/EditServerPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Edit server IP and nickname:[/center]"
+fit_content = true
+
+[node name="ServerIP" type="TextEdit" parent="Menus/JoinScreen/EditServerPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -38.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[server ipv4 or ipv6 address]"
+
+[node name="ServerNickname" type="TextEdit" parent="Menus/JoinScreen/EditServerPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 2.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[personal nickname for this server]"
+
+[node name="Okay" type="Button" parent="Menus/JoinScreen/EditServerPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Okay"
+
+[node name="Cancel" type="Button" parent="Menus/JoinScreen/EditServerPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
+
+[node name="RemoveServerPopup" type="Panel" parent="Menus/JoinScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/RemoveServerPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Are you sure you want to remove that server? 
+(This action cannot be undone.)[/center]"
+fit_content = true
+
+[node name="Confirm" type="Button" parent="Menus/JoinScreen/RemoveServerPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Yes"
+
+[node name="Cancel" type="Button" parent="Menus/JoinScreen/RemoveServerPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
 
 [node name="SettingsScreen" type="Control" parent="Menus"]
 visible = false
