@@ -6,7 +6,7 @@ extends Control
 @onready var play_world_button: Button = $WorldsScreenUI/WorldButtons/Play
 
 var worlds_list = ["bojler", "eladó"]
-@onready var worlds_text = get_node("WorldsScreenUI/Worlds")
+@onready var worlds_text = get_node("WorldsScreenUI/SavedWorldsList")
 @onready var new_world_button = get_node("WorldsScreenUI/WorldButtons/NewWorld")
 @onready var new_world_popup = get_node("NewWorldPopup")
 @onready var delete_world_popup = get_node("DeleteWorldPopup")

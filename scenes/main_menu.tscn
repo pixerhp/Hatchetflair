@@ -153,15 +153,10 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Back"
 
-[node name="Worlds" type="ItemList" parent="Menus/WorldsScreen/WorldsScreenUI"]
+[node name="SavedWorldsList" type="ItemList" parent="Menus/WorldsScreen/WorldsScreenUI"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
-item_count = 4
-item_0/text = "Saved worlds will be listed here"
-item_1/text = "Formatting is subject to change"
-item_2/text = "Some buttons may not work"
-item_3/text = "(Theoretically this list should have a scrollbar if it has enough items)"
 
 [node name="Toggles" type="HBoxContainer" parent="Menus/WorldsScreen/WorldsScreenUI"]
 layout_mode = 2
@@ -549,7 +544,7 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Credits" to="." method="open_menu" binds= ["CreditsScreen"]]
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Quit" to="." method="quit"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
-[connection signal="item_selected" from="Menus/WorldsScreen/WorldsScreenUI/Worlds" to="Menus/WorldsScreen" method="world_list_item_clicked" unbinds=1]
+[connection signal="item_selected" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="world_list_item_clicked" unbinds=1]
 [connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_multiplayer_joining"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="open_delete_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/Play" to="." method="start_game" binds= [true]]

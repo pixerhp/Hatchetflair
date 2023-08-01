@@ -10,14 +10,7 @@ func _ready() -> void:
 
 # Called every frame
 func _process(_delta: float) -> void:
-	# Code to handle some shortcuts to quickly start the game for testing.
-	# As of typing this, the keys are F1 and F2 respectively.
-	if Input.is_action_just_pressed("QuickstartGame"):
-		host_without_playing_toggle.button_pressed = false
-		allow_multiplayer_joining_toggle.button_pressed = true
-		start_game(true)
-	if Input.is_action_just_pressed("QuickJoinLocalhost"):
-		start_game(false)
+	pass
 
 # Display the current connecting status
 func network_status_update(message: String, should_display: bool, show_back_button: bool):
