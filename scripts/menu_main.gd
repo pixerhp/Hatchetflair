@@ -1,8 +1,5 @@
 extends Control
 
-# Worlds selection screen inputs
-@onready var allow_multiplayer_joining_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining
-@onready var host_without_playing_toggle: CheckButton = $Menus/WorldsScreen/WorldsScreenUI/Toggles/HostWithoutPlay
 
 # Called when this script is loaded into the scene
 func _ready() -> void:
@@ -23,13 +20,6 @@ func open_menu(screen_name: String) -> void:
 	for child in $Menus.get_children():
 		child.visible = false
 	get_node("Menus/" + screen_name).visible = true
-
-# Host or join a game
-func start_game(is_hosting: bool = false) -> void:
-	if is_hosting:
-		NetworkManager.start_game(not host_without_playing_toggle.button_pressed, true, allow_multiplayer_joining_toggle.button_pressed)
-	else:
-		NetworkManager.start_game(true, false, true, "127.0.0.1")
 
 # Close the game.
 func quit() -> void:

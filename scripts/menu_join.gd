@@ -8,7 +8,11 @@ extends Control
 func _ready():
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	pass
+
+
+func join_server():
+	NetworkManager.start_game(true, false, true, "127.0.0.1")
 	pass

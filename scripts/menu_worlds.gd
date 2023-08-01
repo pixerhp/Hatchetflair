@@ -21,6 +21,7 @@ func _ready():
 	delete_world_popup.get_node("Cancel").pressed.connect(delete_world_popup.hide)
 	update_worlds_list()
 
+
 # Disables the host_without_playing_toggle if multiplaer joining is turned off.
 func toggle_multiplayer_joining(button_value: bool) -> void:
 	host_without_playing_toggle.disabled = not button_value
@@ -61,3 +62,8 @@ func update_worlds_list():
 	worlds_text.clear()
 	for world in worlds_list:
 		worlds_text.add_item(world)
+
+# Start playing/hosting one of your worlds.
+func start_world():#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
+	NetworkManager.start_game(not host_without_playing_toggle.button_pressed, true, allow_multiplayer_joining_toggle.button_pressed)
+	pass
