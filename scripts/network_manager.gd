@@ -24,7 +24,7 @@ func start_game(is_player: bool, is_server: bool, allow_others: bool, ip_address
 		if is_player:
 			# Spawn a player for the host.
 			player_connected(multiplayer.get_unique_id())
-			network_status_update.emit("Playing as host.", true, false)
+			network_status_update.emit("Playing world as host.", true, false)
 		multiplayer.multiplayer_peer.refuse_new_connections = not allow_others
 	else:
 		start_client(ip_address)

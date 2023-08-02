@@ -433,11 +433,9 @@ text = "Back"
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
-item_count = 4
-item_0/text = "Saved servers will go here"
-item_1/text = "The style of everything is subject to change"
-item_2/text = "Some buttons may not work"
-item_3/text = "Scrollbar test."
+item_count = 2
+item_0/text = "server a"
+item_1/text = "server b"
 
 [node name="ServerButtons" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
 layout_mode = 2
@@ -456,10 +454,10 @@ layout_mode = 2
 disabled = true
 text = "Edit Server"
 
-[node name="JoinGame" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
+[node name="JoinServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
 layout_mode = 2
 disabled = true
-text = "Join Game"
+text = "Join World"
 
 [node name="NewServerPopup" type="Panel" parent="Menus/JoinScreen"]
 visible = false
@@ -844,7 +842,9 @@ text = "Back"
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DuplicateWorld" to="Menus/WorldsScreen" method="_on_duplicate_world_pressed"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/PlayWorld" to="Menus/WorldsScreen" method="_on_play_button_pressed"]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
-[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/JoinGame" to="Menus/JoinScreen" method="join_server"]
+[connection signal="item_activated" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="join_server"]
+[connection signal="item_selected" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="_on_servers_list_item_selected" unbinds=1]
+[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/JoinServer" to="Menus/JoinScreen" method="_on_join_button_pressed"]
 [connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/NetworkInfoOverlay/BackButton" to="." method="network_status_update" binds= ["Pressed back button", false, false]]
