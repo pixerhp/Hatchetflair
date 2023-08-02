@@ -217,7 +217,7 @@ bbcode_enabled = true
 text = "[center]Create a new world:[/center]"
 fit_content = true
 
-[node name="WorldName" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="WorldNameInput" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -229,16 +229,17 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[world name]"
 
-[node name="Seed" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="SeedInput" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_bottom = 36.0
+offset_top = 2.0
+offset_bottom = 38.0
 grow_horizontal = 2
 grow_vertical = 2
-placeholder_text = "[world generation seed]"
+placeholder_text = "[numbered world seed (blank/invalid = random)]"
 
 [node name="Okay" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
@@ -288,7 +289,7 @@ bbcode_enabled = true
 text = "[center]Edit world:[/center]"
 fit_content = true
 
-[node name="WorldName" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
+[node name="WorldNameInput" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -298,18 +299,19 @@ offset_top = -40.0
 offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
-placeholder_text = "[world name]"
+placeholder_text = "[new world name]"
 
-[node name="Seed" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
+[node name="SeedInput" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_bottom = 36.0
+offset_top = 2.0
+offset_bottom = 38.0
 grow_horizontal = 2
 grow_vertical = 2
-placeholder_text = "[world generation seed]"
+placeholder_text = "[new world generation seed]"
 
 [node name="Okay" type="Button" parent="Menus/WorldsScreen/EditWorldPopup"]
 layout_mode = 1
@@ -479,7 +481,7 @@ bbcode_enabled = true
 text = "[center]New server:[/center]"
 fit_content = true
 
-[node name="ServerIP" type="TextEdit" parent="Menus/JoinScreen/NewServerPopup"]
+[node name="ServerIPInput" type="TextEdit" parent="Menus/JoinScreen/NewServerPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -491,13 +493,14 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[server ipv4 or ipv6 address]"
 
-[node name="ServerNickname" type="TextEdit" parent="Menus/JoinScreen/NewServerPopup"]
+[node name="ServerNicknameInput" type="TextEdit" parent="Menus/JoinScreen/NewServerPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_bottom = 36.0
+offset_top = 2.0
+offset_bottom = 38.0
 grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[personal nickname for this server]"
@@ -550,7 +553,7 @@ bbcode_enabled = true
 text = "[center]Edit server IP and nickname:[/center]"
 fit_content = true
 
-[node name="ServerIP" type="TextEdit" parent="Menus/JoinScreen/EditServerPopup"]
+[node name="ServerIPInput" type="TextEdit" parent="Menus/JoinScreen/EditServerPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -562,7 +565,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[server ipv4 or ipv6 address]"
 
-[node name="ServerNickname" type="TextEdit" parent="Menus/JoinScreen/EditServerPopup"]
+[node name="ServerNicknameInput" type="TextEdit" parent="Menus/JoinScreen/EditServerPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -828,10 +831,11 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Credits" to="." method="open_menu" binds= ["CreditsScreen"]]
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Quit" to="." method="quit"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
-[connection signal="item_selected" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="world_list_item_clicked" unbinds=1]
-[connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_multiplayer_joining"]
+[connection signal="item_selected" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="_on_worlds_list_item_selected" unbinds=1]
+[connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_disabling_the_host_without_playing_toggle"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="open_delete_world_popup"]
-[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/Play" to="Menus/WorldsScreen" method="start_world"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/EditWorld" to="Menus/WorldsScreen" method="open_edit_world_popup"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/Play" to="Menus/WorldsScreen" method="_on_play_button_pressed"]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/JoinGame" to="Menus/JoinScreen" method="join_server"]
 [connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_menu" binds= ["TitleScreen"]]
