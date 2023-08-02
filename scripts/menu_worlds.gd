@@ -30,10 +30,6 @@ func start_world():#world_file_name: String, allow_multiplayer: bool, host_witho
 	var host_without_playing_toggle: CheckButton = $WorldsScreenUI/Toggles/HostWithoutPlay
 	NetworkManager.start_game(not host_without_playing_toggle.button_pressed, true, allow_multiplayer_joining_toggle.button_pressed)
 
-func _on_play_button_pressed():
-	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
-		start_world()
-
 
 func open_new_world_popup():
 	hide_all_worlds_menu_popups()
@@ -47,6 +43,21 @@ func confirm_new_world():
 	worlds_list.append(new_world_popup.get_node("WorldNameInput").text)
 	update_worlds_list_text()
 	new_world_popup.hide()
+
+func open_delete_world_popup():
+	hide_all_worlds_menu_popups()
+	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
+		var delete_world_popup = get_node("DeleteWorldPopup")
+		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete \"" + worlds_list[worlds_list_text.get_selected_items()[0]] +"\"?\n(This action cannot be undone.)[/center]"
+		delete_world_popup.show()
+
+func confirm_delete_world():
+	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
+		var delete_world_popup = get_node("DeleteWorldPopup")
+		worlds_list.erase(worlds_list[worlds_list_text.get_selected_items()[0]])
+		delete_world_popup.hide()
+		update_worlds_list_text()
+		disable_world_selected_requiring_buttons()
 
 func open_edit_world_popup():
 	hide_all_worlds_menu_popups()
@@ -64,20 +75,14 @@ func confirm_edit_world():
 		update_worlds_list_text()
 		edit_world_popup.hide()
 
-func open_delete_world_popup():
-	hide_all_worlds_menu_popups()
-	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
-		var delete_world_popup = get_node("DeleteWorldPopup")
-		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete \"" + worlds_list[worlds_list_text.get_selected_items()[0]] +"\"?\n(This action cannot be undone.)[/center]"
-		delete_world_popup.show()
-
-func confirm_delete_world():
+func _on_copy_world_pressed():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
-		var delete_world_popup = get_node("DeleteWorldPopup")
-		worlds_list.erase(worlds_list[worlds_list_text.get_selected_items()[0]])
-		delete_world_popup.hide()
+		worlds_list.append("Copy of " + worlds_list[worlds_list_text.get_selected_items()[0]])
 		update_worlds_list_text()
-		disable_world_selected_requiring_buttons()
+
+func _on_play_button_pressed():
+	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
+		start_world()
 
 
 # Update the text of the visible worlds-list for the player.
@@ -86,14 +91,6 @@ func update_worlds_list_text():
 	for world in worlds_list:
 		worlds_list_text.add_item(world)
 
-func _on_worlds_list_item_selected():
-	hide_all_worlds_menu_popups()
-	var delete_world_button: Button = $WorldsScreenUI/WorldButtons/DeleteWorld
-	delete_world_button.disabled = false
-	var edit_world_button: Button = $WorldsScreenUI/WorldButtons/EditWorld
-	edit_world_button.disabled = false
-	var play_world_button: Button = $WorldsScreenUI/WorldButtons/Play
-	play_world_button.disabled = false
 
 # Disables the host_without_playing_toggle if multiplayer joining is turned off.
 func toggle_disabling_the_host_without_playing_toggle (button_value: bool) -> void:
@@ -102,6 +99,16 @@ func toggle_disabling_the_host_without_playing_toggle (button_value: bool) -> vo
 	if not button_value:
 		host_without_playing_toggle.button_pressed = false
 
+func _on_worlds_list_item_selected():
+	hide_all_worlds_menu_popups()
+	var delete_world_button: Button = $WorldsScreenUI/WorldButtons/DeleteWorld
+	delete_world_button.disabled = false
+	var edit_world_button: Button = $WorldsScreenUI/WorldButtons/EditWorld
+	edit_world_button.disabled = false
+	var copy_world_button: Button = $WorldsScreenUI/WorldButtons/CopyWorld
+	copy_world_button.disabled = false
+	var play_world_button: Button = $WorldsScreenUI/WorldButtons/PlayWorld
+	play_world_button.disabled = false
 
 func hide_all_worlds_menu_popups():
 	get_node("NewWorldPopup").hide()
@@ -113,5 +120,7 @@ func disable_world_selected_requiring_buttons():
 	delete_world_button.disabled = true
 	var edit_world_button: Button = $WorldsScreenUI/WorldButtons/EditWorld
 	edit_world_button.disabled = true
-	var play_world_button: Button = $WorldsScreenUI/WorldButtons/Play
+	var copy_world_button: Button = $WorldsScreenUI/WorldButtons/CopyWorld
+	copy_world_button.disabled = true
+	var play_world_button: Button = $WorldsScreenUI/WorldButtons/PlayWorld
 	play_world_button.disabled = true
