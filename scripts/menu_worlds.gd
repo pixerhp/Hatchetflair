@@ -25,7 +25,7 @@ func _ready():
 
 
 # Start playing/hosting one of your worlds.
-func start_world():#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
+func start_world(world_index: int = 0):#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
 	var allow_multiplayer_joining_toggle: CheckButton = $WorldsScreenUI/Toggles/AllowJoining
 	var host_without_playing_toggle: CheckButton = $WorldsScreenUI/Toggles/HostWithoutPlay
 	NetworkManager.start_game(not host_without_playing_toggle.button_pressed, true, allow_multiplayer_joining_toggle.button_pressed)
