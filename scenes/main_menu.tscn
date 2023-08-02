@@ -187,10 +187,10 @@ layout_mode = 2
 disabled = true
 text = "Edit World"
 
-[node name="CopyWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+[node name="DuplicateWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
 layout_mode = 2
 disabled = true
-text = "Copy World"
+text = "Duplicate World"
 
 [node name="PlayWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
 layout_mode = 2
@@ -840,7 +840,7 @@ text = "Back"
 [connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_disabling_the_host_without_playing_toggle"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="open_delete_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/EditWorld" to="Menus/WorldsScreen" method="open_edit_world_popup"]
-[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/CopyWorld" to="Menus/WorldsScreen" method="_on_copy_world_pressed"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DuplicateWorld" to="Menus/WorldsScreen" method="_on_duplicate_world_pressed"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/PlayWorld" to="Menus/WorldsScreen" method="_on_play_button_pressed"]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/JoinGame" to="Menus/JoinScreen" method="join_server"]

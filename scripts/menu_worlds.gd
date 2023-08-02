@@ -75,10 +75,11 @@ func confirm_edit_world():
 		update_worlds_list_text()
 		edit_world_popup.hide()
 
-func _on_copy_world_pressed():
+func _on_duplicate_world_pressed():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
 		worlds_list.append("Copy of " + worlds_list[worlds_list_text.get_selected_items()[0]])
 		update_worlds_list_text()
+		disable_world_selected_requiring_buttons()
 
 func _on_play_button_pressed():
 	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
@@ -105,8 +106,8 @@ func _on_worlds_list_item_selected():
 	delete_world_button.disabled = false
 	var edit_world_button: Button = $WorldsScreenUI/WorldButtons/EditWorld
 	edit_world_button.disabled = false
-	var copy_world_button: Button = $WorldsScreenUI/WorldButtons/CopyWorld
-	copy_world_button.disabled = false
+	var duplicate_world_button: Button = $WorldsScreenUI/WorldButtons/DuplicateWorld
+	duplicate_world_button.disabled = false
 	var play_world_button: Button = $WorldsScreenUI/WorldButtons/PlayWorld
 	play_world_button.disabled = false
 
@@ -120,7 +121,7 @@ func disable_world_selected_requiring_buttons():
 	delete_world_button.disabled = true
 	var edit_world_button: Button = $WorldsScreenUI/WorldButtons/EditWorld
 	edit_world_button.disabled = true
-	var copy_world_button: Button = $WorldsScreenUI/WorldButtons/CopyWorld
-	copy_world_button.disabled = true
+	var duplicate_world_button: Button = $WorldsScreenUI/WorldButtons/DuplicateWorld
+	duplicate_world_button.disabled = true
 	var play_world_button: Button = $WorldsScreenUI/WorldButtons/PlayWorld
 	play_world_button.disabled = true
