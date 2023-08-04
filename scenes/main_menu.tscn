@@ -234,7 +234,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[world name]"
 
-[node name="SeedInput" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="WorldSeedInput" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -244,7 +244,7 @@ offset_top = 2.0
 offset_bottom = 38.0
 grow_horizontal = 2
 grow_vertical = 2
-placeholder_text = "[numbered world seed (blank/invalid = random)]"
+placeholder_text = "[integer world seed, leave blank for random]"
 
 [node name="Okay" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
@@ -306,7 +306,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[new world name]"
 
-[node name="SeedInput" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
+[node name="WorldSeedInput" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -433,9 +433,6 @@ text = "Back"
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
-item_count = 2
-item_0/text = "server a"
-item_1/text = "server b"
 
 [node name="ServerButtons" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
 layout_mode = 2
@@ -459,7 +456,7 @@ layout_mode = 2
 disabled = true
 text = "Join World"
 
-[node name="NewServerPopup" type="Panel" parent="Menus/JoinScreen"]
+[node name="AddServerPopup" type="Panel" parent="Menus/JoinScreen"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -474,7 +471,7 @@ offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/NewServerPopup"]
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -484,7 +481,7 @@ bbcode_enabled = true
 text = "[center]New server:[/center]"
 fit_content = true
 
-[node name="ServerIPInput" type="TextEdit" parent="Menus/JoinScreen/NewServerPopup"]
+[node name="ServerIPInput" type="TextEdit" parent="Menus/JoinScreen/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -496,7 +493,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[server ipv4 or ipv6 address]"
 
-[node name="ServerNicknameInput" type="TextEdit" parent="Menus/JoinScreen/NewServerPopup"]
+[node name="ServerNicknameInput" type="TextEdit" parent="Menus/JoinScreen/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -508,7 +505,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[personal nickname for this server]"
 
-[node name="Okay" type="Button" parent="Menus/JoinScreen/NewServerPopup"]
+[node name="Okay" type="Button" parent="Menus/JoinScreen/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -521,7 +518,7 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Okay"
 
-[node name="Cancel" type="Button" parent="Menus/JoinScreen/NewServerPopup"]
+[node name="Cancel" type="Button" parent="Menus/JoinScreen/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -837,6 +834,7 @@ text = "Back"
 [connection signal="item_activated" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="start_world"]
 [connection signal="item_selected" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="_on_worlds_list_item_selected" unbinds=1]
 [connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_disabling_the_host_without_playing_toggle"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/NewWorld" to="Menus/WorldsScreen" method="open_new_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="open_delete_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/EditWorld" to="Menus/WorldsScreen" method="open_edit_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DuplicateWorld" to="Menus/WorldsScreen" method="_on_duplicate_world_pressed"]
@@ -844,6 +842,7 @@ text = "Back"
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="item_activated" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="join_server"]
 [connection signal="item_selected" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="_on_servers_list_item_selected" unbinds=1]
+[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/AddServer" to="Menus/JoinScreen" method="open_add_server_popup"]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/JoinServer" to="Menus/JoinScreen" method="_on_join_button_pressed"]
 [connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="open_menu" binds= ["TitleScreen"]]

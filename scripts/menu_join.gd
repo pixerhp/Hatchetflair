@@ -7,7 +7,14 @@ var servers_ips = ["0", "0"]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	# Connect popups and their buttons to functions.
+	var add_server_popup = get_node("AddServerPopup")
+	add_server_popup.get_node("Okay").pressed.connect(self.confirm_add_server)
+	add_server_popup.get_node("Cancel").pressed.connect(add_server_popup.hide)
+	
+	disable_server_selected_requiring_buttons()
+	hide_all_servers_menu_popups()
+	update_servers_list_text()
 
 
 # Attempts to join the selected server.
@@ -29,7 +36,7 @@ func open_add_server_popup():
 	add_server_popup.get_node("ServerNicknameInput").clear()
 	add_server_popup.show()
 
-func confirm_new_server():
+func confirm_add_server():
 	var add_server_popup = get_node("AddServerPopup")
 	servers_ips.append(add_server_popup.get_node("ServerIPInput").text)
 	servers_nicknames.append(add_server_popup.get_node("ServerNicknameInput").text)
@@ -40,8 +47,8 @@ func confirm_new_server():
 # Update the text of the visible servers-list for the player.
 func update_servers_list_text():
 	servers_list_text.clear()
-	for server_name in servers_nicknames:
-		servers_list_text.add_item(server_name)
+	for nickname in servers_nicknames:
+		servers_list_text.add_item(nickname)
 
 
 func _on_servers_list_item_selected():
@@ -54,7 +61,7 @@ func _on_servers_list_item_selected():
 	join_server_button.disabled = false
 
 func hide_all_servers_menu_popups():
-	get_node("NewServerPopup").hide()
+	get_node("AddServerPopup").hide()
 	get_node("EditServerPopup").hide()
 	get_node("RemoveServerPopup").hide()
 

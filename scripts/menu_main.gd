@@ -23,4 +23,4 @@ func open_menu(screen_name: String) -> void:
 
 # Close the game.
 func quit() -> void:
-	get_tree().quit()
+	get_tree().quit()  

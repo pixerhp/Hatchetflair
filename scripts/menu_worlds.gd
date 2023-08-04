@@ -1,14 +1,13 @@
 extends Control
 
 @onready var worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
-var worlds_list = ["test a", "test b", "test c", "test d", "test e", "test f", "test g", "test h"]
+var worlds_names = ["test a", "test b", "test c", "test d", "test e", "test f", "test g", "test h"]
+var worlds_seeds = [1, 2, 3, 4, 5, 6, 7, 8]
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Connect popups and their buttons to functions.
-	var new_world_button = get_node("WorldsScreenUI/WorldButtons/NewWorld")
-	new_world_button.pressed.connect(self.open_new_world_popup)
 	var new_world_popup = get_node("NewWorldPopup")
 	new_world_popup.get_node("Okay").pressed.connect(self.confirm_new_world)
 	new_world_popup.get_node("Cancel").pressed.connect(new_world_popup.hide)
@@ -35,12 +34,13 @@ func open_new_world_popup():
 	hide_all_worlds_menu_popups()
 	var new_world_popup = get_node("NewWorldPopup")
 	new_world_popup.get_node("WorldNameInput").clear()
-	new_world_popup.get_node("SeedInput").clear()
+	new_world_popup.get_node("WorldSeedInput").clear()
 	new_world_popup.show()
 
 func confirm_new_world():
 	var new_world_popup = get_node("NewWorldPopup")
-	worlds_list.append(new_world_popup.get_node("WorldNameInput").text)
+	worlds_names.append(new_world_popup.get_node("WorldNameInput").text)
+	worlds_seeds.append(new_world_popup.get_node("WorldSeedInput").text)
 	update_worlds_list_text()
 	new_world_popup.hide()
 
@@ -48,13 +48,14 @@ func open_delete_world_popup():
 	hide_all_worlds_menu_popups()
 	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
 		var delete_world_popup = get_node("DeleteWorldPopup")
-		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete \"" + worlds_list[worlds_list_text.get_selected_items()[0]] +"\"?\n(This action cannot be undone.)[/center]"
+		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete \"" + worlds_names[worlds_list_text.get_selected_items()[0]] +"\"?\n(This action cannot be undone.)[/center]"
 		delete_world_popup.show()
 
 func confirm_delete_world():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
 		var delete_world_popup = get_node("DeleteWorldPopup")
-		worlds_list.erase(worlds_list[worlds_list_text.get_selected_items()[0]])
+		worlds_names.remove_at(worlds_list_text.get_selected_items()[0])
+		worlds_seeds.remove_at(worlds_list_text.get_selected_items()[0])
 		delete_world_popup.hide()
 		update_worlds_list_text()
 		disable_world_selected_requiring_buttons()
@@ -63,21 +64,21 @@ func open_edit_world_popup():
 	hide_all_worlds_menu_popups()
 	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
 		var edit_world_popup = get_node("EditWorldPopup")
-		edit_world_popup.get_node("PopupTitleText").text = "[center]What will you rename world \"" + worlds_list[worlds_list_text.get_selected_items()[0]] +"\" to?[/center]"
-		edit_world_popup.get_node("WorldNameInput").text = worlds_list[worlds_list_text.get_selected_items()[0]]
+		edit_world_popup.get_node("PopupTitleText").text = "[center]What will you rename world \"" + worlds_names[worlds_list_text.get_selected_items()[0]] +"\" to?[/center]"
+		edit_world_popup.get_node("WorldNameInput").text = worlds_names[worlds_list_text.get_selected_items()[0]]
 		edit_world_popup.get_node("SeedInput").clear()
 		edit_world_popup.show()
 
 func confirm_edit_world():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
 		var edit_world_popup = get_node("EditWorldPopup")
-		worlds_list[worlds_list_text.get_selected_items()[0]] = edit_world_popup.get_node("WorldNameInput").text
+		worlds_names[worlds_list_text.get_selected_items()[0]] = edit_world_popup.get_node("WorldNameInput").text
 		update_worlds_list_text()
 		edit_world_popup.hide()
 
 func _on_duplicate_world_pressed():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
-		worlds_list.append("Copy of " + worlds_list[worlds_list_text.get_selected_items()[0]])
+		worlds_names.append("Copy of " + worlds_names[worlds_list_text.get_selected_items()[0]])
 		update_worlds_list_text()
 		disable_world_selected_requiring_buttons()
 
@@ -89,7 +90,7 @@ func _on_play_button_pressed():
 # Update the text of the visible worlds-list for the player.
 func update_worlds_list_text():
 	worlds_list_text.clear()
-	for world in worlds_list:
+	for world in worlds_names:
 		worlds_list_text.add_item(world)
 
 
