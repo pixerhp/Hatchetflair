@@ -1,8 +1,8 @@
 extends Control
 
 @onready var worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
-var worlds_names = ["test a", "test b", "test c", "test d", "test e", "test f", "test g", "test h"]
-var worlds_seeds = [1, 2, 3, 4, 5, 6, 7, 8]
+var worlds_names = ["world_1", "example 2", "third world", "Bojler eladó"]
+var worlds_seeds = [314, -2165489, 33333333, int("Stevemc32")]
 
 
 # Called when the node enters the scene tree for the first time.

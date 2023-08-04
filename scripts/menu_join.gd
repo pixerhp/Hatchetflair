@@ -1,8 +1,8 @@
 extends Control
 
 @onready var servers_list_text = get_node("JoinScreenUI/SavedServersList")
-var servers_nicknames = ["server a", "server b"]
-var servers_ips = ["0", "0"]
+var servers_nicknames = ["localhost 127.0.0.1", "bad ip address A", "bad ip address B"]
+var servers_ips = ["127.0.0.1", "3256.23532.456.1241356", "definitely an ip address ;^)"]
 
 
 # Called when the node enters the scene tree for the first time.
