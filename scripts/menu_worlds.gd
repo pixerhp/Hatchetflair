@@ -40,7 +40,12 @@ func open_new_world_popup():
 func confirm_new_world():
 	var new_world_popup = get_node("NewWorldPopup")
 	worlds_names.append(new_world_popup.get_node("WorldNameInput").text)
-	worlds_seeds.append(new_world_popup.get_node("WorldSeedInput").text)
+	if (new_world_popup.get_node("WorldSeedInput").text == ""):
+		var random = RandomNumberGenerator.new()
+		random.randomize()
+		worlds_seeds.append(random.randi() + random.randi() - 4294967296)
+	else:
+		worlds_seeds.append(int(new_world_popup.get_node("WorldSeedInput").text))
 	update_worlds_list_text()
 	new_world_popup.hide()
 
@@ -66,13 +71,19 @@ func open_edit_world_popup():
 		var edit_world_popup = get_node("EditWorldPopup")
 		edit_world_popup.get_node("PopupTitleText").text = "[center]What will you rename world \"" + worlds_names[worlds_list_text.get_selected_items()[0]] +"\" to?[/center]"
 		edit_world_popup.get_node("WorldNameInput").text = worlds_names[worlds_list_text.get_selected_items()[0]]
-		edit_world_popup.get_node("SeedInput").clear()
+		edit_world_popup.get_node("WorldSeedInput").text = str(worlds_seeds[worlds_list_text.get_selected_items()[0]])
 		edit_world_popup.show()
 
 func confirm_edit_world():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
 		var edit_world_popup = get_node("EditWorldPopup")
 		worlds_names[worlds_list_text.get_selected_items()[0]] = edit_world_popup.get_node("WorldNameInput").text
+		if (edit_world_popup.get_node("WorldSeedInput").text == ""):
+			var random = RandomNumberGenerator.new()
+			random.randomize()
+			worlds_seeds[worlds_list_text.get_selected_items()[0]] = random.randi() + random.randi() - 4294967296
+		else:
+			worlds_seeds[worlds_list_text.get_selected_items()[0]] = int(edit_world_popup.get_node("WorldSeedInput").text)
 		update_worlds_list_text()
 		edit_world_popup.hide()
 

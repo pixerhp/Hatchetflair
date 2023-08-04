@@ -3,6 +3,7 @@ extends Control
 
 # Called when this script is loaded into the scene
 func _ready() -> void:
+	randomize()
 	NetworkManager.network_status_update.connect(self.network_status_update)
 
 # Called every frame
