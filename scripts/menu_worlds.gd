@@ -24,7 +24,7 @@ func _ready():
 
 
 # Start playing/hosting one of your worlds.
-func start_world(world_index: int = 0):#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
+func start_world(worlds_list_index: int = 0):#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
 	var allow_multiplayer_joining_toggle: CheckButton = $WorldsScreenUI/Toggles/AllowJoining
 	var host_without_playing_toggle: CheckButton = $WorldsScreenUI/Toggles/HostWithoutPlay
 	NetworkManager.start_game(not host_without_playing_toggle.button_pressed, true, allow_multiplayer_joining_toggle.button_pressed)
@@ -49,25 +49,9 @@ func confirm_new_world():
 	update_worlds_list_text()
 	new_world_popup.hide()
 
-func open_delete_world_popup():
-	hide_all_worlds_menu_popups()
-	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
-		var delete_world_popup = get_node("DeleteWorldPopup")
-		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete \"" + worlds_names[worlds_list_text.get_selected_items()[0]] +"\"?\n(This action cannot be undone.)[/center]"
-		delete_world_popup.show()
-
-func confirm_delete_world():
-	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
-		var delete_world_popup = get_node("DeleteWorldPopup")
-		worlds_names.remove_at(worlds_list_text.get_selected_items()[0])
-		worlds_seeds.remove_at(worlds_list_text.get_selected_items()[0])
-		delete_world_popup.hide()
-		update_worlds_list_text()
-		disable_world_selected_requiring_buttons()
-
 func open_edit_world_popup():
 	hide_all_worlds_menu_popups()
-	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
+	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no world is selected.
 		var edit_world_popup = get_node("EditWorldPopup")
 		edit_world_popup.get_node("PopupTitleText").text = "[center]What will you rename world \"" + worlds_names[worlds_list_text.get_selected_items()[0]] +"\" to?[/center]"
 		edit_world_popup.get_node("WorldNameInput").text = worlds_names[worlds_list_text.get_selected_items()[0]]
@@ -86,6 +70,22 @@ func confirm_edit_world():
 			worlds_seeds[worlds_list_text.get_selected_items()[0]] = int(edit_world_popup.get_node("WorldSeedInput").text)
 		update_worlds_list_text()
 		edit_world_popup.hide()
+
+func open_delete_world_popup():
+	hide_all_worlds_menu_popups()
+	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no world is selected.
+		var delete_world_popup = get_node("DeleteWorldPopup")
+		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete\n\"" + worlds_names[worlds_list_text.get_selected_items()[0]] +"\"?\n(This action cannot be undone.)[/center]"
+		delete_world_popup.show()
+
+func confirm_delete_world():
+	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
+		var delete_world_popup = get_node("DeleteWorldPopup")
+		worlds_names.remove_at(worlds_list_text.get_selected_items()[0])
+		worlds_seeds.remove_at(worlds_list_text.get_selected_items()[0])
+		delete_world_popup.hide()
+		update_worlds_list_text()
+		disable_world_selected_requiring_buttons()
 
 func _on_duplicate_world_pressed():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
