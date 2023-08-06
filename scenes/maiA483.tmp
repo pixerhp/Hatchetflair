@@ -1,0 +1,851 @@
+[gd_scene load_steps=7 format=3 uid="uid://bbwhtlk15abxa"]
+
+[ext_resource type="Script" path="res://scripts/main_menu_scripts/menu_main.gd" id="1_2o0by"]
+[ext_resource type="Script" path="res://scripts/main_menu_scripts/menu_worlds.gd" id="2_du0b7"]
+[ext_resource type="Script" path="res://scripts/main_menu_scripts/menu_join.gd" id="3_1l7uw"]
+
+[sub_resource type="Gradient" id="Gradient_skhgw"]
+interpolation_mode = 2
+colors = PackedColorArray(0.440336, 0.440336, 0.440336, 1, 0.37918, 0.37918, 0.37918, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0peb1"]
+fractal_type = 3
+fractal_ping_pong_strength = 0.837
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ewhrs"]
+color_ramp = SubResource("Gradient_skhgw")
+noise = SubResource("FastNoiseLite_0peb1")
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_2o0by")
+
+[node name="BackgroundTexture" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_ewhrs")
+
+[node name="Menus" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleScreen" type="Control" parent="Menus"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleScreenUI" type="VBoxContainer" parent="Menus/TitleScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spacer1" type="Control" parent="Menus/TitleScreen/TitleScreenUI"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/TitleScreen/TitleScreenUI"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 50
+bbcode_enabled = true
+text = "[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=2 amp=50]Hatchetflare[/wave][/rainbow][/center]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Spacer2" type="Control" parent="Menus/TitleScreen/TitleScreenUI"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StartWorld" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Start World"
+
+[node name="JoinWorld" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Join World"
+
+[node name="Settings" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Settings"
+
+[node name="Credits" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Credits"
+
+[node name="Quit" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Quit"
+
+[node name="Spacer3" type="Control" parent="Menus/TitleScreen/TitleScreenUI"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="WorldsScreen" type="Control" parent="Menus"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_du0b7")
+
+[node name="WorldsScreenUI" type="VBoxContainer" parent="Menus/WorldsScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/WorldsScreen/WorldsScreenUI"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 50
+bbcode_enabled = true
+text = "[center]Worlds List[/center]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="BackButton" type="HBoxContainer" parent="Menus/WorldsScreen/WorldsScreenUI"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/BackButton"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Back"
+
+[node name="SavedWorldsList" type="ItemList" parent="Menus/WorldsScreen/WorldsScreenUI"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Toggles" type="HBoxContainer" parent="Menus/WorldsScreen/WorldsScreenUI"]
+layout_mode = 2
+
+[node name="AllowJoining" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
+layout_mode = 2
+text = "Host Multiplayer"
+
+[node name="HostWithoutPlay" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
+layout_mode = 2
+disabled = true
+text = "Host without playing"
+
+[node name="WorldButtons" type="HBoxContainer" parent="Menus/WorldsScreen/WorldsScreenUI"]
+layout_mode = 2
+
+[node name="NewWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+layout_mode = 2
+text = "New World"
+
+[node name="DeleteWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+layout_mode = 2
+disabled = true
+text = "Delete World"
+
+[node name="EditWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+layout_mode = 2
+disabled = true
+text = "Edit World"
+
+[node name="DuplicateWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+layout_mode = 2
+disabled = true
+text = "Duplicate World"
+
+[node name="PlayWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+layout_mode = 2
+disabled = true
+text = "Play"
+
+[node name="NewWorldPopup" type="Panel" parent="Menus/WorldsScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Create a new world:[/center]"
+fit_content = true
+
+[node name="WorldNameInput" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[world name]"
+
+[node name="WorldSeedInput" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 2.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[integer world seed, leave blank for random]"
+
+[node name="Okay" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Okay"
+
+[node name="Cancel" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
+
+[node name="EditWorldPopup" type="Panel" parent="Menus/WorldsScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsScreen/EditWorldPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Edit world:[/center]"
+fit_content = true
+
+[node name="WorldNameInput" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[new world name]"
+
+[node name="WorldSeedInput" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 2.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[new world generation seed]"
+
+[node name="Okay" type="Button" parent="Menus/WorldsScreen/EditWorldPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Okay"
+
+[node name="Cancel" type="Button" parent="Menus/WorldsScreen/EditWorldPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
+
+[node name="DeleteWorldPopup" type="Panel" parent="Menus/WorldsScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsScreen/DeleteWorldPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Are you sure you want to delete that world? 
+(This action cannot be undone.)[/center]"
+fit_content = true
+
+[node name="Confirm" type="Button" parent="Menus/WorldsScreen/DeleteWorldPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Yes"
+
+[node name="Cancel" type="Button" parent="Menus/WorldsScreen/DeleteWorldPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
+
+[node name="JoinScreen" type="Control" parent="Menus"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_1l7uw")
+
+[node name="JoinScreenUI" type="VBoxContainer" parent="Menus/JoinScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/JoinScreen/JoinScreenUI"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 50
+bbcode_enabled = true
+text = "[center]Server IPs List[/center]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="BackButton" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="Menus/JoinScreen/JoinScreenUI/BackButton"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Back"
+
+[node name="SavedServersList" type="ItemList" parent="Menus/JoinScreen/JoinScreenUI"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ServerButtons" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
+layout_mode = 2
+
+[node name="AddServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
+layout_mode = 2
+text = "Add Server"
+
+[node name="RemoveServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
+layout_mode = 2
+disabled = true
+text = "Remove Server"
+
+[node name="EditServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
+layout_mode = 2
+disabled = true
+text = "Edit Server"
+
+[node name="JoinServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
+layout_mode = 2
+disabled = true
+text = "Join World"
+
+[node name="AddServerPopup" type="Panel" parent="Menus/JoinScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/AddServerPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]New server:[/center]"
+fit_content = true
+
+[node name="ServerIPInput" type="TextEdit" parent="Menus/JoinScreen/AddServerPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[server ipv4 or ipv6 address]"
+
+[node name="ServerNicknameInput" type="TextEdit" parent="Menus/JoinScreen/AddServerPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 2.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[personal nickname for this server]"
+
+[node name="Okay" type="Button" parent="Menus/JoinScreen/AddServerPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Okay"
+
+[node name="Cancel" type="Button" parent="Menus/JoinScreen/AddServerPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
+
+[node name="EditServerPopup" type="Panel" parent="Menus/JoinScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/EditServerPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Edit server IP and nickname:[/center]"
+fit_content = true
+
+[node name="ServerIPInput" type="TextEdit" parent="Menus/JoinScreen/EditServerPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -38.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[server ipv4 or ipv6 address]"
+
+[node name="ServerNicknameInput" type="TextEdit" parent="Menus/JoinScreen/EditServerPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 2.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[personal nickname for this server]"
+
+[node name="Okay" type="Button" parent="Menus/JoinScreen/EditServerPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Okay"
+
+[node name="Cancel" type="Button" parent="Menus/JoinScreen/EditServerPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
+
+[node name="RemoveServerPopup" type="Panel" parent="Menus/JoinScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/RemoveServerPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center]Are you sure you want to remove that server? 
+(This action cannot be undone.)[/center]"
+fit_content = true
+
+[node name="Confirm" type="Button" parent="Menus/JoinScreen/RemoveServerPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Yes"
+
+[node name="Cancel" type="Button" parent="Menus/JoinScreen/RemoveServerPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
+
+[node name="SettingsScreen" type="Control" parent="Menus"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleText" type="RichTextLabel" parent="Menus/SettingsScreen"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -157.0
+offset_top = 69.0
+offset_right = 157.0
+offset_bottom = 138.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 50
+bbcode_enabled = true
+text = "[center]Adjustable settings are not yet supported 
+as the game is still in extremely early stages.[/center]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="SettingsButtons" type="VBoxContainer" parent="Menus/SettingsScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -22.5
+offset_top = -15.5
+offset_right = 22.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Back" type="Button" parent="Menus/SettingsScreen/SettingsButtons"]
+layout_mode = 2
+text = "Back"
+
+[node name="CreditsScreen" type="Control" parent="Menus"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleText" type="RichTextLabel" parent="Menus/CreditsScreen"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -402.0
+offset_top = 69.0
+offset_right = 402.0
+offset_bottom = 120.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "Hatchetflare is made possible by these lovely people:"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Credits" type="RichTextLabel" parent="Menus/CreditsScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -122.0
+offset_top = -138.0
+offset_right = 122.0
+offset_bottom = 138.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 5
+theme_override_constants/outline_size = 4
+bbcode_enabled = true
+text = "Lead creative designer:
+	[rainbow freq=0.1][wave]Pixer Pinecone[/wave][/rainbow]
+Developers:
+	[color=orange][wave]Jcodefox[/wave][/color]
+	[wave]SteveMC[/wave]
+Playtesters:
+	[wave]Blitceed[/wave]
+	[wave]LandOcto950[/wave]
+	[wave]Redstone[/wave]
+Other contributions:
+	[wave]Stranded Software Developer[/wave]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Back" type="Button" parent="Menus/CreditsScreen"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -22.0
+offset_top = -119.0
+offset_right = 23.0
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Back"
+
+[node name="NetworkInfoOverlay" type="Control" parent="Menus"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Menus/NetworkInfoOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.309804, 0.309804, 0.309804, 0.901961)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/NetworkInfoOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+fit_content = true
+autowrap_mode = 0
+
+[node name="BackButton" type="Button" parent="Menus/NetworkInfoOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -22.0
+offset_top = 54.0
+offset_right = 23.0
+offset_bottom = 85.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Back"
+
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/StartWorld" to="." method="open_menu" binds= ["WorldsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/JoinWorld" to="." method="open_menu" binds= ["JoinScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Settings" to="." method="open_menu" binds= ["SettingsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Credits" to="." method="open_menu" binds= ["CreditsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Quit" to="." method="quit"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
+[connection signal="item_activated" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="start_world"]
+[connection signal="item_selected" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="_on_worlds_list_item_selected" unbinds=1]
+[connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_disabling_the_host_without_playing_toggle"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/NewWorld" to="Menus/WorldsScreen" method="open_new_world_popup"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="open_delete_world_popup"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/EditWorld" to="Menus/WorldsScreen" method="open_edit_world_popup"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DuplicateWorld" to="Menus/WorldsScreen" method="_on_duplicate_world_pressed"]
+[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/PlayWorld" to="Menus/WorldsScreen" method="_on_play_button_pressed"]
+[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
+[connection signal="item_activated" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="join_server"]
+[connection signal="item_selected" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="_on_servers_list_item_selected" unbinds=1]
+[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/AddServer" to="Menus/JoinScreen" method="open_add_server_popup"]
+[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/RemoveServer" to="Menus/JoinScreen" method="open_remove_server_popup"]
+[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/EditServer" to="Menus/JoinScreen" method="open_edit_server_popup"]
+[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/JoinServer" to="Menus/JoinScreen" method="_on_join_button_pressed"]
+[connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="open_menu" binds= ["TitleScreen"]]
+[connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="open_menu" binds= ["TitleScreen"]]
+[connection signal="pressed" from="Menus/NetworkInfoOverlay/BackButton" to="." method="network_status_update" binds= ["Pressed back button", false, false]]

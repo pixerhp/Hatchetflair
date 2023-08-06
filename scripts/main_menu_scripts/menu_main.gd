@@ -1,10 +1,12 @@
 extends Control
 
-
 # Called when this script is loaded into the scene
 func _ready() -> void:
-	randomize()
+	# Network stuff.
 	NetworkManager.network_status_update.connect(self.network_status_update)
+	
+	# Set the windows title to include the game's name, the version, and a fun splash text if it loads right.
+	GlobalStuff.set_window_title()
 
 # Called every frame
 func _process(_delta: float) -> void:
