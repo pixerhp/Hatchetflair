@@ -1,7 +1,7 @@
 =^)
 	A smiley i occassionally use. i like having a nose.
 Accidentally went down too many stairs ended up in second-basement...
-	remnicient of dream-logic.
+	remnicient of dream-like-logic and liminal feelings.
 bojler eladó
 	“boiler for sale” in hungarian, a popular hungarian meme phrase.
 Catholic!
@@ -16,10 +16,10 @@ Early in development
 	the game is currently still in very early in development.
 Hatchetflash, Hatchetflare, Hatchetflair or other?
 	I still don't feel certain about what the game's name should be.
-Have a lovely day today!
-	you too, person reading this!
+Have a lovely day!
+	you also, the person reading this!
 Have fun!
-	i value players having fun over money. i hate scummy monetary tactics.
+	i hope players have lots of fun with my game, i value it over money.
 Have you ever splatted a 'squiter with a femur bone?
 	A reference to "Secret of Evermore" (SNES).
 hello! -pixer
@@ -32,3 +32,5 @@ Made in Godot!
 	a classic splash. the question mark is because those don't currently exist.
 tau > pi
 	i believe tau is the true circle constant, and also literally: 6.28 > 3.14
+tesseracts are cool!
+	a tesseract is the four-dimensional analogue of the cube.
