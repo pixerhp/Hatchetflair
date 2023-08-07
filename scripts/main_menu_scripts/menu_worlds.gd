@@ -25,9 +25,12 @@ func _ready():
 
 # Start playing/hosting one of your worlds.
 func start_world(worlds_list_index: int = 0):#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
-	var allow_multiplayer_joining_toggle: CheckButton = $WorldsScreenUI/Toggles/AllowJoining
-	var host_without_playing_toggle: CheckButton = $WorldsScreenUI/Toggles/HostWithoutPlay
-	NetworkManager.start_game(not host_without_playing_toggle.button_pressed, true, allow_multiplayer_joining_toggle.button_pressed)
+	print("Chosen world index: " + str(worlds_list_index))
+	NetworkManager.start_game(not $WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed, true, $WorldsScreenUI/Toggles/AllowJoining.button_pressed)
+
+func _on_play_button_pressed():
+	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
+		start_world(worlds_list_text.get_selected_items()[0])
 
 
 func open_new_world_popup():
@@ -92,10 +95,6 @@ func _on_duplicate_world_pressed():
 		worlds_names.append("Copy of " + worlds_names[worlds_list_text.get_selected_items()[0]])
 		update_worlds_list_text()
 		disable_world_selected_requiring_buttons()
-
-func _on_play_button_pressed():
-	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
-		start_world()
 
 
 # Update the text of the visible worlds-list for the player.

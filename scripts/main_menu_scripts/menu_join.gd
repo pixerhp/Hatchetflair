@@ -25,14 +25,13 @@ func _ready():
 
 # Attempts to join the selected server.
 func join_server(server_list_index: int = 0):
-	# UPDATE THIS TO WORK WITH THE SELECTED SERVER IP LATER.
-	NetworkManager.start_game(true, false, true, "127.0.0.1")
-	pass
+	print("Chosen server index: " + str(server_list_index))
+	NetworkManager.start_game(true, false, true, servers_ips[servers_list_text.get_selected_items()[0]])
 
 
 func _on_join_button_pressed():
 	if not servers_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
-		join_server()
+		join_server(servers_list_text.get_selected_items()[0])
 
 
 func open_add_server_popup():

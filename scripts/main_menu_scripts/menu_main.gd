@@ -5,11 +5,9 @@ func _ready() -> void:
 	# Network stuff(?)
 	NetworkManager.network_status_update.connect(self.network_status_update)
 
-# Called every frame
-func _process(_delta: float) -> void:
-	pass
 
-# Display the current connecting status
+# Display the current connecting status using the NetworkInfoOverlay menu.S
+# I think we should rename this function later.
 func network_status_update(message: String, should_display: bool, show_back_button: bool):
 	$Menus/NetworkInfoOverlay.visible = should_display
 	$Menus/NetworkInfoOverlay/RichTextLabel.text = message
