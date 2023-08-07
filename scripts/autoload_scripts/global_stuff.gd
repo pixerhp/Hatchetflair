@@ -1,11 +1,11 @@
 extends Node
 
-const game_version_engine: String = "1"
-const game_version_major: String = "0"
-const game_version_minor: String = "pregame_6"
+const game_version_phase: String = "1"
+const game_version_major: String = "pregame"
+const game_version_minor: String = "6"
 
 func version_entire_string() -> String:
-	return(game_version_engine + "." + game_version_major + "." + game_version_minor)
+	return(game_version_phase + "." + game_version_major + "." + game_version_minor)
 
 
 func _ready() -> void:
