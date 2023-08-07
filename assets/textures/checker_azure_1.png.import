@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://76r1cex2tj1g"
-path="res://.godot/imported/azure_checker_2.png-35a738638c9a91a7da0db96acb0b9861.ctex"
+uid="uid://ccyerwy4co55e"
+path="res://.godot/imported/checker_azure_1.png-36d12f02c5a03d63945cc72e2142fee8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/azure_checker_2.png"
-dest_files=["res://.godot/imported/azure_checker_2.png-35a738638c9a91a7da0db96acb0b9861.ctex"]
+source_file="res://assets/textures/checker_azure_1.png"
+dest_files=["res://.godot/imported/checker_azure_1.png-36d12f02c5a03d63945cc72e2142fee8.ctex"]
 
 [params]
 
