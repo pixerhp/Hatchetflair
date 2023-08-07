@@ -4,6 +4,8 @@
 	it's an integer that i like, and 3:14 is an interesting time.
 accidentally went down too many stairs and ended up in second-basement...
 	remnicient of dream-like logic and similar liminal feelings.
+ala li kijetesantakalu?
+	references the toki pona conlang, also that the game doesn't have raccoons.
 bojler eladó
 	“boiler for sale” in hungarian, a popular hungarian meme phrase.
 Catholic!
@@ -18,6 +20,9 @@ dragons?
 	eventually there will probably be dragons and dragonoids.
 early in development.
 	the game is currently still in very early in development.
+Flerovian!
+	a word i like and use to describe a genre of my own fantasy ideas.
+	also references provious game/other ideas, like "Lands of Fleradove".
 Hatchetflash, Hatchetflare, Hatchetflair or other?
 	I still don't feel certain about what the game's name should be.
 have a lovely day!
@@ -26,16 +31,25 @@ have fun!
 	i hope players have lots of fun with my game, i value it over money.
 hello! -pixer
 	hello! -pixer who's typing up these window-splash-texts.
-ala li kijetesantakalu?
-	references the toki pona conlang, also that the game doesn't have raccoons.
+hexagons are the bestagons!
+	hexagons are a cool tileable shape.
+icosahedrons are so pretty!
+	they really are, imagine little carryable icosahedrons of material.
+Ka-jackelmonoque, Quatuuvix.
+	fun sounding words i thought of a while ago.
+	bastardized segments of trying to pronounce the alphabet as one word.
 Made with Godot!
 	the game is currently being made in godot.
+rhombic dodecahedrons are the... bestagonoids?
+	rhombic dodecahedrons are like a 3D analogue to hexagons.
 sticks and strawberries?
 	a classic splash. the question mark is because those don't currently exist.
 tau > pi
 	i believe tau is the true circle constant, and also literally: 6.28 > 3.14
 tesseracts are cool!
 	a tesseract is the four-dimensional analogue of the cube.
+Unincorporated!
+	corporations are very money-oriented by design, so i want us to stay like this.
 "WOAH, 3D The Blockheads!?"
 	a reference to the game: "the blockheads" by David Frampton.
 	also a reference to joke phrases like "2D Minecraft", "3D Terraria", etc.
