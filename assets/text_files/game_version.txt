@@ -1,9 +1,11 @@
-phase/engine:
+phase:
+	pre-game
+engine:
 	1
 major version:
-	pre-game
-minor version:
 	6
+minor version:
+	0
 
 [[[ REMEMBER TO UPDATE THESE IN THE "global_stuff" AUTOLOAD SCRIPT TOO. ]]]
 it's located at: res://scripts/autoload_scripts/global_stuff.gd
