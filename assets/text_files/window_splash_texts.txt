@@ -1,36 +1,43 @@
 =^)
 	A smiley i occassionally use. i like having a nose.
-Accidentally went down too many stairs ended up in second-basement...
-	remnicient of dream-like-logic and liminal feelings.
+314
+	it's an integer that i like, and 3:14 is an interesting time.
+accidentally went down too many stairs and ended up in second-basement...
+	remnicient of dream-like logic and similar liminal feelings.
 bojler eladó
 	“boiler for sale” in hungarian, a popular hungarian meme phrase.
 Catholic!
-	i am designing the game with avoiding-tempting-players in mind.
-Creature-friends?
+	i am designing the game with avoiding-tempting-players-into-sin in mind.
+creature-friends?
 	the game is likely to have a variety of creature-sapients.
-Cubic!
-	cubic chunks, and a cube-shaped largest possible world.
-Dragons?
+cubic chunks!
+	the game will have cubic chunks, meaning one can be above/below another.
+did you accidentally build the school 30 stories tall again?
+	a reference to the "Wayside School" books, especially the original 3.
+dragons?
 	eventually there will probably be dragons and dragonoids.
-Early in development
+early in development.
 	the game is currently still in very early in development.
 Hatchetflash, Hatchetflare, Hatchetflair or other?
 	I still don't feel certain about what the game's name should be.
-Have a lovely day!
+have a lovely day!
 	you also, the person reading this!
-Have fun!
+have fun!
 	i hope players have lots of fun with my game, i value it over money.
-Have you ever splatted a 'squiter with a femur bone?
-	A reference to "Secret of Evermore" (SNES).
 hello! -pixer
 	hello! -pixer who's typing up these window-splash-texts.
-kijetesantakalu?
-	references the toki pona conlang.
-Made in Godot!
+ala li kijetesantakalu?
+	references the toki pona conlang, also that the game doesn't have raccoons.
+Made with Godot!
 	the game is currently being made in godot.
-"sticks and strawberries"?
+sticks and strawberries?
 	a classic splash. the question mark is because those don't currently exist.
 tau > pi
 	i believe tau is the true circle constant, and also literally: 6.28 > 3.14
 tesseracts are cool!
 	a tesseract is the four-dimensional analogue of the cube.
+"WOAH, 3D The Blockheads!?"
+	a reference to the game: "the blockheads" by David Frampton.
+	also a reference to joke phrases like "2D Minecraft", "3D Terraria", etc.
+'you ever splatted a 'squiter with a femur bone?
+	A reference to "Secret of Evermore" (SNES).
