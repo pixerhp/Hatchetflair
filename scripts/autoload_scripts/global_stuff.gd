@@ -2,7 +2,7 @@ extends Node
 
 const game_version_phase: String = "pre-game"
 const game_version_engine: String = "1"
-const game_version_major: String = "6"
+const game_version_major: String = "7"
 const game_version_minor: String = "0"
 const game_version_entire: String = game_version_phase + " v" + game_version_engine + "." + game_version_major + "." + game_version_minor
 
@@ -13,6 +13,36 @@ func _ready() -> void:
 	
 	# Set the windows title to include the game's name, the version, and a fun splash text if it loads right.
 	set_window_title()
+	
+	# Some essential and example HF user directory content.
+	var file
+	DirAccess.make_dir_absolute("user://storage")
+	file = FileAccess.open("user://storage/user_info.txt", FileAccess.WRITE)
+	file.store_line(game_version_entire)
+	file.store_line("Pixer Pinecone")
+	file.close()
+	file = FileAccess.open("user://storage/servers_list.txt", FileAccess.WRITE)
+	file.store_line(game_version_entire)
+	file.store_line("localhost 127.0.0.1")
+	file.store_line("127.0.0.1")
+	file.store_line("bad ip example")
+	file.store_line("234534534.24653463.34534.547124325")
+	file.close()
+	DirAccess.make_dir_absolute("user://storage/worlds")
+	DirAccess.make_dir_absolute("user://storage/worlds/world_1")
+	file = FileAccess.open("user://storage/worlds/world_1/world_info.txt", FileAccess.WRITE)
+	file.store_line(game_version_entire)
+	file.store_line("date created: 2023/8/7")
+	file.store_line("last played: 2023/8/7")
+	file.store_line("world generation seed: 314")
+	file.close()
+	file = FileAccess.open("user://storage/worlds_list.txt", FileAccess.WRITE)
+	file.store_line(game_version_entire)
+	file.store_line("world_1") # listed world name in the worlds menu.
+	file.store_line("world_1") # name of the folder the world is stored in.
+	file.close()
+	DirAccess.make_dir_absolute("user://storage/worlds/world_1/chunks")
+	
 
 
 func set_window_title(optional_specified_title: String = ""):

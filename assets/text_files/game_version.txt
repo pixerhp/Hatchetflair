@@ -3,7 +3,7 @@ phase:
 engine:
 	1
 major version:
-	6
+	7
 minor version:
 	0
 
