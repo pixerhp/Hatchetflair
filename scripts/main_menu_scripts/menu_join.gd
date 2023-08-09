@@ -74,8 +74,6 @@ func open_remove_server_popup():
 func confirm_remove_server():
 	var servers_list_text = get_node("JoinScreenUI/SavedServersList")
 	if not servers_list_text.get_selected_items().is_empty(): # Crash prevention for if no server nickname is selected.
-		servers_nicknames.remove_at(servers_list_text.get_selected_items()[0])
-		servers_ips.remove_at(servers_list_text.get_selected_items()[0])
 		
 		var servers_text_file_contents = get_array_of_servers_list_file_contents()
 		servers_text_file_contents.remove_at((servers_list_text.get_selected_items()[0] * 2) + 1)
