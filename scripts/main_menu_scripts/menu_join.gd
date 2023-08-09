@@ -51,7 +51,7 @@ func open_edit_server_popup():
 	hide_all_servers_menu_popups()
 	if not servers_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
 		var edit_server_popup = get_node("EditServerPopup")
-		edit_server_popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + servers_nicknames[servers_list_text.get_selected_items()[0]] +"\""
+		edit_server_popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + "[insert server nickname here]" +"\""
 		edit_server_popup.get_node("ServerIPInput").text = servers_ips[servers_list_text.get_selected_items()[0]]
 		edit_server_popup.get_node("ServerNicknameInput").text = servers_nicknames[servers_list_text.get_selected_items()[0]]
 		edit_server_popup.show()
@@ -68,24 +68,47 @@ func open_remove_server_popup():
 	hide_all_servers_menu_popups()
 	if not servers_list_text.get_selected_items().is_empty(): # Don't do anything if no server is selected.
 		var remove_server_popup = get_node("RemoveServerPopup")
-		remove_server_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + servers_nicknames[servers_list_text.get_selected_items()[0]] +"\"?\n(This action cannot be undone.)[/center]"
+		remove_server_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + get_array_of_servers_list_file_contents()[servers_list_text.get_selected_items()[0] * 2] +"\"?\n(This action cannot be undone.)[/center]"
 		remove_server_popup.show()
 
 func confirm_remove_server():
-	if not servers_list_text.get_selected_items().is_empty(): # Crash prevention for if no server is selected.
-		var remove_server_popup = get_node("RemoveServerPopup")
+	var servers_list_text = get_node("JoinScreenUI/SavedServersList")
+	if not servers_list_text.get_selected_items().is_empty(): # Crash prevention for if no server nickname is selected.
 		servers_nicknames.remove_at(servers_list_text.get_selected_items()[0])
 		servers_ips.remove_at(servers_list_text.get_selected_items()[0])
-		remove_server_popup.hide()
+		
+		var servers_text_file_contents = get_array_of_servers_list_file_contents()
+		servers_text_file_contents.remove_at((servers_list_text.get_selected_items()[0] * 2) + 1)
+		servers_text_file_contents.remove_at(servers_list_text.get_selected_items()[0] * 2)
+		
+		# Replace the servers list text file contents with updated contents.
+		if (FileAccess.file_exists("user://storage/servers_list.txt")):
+			var servers_text_file: FileAccess
+			servers_text_file = FileAccess.open("user://storage/servers_list.txt", FileAccess.WRITE)
+			servers_text_file.store_line(GlobalStuff.game_version_entire)
+			for line in servers_text_file_contents:
+				servers_text_file.store_line(line)
+			servers_text_file.close()
+		else:
+			push_error("The text file for the servers list could not be found or accessed by the join menu.")
+		
+		get_node("RemoveServerPopup").hide()
 		update_servers_list_text()
 		disable_server_selected_requiring_buttons()
 
 
 # Update the text of the visible servers-list for the player.
 func update_servers_list_text():
+	var servers_list_text = get_node("JoinScreenUI/SavedServersList")
 	servers_list_text.clear()
-	
-	# If the servers list text file can be found:
+	var servers_text_file_contents = get_array_of_servers_list_file_contents()
+	for index in range(0, servers_text_file_contents.size()-1, 2):
+		servers_list_text.add_item(servers_text_file_contents[index])
+
+# Outputs an array of strings, of every* line from the servers list text file.
+# *Doesn't include the line 1 version number, or the last line either if it's blank or the number of content lines is odd.
+func get_array_of_servers_list_file_contents() -> Array[String]:
+	# If the servers list text file is able to be found/accessed:
 	if (FileAccess.file_exists("user://storage/servers_list.txt")):
 		var servers_list_txt_file: FileAccess
 		servers_list_txt_file = FileAccess.open("user://storage/servers_list.txt", FileAccess.READ)
@@ -97,12 +120,12 @@ func update_servers_list_text():
 			servers_list_txt_file.close()
 			if (text_lines.size() % 2 == 1):
 				text_lines.pop_back()
-			for index in range(0, text_lines.size()-1, 2):
-				servers_list_text.add_item(text_lines[index])
+			return(text_lines)
 		else:
-			push_error("The text file for the servers list, when accessed by the join menu, was found to be outdated.")
+			push_error("The text file for the servers list, when accessed by the join menu, was found to have an outdated version.")
 	else:
-		push_error("The text file for the servers list could not be found when trying to update the list of servers text in the join menu.")
+		push_error("The text file for the servers list could not be found or accessed by the join menu.")
+	return([])
 
 
 func _on_servers_list_item_selected():
