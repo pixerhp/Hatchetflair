@@ -5,9 +5,9 @@ const game_version_engine: String = "1"
 const game_version_major: String = "7"
 const game_version_minor: String = "0"
 const game_version_entire: String = game_version_phase + " v" + game_version_engine + "." + game_version_major + "." + game_version_minor
+var all_global_stuff_initialized: bool = false
 
-
-func _ready() -> void:
+func _enter_tree() -> void:
 	# Ensure the global random number generator isn't the same every program execution.
 	randomize()
 	
@@ -43,6 +43,7 @@ func _ready() -> void:
 	file.close()
 	DirAccess.make_dir_absolute("user://storage/worlds/world_1/chunks")
 	
+	all_global_stuff_initialized = true
 
 
 func set_window_title(optional_specified_title: String = ""):
@@ -52,13 +53,13 @@ func set_window_title(optional_specified_title: String = ""):
 	# Preemptively set the window's title, just in case something goes wrong with splash texts.
 	DisplayServer.window_set_title("Hatchetflare   " + game_version_entire)
 	# Attempt to open the splash texts file.
-	var splash_texts_file = FileAccess
-	if splash_texts_file.file_exists("res://assets/text_files/window_splash_texts.txt"):
+	if FileAccess.file_exists("res://assets/text_files/window_splash_texts.txt"):
 		# Create an array of usable splash texts.
+		var splash_texts_file = FileAccess
 		splash_texts_file = FileAccess.open("res://assets/text_files/window_splash_texts.txt", FileAccess.READ)
 		var line_contents: String = ""
 		var usable_splash_texts: Array[String] = []
-		while (splash_texts_file.eof_reached() == false) :
+		while (splash_texts_file.eof_reached() == false):
 			line_contents = splash_texts_file.get_line()
 			if (not line_contents.begins_with("\t")) and (line_contents != ""):
 				usable_splash_texts.append(line_contents)
@@ -69,7 +70,7 @@ func set_window_title(optional_specified_title: String = ""):
 		else:
 			DisplayServer.window_set_title("Hatchetflare   " + game_version_entire + "   ---   " + usable_splash_texts[randi() % usable_splash_texts.size()])
 	else:
-		push_warning("The file for window title splash texts was not found, so no splash text was used.")
+		push_error("The file for window title splash-texts was not found, so no splash text was used.")
 
 
 

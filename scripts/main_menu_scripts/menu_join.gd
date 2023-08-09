@@ -1,8 +1,8 @@
 extends Control
 
 @onready var servers_list_text = get_node("JoinScreenUI/SavedServersList")
-var servers_nicknames = ["localhost 127.0.0.1", "bad ip address example A", "bad ip address example B", "bad ip address example C", "bad ip address example D"]
-var servers_ips = ["127.0.0.1", "3256.23532.456.1241356", "definitely an ip address ;^)", "", "%..."]
+var servers_nicknames = [""]
+var servers_ips = [""]
 
 
 # Called when the node enters the scene tree for the first time.
@@ -20,7 +20,6 @@ func _ready():
 	
 	disable_server_selected_requiring_buttons()
 	hide_all_servers_menu_popups()
-	update_servers_list_text()
 
 
 # Attempts to join the selected server.
@@ -85,8 +84,25 @@ func confirm_remove_server():
 # Update the text of the visible servers-list for the player.
 func update_servers_list_text():
 	servers_list_text.clear()
-	for nickname in servers_nicknames:
-		servers_list_text.add_item(nickname)
+	
+	# If the servers list text file can be found:
+	if (FileAccess.file_exists("user://storage/servers_list.txt")):
+		var servers_list_txt_file: FileAccess
+		servers_list_txt_file = FileAccess.open("user://storage/servers_list.txt", FileAccess.READ)
+		# If the version of the file is correct:
+		if (servers_list_txt_file.get_line() == GlobalStuff.game_version_entire):
+			var text_lines: Array[String] = []
+			while (servers_list_txt_file.eof_reached() == false):
+				text_lines.append(servers_list_txt_file.get_line())
+			servers_list_txt_file.close()
+			if (text_lines.size() % 2 == 1):
+				text_lines.pop_back()
+			for index in range(0, text_lines.size()-1, 2):
+				servers_list_text.add_item(text_lines[index])
+		else:
+			push_error("The text file for the servers list, when accessed by the join menu, was found to be outdated.")
+	else:
+		push_error("The text file for the servers list could not be found when trying to update the list of servers text in the join menu.")
 
 
 func _on_servers_list_item_selected():
