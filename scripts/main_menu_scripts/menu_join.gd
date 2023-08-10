@@ -2,14 +2,9 @@ extends Control
 
 const servers_list_file_location: String = "user://storage/servers_list.txt"
 
-@onready var servers_list_text = get_node("JoinScreenUI/SavedServersList")
-var servers_nicknames: Array[String] = []
-var servers_ips: Array[String] = []
-
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# Connect popups and their buttons to functions.
+	# Connect join menu popups and their buttons to functions.
 	var add_server_popup = get_node("AddServerPopup")
 	add_server_popup.get_node("Okay").pressed.connect(self.confirm_add_server)
 	add_server_popup.get_node("Cancel").pressed.connect(add_server_popup.hide)
@@ -26,13 +21,16 @@ func _ready():
 
 # Attempts to join the selected server.
 func join_server(server_list_index: int = 0):
-	print("Chosen server index: " + str(server_list_index))
-	NetworkManager.start_game(true, false, true, servers_ips[servers_list_text.get_selected_items()[0]])
+	print("Chosen server list index: " + str(server_list_index))
+	print("Chosen server nickname: " + get_array_of_servers_list_file_contents()[server_list_index * 2])
+	print("Chosen server IP: " + get_array_of_servers_list_file_contents()[(server_list_index * 2) + 1])
+	NetworkManager.start_game(true, false, true, get_array_of_servers_list_file_contents()[(server_list_index * 2) + 1])
 
 
 func _on_join_button_pressed():
-	if not servers_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
-		join_server(servers_list_text.get_selected_items()[0])
+	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
+	if not displayed_servers_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
+		join_server(displayed_servers_list_text.get_selected_items()[0])
 
 
 func open_add_server_popup():
@@ -86,7 +84,7 @@ func open_remove_server_popup():
 	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
 	if not displayed_servers_list_text.get_selected_items().is_empty(): # Don't do anything if no server is selected.
 		var remove_server_popup = get_node("RemoveServerPopup")
-		remove_server_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + get_array_of_servers_list_file_contents()[servers_list_text.get_selected_items()[0] * 2] +"\"?\n(This action cannot be undone.)[/center]"
+		remove_server_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + get_array_of_servers_list_file_contents()[displayed_servers_list_text.get_selected_items()[0] * 2] +"\"?\n(This action cannot be undone.)[/center]"
 		remove_server_popup.show()
 
 func confirm_remove_server():

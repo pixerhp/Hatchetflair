@@ -7,7 +7,7 @@ var worlds_seeds = [314, -2165489, 33333333, int("Stevemc32")]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# Connect popups and their buttons to functions.
+	# Connect worlds menu popups and their buttons to functions.
 	var new_world_popup = get_node("NewWorldPopup")
 	new_world_popup.get_node("Okay").pressed.connect(self.confirm_new_world)
 	new_world_popup.get_node("Cancel").pressed.connect(new_world_popup.hide)
