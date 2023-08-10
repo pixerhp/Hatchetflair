@@ -4,7 +4,7 @@ const servers_list_file_location: String = "user://storage/servers_list.txt"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	# Connect join menu popups and their buttons to functions.
+	# Connect join menu popups buttons to their associated functions.
 	var add_server_popup = get_node("AddServerPopup")
 	add_server_popup.get_node("Okay").pressed.connect(self.confirm_add_server)
 	add_server_popup.get_node("Cancel").pressed.connect(add_server_popup.hide)
@@ -19,13 +19,12 @@ func _ready():
 	hide_all_servers_menu_popups()
 
 
-# Attempts to join the selected server.
+# Attempt to join the selected server.
 func join_server(server_list_index: int = 0):
 	print("Chosen server list index: " + str(server_list_index))
 	print("Chosen server nickname: " + get_array_of_servers_list_file_contents()[server_list_index * 2])
 	print("Chosen server IP: " + get_array_of_servers_list_file_contents()[(server_list_index * 2) + 1])
 	NetworkManager.start_game(true, false, true, get_array_of_servers_list_file_contents()[(server_list_index * 2) + 1])
-
 
 func _on_join_button_pressed():
 	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
@@ -50,7 +49,7 @@ func confirm_add_server():
 	# Replace the current servers list file contents with newer updated contents.
 	replace_servers_list_file_contents(servers_text_file_contents)
 	
-	update_servers_list_text()
+	update_displayed_servers_list_text()
 	add_server_popup.hide()
 
 func open_edit_server_popup():
@@ -76,7 +75,7 @@ func confirm_edit_server():
 		# Replace the current servers list file contents with newer updated contents.
 		replace_servers_list_file_contents(servers_text_file_contents)
 		
-		update_servers_list_text()
+		update_displayed_servers_list_text()
 		edit_server_popup.hide()
 
 func open_remove_server_popup():
@@ -99,22 +98,21 @@ func confirm_remove_server():
 		# Replace the current servers list file contents with newer updated contents.
 		replace_servers_list_file_contents(servers_text_file_contents)
 		
-		update_servers_list_text()
+		update_displayed_servers_list_text()
 		disable_server_selected_requiring_buttons()
 		get_node("RemoveServerPopup").hide()
 
 
 # Update the servers list text which is shown to players in the join menu.
-func update_servers_list_text():
+func update_displayed_servers_list_text():
 	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
 	displayed_servers_list_text.clear()
+	
 	var servers_text_file_contents = get_array_of_servers_list_file_contents()
-	# Only use every other item in the file contents (nicknames,) since the servers list file also stores server ips.
-	for index in range(0, servers_text_file_contents.size()-1, 2):
+	for index in range(0, servers_text_file_contents.size()-1, 2): # (Only using the nicknames for the displayed list.)
 		displayed_servers_list_text.add_item(servers_text_file_contents[index])
 
-# Outputs an array of strings, of every* line from the servers list text file.
-# *Doesn't include the line 1 version number, or the last line either if it's blank or the number of content lines is odd.
+# Outputs an array of strings, who's items alternate between server nicknames and ips. (A server's IP is right after it's nickname.)
 func get_array_of_servers_list_file_contents() -> Array[String]:
 	# If the servers list text file is able to be found/accessed:
 	if (FileAccess.file_exists(servers_list_file_location)):
@@ -150,22 +148,16 @@ func replace_servers_list_file_contents(new_servers_list_contents: Array[String]
 
 func _on_servers_list_item_selected():
 	hide_all_servers_menu_popups()
-	var remove_server_button: Button = $JoinScreenUI/ServerButtons/RemoveServer
-	remove_server_button.disabled = false
-	var edit_server_button: Button = $JoinScreenUI/ServerButtons/EditServer
-	edit_server_button.disabled = false
-	var join_server_button: Button = $JoinScreenUI/ServerButtons/JoinServer
-	join_server_button.disabled = false
+	$JoinScreenUI/ServerButtons/RemoveServer.disabled = false
+	$JoinScreenUI/ServerButtons/EditServer.disabled = false
+	$JoinScreenUI/ServerButtons/JoinServer.disabled = false
+
+func disable_server_selected_requiring_buttons():
+	$JoinScreenUI/ServerButtons/RemoveServer.disabled = true
+	$JoinScreenUI/ServerButtons/EditServer.disabled = true
+	$JoinScreenUI/ServerButtons/JoinServer.disabled = true
 
 func hide_all_servers_menu_popups():
 	get_node("AddServerPopup").hide()
 	get_node("EditServerPopup").hide()
 	get_node("RemoveServerPopup").hide()
-
-func disable_server_selected_requiring_buttons():
-	var remove_server_button: Button = $JoinScreenUI/ServerButtons/RemoveServer
-	remove_server_button.disabled = true
-	var edit_server_button: Button = $JoinScreenUI/ServerButtons/EditServer
-	edit_server_button.disabled = true
-	var join_server_button: Button = $JoinScreenUI/ServerButtons/JoinServer
-	join_server_button.disabled = true
