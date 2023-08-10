@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Hatchetflare"
-config/description="Hatchetflare, a 3D sandbox survival game."
+config/name="Hatchetflair"
+config/description="A 3D sandbox survival game."
 run/main_scene="res://scenes/main_menu.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Hatchetflair"
