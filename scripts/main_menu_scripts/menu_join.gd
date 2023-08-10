@@ -43,30 +43,39 @@ func open_add_server_popup():
 	add_server_popup.show()
 
 func confirm_add_server():
+	# Figure out what the new servers list items (including IPs) should look like.
 	var add_server_popup = get_node("AddServerPopup")
-	servers_ips.append(add_server_popup.get_node("ServerIPInput").text)
-	servers_nicknames.append(add_server_popup.get_node("ServerNicknameInput").text)
+	var servers_text_file_contents = get_array_of_servers_list_file_contents()
+	servers_text_file_contents.append(add_server_popup.get_node("ServerNicknameInput").text)
+	servers_text_file_contents.append(add_server_popup.get_node("ServerIPInput").text)
+	
+	# Replace the current servers list file contents with newer updated contents.
+	replace_servers_list_file_contents(servers_text_file_contents)
+	
 	update_servers_list_text()
 	add_server_popup.hide()
 
 func open_edit_server_popup():
 	hide_all_servers_menu_popups()
-	if not servers_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
+	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
+	if not displayed_servers_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
 		var edit_server_popup = get_node("EditServerPopup")
-		edit_server_popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + get_array_of_servers_list_file_contents()[servers_list_text.get_selected_items()[0] * 2] +"\""
-		edit_server_popup.get_node("ServerIPInput").text = get_array_of_servers_list_file_contents()[(servers_list_text.get_selected_items()[0] * 2) + 1]
-		edit_server_popup.get_node("ServerNicknameInput").text = get_array_of_servers_list_file_contents()[servers_list_text.get_selected_items()[0] * 2]
+		edit_server_popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + get_array_of_servers_list_file_contents()[displayed_servers_list_text.get_selected_items()[0] * 2] +"\""
+		edit_server_popup.get_node("ServerIPInput").text = get_array_of_servers_list_file_contents()[(displayed_servers_list_text.get_selected_items()[0] * 2) + 1]
+		edit_server_popup.get_node("ServerNicknameInput").text = get_array_of_servers_list_file_contents()[displayed_servers_list_text.get_selected_items()[0] * 2]
 		edit_server_popup.show()
 
 func confirm_edit_server():
-	var servers_list_text = get_node("JoinScreenUI/SavedServersList")
-	if not servers_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
+	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
+	if not displayed_servers_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
 		
+		# Figure out what the new servers list items (including IPs) should look like.
 		var edit_server_popup = get_node("EditServerPopup")
 		var servers_text_file_contents = get_array_of_servers_list_file_contents()
-		servers_text_file_contents[servers_list_text.get_selected_items()[0] * 2] = edit_server_popup.get_node("ServerNicknameInput").text
-		servers_text_file_contents[(servers_list_text.get_selected_items()[0] * 2) + 1] = edit_server_popup.get_node("ServerIPInput").text
+		servers_text_file_contents[displayed_servers_list_text.get_selected_items()[0] * 2] = edit_server_popup.get_node("ServerNicknameInput").text
+		servers_text_file_contents[(displayed_servers_list_text.get_selected_items()[0] * 2) + 1] = edit_server_popup.get_node("ServerIPInput").text
 		
+		# Replace the current servers list file contents with newer updated contents.
 		replace_servers_list_file_contents(servers_text_file_contents)
 		
 		update_servers_list_text()
@@ -74,19 +83,20 @@ func confirm_edit_server():
 
 func open_remove_server_popup():
 	hide_all_servers_menu_popups()
-	if not servers_list_text.get_selected_items().is_empty(): # Don't do anything if no server is selected.
+	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
+	if not displayed_servers_list_text.get_selected_items().is_empty(): # Don't do anything if no server is selected.
 		var remove_server_popup = get_node("RemoveServerPopup")
 		remove_server_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + get_array_of_servers_list_file_contents()[servers_list_text.get_selected_items()[0] * 2] +"\"?\n(This action cannot be undone.)[/center]"
 		remove_server_popup.show()
 
 func confirm_remove_server():
-	var servers_list_text = get_node("JoinScreenUI/SavedServersList")
-	if not servers_list_text.get_selected_items().is_empty(): # Crash prevention for if no server nickname is selected.
+	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
+	if not displayed_servers_list_text.get_selected_items().is_empty(): # Crash prevention for if no server nickname is selected.
 		
 		# Figure out what the new servers list items (including IPs) should look like.
 		var servers_text_file_contents = get_array_of_servers_list_file_contents()
-		servers_text_file_contents.remove_at((servers_list_text.get_selected_items()[0] * 2) + 1)
-		servers_text_file_contents.remove_at(servers_list_text.get_selected_items()[0] * 2)
+		servers_text_file_contents.remove_at((displayed_servers_list_text.get_selected_items()[0] * 2) + 1)
+		servers_text_file_contents.remove_at(displayed_servers_list_text.get_selected_items()[0] * 2)
 		
 		# Replace the current servers list file contents with newer updated contents.
 		replace_servers_list_file_contents(servers_text_file_contents)
@@ -98,12 +108,12 @@ func confirm_remove_server():
 
 # Update the servers list text which is shown to players in the join menu.
 func update_servers_list_text():
-	var servers_list_text = get_node("JoinScreenUI/SavedServersList")
-	servers_list_text.clear()
+	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
+	displayed_servers_list_text.clear()
 	var servers_text_file_contents = get_array_of_servers_list_file_contents()
 	# Only use every other item in the file contents (nicknames,) since the servers list file also stores server ips.
 	for index in range(0, servers_text_file_contents.size()-1, 2):
-		servers_list_text.add_item(servers_text_file_contents[index])
+		displayed_servers_list_text.add_item(servers_text_file_contents[index])
 
 # Outputs an array of strings, of every* line from the servers list text file.
 # *Doesn't include the line 1 version number, or the last line either if it's blank or the number of content lines is odd.
