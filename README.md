@@ -1,4 +1,5 @@
-# Hatchetflair (Godot)
-The official repository for the game "Hatchetflare". Hatchetflare is a 3D cubic-chunk sandbox with destructable marching-cubes terrain which has a focus in mining & resource management, idea-provoking 3D world generation & exploration, being filled to the brim with fantastical creature designs (including ugly ones too,) and fun social interaction.
+# Hatchetflair
+The official repository for the indie game designed by Pixer Pinecone.
 
-If you're interested in learning more about the game or potentially helping out it's development, you can see this google doc for more info: https://docs.google.com/document/d/1mLPusB7MNbXRBAH9oUUa8hkMpNgSxWFHCYIRtaPZ9FI/edit?usp=sharing
+* Official development discord server: https://discord.gg/bnnnz2QVAM
+* (ARCHAIC google doc:) https://docs.google.com/document/d/1mLPusB7MNbXRBAH9oUUa8hkMpNgSxWFHCYIRtaPZ9FI/edit?usp=sharing
