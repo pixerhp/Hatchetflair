@@ -105,12 +105,40 @@ func confirm_remove_server():
 
 # Update the servers list text which is shown to players in the join menu.
 func update_displayed_servers_list_text():
+	reorder_servers_alphabetically()
+	
 	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
 	displayed_servers_list_text.clear()
 	
 	var servers_text_file_contents = get_array_of_servers_list_file_contents()
 	for index in range(0, servers_text_file_contents.size()-1, 2): # (Only using the nicknames for the displayed list.)
 		displayed_servers_list_text.add_item(servers_text_file_contents[index])
+
+# NOTE: This will mess up servers who's saved IPs have the string "IP:" in them, but they shouldn't have that anyways so it's an acceptable bug.
+func reorder_servers_alphabetically():
+	var servers_text_file_contents = get_array_of_servers_list_file_contents()
+	
+	# Concatenate the IPs to the ends of the nicknames so that we know who belongs with what after we sort the array.
+	var concatenated_file_contents: Array[String] = []
+	for index in range(0, servers_text_file_contents.size()-1, 2): 
+		concatenated_file_contents.append(servers_text_file_contents[index] + "IP:" + servers_text_file_contents[index + 1])
+	
+	# Sort the concatenated items alphabetically. (The IPs at the end of each array item don't mess up the sorting.)
+	concatenated_file_contents.sort()
+	
+	# Reusing the file-contents array variable, seperate the nickname and IP components from the items in the sorted concatenated array.
+	servers_text_file_contents.clear()
+	var letter_num: int = 0
+	for list_item in concatenated_file_contents:
+		# Searches for the rightmost instance of "IP:" in the concatenated string, and uses it's location to seperate nickname and ip.
+		letter_num = list_item.length()-3
+		while not (list_item.substr(letter_num,3) == "IP:"):
+			letter_num -= 1
+		servers_text_file_contents.append(list_item.substr(0,letter_num))
+		servers_text_file_contents.append(list_item.substr(letter_num + 3))
+	
+	# Replace the servers list file contents with a sorted version of it's current contents.
+	replace_servers_list_file_contents(servers_text_file_contents)
 
 # Outputs an array of strings, who's items alternate between server nicknames and ips. (A server's IP is right after it's nickname.)
 func get_array_of_servers_list_file_contents() -> Array[String]:
