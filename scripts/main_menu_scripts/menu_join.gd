@@ -111,8 +111,8 @@ func update_displayed_servers_list_text():
 	displayed_servers_list_text.clear()
 	
 	var servers_text_file_contents = get_servers_list_file_contents()
-	# Only use the server nicknames for the displayed text.
-	for index in range(0, servers_text_file_contents.size()-1, 2):
+	# Only use the server nicknames for the displayed text. (It starts at index 1 to skip the version string.)
+	for index in range(1, servers_text_file_contents.size()-1, 2):
 		displayed_servers_list_text.add_item(servers_text_file_contents[index])
 
 # NOTE: This will mess up servers who's saved IPs have the string "IP:" in them, but they shouldn't have that anyways so it's an acceptable bug.
@@ -121,7 +121,7 @@ func reorder_servers_alphabetically():
 	
 	# Concatenate the IPs to the ends of the nicknames so that we know who belongs with what after we sort the array.
 	var concatenated_file_contents: Array[String] = []
-	for index in range(0, servers_text_file_contents.size()-1, 2): 
+	for index in range(1, servers_text_file_contents.size()-1, 2): 
 		concatenated_file_contents.append(servers_text_file_contents[index] + "IP:" + servers_text_file_contents[index + 1])
 	
 	# Sort the concatenated items alphabetically. (The IPs at the end of each array item don't mess up the sorting.)
@@ -129,6 +129,7 @@ func reorder_servers_alphabetically():
 	
 	# Reusing the file-contents array variable, seperate the nickname and IP components from the items in the sorted concatenated array.
 	servers_text_file_contents.clear()
+	servers_text_file_contents.append(GlobalStuff.game_version_entire)
 	var letter_num: int = 0
 	for list_item in concatenated_file_contents:
 		# Searches for the rightmost instance of "IP:" in the concatenated string, and uses it's location to seperate nickname and ip.
@@ -147,32 +148,32 @@ func get_servers_list_file_contents() -> Array[String]:
 	if (FileAccess.file_exists(servers_list_file_location)):
 		var servers_list_txt_file: FileAccess
 		servers_list_txt_file = FileAccess.open(servers_list_file_location, FileAccess.READ)
-		# If the version of the file is correct:
-		if (servers_list_txt_file.get_line() == GlobalStuff.game_version_entire):
-			var text_lines: Array[String] = []
-			while (servers_list_txt_file.eof_reached() == false):
-				text_lines.append(servers_list_txt_file.get_line())
-			servers_list_txt_file.close()
-			if (text_lines.size() % 2 == 1):
+		var text_lines: Array[String] = []
+		while (servers_list_txt_file.eof_reached() == false): # Store each line of text as an array item.
+			text_lines.append(servers_list_txt_file.get_line())
+		servers_list_txt_file.close()
+		if (text_lines.size() > 0): # (crash prevention)
+			if (text_lines[text_lines.size()-1] == ""): # Don't include the blank line at the end of text files.
 				text_lines.pop_back()
-			return(text_lines)
-		else:
-			push_error("The text file for the servers list, when accessed by the join menu, was found to have an outdated version.")
+		if not (text_lines[0] == GlobalStuff.game_version_entire):
+			push_warning("The servers list text file was found to have an outdated version when attempting to get it's file contents. (Contents used anyway.)")
+		return(text_lines)
 	else:
-		push_error("The text file for the servers list could not be found or accessed by the join menu to be read.")
-	return([]) # The response for if an error happens.
+		push_error("The servers list text file could not be found/accessed whilst attempted to be read.")
+		return([])
 
 func replace_servers_list_file_contents(new_servers_list_contents: Array[String]):
 	# Ensure that the file can be accessed before proceeding.
-	if (FileAccess.file_exists(servers_list_file_location)):
-		var servers_text_file: FileAccess
-		servers_text_file = FileAccess.open(servers_list_file_location, FileAccess.WRITE)
-		servers_text_file.store_line(GlobalStuff.game_version_entire)
+	if not (FileAccess.file_exists(servers_list_file_location)):
+		push_warning("The servers list text file could not be found/accessed whilst attempting to be written to / replaced. (Writing to it's specified location anyway.)")
+	var servers_text_file: FileAccess
+	servers_text_file = FileAccess.open(servers_list_file_location, FileAccess.WRITE)
+	if (servers_text_file.get_open_error() == 0):
 		for line in new_servers_list_contents:
 			servers_text_file.store_line(line)
-		servers_text_file.close()
 	else:
-		push_error("The servers list text file could not be accessed whilst attempting to replace it's contents.")
+		push_error("The servers list file location could not be written to / created. (Does the program have proper OS permissions to create/write files?)")
+	servers_text_file.close()
 
 
 func _on_servers_list_item_selected():

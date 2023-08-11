@@ -125,13 +125,14 @@ func get_worlds_list_file_contents() -> Array[String]:
 		while (worlds_list_txt_file.eof_reached() == false): # Store each line of text as an array item.
 			text_lines.append(worlds_list_txt_file.get_line())
 		worlds_list_txt_file.close()
-		if (text_lines[text_lines.size()-1] == ""): # Don't include the blank line at the end of text files.
-			text_lines.pop_back()
+		if (text_lines.size() > 0): # (crash prevention)
+			if (text_lines[text_lines.size()-1] == ""): # Don't include the blank line at the end of text files.
+				text_lines.pop_back()
 		if not (text_lines[0] == GlobalStuff.game_version_entire):
-			push_error("The text file for the worlds list, when accessed by the worlds menu, was found to have an outdated version. (Contents used anyway.)")
+			push_warning("The worlds list text file was found to have an outdated version when attempting to get it's file contents. (Contents used anyway.)")
 		return(text_lines)
 	else:
-		push_error("The text file for the worlds list could not be found or accessed by the worlds menu.")
+		push_error("The worlds list text file could not be found or accessed by the worlds menu to be read.")
 		return([])
 
 func replace_worlds_list_file_contents(new_worlds_list_contents: Array[String]):
