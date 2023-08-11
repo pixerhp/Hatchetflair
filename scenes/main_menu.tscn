@@ -71,7 +71,7 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
-text = "[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=2 amp=50]Hatchetflair[/wave][/rainbow][/center]"
+text = "[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=-2 amp=50]Hatchetflair[/wave][/rainbow][/center]"
 fit_content = true
 autowrap_mode = 0
 
