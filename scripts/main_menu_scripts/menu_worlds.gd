@@ -52,7 +52,7 @@ func confirm_new_world():
 		worlds_seeds.append(random.randi() + random.randi() - 4294967296)
 	else:
 		worlds_seeds.append(int(new_world_popup.get_node("WorldSeedInput").text))
-	update_worlds_list_text()
+	update_displayed_worlds_list_text()
 	new_world_popup.hide()
 
 func open_edit_world_popup():
@@ -74,7 +74,7 @@ func confirm_edit_world():
 			worlds_seeds[worlds_list_text.get_selected_items()[0]] = random.randi() + random.randi() - 4294967296
 		else:
 			worlds_seeds[worlds_list_text.get_selected_items()[0]] = int(edit_world_popup.get_node("WorldSeedInput").text)
-		update_worlds_list_text()
+		update_displayed_worlds_list_text()
 		edit_world_popup.hide()
 
 func open_delete_world_popup():
@@ -90,18 +90,18 @@ func confirm_delete_world():
 		worlds_names.remove_at(worlds_list_text.get_selected_items()[0])
 		worlds_seeds.remove_at(worlds_list_text.get_selected_items()[0])
 		delete_world_popup.hide()
-		update_worlds_list_text()
+		update_displayed_worlds_list_text()
 		disable_world_selected_requiring_buttons()
 
 func _on_duplicate_world_pressed():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
 		worlds_names.append("Copy of " + worlds_names[worlds_list_text.get_selected_items()[0]])
-		update_worlds_list_text()
+		update_displayed_worlds_list_text()
 		disable_world_selected_requiring_buttons()
 
 
 # Update the text of the visible worlds-list for the player.
-func update_worlds_list_text():
+func update_displayed_worlds_list_text():
 	reorder_worlds_alphabetically()
 	
 	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
