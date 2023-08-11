@@ -3,8 +3,8 @@ extends Control
 const worlds_list_file_location: String = "user://storage/worlds_list.txt"
 
 @onready var worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
-var worlds_names = ["world_1", "example 2", "third world", "Bojler eladó"]
-var worlds_seeds = [314, -2165489, 33333333, int("Stevemc32")]
+var worlds_names: Array[String] = []
+var worlds_seeds: Array[int] = []
 
 
 # Called when the node enters the scene tree for the first time.
@@ -101,14 +101,38 @@ func _on_duplicate_world_pressed():
 
 # Update the text of the visible worlds-list for the player.
 func update_worlds_list_text():
-	worlds_list_text.clear()
-	for world in worlds_names:
-		worlds_list_text.add_item(world)
+	reorder_worlds_alphabetically()
+	
+	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
+	displayed_worlds_list_text.clear()
+	
+	var worlds_list_file_contents = get_worlds_list_file_contents()
+	# Only use the regular world names for the displayed text.
+	for index in range(0, worlds_list_file_contents.size()-1, 2):
+		displayed_worlds_list_text.add_item(worlds_list_file_contents[index])
 
 func reorder_worlds_alphabetically():
 	pass
 
+# Outputs an array of strings who's items alternate between world names and then it's directory/folder name.
 func get_worlds_list_file_contents() -> Array[String]:
+	# If the worlds  list text file is able to be found/accessed:
+	if (FileAccess.file_exists(worlds_list_file_location)):
+		var worlds_list_txt_file: FileAccess
+		worlds_list_txt_file = FileAccess.open(worlds_list_file_location, FileAccess.READ)
+		# If the version of the file is correct:
+		if (worlds_list_txt_file.get_line() == GlobalStuff.game_version_entire):
+			var text_lines: Array[String] = []
+			while (worlds_list_txt_file.eof_reached() == false):
+				text_lines.append(worlds_list_txt_file.get_line())
+			worlds_list_txt_file.close()
+			if (text_lines.size() % 2 == 1):
+				text_lines.pop_back()
+			return(text_lines)
+		else:
+			push_error("The text file for the worlds list, when accessed by the worlds menu, was found to have an outdated version.")
+	else:
+		push_error("The text file for the worlds list could not be found or accessed by the worlds menu.")
 	return([])
 
 func replace_worlds_list_file_contents(new_worlds_list_contents: Array[String]):

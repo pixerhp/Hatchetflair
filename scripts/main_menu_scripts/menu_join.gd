@@ -111,7 +111,8 @@ func update_displayed_servers_list_text():
 	displayed_servers_list_text.clear()
 	
 	var servers_text_file_contents = get_servers_list_file_contents()
-	for index in range(0, servers_text_file_contents.size()-1, 2): # (Only using the nicknames for the displayed list.)
+	# Only use the server nicknames for the displayed text.
+	for index in range(0, servers_text_file_contents.size()-1, 2):
 		displayed_servers_list_text.add_item(servers_text_file_contents[index])
 
 # NOTE: This will mess up servers who's saved IPs have the string "IP:" in them, but they shouldn't have that anyways so it's an acceptable bug.
@@ -140,7 +141,7 @@ func reorder_servers_alphabetically():
 	# Replace the servers list file contents with a sorted version of it's current contents.
 	replace_servers_list_file_contents(servers_text_file_contents)
 
-# Outputs an array of strings, who's items alternate between server nicknames and ips. (A server's IP is right after it's nickname.)
+# Outputs an array of strings who's items alternate between server nicknames and ips. (A server's IP is right after it's nickname.)
 func get_servers_list_file_contents() -> Array[String]:
 	# If the servers list text file is able to be found/accessed:
 	if (FileAccess.file_exists(servers_list_file_location)):
