@@ -1,5 +1,7 @@
 extends Control
 
+const worlds_list_file_location: String = "user://storage/worlds_list.txt"
+
 @onready var worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
 var worlds_names = ["world_1", "example 2", "third world", "Bojler eladó"]
 var worlds_seeds = [314, -2165489, 33333333, int("Stevemc32")]
@@ -102,6 +104,21 @@ func update_worlds_list_text():
 	worlds_list_text.clear()
 	for world in worlds_names:
 		worlds_list_text.add_item(world)
+
+func reorder_worlds_alphabetically():
+	pass
+
+func get_worlds_list_file_contents() -> Array[String]:
+	return([])
+
+func replace_worlds_list_file_contents(new_worlds_list_contents: Array[String]):
+	pass
+
+func get_world_info_file_contents(directory_folder_for_world: String, name_of_world: String) -> Array[String]:
+	return([])
+
+func replace_world_info_file_contents(directory_folder_for_world: String, name_of_world: String, new_file_contents):
+	pass
 
 
 # Disables the host_without_playing_toggle if multiplayer joining is turned off.

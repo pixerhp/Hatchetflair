@@ -22,9 +22,9 @@ func _ready():
 # Attempt to join the selected server.
 func join_server(server_list_index: int = 0):
 	print("Chosen server list index: " + str(server_list_index))
-	print("Chosen server nickname: " + get_array_of_servers_list_file_contents()[server_list_index * 2])
-	print("Chosen server IP: " + get_array_of_servers_list_file_contents()[(server_list_index * 2) + 1])
-	NetworkManager.start_game(true, false, true, get_array_of_servers_list_file_contents()[(server_list_index * 2) + 1])
+	print("Chosen server nickname: " + get_servers_list_file_contents()[server_list_index * 2])
+	print("Chosen server IP: " + get_servers_list_file_contents()[(server_list_index * 2) + 1])
+	NetworkManager.start_game(true, false, true, get_servers_list_file_contents()[(server_list_index * 2) + 1])
 
 func _on_join_button_pressed():
 	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
@@ -42,7 +42,7 @@ func open_add_server_popup():
 func confirm_add_server():
 	# Figure out what the new servers list items (including IPs) should look like.
 	var add_server_popup = get_node("AddServerPopup")
-	var servers_text_file_contents = get_array_of_servers_list_file_contents()
+	var servers_text_file_contents = get_servers_list_file_contents()
 	servers_text_file_contents.append(add_server_popup.get_node("ServerNicknameInput").text)
 	servers_text_file_contents.append(add_server_popup.get_node("ServerIPInput").text)
 	
@@ -57,9 +57,9 @@ func open_edit_server_popup():
 	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
 	if not displayed_servers_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
 		var edit_server_popup = get_node("EditServerPopup")
-		edit_server_popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + get_array_of_servers_list_file_contents()[displayed_servers_list_text.get_selected_items()[0] * 2] +"\""
-		edit_server_popup.get_node("ServerIPInput").text = get_array_of_servers_list_file_contents()[(displayed_servers_list_text.get_selected_items()[0] * 2) + 1]
-		edit_server_popup.get_node("ServerNicknameInput").text = get_array_of_servers_list_file_contents()[displayed_servers_list_text.get_selected_items()[0] * 2]
+		edit_server_popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + get_servers_list_file_contents()[displayed_servers_list_text.get_selected_items()[0] * 2] +"\""
+		edit_server_popup.get_node("ServerIPInput").text = get_servers_list_file_contents()[(displayed_servers_list_text.get_selected_items()[0] * 2) + 1]
+		edit_server_popup.get_node("ServerNicknameInput").text = get_servers_list_file_contents()[displayed_servers_list_text.get_selected_items()[0] * 2]
 		edit_server_popup.show()
 
 func confirm_edit_server():
@@ -68,7 +68,7 @@ func confirm_edit_server():
 		
 		# Figure out what the new servers list items (including IPs) should look like.
 		var edit_server_popup = get_node("EditServerPopup")
-		var servers_text_file_contents = get_array_of_servers_list_file_contents()
+		var servers_text_file_contents = get_servers_list_file_contents()
 		servers_text_file_contents[displayed_servers_list_text.get_selected_items()[0] * 2] = edit_server_popup.get_node("ServerNicknameInput").text
 		servers_text_file_contents[(displayed_servers_list_text.get_selected_items()[0] * 2) + 1] = edit_server_popup.get_node("ServerIPInput").text
 		
@@ -83,7 +83,7 @@ func open_remove_server_popup():
 	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
 	if not displayed_servers_list_text.get_selected_items().is_empty(): # Don't do anything if no server is selected.
 		var remove_server_popup = get_node("RemoveServerPopup")
-		remove_server_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + get_array_of_servers_list_file_contents()[displayed_servers_list_text.get_selected_items()[0] * 2] +"\"?\n(This action cannot be undone.)[/center]"
+		remove_server_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + get_servers_list_file_contents()[displayed_servers_list_text.get_selected_items()[0] * 2] +"\"?\n(This action cannot be undone.)[/center]"
 		remove_server_popup.show()
 
 func confirm_remove_server():
@@ -91,7 +91,7 @@ func confirm_remove_server():
 	if not displayed_servers_list_text.get_selected_items().is_empty(): # Crash prevention for if no server nickname is selected.
 		
 		# Figure out what the new servers list items (including IPs) should look like.
-		var servers_text_file_contents = get_array_of_servers_list_file_contents()
+		var servers_text_file_contents = get_servers_list_file_contents()
 		servers_text_file_contents.remove_at((displayed_servers_list_text.get_selected_items()[0] * 2) + 1)
 		servers_text_file_contents.remove_at(displayed_servers_list_text.get_selected_items()[0] * 2)
 		
@@ -110,13 +110,13 @@ func update_displayed_servers_list_text():
 	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
 	displayed_servers_list_text.clear()
 	
-	var servers_text_file_contents = get_array_of_servers_list_file_contents()
+	var servers_text_file_contents = get_servers_list_file_contents()
 	for index in range(0, servers_text_file_contents.size()-1, 2): # (Only using the nicknames for the displayed list.)
 		displayed_servers_list_text.add_item(servers_text_file_contents[index])
 
 # NOTE: This will mess up servers who's saved IPs have the string "IP:" in them, but they shouldn't have that anyways so it's an acceptable bug.
 func reorder_servers_alphabetically():
-	var servers_text_file_contents = get_array_of_servers_list_file_contents()
+	var servers_text_file_contents = get_servers_list_file_contents()
 	
 	# Concatenate the IPs to the ends of the nicknames so that we know who belongs with what after we sort the array.
 	var concatenated_file_contents: Array[String] = []
@@ -141,7 +141,7 @@ func reorder_servers_alphabetically():
 	replace_servers_list_file_contents(servers_text_file_contents)
 
 # Outputs an array of strings, who's items alternate between server nicknames and ips. (A server's IP is right after it's nickname.)
-func get_array_of_servers_list_file_contents() -> Array[String]:
+func get_servers_list_file_contents() -> Array[String]:
 	# If the servers list text file is able to be found/accessed:
 	if (FileAccess.file_exists(servers_list_file_location)):
 		var servers_list_txt_file: FileAccess

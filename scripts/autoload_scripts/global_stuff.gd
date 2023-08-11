@@ -1,8 +1,9 @@
 extends Node
 
+const game_name: String = "Hatchetflair"
 const game_version_phase: String = "pre-game"
 const game_version_engine: String = "1"
-const game_version_major: String = "7"
+const game_version_major: String = "8"
 const game_version_minor: String = "0"
 const game_version_entire: String = game_version_phase + " v" + game_version_engine + "." + game_version_major + "." + game_version_minor
 var all_global_stuff_initialized: bool = false
@@ -51,7 +52,7 @@ func set_window_title(optional_specified_title: String = ""):
 		DisplayServer.window_set_title(optional_specified_title)
 		return
 	# Preemptively set the window's title, just in case something goes wrong with splash texts.
-	DisplayServer.window_set_title("Hatchetflare   " + game_version_entire)
+	DisplayServer.window_set_title(game_name + "   " + game_version_entire)
 	# Attempt to open the splash texts file.
 	if FileAccess.file_exists("res://assets/text_files/window_splash_texts.txt"):
 		# Create an array of usable splash texts.
@@ -68,7 +69,7 @@ func set_window_title(optional_specified_title: String = ""):
 		if usable_splash_texts.is_empty():
 			push_warning("The window title splash texts file was accessed successfully, but no useable splashes were found, so no splash text was used.")
 		else:
-			DisplayServer.window_set_title("Hatchetflare   " + game_version_entire + "   ---   " + usable_splash_texts[randi() % usable_splash_texts.size()])
+			DisplayServer.window_set_title(game_name + "   " + game_version_entire + "   ---   " + usable_splash_texts[randi() % usable_splash_texts.size()])
 	else:
 		push_error("The file for window title splash-texts was not found, so no splash text was used.")
 
