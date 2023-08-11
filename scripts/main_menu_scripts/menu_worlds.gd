@@ -27,8 +27,8 @@ func _ready():
 # Start playing/hosting one of your worlds.
 func start_world(worlds_list_index: int = 0):#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
 	print("Chosen world's list-index: " + str(worlds_list_index))
-	print("Chosen world's name: " + get_worlds_list_file_contents()[worlds_list_index * 2])
-	print("Chosen world's folder/directory name: " + get_worlds_list_file_contents()[(worlds_list_index * 2) + 1])
+	print("Chosen world's name: " + get_worlds_list_file_contents()[(worlds_list_index * 2) + 1])
+	print("Chosen world's folder/directory name: " + get_worlds_list_file_contents()[(worlds_list_index * 2) + 2])
 	NetworkManager.start_game(not $WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed, true, $WorldsScreenUI/Toggles/AllowJoining.button_pressed)
 
 func _on_play_button_pressed():
@@ -108,7 +108,7 @@ func update_displayed_worlds_list_text():
 	displayed_worlds_list_text.clear()
 	
 	var worlds_list_file_contents = get_worlds_list_file_contents()
-	# Only use the regular world names for the displayed text. (We start at index 1 to skip the version string.)
+	# Only use the regular world names for the displayed text. (It starts at index 1 to skip the version string.)
 	for index in range(1, worlds_list_file_contents.size()-1, 2):
 		displayed_worlds_list_text.add_item(worlds_list_file_contents[index])
 
@@ -132,20 +132,21 @@ func get_worlds_list_file_contents() -> Array[String]:
 			push_warning("The worlds list text file was found to have an outdated version when attempting to get it's file contents. (Contents used anyway.)")
 		return(text_lines)
 	else:
-		push_error("The worlds list text file could not be found or accessed by the worlds menu to be read.")
+		push_error("The worlds list text file could not be found/accessed whilst attempted to be read.")
 		return([])
 
 func replace_worlds_list_file_contents(new_worlds_list_contents: Array[String]):
 	# Ensure that the file can be accessed before proceeding.
-	if (FileAccess.file_exists(worlds_list_file_location)):
-		var worlds_list_text_file: FileAccess
-		worlds_list_text_file = FileAccess.open(worlds_list_file_location, FileAccess.WRITE)
-		worlds_list_text_file.store_line(GlobalStuff.game_version_entire)
+	if not (FileAccess.file_exists(worlds_list_file_location)):
+		push_warning("The worlds list text file could not be found/accessed whilst attempting to be written to / replaced. (Writing to its specified location anyway.)")
+	var worlds_list_text_file: FileAccess
+	worlds_list_text_file = FileAccess.open(worlds_list_file_location, FileAccess.WRITE)
+	if (FileAccess.get_open_error() == 0):
 		for line in new_worlds_list_contents:
 			worlds_list_text_file.store_line(line)
-		worlds_list_text_file.close()
 	else:
-		push_error("The worlds list text file could not be accessed whilst trying to update it's contents.")
+		push_error("The worlds list file location could not be written to / created. (Does the program have proper OS permissions to create/write files?)")
+	worlds_list_text_file.close()
 
 # DOES include the version number at the start of the doc, especially for use in asking if you want to update the world.
 func get_world_info_file_contents(name_of_directory_folder_for_world: String) -> Array[String]:
@@ -180,21 +181,16 @@ func replace_world_info_file_contents(name_of_directory_folder_for_world: String
 
 # Disables the host_without_playing_toggle if multiplayer joining is turned off.
 func toggle_disabling_the_host_without_playing_toggle (button_value: bool) -> void:
-	var host_without_playing_toggle: CheckButton = $WorldsScreenUI/Toggles/HostWithoutPlay
-	host_without_playing_toggle.disabled = not button_value
+	$WorldsScreenUI/Toggles/HostWithoutPlay.disabled = not button_value
 	if not button_value:
-		host_without_playing_toggle.button_pressed = false
+		$WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed = false
 
 func _on_worlds_list_item_selected():
 	hide_all_worlds_menu_popups()
-	var delete_world_button: Button = $WorldsScreenUI/WorldButtons/DeleteWorld
-	delete_world_button.disabled = false
-	var edit_world_button: Button = $WorldsScreenUI/WorldButtons/EditWorld
-	edit_world_button.disabled = false
-	var duplicate_world_button: Button = $WorldsScreenUI/WorldButtons/DuplicateWorld
-	duplicate_world_button.disabled = false
-	var play_world_button: Button = $WorldsScreenUI/WorldButtons/PlayWorld
-	play_world_button.disabled = false
+	$WorldsScreenUI/WorldButtons/DeleteWorld.disabled = false
+	$WorldsScreenUI/WorldButtons/EditWorld.disabled = false
+	$WorldsScreenUI/WorldButtons/DuplicateWorld.disabled = false
+	$WorldsScreenUI/WorldButtons/PlayWorld.disabled = false
 
 func hide_all_worlds_menu_popups():
 	get_node("NewWorldPopup").hide()
@@ -202,11 +198,7 @@ func hide_all_worlds_menu_popups():
 	get_node("DeleteWorldPopup").hide()
 
 func disable_world_selected_requiring_buttons():
-	var delete_world_button: Button = $WorldsScreenUI/WorldButtons/DeleteWorld
-	delete_world_button.disabled = true
-	var edit_world_button: Button = $WorldsScreenUI/WorldButtons/EditWorld
-	edit_world_button.disabled = true
-	var duplicate_world_button: Button = $WorldsScreenUI/WorldButtons/DuplicateWorld
-	duplicate_world_button.disabled = true
-	var play_world_button: Button = $WorldsScreenUI/WorldButtons/PlayWorld
-	play_world_button.disabled = true
+	$WorldsScreenUI/WorldButtons/DeleteWorld.disabled = true
+	$WorldsScreenUI/WorldButtons/EditWorld.disabled = true
+	$WorldsScreenUI/WorldButtons/DuplicateWorld.disabled = true
+	$WorldsScreenUI/WorldButtons/PlayWorld.disabled = true

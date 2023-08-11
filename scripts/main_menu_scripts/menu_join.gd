@@ -142,7 +142,7 @@ func reorder_servers_alphabetically():
 	# Replace the servers list file contents with a sorted version of it's current contents.
 	replace_servers_list_file_contents(servers_text_file_contents)
 
-# Outputs an array of strings who's items alternate between server nicknames and ips. (A server's IP is right after it's nickname.)
+# Outputs an array of strings who's items alternate between server nicknames and then it's ip.
 func get_servers_list_file_contents() -> Array[String]:
 	# If the servers list text file is able to be found/accessed:
 	if (FileAccess.file_exists(servers_list_file_location)):
@@ -165,15 +165,15 @@ func get_servers_list_file_contents() -> Array[String]:
 func replace_servers_list_file_contents(new_servers_list_contents: Array[String]):
 	# Ensure that the file can be accessed before proceeding.
 	if not (FileAccess.file_exists(servers_list_file_location)):
-		push_warning("The servers list text file could not be found/accessed whilst attempting to be written to / replaced. (Writing to it's specified location anyway.)")
-	var servers_text_file: FileAccess
-	servers_text_file = FileAccess.open(servers_list_file_location, FileAccess.WRITE)
+		push_warning("The servers list text file could not be found/accessed whilst attempting to be written to / replaced. (Writing to its specified location anyway.)")
+	var servers_list_text_file: FileAccess
+	servers_list_text_file = FileAccess.open(servers_list_file_location, FileAccess.WRITE)
 	if (FileAccess.get_open_error() == 0):
 		for line in new_servers_list_contents:
-			servers_text_file.store_line(line)
+			servers_list_text_file.store_line(line)
 	else:
 		push_error("The servers list file location could not be written to / created. (Does the program have proper OS permissions to create/write files?)")
-	servers_text_file.close()
+	servers_list_text_file.close()
 
 
 func _on_servers_list_item_selected():
