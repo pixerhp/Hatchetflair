@@ -22,7 +22,6 @@ func _ready():
 	
 	disable_world_selected_requiring_buttons()
 	hide_all_worlds_menu_popups()
-	update_worlds_list_text()
 
 
 # Start playing/hosting one of your worlds.
@@ -109,8 +108,8 @@ func update_worlds_list_text():
 	displayed_worlds_list_text.clear()
 	
 	var worlds_list_file_contents = get_worlds_list_file_contents()
-	# Only use the regular world names for the displayed text.
-	for index in range(0, worlds_list_file_contents.size()-1, 2):
+	# Only use the regular world names for the displayed text. (We start at index 1 to skip the version string.)
+	for index in range(1, worlds_list_file_contents.size()-1, 2):
 		displayed_worlds_list_text.add_item(worlds_list_file_contents[index])
 
 func reorder_worlds_alphabetically():
@@ -118,24 +117,22 @@ func reorder_worlds_alphabetically():
 
 # Outputs an array of strings who's items alternate between world names and then it's directory/folder name.
 func get_worlds_list_file_contents() -> Array[String]:
-	# If the worlds  list text file is able to be found/accessed:
+	# If the worlds list text file is able to be found/accessed:
 	if (FileAccess.file_exists(worlds_list_file_location)):
 		var worlds_list_txt_file: FileAccess
 		worlds_list_txt_file = FileAccess.open(worlds_list_file_location, FileAccess.READ)
-		# If the version of the file is correct:
-		if (worlds_list_txt_file.get_line() == GlobalStuff.game_version_entire):
-			var text_lines: Array[String] = []
-			while (worlds_list_txt_file.eof_reached() == false):
-				text_lines.append(worlds_list_txt_file.get_line())
-			worlds_list_txt_file.close()
-			if (text_lines.size() % 2 == 1):
-				text_lines.pop_back()
-			return(text_lines)
-		else:
-			push_error("The text file for the worlds list, when accessed by the worlds menu, was found to have an outdated version.")
+		var text_lines: Array[String] = []
+		while (worlds_list_txt_file.eof_reached() == false): # Store each line of text as an array item.
+			text_lines.append(worlds_list_txt_file.get_line())
+		worlds_list_txt_file.close()
+		if (text_lines[text_lines.size()-1] == ""): # Don't include the blank line at the end of text files.
+			text_lines.pop_back()
+		if not (text_lines[0] == GlobalStuff.game_version_entire):
+			push_error("The text file for the worlds list, when accessed by the worlds menu, was found to have an outdated version. (Contents used anyway.)")
+		return(text_lines)
 	else:
 		push_error("The text file for the worlds list could not be found or accessed by the worlds menu.")
-	return([])
+		return([])
 
 func replace_worlds_list_file_contents(new_worlds_list_contents: Array[String]):
 	# Ensure that the file can be accessed before proceeding.
@@ -149,11 +146,35 @@ func replace_worlds_list_file_contents(new_worlds_list_contents: Array[String]):
 	else:
 		push_error("The worlds list text file could not be accessed whilst trying to update it's contents.")
 
-func get_world_info_file_contents(directory_folder_for_world: String, name_of_world: String) -> Array[String]:
-	return([])
+# DOES include the version number at the start of the doc, especially for use in asking if you want to update the world.
+func get_world_info_file_contents(name_of_directory_folder_for_world: String) -> Array[String]:
+	# If the world info text file is able to be found/accessed:
+	if (FileAccess.file_exists("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt")):
+		var world_info_text_file: FileAccess
+		world_info_text_file = FileAccess.open("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt", FileAccess.READ)
+		var text_lines: Array[String] = []
+		while (world_info_text_file.eof_reached() == false):
+			text_lines.append(world_info_text_file.get_line())
+		world_info_text_file.close()
+		# Don't use the blank line icluded at the end of most text files.
+		if (text_lines[text_lines.size()-1] == ""):
+			text_lines.pop_back()
+		return(text_lines)
+	else:
+		push_error("The text file for a world's info (directory: \"" + name_of_directory_folder_for_world + "\") could not be found or accessed by the worlds menu to be read.")
+		return([])
 
-func replace_world_info_file_contents(directory_folder_for_world: String, name_of_world: String, new_file_contents):
-	pass
+# Input SHOULD include version number.
+func replace_world_info_file_contents(name_of_directory_folder_for_world: String, new_file_contents: Array[String]):
+	# Ensure that the file can be accessed before proceeding.
+	if (FileAccess.file_exists("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt")):
+		var world_info_text_file: FileAccess
+		world_info_text_file = FileAccess.open("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt", FileAccess.WRITE)
+		for line in new_file_contents:
+			world_info_text_file.store_line(line)
+		world_info_text_file.close()
+	else:
+		push_error("The text file for a world's info (directory: \"" + name_of_directory_folder_for_world + "\") could not be accessed whilst attempting to replace it's contents.")
 
 
 # Disables the host_without_playing_toggle if multiplayer joining is turned off.

@@ -159,8 +159,8 @@ func get_servers_list_file_contents() -> Array[String]:
 		else:
 			push_error("The text file for the servers list, when accessed by the join menu, was found to have an outdated version.")
 	else:
-		push_error("The text file for the servers list could not be found or accessed by the join menu.")
-	return([])
+		push_error("The text file for the servers list could not be found or accessed by the join menu to be read.")
+	return([]) # The response for if an error happens.
 
 func replace_servers_list_file_contents(new_servers_list_contents: Array[String]):
 	# Ensure that the file can be accessed before proceeding.
@@ -172,7 +172,7 @@ func replace_servers_list_file_contents(new_servers_list_contents: Array[String]
 			servers_text_file.store_line(line)
 		servers_text_file.close()
 	else:
-		push_error("The servers list text file could not be accessed whilst trying to update it's contents.")
+		push_error("The servers list text file could not be accessed whilst attempting to replace it's contents.")
 
 
 func _on_servers_list_item_selected():
