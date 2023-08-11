@@ -27,7 +27,9 @@ func _ready():
 
 # Start playing/hosting one of your worlds.
 func start_world(worlds_list_index: int = 0):#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
-	print("Chosen world index: " + str(worlds_list_index))
+	print("Chosen world's list-index: " + str(worlds_list_index))
+	print("Chosen world's name: " + get_worlds_list_file_contents()[worlds_list_index * 2])
+	print("Chosen world's folder/directory name: " + get_worlds_list_file_contents()[(worlds_list_index * 2) + 1])
 	NetworkManager.start_game(not $WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed, true, $WorldsScreenUI/Toggles/AllowJoining.button_pressed)
 
 func _on_play_button_pressed():
@@ -136,7 +138,16 @@ func get_worlds_list_file_contents() -> Array[String]:
 	return([])
 
 func replace_worlds_list_file_contents(new_worlds_list_contents: Array[String]):
-	pass
+	# Ensure that the file can be accessed before proceeding.
+	if (FileAccess.file_exists(worlds_list_file_location)):
+		var worlds_list_text_file: FileAccess
+		worlds_list_text_file = FileAccess.open(worlds_list_file_location, FileAccess.WRITE)
+		worlds_list_text_file.store_line(GlobalStuff.game_version_entire)
+		for line in new_worlds_list_contents:
+			worlds_list_text_file.store_line(line)
+		worlds_list_text_file.close()
+	else:
+		push_error("The worlds list text file could not be accessed whilst trying to update it's contents.")
 
 func get_world_info_file_contents(directory_folder_for_world: String, name_of_world: String) -> Array[String]:
 	return([])

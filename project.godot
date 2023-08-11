@@ -16,7 +16,8 @@ run/main_scene="res://scenes/main_menu.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Hatchetflair"
 config/features=PackedStringArray("4.1", "GL Compatibility")
-config/icon="res://assets/icons/icon.svg"
+boot_splash/image="res://assets/icons/hf_icon.png"
+config/icon="res://assets/icons/hf_icon.png"
 
 [autoload]
 

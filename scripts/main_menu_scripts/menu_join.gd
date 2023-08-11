@@ -21,9 +21,9 @@ func _ready():
 
 # Attempt to join the selected server.
 func join_server(server_list_index: int = 0):
-	print("Chosen server list index: " + str(server_list_index))
-	print("Chosen server nickname: " + get_servers_list_file_contents()[server_list_index * 2])
-	print("Chosen server IP: " + get_servers_list_file_contents()[(server_list_index * 2) + 1])
+	print("Chosen server's list-index: " + str(server_list_index))
+	print("Chosen server's nickname: " + get_servers_list_file_contents()[server_list_index * 2])
+	print("Chosen server's IP: " + get_servers_list_file_contents()[(server_list_index * 2) + 1])
 	NetworkManager.start_game(true, false, true, get_servers_list_file_contents()[(server_list_index * 2) + 1])
 
 func _on_join_button_pressed():
@@ -163,7 +163,7 @@ func get_servers_list_file_contents() -> Array[String]:
 	return([])
 
 func replace_servers_list_file_contents(new_servers_list_contents: Array[String]):
-	# Make sure you can actually access the file.
+	# Ensure that the file can be accessed before proceeding.
 	if (FileAccess.file_exists(servers_list_file_location)):
 		var servers_text_file: FileAccess
 		servers_text_file = FileAccess.open(servers_list_file_location, FileAccess.WRITE)
