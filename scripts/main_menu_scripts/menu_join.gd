@@ -149,11 +149,11 @@ func get_servers_list_file_contents() -> Array[String]:
 		var servers_list_txt_file: FileAccess
 		servers_list_txt_file = FileAccess.open(servers_list_file_location, FileAccess.READ)
 		var text_lines: Array[String] = []
-		while (servers_list_txt_file.eof_reached() == false): # Store each line of text as an array item.
+		while (servers_list_txt_file.eof_reached() == false): # Store each line of text as an item in an array.
 			text_lines.append(servers_list_txt_file.get_line())
 		servers_list_txt_file.close()
 		if (text_lines.size() > 0): # (crash prevention)
-			if (text_lines[text_lines.size()-1] == ""): # Don't include the blank line at the end of text files.
+			if (text_lines[text_lines.size()-1] == ""): # Don't include the blank line in the end of text files.
 				text_lines.pop_back()
 		if not (text_lines[0] == GlobalStuff.game_version_entire):
 			push_warning("The servers list text file was found to have an outdated version when attempting to get it's file contents. (Contents used anyway.)")
