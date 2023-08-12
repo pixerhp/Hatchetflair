@@ -40,14 +40,15 @@ func open_add_server_popup():
 	add_server_popup.show()
 
 func confirm_add_server():
-	# Figure out what the new servers list items (including IPs) should look like.
 	var add_server_popup = get_node("AddServerPopup")
-	var servers_text_file_contents = get_servers_list_file_contents()
-	servers_text_file_contents.append(add_server_popup.get_node("ServerNicknameInput").text)
-	servers_text_file_contents.append(add_server_popup.get_node("ServerIPInput").text)
+	
+	# Figure out what the new servers list items (including IPs) should look like.
+	var servers_list_text_file_contents = get_servers_list_file_contents()
+	servers_list_text_file_contents.append(add_server_popup.get_node("ServerNicknameInput").text)
+	servers_list_text_file_contents.append(add_server_popup.get_node("ServerIPInput").text)
 	
 	# Replace the current servers list file contents with newer updated contents.
-	replace_servers_list_file_contents(servers_text_file_contents)
+	replace_servers_list_file_contents(servers_list_text_file_contents)
 	
 	update_displayed_servers_list_text()
 	add_server_popup.hide()
@@ -68,12 +69,12 @@ func confirm_edit_server():
 		
 		# Figure out what the new servers list items (including IPs) should look like.
 		var edit_server_popup = get_node("EditServerPopup")
-		var servers_text_file_contents = get_servers_list_file_contents()
-		servers_text_file_contents[(displayed_servers_list_text.get_selected_items()[0] * 2) + 1] = edit_server_popup.get_node("ServerNicknameInput").text
-		servers_text_file_contents[(displayed_servers_list_text.get_selected_items()[0] * 2) + 2] = edit_server_popup.get_node("ServerIPInput").text
+		var servers_list_text_file_contents = get_servers_list_file_contents()
+		servers_list_text_file_contents[(displayed_servers_list_text.get_selected_items()[0] * 2) + 1] = edit_server_popup.get_node("ServerNicknameInput").text
+		servers_list_text_file_contents[(displayed_servers_list_text.get_selected_items()[0] * 2) + 2] = edit_server_popup.get_node("ServerIPInput").text
 		
 		# Replace the current servers list file contents with newer updated contents.
-		replace_servers_list_file_contents(servers_text_file_contents)
+		replace_servers_list_file_contents(servers_list_text_file_contents)
 		
 		update_displayed_servers_list_text()
 		edit_server_popup.hide()
@@ -91,12 +92,12 @@ func confirm_remove_server():
 	if not displayed_servers_list_text.get_selected_items().is_empty(): # Crash prevention for if no server nickname is selected.
 		
 		# Figure out what the new servers list items (including IPs) should look like.
-		var servers_text_file_contents = get_servers_list_file_contents()
-		servers_text_file_contents.remove_at((displayed_servers_list_text.get_selected_items()[0] * 2) + 2)
-		servers_text_file_contents.remove_at((displayed_servers_list_text.get_selected_items()[0] * 2) + 1)
+		var servers_list_text_file_contents = get_servers_list_file_contents()
+		servers_list_text_file_contents.remove_at((displayed_servers_list_text.get_selected_items()[0] * 2) + 2)
+		servers_list_text_file_contents.remove_at((displayed_servers_list_text.get_selected_items()[0] * 2) + 1)
 		
 		# Replace the current servers list file contents with newer updated contents.
-		replace_servers_list_file_contents(servers_text_file_contents)
+		replace_servers_list_file_contents(servers_list_text_file_contents)
 		
 		update_displayed_servers_list_text()
 		disable_server_selected_requiring_buttons()
@@ -110,48 +111,48 @@ func update_displayed_servers_list_text():
 	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
 	displayed_servers_list_text.clear()
 	
-	var servers_text_file_contents = get_servers_list_file_contents()
+	var servers_list_text_file_contents = get_servers_list_file_contents()
 	# Only use the server nicknames for the displayed text. (It starts at index 1 to skip the version string.)
-	for index in range(1, servers_text_file_contents.size()-1, 2):
-		displayed_servers_list_text.add_item(servers_text_file_contents[index])
+	for index in range(1, servers_list_text_file_contents.size()-1, 2):
+		displayed_servers_list_text.add_item(servers_list_text_file_contents[index])
 
 # NOTE: This will mess up servers who's saved IPs have the string "IP:" in them, but they shouldn't have that anyways so it's an acceptable bug.
 func reorder_servers_alphabetically():
-	var servers_text_file_contents = get_servers_list_file_contents()
+	var servers_list_text_file_contents = get_servers_list_file_contents()
 	
 	# Concatenate the IPs to the ends of the nicknames so that we know who belongs with what after we sort the array.
 	var concatenated_file_contents: Array[String] = []
-	for index in range(1, servers_text_file_contents.size()-1, 2): 
-		concatenated_file_contents.append(servers_text_file_contents[index] + "IP:" + servers_text_file_contents[index + 1])
+	for index in range(1, servers_list_text_file_contents.size()-1, 2): 
+		concatenated_file_contents.append(servers_list_text_file_contents[index] + "IP:" + servers_list_text_file_contents[index + 1])
 	
 	# Sort the concatenated items alphabetically. (The IPs at the end of each array item don't mess up the sorting.)
 	concatenated_file_contents.sort()
 	
 	# Reusing the file-contents array variable, seperate the nickname and IP components from the items in the sorted concatenated array.
-	servers_text_file_contents.clear()
-	servers_text_file_contents.append(GlobalStuff.game_version_entire)
+	servers_list_text_file_contents.clear()
+	servers_list_text_file_contents.append(GlobalStuff.game_version_entire)
 	var letter_num: int = 0
 	for list_item in concatenated_file_contents:
 		# Searches for the rightmost instance of "IP:" in the concatenated string, and uses it's location to seperate nickname and ip.
 		letter_num = list_item.length()-3
 		while not (list_item.substr(letter_num,3) == "IP:"):
 			letter_num -= 1
-		servers_text_file_contents.append(list_item.substr(0,letter_num))
-		servers_text_file_contents.append(list_item.substr(letter_num + 3))
+		servers_list_text_file_contents.append(list_item.substr(0,letter_num))
+		servers_list_text_file_contents.append(list_item.substr(letter_num + 3))
 	
 	# Replace the servers list file contents with a sorted version of it's current contents.
-	replace_servers_list_file_contents(servers_text_file_contents)
+	replace_servers_list_file_contents(servers_list_text_file_contents)
 
 # Outputs an array of strings who's items alternate between server nicknames and then it's ip.
 func get_servers_list_file_contents() -> Array[String]:
 	# If the servers list text file is able to be found/accessed:
 	if (FileAccess.file_exists(servers_list_file_location)):
-		var servers_list_txt_file: FileAccess
-		servers_list_txt_file = FileAccess.open(servers_list_file_location, FileAccess.READ)
+		var servers_list_text_file: FileAccess
+		servers_list_text_file = FileAccess.open(servers_list_file_location, FileAccess.READ)
 		var text_lines: Array[String] = []
-		while (servers_list_txt_file.eof_reached() == false): # Store each line of text as an item in an array.
-			text_lines.append(servers_list_txt_file.get_line())
-		servers_list_txt_file.close()
+		while (servers_list_text_file.eof_reached() == false): # Store each line of text as an item in an array.
+			text_lines.append(servers_list_text_file.get_line())
+		servers_list_text_file.close()
 		if (text_lines.size() > 0): # (crash prevention)
 			if (text_lines[text_lines.size()-1] == ""): # Don't include the blank line in the end of text files.
 				text_lines.pop_back()

@@ -34,7 +34,7 @@ func _enter_tree() -> void:
 	file = FileAccess.open("user://storage/worlds/world_1/world_info.txt", FileAccess.WRITE)
 	file.store_line(game_version_entire)
 	file.store_line("date created: 2023_8_7")
-	file.store_line("last played: never")
+	file.store_line("last played: unplayed")
 	file.store_line("world generation seed: 314")
 	file.close()
 	file = FileAccess.open("user://storage/worlds_list.txt", FileAccess.WRITE)

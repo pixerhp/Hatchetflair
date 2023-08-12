@@ -45,23 +45,50 @@ func open_new_world_popup():
 
 func confirm_new_world():
 	var new_world_popup = get_node("NewWorldPopup")
-	worlds_names.append(new_world_popup.get_node("WorldNameInput").text)
+	
+	# Randomize the seed if the seed input was left blank.
 	if (new_world_popup.get_node("WorldSeedInput").text == ""):
 		var random = RandomNumberGenerator.new()
 		random.randomize()
-		worlds_seeds.append(random.randi() + random.randi() - 4294967296)
+		new_world_popup.get_node("WorldSeedInput").text = str(random.randi() + random.randi() - 4294967296)
+	
+	# Figure out what the new worlds list items should look like.
+	var worlds_list_text_file_contents = get_worlds_list_file_contents()
+	worlds_list_text_file_contents.append(new_world_popup.get_node("WorldNameInput").text)
+	# (Find an appropriate unused internal directory/folder name for the world.)
+	if (DirAccess.dir_exists_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1])):
+		var alt_dir_name_attempt: int = 1
+		while(true == DirAccess.dir_exists_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1] + " alt_" + str(alt_dir_name_attempt))):
+				alt_dir_name_attempt += 1
+		worlds_list_text_file_contents.append(new_world_popup.get_node("WorldNameInput").text + " alt_" + str(alt_dir_name_attempt))
 	else:
-		worlds_seeds.append(int(new_world_popup.get_node("WorldSeedInput").text))
+		worlds_list_text_file_contents.append(new_world_popup.get_node("WorldNameInput").text)
+	# (Create the world's directory/folder and it's essential files.)
+	DirAccess.make_dir_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1])
+	DirAccess.make_dir_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1] + "/chunks")
+	var new_world_info_file
+	new_world_info_file = FileAccess.open("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1] + "/world_info.txt", FileAccess.WRITE)
+	new_world_info_file.store_line(GlobalStuff.game_version_entire)
+	new_world_info_file.store_line("date created: [date]")
+	new_world_info_file.store_line("last played: unplayed")
+	new_world_info_file.store_line("world generation seed: " + new_world_popup.get_node("WorldSeedInput").text)
+	new_world_info_file.close()
+	
+	# Replace the current worlds list file contents with newer updated contents.
+	replace_worlds_list_file_contents(worlds_list_text_file_contents)
+	
 	update_displayed_worlds_list_text()
 	new_world_popup.hide()
 
+######## REMEMBER TO MAKE IT RENAME A DIRECTORY/FOLDER IF YOU RENAME THE WORLD
 func open_edit_world_popup():
 	hide_all_worlds_menu_popups()
-	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no world is selected.
+	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
+	if not displayed_worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no world is selected.
 		var edit_world_popup = get_node("EditWorldPopup")
-		edit_world_popup.get_node("PopupTitleText").text = "[center]What will you rename world \"" + worlds_names[worlds_list_text.get_selected_items()[0]] +"\" to?[/center]"
-		edit_world_popup.get_node("WorldNameInput").text = worlds_names[worlds_list_text.get_selected_items()[0]]
-		edit_world_popup.get_node("WorldSeedInput").text = str(worlds_seeds[worlds_list_text.get_selected_items()[0]])
+		edit_world_popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + get_worlds_list_file_contents()[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1] +"\""
+		edit_world_popup.get_node("WorldNameInput").text = get_worlds_list_file_contents()[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1]
+		edit_world_popup.get_node("WorldSeedInput").text = get_world_info_file_contents(get_worlds_list_file_contents()[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 2])[3].substr(23)
 		edit_world_popup.show()
 
 func confirm_edit_world():
