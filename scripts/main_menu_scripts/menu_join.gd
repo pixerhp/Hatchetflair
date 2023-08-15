@@ -126,7 +126,7 @@ func reorder_servers_alphabetically():
 		concatenated_file_contents.append(servers_list_text_file_contents[index] + "IP:" + servers_list_text_file_contents[index + 1])
 	
 	# Sort the concatenated items alphabetically. (The IPs at the end of each array item don't mess up the sorting.)
-	concatenated_file_contents.sort()
+	concatenated_file_contents.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0)
 	
 	# Reusing the file-contents array variable, seperate the nickname and IP components from the items in the sorted concatenated array.
 	servers_list_text_file_contents.clear()
