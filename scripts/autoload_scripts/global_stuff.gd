@@ -50,12 +50,12 @@ func set_window_title(optional_specified_title: String = ""):
 func create_essential_files():
 	var file
 	DirAccess.make_dir_absolute("user://storage")
-	if not DirAccess.dir_exists_absolute("user://storage/user_info.txt"):
+	if not FileAccess.file_exists("user://storage/user_info.txt"):
 		file = FileAccess.open("user://storage/user_info.txt", FileAccess.WRITE)
 		file.store_line(game_version_entire)
 		file.store_line("Pixer Pinecone")
 		file.close()
-	if not DirAccess.dir_exists_absolute("user://storage/servers_list.txt"):
+	if not FileAccess.file_exists("user://storage/servers_list.txt"):
 		file = FileAccess.open("user://storage/servers_list.txt", FileAccess.WRITE)
 		file.store_line(game_version_entire)
 		file.store_line("localhost 127.0.0.1")
@@ -67,11 +67,12 @@ func create_essential_files():
 	DirAccess.make_dir_absolute("user://storage/worlds/world_1/chunks")
 	file = FileAccess.open("user://storage/worlds/world_1/world_info.txt", FileAccess.WRITE)
 	file.store_line(game_version_entire)
-	file.store_line("date created: 2023_8_7")
+	file.store_line("date created: 2023-08-07T3:14:00")
 	file.store_line("last played: unplayed")
 	file.store_line("world generation seed: 314")
 	file.close()
-	if not DirAccess.dir_exists_absolute("user://storage/worlds_list.txt"):
+	if not FileAccess.file_exists("user://storage/worlds_list.txt"):
+		print("(The worlds list was created/overwritten because it wasn't found.)")
 		file = FileAccess.open("user://storage/worlds_list.txt", FileAccess.WRITE)
 		file.store_line(game_version_entire)
 		file.store_line("world_1") # the regular name of the world.
