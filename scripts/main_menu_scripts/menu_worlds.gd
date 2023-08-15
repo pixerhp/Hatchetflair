@@ -149,8 +149,8 @@ func ensure_all_world_folders_are_known():
 
 func ensure_world_folder_has_all_essential_files(name_of_directory_folder_for_world: String):
 	if not DirAccess.dir_exists_absolute("user://storage/worlds/" + name_of_directory_folder_for_world):
+		push_warning("Tried to ensure that the world folder: \"" + name_of_directory_folder_for_world +"\" has all essential files, but that world folder didn't even exist. (Creating it now.)")
 		DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + name_of_directory_folder_for_world)
-		push_warning("Tried to ensure that the world folder: \"" + name_of_directory_folder_for_world +"\" has all essential files, but the folder didn't even exist. (Created it.)")
 	DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + name_of_directory_folder_for_world + "/chunks")
 	if not FileAccess.file_exists("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt"):
 		var file = FileAccess
