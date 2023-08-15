@@ -116,31 +116,35 @@ func update_displayed_servers_list_text():
 	for index in range(1, servers_list_text_file_contents.size()-1, 2):
 		displayed_servers_list_text.add_item(servers_list_text_file_contents[index])
 
-# NOTE: This will mess up servers who's saved IPs have the string "IP:" in them, but they shouldn't have that anyways so it's an acceptable bug.
 func reorder_servers_alphabetically():
 	var servers_list_text_file_contents = get_servers_list_file_contents()
 	
-	# Concatenate the IPs to the ends of the nicknames so that we know who belongs with what after we sort the array.
+	# Concatenate each IP onto the back of its server's nickname, so that we know who goes with what after sorting.
 	var concatenated_file_contents: Array[String] = []
 	for index in range(1, servers_list_text_file_contents.size()-1, 2): 
-		concatenated_file_contents.append(servers_list_text_file_contents[index] + "IP:" + servers_list_text_file_contents[index + 1])
+		concatenated_file_contents.append(servers_list_text_file_contents[index] + servers_list_text_file_contents[index + 1] + "ip_at:" + str(servers_list_text_file_contents[index].length()))
 	
-	# Sort the concatenated items alphabetically. (The IPs at the end of each array item don't mess up the sorting.)
+	# Sort the concatenated items alphabetically, the custom func is so that numbers are sorted more nicely. (1 < 2 < 10)
 	concatenated_file_contents.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0)
 	
 	# Reusing the file-contents array variable, seperate the nickname and IP components from the items in the sorted concatenated array.
 	servers_list_text_file_contents.clear()
 	servers_list_text_file_contents.append(GlobalStuff.game_version_entire)
 	var letter_num: int = 0
+	var ip_string_start_index: int = 0
 	for list_item in concatenated_file_contents:
-		# Searches for the rightmost instance of "IP:" in the concatenated string, and uses it's location to seperate nickname and ip.
-		letter_num = list_item.length()-3
-		while not (list_item.substr(letter_num,3) == "IP:"):
+		# Searches for the rightmost instance of "ip_at:" in the concatenated string, and uses its location and the number after it to help seperate nickname and ip properly.
+		letter_num = list_item.length()-7
+		while not (list_item.substr(letter_num,6) == "ip_at:"):
 			letter_num -= 1
-		servers_list_text_file_contents.append(list_item.substr(0,letter_num))
-		servers_list_text_file_contents.append(list_item.substr(letter_num + 3))
+			if (letter_num < 0):
+				push_error("The string \"ip_at:\" was not found in a concatenated_file_contents list item when unconcatenating it, expect a jumbled result.")
+				break
+		ip_string_start_index = int(list_item.substr(letter_num + 6))
+		servers_list_text_file_contents.append(list_item.substr(0, ip_string_start_index))
+		servers_list_text_file_contents.append(list_item.substr(ip_string_start_index, letter_num - ip_string_start_index))
 	
-	# Replace the servers list file contents with a sorted version of it's current contents.
+	# Replace the servers list file contents with the new sorted copy of it's current contents.
 	replace_servers_list_file_contents(servers_list_text_file_contents)
 
 # Outputs an array of strings who's items alternate between server nicknames and then it's ip.
