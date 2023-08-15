@@ -64,8 +64,8 @@ func confirm_new_world():
 	else:
 		worlds_list_text_file_contents.append(new_world_popup.get_node("WorldNameInput").text)
 	# (Create the world's directory/folder and it's essential files.)
-	DirAccess.make_dir_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1])
-	DirAccess.make_dir_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1] + "/chunks")
+	DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1])
+	DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1] + "/chunks")
 	var new_world_info_file
 	new_world_info_file = FileAccess.open("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1] + "/world_info.txt", FileAccess.WRITE)
 	new_world_info_file.store_line(GlobalStuff.game_version_entire)
@@ -80,7 +80,6 @@ func confirm_new_world():
 	update_displayed_worlds_list_text()
 	new_world_popup.hide()
 
-######## REMEMBER TO MAKE IT RENAME A DIRECTORY/FOLDER IF YOU RENAME THE WORLD
 func open_edit_world_popup():
 	hide_all_worlds_menu_popups()
 	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
@@ -91,6 +90,7 @@ func open_edit_world_popup():
 		edit_world_popup.get_node("WorldSeedInput").text = get_world_info_file_contents(get_worlds_list_file_contents()[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 2])[3].substr(23)
 		edit_world_popup.show()
 
+######## REMEMBER TO MAKE IT RENAME A DIRECTORY/FOLDER IF YOU RENAME THE WORLD
 func confirm_edit_world():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
 		var edit_world_popup = get_node("EditWorldPopup")
