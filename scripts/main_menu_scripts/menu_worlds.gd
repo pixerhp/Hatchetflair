@@ -50,7 +50,7 @@ func confirm_new_world():
 	if (new_world_popup.get_node("WorldSeedInput").text == ""):
 		var random = RandomNumberGenerator.new()
 		random.randomize()
-		new_world_popup.get_node("WorldSeedInput").text = str(random.randi() + random.randi() - 4294967296)
+		new_world_popup.get_node("WorldSeedInput").text = str(random.randi() - 4294967296 + random.randi())
 	
 	# Figure out what the new worlds list items should look like.
 	var worlds_list_text_file_contents = get_worlds_list_file_contents()
@@ -129,6 +129,7 @@ func _on_duplicate_world_pressed():
 
 # Update the text of the visible worlds-list for the player.
 func update_displayed_worlds_list_text():
+	ensure_all_world_folders_are_known()
 	reorder_worlds_alphabetically()
 	
 	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
@@ -141,6 +142,26 @@ func update_displayed_worlds_list_text():
 
 func reorder_worlds_alphabetically():
 	pass
+
+# Helpful in the instance that any world folders exist without the worlds list text file "knowing" about them.
+func ensure_all_world_folders_are_known():
+	pass
+
+func ensure_world_folder_has_all_essential_files(name_of_directory_folder_for_world: String):
+	if not DirAccess.dir_exists_absolute("user://storage/worlds/" + name_of_directory_folder_for_world):
+		DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + name_of_directory_folder_for_world)
+		push_warning("Tried to ensure that the world folder: \"" + name_of_directory_folder_for_world +"\" has all essential files, but the folder didn't even exist. (Created it.)")
+	DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + name_of_directory_folder_for_world + "/chunks")
+	if not FileAccess.file_exists("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt"):
+		var file = FileAccess
+		file = FileAccess.open("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt", FileAccess.WRITE)
+		file.store_line(GlobalStuff.game_version_entire)
+		file.store_line("date created: " + Time.get_datetime_string_from_system())
+		file.store_line("last played: unplayed")
+		var random = RandomNumberGenerator.new()
+		random.randomize()
+		file.store_line("world generation seed: " + str(random.randi() - 4294967296 + random.randi()))
+		file.close()
 
 # Outputs an array of strings who's items alternate between world names and then it's directory/folder name.
 func get_worlds_list_file_contents() -> Array[String]:
