@@ -16,33 +16,7 @@ func _enter_tree() -> void:
 	set_window_title()
 	
 	# Some essential and example HF user directory content.
-	var file
-	DirAccess.make_dir_absolute("user://storage")
-	file = FileAccess.open("user://storage/user_info.txt", FileAccess.WRITE)
-	file.store_line(game_version_entire)
-	file.store_line("Pixer Pinecone")
-	file.close()
-	file = FileAccess.open("user://storage/servers_list.txt", FileAccess.WRITE)
-	file.store_line(game_version_entire)
-	file.store_line("localhost 127.0.0.1")
-	file.store_line("127.0.0.1")
-	file.store_line("bad ip example")
-	file.store_line("234534534.24653463.34534.547124325")
-	file.close()
-	DirAccess.make_dir_absolute("user://storage/worlds")
-	DirAccess.make_dir_absolute("user://storage/worlds/world_1")
-	file = FileAccess.open("user://storage/worlds/world_1/world_info.txt", FileAccess.WRITE)
-	file.store_line(game_version_entire)
-	file.store_line("date created: 2023_8_7")
-	file.store_line("last played: unplayed")
-	file.store_line("world generation seed: 314")
-	file.close()
-	file = FileAccess.open("user://storage/worlds_list.txt", FileAccess.WRITE)
-	file.store_line(game_version_entire)
-	file.store_line("world_1") # the regular name of the world.
-	file.store_line("world_1") # the name of the folder where the world is stored in.
-	file.close()
-	DirAccess.make_dir_absolute("user://storage/worlds/world_1/chunks")
+	create_essential_files()
 	
 	all_global_stuff_initialized = true
 
@@ -72,6 +46,37 @@ func set_window_title(optional_specified_title: String = ""):
 			DisplayServer.window_set_title(game_name + "   " + game_version_entire + "   ---   " + usable_splash_texts[randi() % usable_splash_texts.size()])
 	else:
 		push_error("The file for window title splash-texts was not found, so no splash text was used.")
+
+func create_essential_files():
+	var file
+	DirAccess.make_dir_absolute("user://storage")
+	if not DirAccess.dir_exists_absolute("user://storage/user_info.txt"):
+		file = FileAccess.open("user://storage/user_info.txt", FileAccess.WRITE)
+		file.store_line(game_version_entire)
+		file.store_line("Pixer Pinecone")
+		file.close()
+	if not DirAccess.dir_exists_absolute("user://storage/servers_list.txt"):
+		file = FileAccess.open("user://storage/servers_list.txt", FileAccess.WRITE)
+		file.store_line(game_version_entire)
+		file.store_line("localhost 127.0.0.1")
+		file.store_line("127.0.0.1")
+		file.store_line("bad ip example")
+		file.store_line("234534534.24653463.34534.547124325")
+		file.close()
+	DirAccess.make_dir_recursive_absolute("user://storage/worlds/world_1")
+	DirAccess.make_dir_absolute("user://storage/worlds/world_1/chunks")
+	file = FileAccess.open("user://storage/worlds/world_1/world_info.txt", FileAccess.WRITE)
+	file.store_line(game_version_entire)
+	file.store_line("date created: 2023_8_7")
+	file.store_line("last played: unplayed")
+	file.store_line("world generation seed: 314")
+	file.close()
+	if not DirAccess.dir_exists_absolute("user://storage/worlds_list.txt"):
+		file = FileAccess.open("user://storage/worlds_list.txt", FileAccess.WRITE)
+		file.store_line(game_version_entire)
+		file.store_line("world_1") # the regular name of the world.
+		file.store_line("world_1") # the name of the folder where the world is stored in.
+		file.close()
 
 
 
