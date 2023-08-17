@@ -129,7 +129,7 @@ func _on_duplicate_world_pressed():
 
 # Update the text of the visible worlds-list for the player.
 func update_displayed_worlds_list_text():
-	ensure_all_world_folders_are_known()
+	sync_worlds_list_to_what_world_folders_actually_exist()
 	reorder_worlds_alphabetically()
 	
 	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
@@ -144,10 +144,38 @@ func reorder_worlds_alphabetically():
 	pass
 
 # Helpful in the instance that any world folders exist without the worlds list text file "knowing" about them.
-func ensure_all_world_folders_are_known():
-	pass
+func sync_worlds_list_to_what_world_folders_actually_exist():
+	# Ensure that the storage folder worlds folder exists before opening it.
+	if not DirAccess.dir_exists_absolute("user://storage/worlds"):
+		push_warning("When trying to ensure all world folders are known, the main \"worlds\" folder could not be found. (Creating it now.)")
+		DirAccess.make_dir_recursive_absolute("user://storage/worlds")
+	
+	# Get all of the raw info needed for comparison.
+	var list_of_world_folder_names: PackedStringArray = DirAccess.open("user://storage/worlds").get_directories()
+	var worlds_list_file_contents: Array[String] = get_worlds_list_file_contents()
+	
+	# Remove listed worlds but which don't actually exist from what will be the replacement worlds list text file contents.
+	var indeces_for_removal: Array[int] = []
+	for index in range(worlds_list_file_contents.size()-1, 0, -2): # (We want the list of indeces to remove from last to first, so we check these in a similar order.)
+		if (list_of_world_folder_names.count(worlds_list_file_contents[index]) == 0):
+			indeces_for_removal.append(index)
+	for index in indeces_for_removal:
+		worlds_list_file_contents.remove_at(index)
+		worlds_list_file_contents.remove_at(index - 1)
+	
+	# Add unaccounted-for found world folders to what will be the replacement worlds list text file contents.
+	var already_known_folder_names: Array[String] = []
+	for index in range(2, worlds_list_file_contents.size(), 2):
+		already_known_folder_names.append(worlds_list_file_contents[index])
+	for folder_name in list_of_world_folder_names:
+		if (already_known_folder_names.count(folder_name) == 0):
+			worlds_list_file_contents.append(folder_name) # (We do this once for world name, twice for world folder name.)
+			worlds_list_file_contents.append(folder_name)
+	
+	# Replace the worlds list text file's contents with the new ensuredly-synced file contents.
+	replace_worlds_list_file_contents(worlds_list_file_contents)
 
-func ensure_world_folder_has_all_essential_files(name_of_directory_folder_for_world: String):
+func ensure_world_folder_has_its_essential_files(name_of_directory_folder_for_world: String):
 	if not DirAccess.dir_exists_absolute("user://storage/worlds/" + name_of_directory_folder_for_world):
 		push_warning("Tried to ensure that the world folder: \"" + name_of_directory_folder_for_world +"\" has all essential files, but that world folder didn't even exist. (Creating it now.)")
 		DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + name_of_directory_folder_for_world)
