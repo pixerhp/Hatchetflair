@@ -1,5 +1,28 @@
 extends Node
 
+
+func get_lines_of_text_file_as_array(file_location: String, include_potential_blank_last_line: bool) -> Array[String]:
+	if not FileAccess.file_exists(file_location):
+		push_error("A text file couldn't be found to have its lines read: " + file_location)
+		return([])
+	
+	var file: FileAccess = FileAccess.open(file_location, FileAccess.READ)
+	if not file.is_open():
+		push_error("A text file which was successfully found couldn't be opened to have its lines read: " + file_location)
+		return([])
+	
+	# Get all of the lines of the text file.
+	var text_lines: Array[String] = []
+	while (file.eof_reached() == false):
+		text_lines.append(file.get_line())
+	file.close()
+	
+	if not include_potential_blank_last_line:
+		if (text_lines.size() > 0) and (text_lines[text_lines.size()-1] == ""):
+			text_lines.pop_back()
+	
+	return(text_lines)
+
 func recursively_delete_all_files_inside_directory(dir: String) -> bool:
 	if not DirAccess.dir_exists_absolute(dir):
 		push_warning("The \"recursively_delete_all_files_inside_directory()\" func couldn't find the directory specified: " + dir)
@@ -17,3 +40,6 @@ func recursively_delete_all_files_inside_directory(dir: String) -> bool:
 		DirAccess.remove_absolute(dir + "/" + file)
 	
 	return false
+
+
+# VERSION UPDATING FUNCTIONS ARE BELOW HERE.
