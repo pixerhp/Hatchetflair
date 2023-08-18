@@ -23,6 +23,7 @@ config/icon="res://assets/icons/hf_icon.png"
 
 NetworkManager="*res://scripts/autoload_scripts/network_manager.gd"
 GlobalStuff="*res://scripts/autoload_scripts/global_stuff.gd"
+FileManager="*res://scripts/autoload_scripts/file_manager.gd"
 
 [input]
 

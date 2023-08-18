@@ -106,25 +106,40 @@ func confirm_edit_world():
 
 func open_delete_world_popup():
 	hide_all_worlds_menu_popups()
-	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no world is selected.
+	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
+	if not displayed_worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no world is selected.
 		var delete_world_popup = get_node("DeleteWorldPopup")
-		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete\n\"" + worlds_names[worlds_list_text.get_selected_items()[0]] +"\"?\n(This action cannot be undone.)[/center]"
+		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete world:\n\"" + get_worlds_list_file_contents()[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1] +"\"?\n(This action cannot be undone.)[/center]"
 		delete_world_popup.show()
 
 func confirm_delete_world():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
-		var delete_world_popup = get_node("DeleteWorldPopup")
-		worlds_names.remove_at(worlds_list_text.get_selected_items()[0])
-		worlds_seeds.remove_at(worlds_list_text.get_selected_items()[0])
-		delete_world_popup.hide()
-		update_displayed_worlds_list_text()
+		var worlds_list_file_contents: Array[String] = get_worlds_list_file_contents()
+		var dir_to_delete: String = "user://storage/worlds/" + worlds_list_file_contents[(worlds_list_text.get_selected_items()[0] * 2) + 2]
+		
+		# It doesn't make sense to try to delete the world if you can't even find it.
+		if DirAccess.dir_exists_absolute(dir_to_delete):
+			# Delete all of the files in the world's folder and then said folder itself.
+			if (FileManager.recursively_delete_all_files_inside_directory(dir_to_delete) == false):
+				DirAccess.remove_absolute(dir_to_delete)
+				
+				# If successful, remove knowledge of the world from the worlds list text file.
+				worlds_list_file_contents.remove_at((worlds_list_text.get_selected_items()[0] * 2) + 2)
+				worlds_list_file_contents.remove_at((worlds_list_text.get_selected_items()[0] * 2) + 1)
+			else:
+				push_warning("When attempting to delete a world, an error was encountered trying to delete its folder.(Aborting complete deletion, however some files may have already been removed.)")
+		else:
+			push_warning("When attempting to delete a world, its folder could not be found. (Aborting deletion.)")
+		
+		get_node("DeleteWorldPopup").hide()
 		disable_world_selected_requiring_buttons()
+		update_displayed_worlds_list_text()
 
 func _on_duplicate_world_pressed():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
 		worlds_names.append("Copy of " + worlds_names[worlds_list_text.get_selected_items()[0]])
-		update_displayed_worlds_list_text()
 		disable_world_selected_requiring_buttons()
+		update_displayed_worlds_list_text()
 
 
 # Update the text of the visible worlds-list for the player.
