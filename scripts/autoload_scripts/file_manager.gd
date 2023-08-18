@@ -8,7 +8,7 @@ func get_lines_of_text_file_as_array(file_location: String, include_potential_bl
 	
 	var file: FileAccess = FileAccess.open(file_location, FileAccess.READ)
 	if not file.is_open():
-		push_error("A text file which was successfully found couldn't be opened to have its lines read: " + file_location)
+		push_error("A text file which was successfully found couldn't be opened to have its lines read: " + file_location + " with FileAccess open error: " + str(FileAccess.get_open_error()))
 		return([])
 	
 	# Get all of the lines of the text file.
@@ -22,6 +22,17 @@ func get_lines_of_text_file_as_array(file_location: String, include_potential_bl
 			text_lines.pop_back()
 	
 	return(text_lines)
+
+func write_text_file_from_array_of_lines(file_location: String, text_lines: Array[String]) -> void:
+	var file: FileAccess = FileAccess.open(file_location, FileAccess.WRITE)
+	if not file.is_open():
+		push_error("A text file to be written-to/created could not be opened: " + file_location + " with FileAccess open error: " + str(FileAccess.get_open_error()))
+		return
+	
+	for line in text_lines:
+		file.store_line(line)
+	file.close()
+	return
 
 func recursively_delete_all_files_inside_directory(dir: String) -> bool:
 	if not DirAccess.dir_exists_absolute(dir):
