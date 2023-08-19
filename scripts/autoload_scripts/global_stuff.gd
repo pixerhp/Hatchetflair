@@ -8,7 +8,7 @@ const game_version_minor: String = "0"
 const game_version_entire: String = game_version_phase + " v" + game_version_engine + "." + game_version_major + "." + game_version_minor
 var all_global_stuff_initialized: bool = false
 
-func _init() -> void:
+func _enter_tree() -> void:
 	# Ensure the global random number generator isn't the same every program execution.
 	randomize()
 	
@@ -30,11 +30,10 @@ func set_window_title(optional_specified_title: String = ""):
 	# Attempt to open the splash texts file.
 	if FileAccess.file_exists("res://assets/text_files/window_splash_texts.txt"):
 		# Create an array of usable splash texts.
-		var splash_texts_file: FileAccess
-		splash_texts_file = FileAccess.open("res://assets/text_files/window_splash_texts.txt", FileAccess.READ)
+		var splash_texts_file: FileAccess = FileAccess.open("res://assets/text_files/window_splash_texts.txt", FileAccess.READ)
 		var line_contents: String = ""
 		var usable_splash_texts: Array[String] = []
-		while (splash_texts_file.eof_reached() == false):
+		while not splash_texts_file.eof_reached():
 			line_contents = splash_texts_file.get_line()
 			if (not line_contents.begins_with("\t")) and (line_contents != ""):
 				usable_splash_texts.append(line_contents)
@@ -43,7 +42,7 @@ func set_window_title(optional_specified_title: String = ""):
 		if usable_splash_texts.is_empty():
 			push_warning("The window title splash texts file was accessed successfully, but no useable splashes were found, so no splash text was used.")
 		else:
-			DisplayServer.window_set_title(game_name + "   " + game_version_entire + "   ---   " + usable_splash_texts[randi() % usable_splash_texts.size()])
+			DisplayServer.window_set_title(game_name + "   " + game_version_entire + "   ---   " + usable_splash_texts.pick_random())
 	else:
 		push_error("The file for window title splash-texts was not found, so no splash text was used.")
 

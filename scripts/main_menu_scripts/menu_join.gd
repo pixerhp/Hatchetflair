@@ -24,7 +24,7 @@ func join_server(servers_list_index: int = 0):
 	NetworkManager.start_game(true, false, true, servers_txtfile_lines[(servers_list_index*2)+2])
 
 func _on_join_button_pressed():
-	var displayed_servers_list_text = get_node("JoinScreenUI/SavedServersList")
+	var displayed_servers_list_text = $JoinScreenUI/SavedServersList
 	if not displayed_servers_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
 		join_server(displayed_servers_list_text.get_selected_items()[0])
 

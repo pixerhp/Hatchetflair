@@ -2,7 +2,7 @@ extends Control
 
 const worlds_list_file_location: String = "user://storage/worlds_list.txt"
 
-@onready var worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
+@onready var worlds_list_text = $WorldsScreenUI/SavedWorldsList
 var worlds_names: Array[String] = []
 var worlds_seeds: Array[int] = []
 
@@ -10,19 +10,18 @@ var worlds_seeds: Array[int] = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Connect worlds menu popups and their buttons to functions.
-	var new_world_popup = get_node("NewWorldPopup")
+	var new_world_popup = $NewWorldPopup
 	new_world_popup.get_node("Okay").pressed.connect(self.confirm_new_world)
 	new_world_popup.get_node("Cancel").pressed.connect(new_world_popup.hide)
-	var edit_world_popup = get_node("EditWorldPopup")
+	var edit_world_popup = $EditWorldPopup
 	edit_world_popup.get_node("Okay").pressed.connect(self.confirm_edit_world)
 	edit_world_popup.get_node("Cancel").pressed.connect(edit_world_popup.hide)
-	var delete_world_popup = get_node("DeleteWorldPopup")
+	var delete_world_popup = $DeleteWorldPopup
 	delete_world_popup.get_node("Confirm").pressed.connect(self.confirm_delete_world)
 	delete_world_popup.get_node("Cancel").pressed.connect(delete_world_popup.hide)
 	
 	disable_world_selected_requiring_buttons()
 	hide_all_worlds_menu_popups()
-
 
 # Start playing/hosting one of your worlds.
 func start_world(worlds_list_index: int = 0):#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
@@ -34,7 +33,6 @@ func start_world(worlds_list_index: int = 0):#world_file_name: String, allow_mul
 func _on_play_button_pressed():
 	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
 		start_world(worlds_list_text.get_selected_items()[0])
-
 
 func open_new_world_popup():
 	hide_all_worlds_menu_popups()
@@ -271,7 +269,6 @@ func replace_world_info_file_contents(name_of_directory_folder_for_world: String
 		push_error("The world info text file in directory: \"" + name_of_directory_folder_for_world + "\" could not be written to / created. (Does the program have proper OS permissions to create/write files?)")
 	world_info_text_file.close()
 
-
 # Disables the host_without_playing_toggle if multiplayer joining is turned off.
 func toggle_disabling_the_host_without_playing_toggle (button_value: bool) -> void:
 	$WorldsScreenUI/Toggles/HostWithoutPlay.disabled = not button_value
@@ -285,13 +282,13 @@ func _on_worlds_list_item_selected():
 	$WorldsScreenUI/WorldButtons/DuplicateWorld.disabled = false
 	$WorldsScreenUI/WorldButtons/PlayWorld.disabled = false
 
-func hide_all_worlds_menu_popups():
-	get_node("NewWorldPopup").hide()
-	get_node("EditWorldPopup").hide()
-	get_node("DeleteWorldPopup").hide()
-
 func disable_world_selected_requiring_buttons():
 	$WorldsScreenUI/WorldButtons/DeleteWorld.disabled = true
 	$WorldsScreenUI/WorldButtons/EditWorld.disabled = true
 	$WorldsScreenUI/WorldButtons/DuplicateWorld.disabled = true
 	$WorldsScreenUI/WorldButtons/PlayWorld.disabled = true
+
+func hide_all_worlds_menu_popups():
+	$NewWorldPopup.hide()
+	$EditWorldPopup.hide()
+	$DeleteWorldPopup.hide()
