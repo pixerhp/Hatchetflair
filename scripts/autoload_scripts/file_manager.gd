@@ -1,7 +1,7 @@
 extends Node
 
 
-func get_lines_of_text_file_as_array(file_location: String, include_potential_blank_last_line: bool) -> Array[String]:
+func read_txtfile_lines_as_array(file_location: String, include_potential_blank_last_line: bool) -> Array[String]:
 	if not FileAccess.file_exists(file_location):
 		push_error("A text file couldn't be found to have its lines read: " + file_location)
 		return([])
@@ -23,7 +23,7 @@ func get_lines_of_text_file_as_array(file_location: String, include_potential_bl
 	
 	return(text_lines)
 
-func write_text_file_from_array_of_lines(file_location: String, text_lines: Array[String]) -> void:
+func write_txtfile_from_array_of_lines(file_location: String, text_lines: Array[String]) -> void:
 	var file: FileAccess = FileAccess.open(file_location, FileAccess.WRITE)
 	if not file.is_open():
 		push_error("A text file to be written-to/created could not be opened: " + file_location + " with FileAccess open error: " + str(FileAccess.get_open_error()))
@@ -39,7 +39,7 @@ func recursively_delete_all_files_inside_directory(dir: String) -> bool:
 		push_warning("The \"recursively_delete_all_files_inside_directory()\" func couldn't find the directory specified: " + dir)
 		return true
 	
-	# Delete the contents of all deeper nested directories and their files first.
+	# Delete the contents of all deeper nested directories and all of their files first.
 	for deeper_nested_dir in DirAccess.get_directories_at(dir):
 		if recursively_delete_all_files_inside_directory(dir + "/" + deeper_nested_dir):
 			push_warning("The \"recursively_delete_all_files_inside_directory()\" func encountered an error deleting directory: " + dir + "/" + deeper_nested_dir)

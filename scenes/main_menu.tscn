@@ -505,7 +505,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[personal nickname for this server]"
 
-[node name="Okay" type="Button" parent="Menus/JoinScreen/AddServerPopup"]
+[node name="Confirm" type="Button" parent="Menus/JoinScreen/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -577,7 +577,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[personal nickname for this server]"
 
-[node name="Okay" type="Button" parent="Menus/JoinScreen/EditServerPopup"]
+[node name="Confirm" type="Button" parent="Menus/JoinScreen/EditServerPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -840,7 +840,7 @@ text = "Back"
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/EditWorld" to="Menus/WorldsScreen" method="open_edit_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DuplicateWorld" to="Menus/WorldsScreen" method="_on_duplicate_world_pressed"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/PlayWorld" to="Menus/WorldsScreen" method="_on_play_button_pressed"]
-[connection signal="visibility_changed" from="Menus/JoinScreen" to="Menus/JoinScreen" method="update_displayed_servers_list_text"]
+[connection signal="visibility_changed" from="Menus/JoinScreen" to="Menus/JoinScreen" method="update_the_displayed_servers_list"]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="open_menu" binds= ["TitleScreen"]]
 [connection signal="item_activated" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="join_server"]
 [connection signal="item_selected" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="_on_servers_list_item_selected" unbinds=1]
