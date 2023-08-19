@@ -30,7 +30,7 @@ func set_window_title(optional_specified_title: String = ""):
 	# Attempt to open the splash texts file.
 	if FileAccess.file_exists("res://assets/text_files/window_splash_texts.txt"):
 		# Create an array of usable splash texts.
-		var splash_texts_file = FileAccess
+		var splash_texts_file: FileAccess
 		splash_texts_file = FileAccess.open("res://assets/text_files/window_splash_texts.txt", FileAccess.READ)
 		var line_contents: String = ""
 		var usable_splash_texts: Array[String] = []
