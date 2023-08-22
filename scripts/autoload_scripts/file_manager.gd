@@ -44,7 +44,7 @@ func sort_txtfile_contents_alphabetically(file_location: String, skipped_lines: 
 		return
 	elif ((file_contents.size() - skipped_lines) % num_of_lines_in_group != 0):
 		push_error("Attempted to alphabetically sort a text files contents, but it had the wrong number of lines: " + file_location)
-		push_error("(The sort Expected [" + str(num_of_lines_in_group) + "k + " + str(skipped_lines) + "] lines, but found " + str(file_contents.size()) + "instead.)")
+		push_error("(The sort expected [" + str(num_of_lines_in_group) + "k + " + str(skipped_lines) + "] lines, but the file contained " + str(file_contents.size()) + " lines instead.)")
 		return
 	
 	# {U} Concatenate together all lines in each "group" (with item-length keys at the end,) so that they stay together after the sort is finished.
