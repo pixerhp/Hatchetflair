@@ -37,13 +37,14 @@ func write_txtfile_from_array_of_lines(file_location: String, text_lines: Array[
 func sort_txtfile_contents_alphabetically(file_location: String, skipped_lines: int, num_of_lines_in_group: int = 1) -> void:
 	var file_contents: Array[String] = read_txtfile_lines_as_array(file_location, false)
 	if file_contents.size() == 0:
-		push_warning("Attempted to alphabetically sort a text file's contents, but it had no contents: " + file_location)
+		push_warning("Attempted to alphabetically sort a text file's contents, but it had no contents. (Aborting sort.) File location: " + file_location)
 		return
 	elif (file_contents.size() == skipped_lines) or (file_contents.size() == skipped_lines + num_of_lines_in_group):
 		# The file has very few lines, such that attempting to sort it wouldn't change anything, wasting time.
+		# This is a common and intended situation, so there's no need for a warning/error message.
 		return
 	elif ((file_contents.size() - skipped_lines) % num_of_lines_in_group != 0):
-		push_error("Attempted to alphabetically sort a text files contents, but it had the wrong number of lines: " + file_location)
+		push_error("Attempted to alphabetically sort a text files contents, but it had the wrong number of lines. (Aborting sort.) File location: " + file_location)
 		push_error("(The sort expected [" + str(num_of_lines_in_group) + "k + " + str(skipped_lines) + "] lines, but the file contained " + str(file_contents.size()) + " lines instead.)")
 		return
 	
