@@ -21,9 +21,10 @@ func _ready():
 
 # Start playing/hosting one of your worlds.
 func start_world(worlds_list_index: int = 0):#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
+	var worlds_txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	print("Chosen world's list-index: " + str(worlds_list_index))
-	print("Chosen world's name: " + FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)[(worlds_list_index * 2) + 1])
-	print("Chosen world's folder/directory name: " + FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)[(worlds_list_index * 2) + 2])
+	print("Chosen world's name: " + worlds_txtfile_lines[(worlds_list_index * 2) + 1])
+	print("Chosen world's folder/directory name: " + worlds_txtfile_lines[(worlds_list_index * 2) + 2])
 	NetworkManager.start_game(not $WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed, true, $WorldsScreenUI/Toggles/AllowJoining.button_pressed)
 
 func _on_play_button_pressed():
@@ -47,7 +48,7 @@ func confirm_new_world():
 		new_world_popup.get_node("WorldSeedInput").text = str(random.randi() - 4294967296 + random.randi())
 	
 	# Figure out what the new worlds list items should look like.
-	var worlds_list_text_file_contents = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)
+	var worlds_list_text_file_contents = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	worlds_list_text_file_contents.append(new_world_popup.get_node("WorldNameInput").text)
 	# (Find an appropriate unused internal directory/folder name for the world.)
 	if (DirAccess.dir_exists_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1])):
@@ -79,9 +80,9 @@ func open_edit_world_popup():
 	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
 	if not displayed_worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no world is selected.
 		var edit_world_popup = get_node("EditWorldPopup")
-		edit_world_popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1] +"\""
-		edit_world_popup.get_node("WorldNameInput").text = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1]
-		edit_world_popup.get_node("WorldSeedInput").text = FileManager.read_txtfile_lines_as_array("user://storage/worlds/"+FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 2]+"/world_info.txt", false)[3].substr(23)
+		edit_world_popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1] +"\""
+		edit_world_popup.get_node("WorldNameInput").text = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1]
+		edit_world_popup.get_node("WorldSeedInput").text = FileManager.read_txtfile_lines_as_array("user://storage/worlds/"+FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 2]+"/world_info.txt")[3].substr(23)
 		edit_world_popup.show()
 
 ######## REMEMBER TO MAKE IT RENAME A DIRECTORY/FOLDER IF YOU RENAME THE WORLD
@@ -103,12 +104,12 @@ func open_delete_world_popup():
 	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
 	if not displayed_worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no world is selected.
 		var delete_world_popup = get_node("DeleteWorldPopup")
-		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete world:\n\"" + FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1] +"\"?\n(This action cannot be undone.)[/center]"
+		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete world:\n\"" + FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1] +"\"?\n(This action cannot be undone.)[/center]"
 		delete_world_popup.show()
 
 func confirm_delete_world():
 	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
-		var worlds_list_file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)
+		var worlds_list_file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 		var dir_to_delete: String = "user://storage/worlds/" + worlds_list_file_contents[(worlds_list_text.get_selected_items()[0] * 2) + 2]
 		
 		# It doesn't make sense to try to delete the world if you can't even find it.
@@ -144,7 +145,7 @@ func update_displayed_worlds_list_text():
 	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
 	displayed_worlds_list_text.clear()
 	
-	var worlds_list_file_contents = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)
+	var worlds_list_file_contents = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	# Only use the regular world names for the displayed text. (It starts at index 1 to skip the version string.)
 	for index in range(1, worlds_list_file_contents.size()-1, 2):
 		displayed_worlds_list_text.add_item(worlds_list_file_contents[index])
@@ -158,7 +159,7 @@ func sync_worlds_list_to_what_world_folders_actually_exist():
 	
 	# Get all of the raw info needed for comparison.
 	var list_of_world_folder_names: PackedStringArray = DirAccess.open("user://storage/worlds").get_directories()
-	var worlds_list_file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)
+	var worlds_list_file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	
 	# Remove listed worlds but which don't actually exist from what will be the replacement worlds list text file contents.
 	var indeces_for_removal: Array[int] = []
@@ -198,8 +199,7 @@ func ensure_world_folder_has_its_essential_files(name_of_directory_folder_for_wo
 		file.close()
 
 
-# Disables the host_without_playing_toggle if multiplayer joining is turned off.
-func toggle_disabling_the_host_without_playing_toggle (button_value: bool) -> void:
+func toggle_visibility_of_host_without_playing_toggle (button_value: bool) -> void:
 	$WorldsScreenUI/Toggles/HostWithoutPlay.disabled = not button_value
 	if not button_value:
 		$WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed = false

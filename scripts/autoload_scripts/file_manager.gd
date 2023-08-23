@@ -3,7 +3,7 @@ extends Node
 
 # FILE INTERACTION FUNCTIONS:
 
-func read_txtfile_lines_as_array(file_location: String, include_potential_blank_last_line: bool = false) -> Array[String]:
+func read_txtfile_lines_as_array(file_location: String) -> Array[String]:
 	if not FileAccess.file_exists(file_location):
 		push_error("A text file \"" + file_location + "\" couldn't be found to have its lines read. (Returning [].)")
 		return([])
@@ -19,9 +19,8 @@ func read_txtfile_lines_as_array(file_location: String, include_potential_blank_
 		text_lines.append(file.get_line())
 	file.close()
 	
-	if not include_potential_blank_last_line:
-		if (text_lines.size() > 0) and (text_lines[text_lines.size()-1] == ""):
-			text_lines.pop_back()
+	if (text_lines.size() > 0) and (text_lines[text_lines.size()-1] == ""):
+		text_lines.pop_back()
 	
 	return(text_lines)
 
@@ -37,7 +36,7 @@ func write_txtfile_from_array_of_lines(file_location: String, text_lines: Array[
 	return
 
 func sort_txtfile_contents_alphabetically(file_location: String, skipped_lines: int, num_of_lines_in_group: int = 1) -> void:
-	var file_contents: Array[String] = read_txtfile_lines_as_array(file_location, false)
+	var file_contents: Array[String] = read_txtfile_lines_as_array(file_location)
 	if file_contents.size() == 0:
 		push_warning("Attempted to alphabetically sort the contents of \"" + file_location + "\", but it had no contents. (Aborting sort.)")
 		return
@@ -75,16 +74,14 @@ func sort_txtfile_contents_alphabetically(file_location: String, skipped_lines: 
 		
 		# Determine the final results of the sort, unconcatenating grouped lines back apart.
 		file_contents = content_of_skipped_lines
-		var letter_num: int = 0
+		var index_of_seperator: int = 0
 		for current_concatenation in concatenated_lines:
 			for item_num in range(1, num_of_lines_in_group + 1):
 				if item_num != num_of_lines_in_group:
 					# Find the rightmost instance of ":" in the current state of current_concatenation.
-					letter_num = current_concatenation.length()-2 # Would be -1, but -2 because at least 1 digit is after it.
-					while not (current_concatenation.substr(letter_num, 1) == ":"):
-						letter_num -= 1
-					file_contents.append(current_concatenation.substr(0, int(current_concatenation.substr(letter_num+1))))
-					current_concatenation = current_concatenation.substr(int(current_concatenation.substr(letter_num+1)), letter_num - int(current_concatenation.substr(letter_num+1)))
+					index_of_seperator = current_concatenation.rfind(":")
+					file_contents.append(current_concatenation.substr(0, int(current_concatenation.substr(index_of_seperator+1))))
+					current_concatenation = current_concatenation.substr(int(current_concatenation.substr(index_of_seperator+1)), index_of_seperator - int(current_concatenation.substr(index_of_seperator+1)))
 				else: # The last bit of concatenated info with nothing else surrounding it.
 					file_contents.append(current_concatenation)
 	

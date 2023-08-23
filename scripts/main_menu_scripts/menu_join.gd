@@ -17,7 +17,7 @@ func _ready():
 
 
 func join_server(servers_list_index: int = 0):
-	var servers_txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location, false)
+	var servers_txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
 	print("Chosen server's list-index: " + str(servers_list_index))
 	print("Chosen server's nickname: " + servers_txtfile_lines[(servers_list_index*2)+1])
 	print("Chosen server's IP: " + servers_txtfile_lines[(servers_list_index*2)+2])
@@ -39,7 +39,7 @@ func confirm_add_server():
 	var popup = $AddServerPopup
 	
 	# Figure out what the new contents for the servers-list text file should be and replace the old contents.
-	var file_contents = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location, false)
+	var file_contents = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
 	file_contents.append(popup.get_node("ServerNicknameInput").text)
 	file_contents.append(popup.get_node("ServerIPInput").text)
 	FileManager.write_txtfile_from_array_of_lines(servers_list_txtfile_location, file_contents)
@@ -55,7 +55,7 @@ func open_edit_server_popup():
 		push_warning("Attempted to open the EditServer popup despite no displayed server item being selected. (Did nothing.)")
 		return
 	
-	var txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location, false)
+	var txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
 	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
 	var popup = $EditServerPopup
 	popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + txtfile_lines[(selected_server_index*2)+1] +"\""
@@ -71,7 +71,7 @@ func confirm_edit_server():
 		return
 	
 	# Determine what the contents of the servers list text file should be after editing and replace the old contents.
-	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location, false)
+	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
 	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
 	var popup = $EditServerPopup
 	file_contents[(selected_server_index*2)+1] = popup.get_node("ServerNicknameInput").text
@@ -91,7 +91,7 @@ func open_remove_server_popup():
 		return
 	
 	var popup = $RemoveServerPopup
-	var name_of_removable_server: String = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location, false)[(displayed_servers_itemlist.get_selected_items()[0]*2)+1]
+	var name_of_removable_server: String = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)[(displayed_servers_itemlist.get_selected_items()[0]*2)+1]
 	popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + name_of_removable_server +"\"?\n(This action CANNOT be undone!)[/center]"
 	popup.show()
 	return
@@ -103,7 +103,7 @@ func confirm_remove_server():
 		return
 	
 	# Determine what the contents of the servers list text file should be after the removal and replace the old contents.
-	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location, false)
+	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
 	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
 	file_contents.remove_at((selected_server_index*2)+2)
 	file_contents.remove_at((selected_server_index*2)+1)
@@ -120,7 +120,7 @@ func update_the_displayed_servers_list():
 	$JoinScreenUI/SavedServersList.clear()
 	
 	# Add each server nickname from the text file to the displayed servers list text you see in the menu.
-	var servers_list_txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location, false)
+	var servers_list_txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
 	for index in range(1, servers_list_txtfile_lines.size()-1, 2):
 		$JoinScreenUI/SavedServersList.add_item(servers_list_txtfile_lines[index])
 	return
