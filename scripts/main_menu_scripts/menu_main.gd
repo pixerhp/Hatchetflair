@@ -9,20 +9,6 @@ func _ready() -> void:
 	# Does NOT update each world and its contents, that'd be done in the worlds menu.
 	if ensure_essential_files_are_up_to_date():
 		push_error("There was an error checking/updating one or more essential files,\nthis may lead to crashes or unintended behavior.")
-	
-	# JUST FOR TESTING THE FILEMANAGER ALPHABETICAL SORT FUNCTION:
-	var file = FileAccess.open("user://sort_test.txt", FileAccess.WRITE)
-	file.store_line(GlobalStuff.game_version_entire)
-	file.store_line("zzzzzitem_3_name")
-	file.store_line("aitem_3_thing")
-	file.store_line("item_1_name")
-	file.store_line("zitem_1_thing")
-	file.store_line("item_4_name")
-	file.store_line("item_4_thing")
-	file.store_line("item_2_name")
-	file.store_line("item_2_thing")
-	file.close()
-	FileManager.sort_txtfile_contents_alphabetically("user://sort_test.txt", 1, 2)
 
 
 # Display the current connecting status using the NetworkInfoOverlay menu.

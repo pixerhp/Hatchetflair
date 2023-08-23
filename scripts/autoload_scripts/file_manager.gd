@@ -1,7 +1,9 @@
 extends Node
 
 
-func read_txtfile_lines_as_array(file_location: String, include_potential_blank_last_line: bool) -> Array[String]:
+# FILE INTERACTION FUNCTIONS:
+
+func read_txtfile_lines_as_array(file_location: String, include_potential_blank_last_line: bool = false) -> Array[String]:
 	if not FileAccess.file_exists(file_location):
 		push_error("A text file \"" + file_location + "\" couldn't be found to have its lines read. (Returning [].)")
 		return([])
@@ -108,4 +110,38 @@ func recursively_delete_all_files_inside_directory(dir: String) -> bool:
 	return false
 
 
-# VERSION UPDATING FUNCTIONS ARE BELOW HERE.
+# FILE ENSURANCE/CREATION FUNCTIONS:
+
+func ensure_essential_game_dirs_and_files_exist() -> bool:
+	var errors_were_encountered: bool = false
+	
+	var directories_to_ensure: Array[String] = [
+		"user://storage",
+		"user://storage/worlds",
+	]
+	for dir in directories_to_ensure:
+		DirAccess.make_dir_recursive_absolute(dir)
+		if not DirAccess.dir_exists_absolute(dir):
+			errors_were_encountered = true
+			push_error("Essential game directory: \""+dir+"\" could not be created/found.")
+	
+	# If an essential file doesn't already exist, creates it blank except for version_entire in its first text line.
+	var file_locations_to_ensure: Array[String] = [
+		"user://storage/user_info.txt",
+		"user://storage/worlds_list.txt",
+		"user://storage/servers_list.txt",
+	]
+	for file_location in file_locations_to_ensure:
+		if not FileAccess.file_exists(file_location):
+			write_txtfile_from_array_of_lines(file_location, [GlobalStuff.game_version_entire])
+			if not FileAccess.file_exists(file_location):
+				errors_were_encountered = true
+				push_error("Essential game file: \""+file_location+"\" could not be created/found.")
+	
+	if errors_were_encountered:
+		return(true)
+	else:
+		return(false)
+
+
+# VERSION UPDATING/DOWNDATING FUNCTIONS:
