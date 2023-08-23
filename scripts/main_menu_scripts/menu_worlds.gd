@@ -85,7 +85,7 @@ func open_edit_world_popup():
 		var edit_world_popup = get_node("EditWorldPopup")
 		edit_world_popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1] +"\""
 		edit_world_popup.get_node("WorldNameInput").text = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1]
-		edit_world_popup.get_node("WorldSeedInput").text = get_world_info_file_contents(FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 2])[3].substr(23)
+		edit_world_popup.get_node("WorldSeedInput").text = FileManager.read_txtfile_lines_as_array("user://storage/worlds/"+FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location, false)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 2]+"/world_info.txt", false)[3].substr(23)
 		edit_world_popup.show()
 
 ######## REMEMBER TO MAKE IT RENAME A DIRECTORY/FOLDER IF YOU RENAME THE WORLD
@@ -201,37 +201,6 @@ func ensure_world_folder_has_its_essential_files(name_of_directory_folder_for_wo
 		file.store_line("world generation seed: " + str(random.randi() - 4294967296 + random.randi()))
 		file.close()
 
-func get_world_info_file_contents(name_of_directory_folder_for_world: String) -> Array[String]:
-	# If the world info text file is able to be found/accessed:
-	if (FileAccess.file_exists("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt")):
-		var world_info_text_file: FileAccess
-		world_info_text_file = FileAccess.open("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt", FileAccess.READ)
-		var text_lines: Array[String] = []
-		while (world_info_text_file.eof_reached() == false): # Store each line of text as an item in an array.
-			text_lines.append(world_info_text_file.get_line())
-		world_info_text_file.close()
-		if (text_lines.size() > 0): # (crash prevention)
-			if (text_lines[text_lines.size()-1] == ""): # Don't include the blank line in the end of text files.
-				text_lines.pop_back()
-		if not (text_lines[0] == GlobalStuff.game_version_entire):
-			push_warning("The world item text file was found to have an outdated version when attempting to get it's file contents. (Contents used anyway.)")
-		return(text_lines)
-	else:
-		push_error("The world info text file in directory: \"" + name_of_directory_folder_for_world + "\" could not be found/accessed whilst attempted to be read.")
-		return([])
-
-func replace_world_info_file_contents(name_of_directory_folder_for_world: String, new_file_contents: Array[String]):
-	# Ensure that the file can be accessed before proceeding.
-	if not (FileAccess.file_exists("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt")):
-		push_warning("The world info text file in directory: \"" + name_of_directory_folder_for_world + "\" could not be found/accessed whilst attempting to be written to / replaced. (Writing to its specified location anyway.)")
-	var world_info_text_file: FileAccess
-	world_info_text_file = FileAccess.open("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt", FileAccess.WRITE)
-	if (FileAccess.get_open_error() == 0):
-		for line in new_file_contents:
-			world_info_text_file.store_line(line)
-	else:
-		push_error("The world info text file in directory: \"" + name_of_directory_folder_for_world + "\" could not be written to / created. (Does the program have proper OS permissions to create/write files?)")
-	world_info_text_file.close()
 
 # Disables the host_without_playing_toggle if multiplayer joining is turned off.
 func toggle_disabling_the_host_without_playing_toggle (button_value: bool) -> void:
