@@ -64,8 +64,8 @@ func confirm_new_world():
 	var new_world_info_file
 	new_world_info_file = FileAccess.open("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1] + "/world_info.txt", FileAccess.WRITE)
 	new_world_info_file.store_line(GlobalStuff.game_version_entire)
-	new_world_info_file.store_line("date created: " + Time.get_datetime_string_from_system())
-	new_world_info_file.store_line("last played: unplayed")
+	new_world_info_file.store_line("creation date-time (utc): " + Time.get_datetime_string_from_system(true, true))
+	new_world_info_file.store_line("last-played date-time (utc): unplayed")
 	new_world_info_file.store_line("world generation seed: " + new_world_popup.get_node("WorldSeedInput").text)
 	new_world_info_file.close()
 	
