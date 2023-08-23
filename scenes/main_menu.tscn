@@ -246,7 +246,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[integer world seed, leave blank for random]"
 
-[node name="Okay" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="Confirm" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -318,7 +318,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[new world generation seed]"
 
-[node name="Okay" type="Button" parent="Menus/WorldsScreen/EditWorldPopup"]
+[node name="Confirm" type="Button" parent="Menus/WorldsScreen/EditWorldPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

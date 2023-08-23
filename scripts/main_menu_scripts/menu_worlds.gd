@@ -7,18 +7,14 @@ var worlds_names: Array[String] = []
 var worlds_seeds: Array[int] = []
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	# Connect worlds menu popups and their buttons to functions.
-	var new_world_popup = $NewWorldPopup
-	new_world_popup.get_node("Okay").pressed.connect(self.confirm_new_world)
-	new_world_popup.get_node("Cancel").pressed.connect(new_world_popup.hide)
-	var edit_world_popup = $EditWorldPopup
-	edit_world_popup.get_node("Okay").pressed.connect(self.confirm_edit_world)
-	edit_world_popup.get_node("Cancel").pressed.connect(edit_world_popup.hide)
-	var delete_world_popup = $DeleteWorldPopup
-	delete_world_popup.get_node("Confirm").pressed.connect(self.confirm_delete_world)
-	delete_world_popup.get_node("Cancel").pressed.connect(delete_world_popup.hide)
+	# Connect popup buttons to their associated functions.
+	$NewWorldPopup/Confirm.pressed.connect(self.confirm_new_world)
+	$NewWorldPopup/Cancel.pressed.connect($NewWorldPopup.hide)
+	$EditWorldPopup/Confirm.pressed.connect(self.confirm_edit_world)
+	$EditWorldPopup/Cancel.pressed.connect($EditWorldPopup.hide)
+	$DeleteWorldPopup/Confirm.pressed.connect(self.confirm_delete_world)
+	$DeleteWorldPopup/Cancel.pressed.connect($DeleteWorldPopup.hide)
 	
 	disable_world_selected_requiring_buttons()
 	hide_all_worlds_menu_popups()
