@@ -1,12 +1,34 @@
 extends Node
 
+var all_global_stuff_initialized: bool = false
 const game_name: String = "Hatchetflair"
 const game_version_phase: String = "pre-game"
 const game_version_engine: String = "1"
 const game_version_major: String = "8"
 const game_version_minor: String = "0"
 const game_version_entire: String = game_version_phase + " v" + game_version_engine + "." + game_version_major + "." + game_version_minor
-var all_global_stuff_initialized: bool = false
+
+# Useful for getting and using certain parts of a version_entire from a file/other.
+func unconcat_ver_entire(version_entire: String) -> Array[String]:
+	# No need to do anything if the input is blank.
+	if version_entire == "":
+		return([])
+	
+	var version_components: Array[String] = []
+	var remaining_version_string: String = version_entire
+	
+	# Get the phase and then remove it (and also " v") from what's left to search through.
+	version_components.append(remaining_version_string.substr(0, remaining_version_string.find(" ")))
+	remaining_version_string = remaining_version_string.erase(0, remaining_version_string.find(" ") + 2)
+	
+	# Get every number preceeded by a period, and then the remaining string if there's anything past the last period.
+	while remaining_version_string.find(".") != -1:
+		version_components.append(remaining_version_string.substr(0, remaining_version_string.find(".")))
+		remaining_version_string = remaining_version_string.erase(0, remaining_version_string.find(".") + 1)
+	if remaining_version_string != "":
+		version_components.append(remaining_version_string)
+	
+	return(version_components)
 
 
 func _enter_tree() -> void:
