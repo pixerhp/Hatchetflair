@@ -143,7 +143,7 @@ func _on_duplicate_world_pressed():
 # Update the text of the visible worlds-list for the player.
 func update_displayed_worlds_list_text():
 	sync_worlds_list_to_what_world_folders_actually_exist()
-	reorder_worlds_alphabetically()
+	FileManager.sort_txtfile_contents_alphabetically(worlds_list_file_location, 1, 2)
 	
 	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
 	displayed_worlds_list_text.clear()
@@ -152,9 +152,6 @@ func update_displayed_worlds_list_text():
 	# Only use the regular world names for the displayed text. (It starts at index 1 to skip the version string.)
 	for index in range(1, worlds_list_file_contents.size()-1, 2):
 		displayed_worlds_list_text.add_item(worlds_list_file_contents[index])
-
-func reorder_worlds_alphabetically():
-	pass
 
 # Helpful in the instance that any world folders exist without the worlds list text file "knowing" about them.
 func sync_worlds_list_to_what_world_folders_actually_exist():

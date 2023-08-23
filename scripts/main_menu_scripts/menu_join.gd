@@ -116,7 +116,7 @@ func confirm_remove_server():
 
 
 func update_the_displayed_servers_list():
-	reorder_servers_alphabetically()
+	FileManager.sort_txtfile_contents_alphabetically(servers_list_file_location, 1, 2)
 	$JoinScreenUI/SavedServersList.clear()
 	
 	# Add each server nickname from the text file to the displayed servers list text you see in the menu.
@@ -124,43 +124,6 @@ func update_the_displayed_servers_list():
 	for index in range(1, servers_list_txtfile_lines.size()-1, 2):
 		$JoinScreenUI/SavedServersList.add_item(servers_list_txtfile_lines[index])
 	return
-
-func reorder_servers_alphabetically():
-	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_file_location, false)
-	if (file_contents.size() == 0):
-		push_warning("Found the servers list text file contents to be completely empty (notably without even a version) when attempting to sort/reorder them.")
-		return
-	elif (file_contents.size() == 1):
-		# (No need to sort the list in this situation.)
-		return
-	
-	# Concatenate nicknames and ips together before sorting, so that we know which nickname goes with which ip later.
-	var concatenated_lines: Array[String] = []
-	for index in range(1, file_contents.size()-1, 2): 
-		concatenated_lines.append(file_contents[index] + file_contents[index+1] + "ip_at:" + str(file_contents[index].length()))
-	
-	# Sort the concatenated items alphabetically (a to z.) (The custom function is so that 1 < 2 < 10.)
-	concatenated_lines.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0)
-	
-	# Unconcatenate the nicknames and ips, and replace the current servers list file contents with the sorted version.
-	file_contents.clear()
-	file_contents.append(GlobalStuff.game_version_entire)
-	var letter_num: int = 0
-	var ip_string_start_index: int = 0
-	for list_item in concatenated_lines:
-		# Searches for and uses the rightmost instance of "ip_at:" in each concatenated item for unconcatenating.
-		letter_num = list_item.length()-7 # (It would be 6, but we know that there's at least 1 digit after it.)
-		while not (list_item.substr(letter_num,6) == "ip_at:"):
-			letter_num -= 1
-			if (letter_num < 0):
-				push_error("The string \"ip_at:\" was not found when unconcatenating items during sorting the server list. (Aborting sort.)")
-				return
-		ip_string_start_index = int(list_item.substr(letter_num + 6))
-		file_contents.append(list_item.substr(0, ip_string_start_index))
-		file_contents.append(list_item.substr(ip_string_start_index, letter_num - ip_string_start_index))
-	
-	# Replace the servers list file contents with the new sorted copy of it's current contents.
-	FileManager.write_txtfile_from_array_of_lines(servers_list_file_location, file_contents)
 
 
 func _on_servers_list_item_selected():
