@@ -5,17 +5,18 @@ extends Node
 
 func read_txtfile_lines_as_array(file_location: String) -> Array[String]:
 	if not FileAccess.file_exists(file_location):
-		push_error("A text file \"" + file_location + "\" couldn't be found to have its lines read. (Returning [].)")
+		push_error("A text file: \"", file_location, "\" couldn't be found to have its lines read. (Returning [].)")
 		return([])
 	
 	var file: FileAccess = FileAccess.open(file_location, FileAccess.READ)
 	if not file.is_open():
-		push_error("A text file \"" + file_location + "\" which was successfully found couldn't be opened to have its lines read. It had FileAccess open error: " + str(FileAccess.get_open_error()) + " (Returning [].)")
+		push_error("A text file: \"", file_location, "\" which was successfully found couldn't be opened to have its lines read. ",
+		"(FileAccess open error:) ", str(FileAccess.get_open_error()), " (Returning [].)")
 		return([])
 	
 	# Get all of the lines of the text file.
 	var text_lines: Array[String] = []
-	while (file.eof_reached() == false):
+	while file.eof_reached() == false:
 		text_lines.append(file.get_line())
 	file.close()
 	
@@ -27,7 +28,7 @@ func read_txtfile_lines_as_array(file_location: String) -> Array[String]:
 func write_txtfile_from_array_of_lines(file_location: String, text_lines: Array[String]) -> void:
 	var file: FileAccess = FileAccess.open(file_location, FileAccess.WRITE)
 	if not file.is_open():
-		push_error("A text file to be written-to/created could not be opened: " + file_location + " with FileAccess open error: " + str(FileAccess.get_open_error()))
+		push_error("A text file: \"", file_location, "\" to be written-to or created could not be opened. (FileAccess open error:) ", str(FileAccess.get_open_error()))
 		return
 	
 	for line in text_lines:
@@ -45,8 +46,8 @@ func sort_txtfile_contents_alphabetically(file_location: String, skipped_lines: 
 		# This is a common and intended situation, so there's no need for a warning/error message.
 		return
 	elif ((file_contents.size() - skipped_lines) % num_of_lines_in_group != 0):
-		push_error("Attempted to alphabetically sort the contents of \"" + file_location + "\", but it had the wrong number of lines. (Aborting sort.)")
-		push_error("(The sort expected [" + str(num_of_lines_in_group) + "k + " + str(skipped_lines) + "] lines, but the file contained " + str(file_contents.size()) + " lines instead.)")
+		push_error("Attempted to alphabetically sort the content lines of \"", file_location, "\", but it had the wrong number of lines. (Aborting sort.) ",
+		"(The sort expected [", str(num_of_lines_in_group), "k + ", str(skipped_lines), "] lines, but the file contained ", str(file_contents.size()), " lines instead.)")
 		return
 	
 	if num_of_lines_in_group < 2:
@@ -88,15 +89,15 @@ func sort_txtfile_contents_alphabetically(file_location: String, skipped_lines: 
 	write_txtfile_from_array_of_lines(file_location, file_contents)
 	return
 
-func recursively_delete_all_files_inside_directory(dir: String) -> bool:
+func erase_dir_contents(dir: String) -> bool:
 	if not DirAccess.dir_exists_absolute(dir):
-		push_warning("The \"recursively_delete_all_files_inside_directory()\" func couldn't find the directory specified: " + dir)
+		push_warning("The \"erase_dir_contents()\" func found that the directory specified didn't exist: ", dir)
 		return true
 	
 	# Delete the contents of all deeper nested directories and all of their files first.
 	for deeper_nested_dir in DirAccess.get_directories_at(dir):
-		if recursively_delete_all_files_inside_directory(dir + "/" + deeper_nested_dir):
-			push_warning("The \"recursively_delete_all_files_inside_directory()\" func encountered an error deleting directory: " + dir + "/" + deeper_nested_dir)
+		if erase_dir_contents(dir + "/" + deeper_nested_dir):
+			push_warning("The \"erase_dir_contents()\" func encountered an error deleting directory: ", dir, "/", deeper_nested_dir)
 			return true
 		DirAccess.remove_absolute(dir + "/" + deeper_nested_dir)
 	
@@ -105,6 +106,9 @@ func recursively_delete_all_files_inside_directory(dir: String) -> bool:
 		DirAccess.remove_absolute(dir + "/" + file)
 	
 	return false
+
+func copy_dir_to_other_dir(orig_dir: String, new_dir: String, replace_new_dir_contents_if_exists: bool = true) -> void:
+	pass
 
 
 # FILE ENSURANCE/CREATION FUNCTIONS:

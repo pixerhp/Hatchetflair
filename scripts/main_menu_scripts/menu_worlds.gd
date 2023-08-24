@@ -133,7 +133,7 @@ func confirm_delete_world():
 		# It doesn't make sense to try to delete the world if you can't even find it.
 		if DirAccess.dir_exists_absolute(dir_to_delete):
 			# Delete all of the files in the world's folder and then said folder itself.
-			if (FileManager.recursively_delete_all_files_inside_directory(dir_to_delete) == false):
+			if (FileManager.erase_dir_contents(dir_to_delete) == false):
 				DirAccess.remove_absolute(dir_to_delete)
 				
 				# If successful, remove knowledge of the world from the worlds list text file.
