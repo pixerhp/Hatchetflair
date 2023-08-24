@@ -63,7 +63,7 @@ func open_edit_server_popup():
 	var txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
 	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
 	var popup = $EditServerPopup
-	popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + txtfile_lines[(selected_server_index*2)+1] +"\""
+	popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + txtfile_lines[(selected_server_index*2)+1] + "\""
 	popup.get_node("ServerIPInput").text = txtfile_lines[(selected_server_index*2)+2]
 	popup.get_node("ServerNicknameInput").text = txtfile_lines[(selected_server_index*2)+1]
 	popup.show()

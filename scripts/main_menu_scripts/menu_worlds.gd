@@ -30,6 +30,7 @@ func start_world(worlds_list_index: int = 0):#!!!!!!!!!world_file_name: String, 
 	return
 
 func _on_play_button_pressed():
+	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
 	if not displayed_worlds_itemlist.get_selected_items().is_empty():
 		start_world(displayed_worlds_itemlist.get_selected_items()[0])
 	return
@@ -86,13 +87,21 @@ func confirm_new_world():
 
 func open_edit_world_popup():
 	hide_all_worlds_menu_popups()
-	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
-	if not displayed_worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no world is selected.
-		var edit_world_popup = get_node("EditWorldPopup")
-		edit_world_popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1] +"\""
-		edit_world_popup.get_node("WorldNameInput").text = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1]
-		edit_world_popup.get_node("WorldSeedInput").text = FileManager.read_txtfile_lines_as_array("user://storage/worlds/"+FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 2]+"/world_info.txt")[3].substr(23)
-		edit_world_popup.show()
+	
+	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
+	if displayed_worlds_itemlist.get_selected_items().is_empty():
+		push_warning("Attempted to open the EditWorld popup despite no displayed world item being selected. (Did nothing.)")
+		return
+	
+	var worlds_list_txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var selected_world_index: int = displayed_worlds_itemlist.get_selected_items()[0]
+	var world_info_lines: Array[String] = FileManager.read_txtfile_lines_as_array("user://storage/worlds/"+worlds_list_txtfile_lines[(selected_world_index*2)+2]+"/world_info.txt")
+	var popup: Node = $EditWorldPopup
+	popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + worlds_list_txtfile_lines[(selected_world_index*2)+1] + "\""
+	popup.get_node("WorldNameInput").text = worlds_list_txtfile_lines[(selected_world_index*2)+1]
+	popup.get_node("WorldSeedInput").text = world_info_lines[3].substr(23)
+	popup.show()
+	return
 
 ######## REMEMBER TO MAKE IT RENAME A DIRECTORY/FOLDER IF YOU RENAME THE WORLD
 func confirm_edit_world():
