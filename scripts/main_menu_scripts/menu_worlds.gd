@@ -2,7 +2,7 @@ extends Control
 
 const worlds_list_txtfile_location: String = "user://storage/worlds_list.txt"
 
-@onready var worlds_list_text = $WorldsScreenUI/SavedWorldsList
+@onready var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
 var worlds_names: Array[String] = []
 var worlds_seeds: Array[int] = []
 
@@ -18,62 +18,71 @@ func _ready():
 	
 	disable_world_selected_requiring_buttons()
 	hide_all_worlds_menu_popups()
+	return
 
 # Start playing/hosting one of your worlds.
-func start_world(worlds_list_index: int = 0):#world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
+func start_world(worlds_list_index: int = 0):#!!!!!!!!!world_file_name: String, allow_multiplayer: bool, host_without_playing: bool):
 	var worlds_txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	print("Chosen world's list-index: " + str(worlds_list_index))
 	print("Chosen world's name: " + worlds_txtfile_lines[(worlds_list_index * 2) + 1])
 	print("Chosen world's folder/directory name: " + worlds_txtfile_lines[(worlds_list_index * 2) + 2])
 	NetworkManager.start_game(not $WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed, true, $WorldsScreenUI/Toggles/AllowJoining.button_pressed)
+	return
 
 func _on_play_button_pressed():
-	if not worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
-		start_world(worlds_list_text.get_selected_items()[0])
+	if not displayed_worlds_itemlist.get_selected_items().is_empty():
+		start_world(displayed_worlds_itemlist.get_selected_items()[0])
+	return
 
 func open_new_world_popup():
 	hide_all_worlds_menu_popups()
-	var new_world_popup = get_node("NewWorldPopup")
-	new_world_popup.get_node("WorldNameInput").clear()
-	new_world_popup.get_node("WorldSeedInput").clear()
-	new_world_popup.show()
+	$NewWorldPopup/WorldNameInput.clear()
+	$NewWorldPopup/WorldSeedInput.clear()
+	$NewWorldPopup.show()
+	return
 
 func confirm_new_world():
-	var new_world_popup = get_node("NewWorldPopup")
+	var popup = $NewWorldPopup
+	var name_of_new_world: String = popup.get_node("WorldNameInput").text
+	var dir_of_new_world: String = ""
+	var seed_of_new_world: String = popup.get_node("WorldSeedInput").text
 	
-	# Randomize the seed if the seed input was left blank.
-	if (new_world_popup.get_node("WorldSeedInput").text == ""):
-		var random = RandomNumberGenerator.new()
+	# Randomize the worldgen seed if the popup's seed input was left blank.
+	if seed_of_new_world == "":
+		var random: RandomNumberGenerator = RandomNumberGenerator.new()
 		random.randomize()
-		new_world_popup.get_node("WorldSeedInput").text = str(random.randi() - 4294967296 + random.randi())
+		seed_of_new_world = str(random.randi() - 4294967296 + random.randi())
 	
-	# Figure out what the new worlds list items should look like.
-	var worlds_list_text_file_contents = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
-	worlds_list_text_file_contents.append(new_world_popup.get_node("WorldNameInput").text)
-	# (Find an appropriate unused internal directory/folder name for the world.)
-	if (DirAccess.dir_exists_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1])):
-		var alt_dir_name_attempt: int = 1
-		while(true == DirAccess.dir_exists_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1] + " alt_" + str(alt_dir_name_attempt))):
-				alt_dir_name_attempt += 1
-		worlds_list_text_file_contents.append(new_world_popup.get_node("WorldNameInput").text + " alt_" + str(alt_dir_name_attempt))
+	# Determine the updated worlds-list txtfile contents and replace the old contents.
+	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	file_contents.append(name_of_new_world)
+	if not DirAccess.dir_exists_absolute("user://storage/worlds/"+name_of_new_world):
+		# The world's name isn't already also the directory name of some other world, so we can use it.
+		dir_of_new_world = name_of_new_world
+		file_contents.append(dir_of_new_world)
 	else:
-		worlds_list_text_file_contents.append(new_world_popup.get_node("WorldNameInput").text)
-	# (Create the world's directory/folder and it's essential files.)
-	DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1])
-	DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1] + "/chunks")
-	var new_world_info_file
-	new_world_info_file = FileAccess.open("user://storage/worlds/" + worlds_list_text_file_contents[worlds_list_text_file_contents.size()-1] + "/world_info.txt", FileAccess.WRITE)
-	new_world_info_file.store_line(GlobalStuff.game_version_entire)
-	new_world_info_file.store_line("creation date-time (utc): " + Time.get_datetime_string_from_system(true, true))
-	new_world_info_file.store_line("last-played date-time (utc): unplayed")
-	new_world_info_file.store_line("world generation seed: " + new_world_popup.get_node("WorldSeedInput").text)
-	new_world_info_file.close()
+		# Find an unused directory name for the new world.
+		var alt_dir_name_attempt_num: int = 1
+		while(true == DirAccess.dir_exists_absolute("user://storage/worlds/"+name_of_new_world+" alt_"+str(alt_dir_name_attempt_num))):
+				alt_dir_name_attempt_num += 1
+		dir_of_new_world = name_of_new_world + " alt_" + str(alt_dir_name_attempt_num)
+		file_contents.append(dir_of_new_world)
+	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, file_contents)
 	
-	# Replace the current worlds list file contents with newer updated contents.
-	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, worlds_list_text_file_contents)
+	# Set-up the new world's directories and files.
+	DirAccess.make_dir_recursive_absolute("user://storage/worlds/"+dir_of_new_world)
+	DirAccess.make_dir_recursive_absolute("user://storage/worlds/"+dir_of_new_world+"/chunks")
+	var world_info_txtfile_lines: Array[String] = [
+		GlobalStuff.game_version_entire,
+		"creation date-time (utc): " + Time.get_datetime_string_from_system(true, true),
+		"last-played date-time (utc): unplayed",
+		"world generation seed: " + seed_of_new_world,
+	]
+	FileManager.write_txtfile_from_array_of_lines("user://storage/worlds/"+dir_of_new_world+"/world_info.txt", world_info_txtfile_lines)
 	
 	update_displayed_worlds_list_text()
-	new_world_popup.hide()
+	popup.hide()
+	return
 
 func open_edit_world_popup():
 	hide_all_worlds_menu_popups()
@@ -87,15 +96,15 @@ func open_edit_world_popup():
 
 ######## REMEMBER TO MAKE IT RENAME A DIRECTORY/FOLDER IF YOU RENAME THE WORLD
 func confirm_edit_world():
-	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
+	if not displayed_worlds_itemlist.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
 		var edit_world_popup = get_node("EditWorldPopup")
-		worlds_names[worlds_list_text.get_selected_items()[0]] = edit_world_popup.get_node("WorldNameInput").text
+		worlds_names[displayed_worlds_itemlist.get_selected_items()[0]] = edit_world_popup.get_node("WorldNameInput").text
 		if (edit_world_popup.get_node("WorldSeedInput").text == ""):
 			var random = RandomNumberGenerator.new()
 			random.randomize()
-			worlds_seeds[worlds_list_text.get_selected_items()[0]] = random.randi() + random.randi() - 4294967296
+			worlds_seeds[displayed_worlds_itemlist.get_selected_items()[0]] = random.randi() + random.randi() - 4294967296
 		else:
-			worlds_seeds[worlds_list_text.get_selected_items()[0]] = int(edit_world_popup.get_node("WorldSeedInput").text)
+			worlds_seeds[displayed_worlds_itemlist.get_selected_items()[0]] = int(edit_world_popup.get_node("WorldSeedInput").text)
 		update_displayed_worlds_list_text()
 		edit_world_popup.hide()
 
@@ -108,9 +117,9 @@ func open_delete_world_popup():
 		delete_world_popup.show()
 
 func confirm_delete_world():
-	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
+	if not displayed_worlds_itemlist.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
 		var worlds_list_file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
-		var dir_to_delete: String = "user://storage/worlds/" + worlds_list_file_contents[(worlds_list_text.get_selected_items()[0] * 2) + 2]
+		var dir_to_delete: String = "user://storage/worlds/" + worlds_list_file_contents[(displayed_worlds_itemlist.get_selected_items()[0] * 2) + 2]
 		
 		# It doesn't make sense to try to delete the world if you can't even find it.
 		if DirAccess.dir_exists_absolute(dir_to_delete):
@@ -119,8 +128,8 @@ func confirm_delete_world():
 				DirAccess.remove_absolute(dir_to_delete)
 				
 				# If successful, remove knowledge of the world from the worlds list text file.
-				worlds_list_file_contents.remove_at((worlds_list_text.get_selected_items()[0] * 2) + 2)
-				worlds_list_file_contents.remove_at((worlds_list_text.get_selected_items()[0] * 2) + 1)
+				worlds_list_file_contents.remove_at((displayed_worlds_itemlist.get_selected_items()[0] * 2) + 2)
+				worlds_list_file_contents.remove_at((displayed_worlds_itemlist.get_selected_items()[0] * 2) + 1)
 			else:
 				push_warning("When attempting to delete a world, an error was encountered trying to delete its folder.(Aborting complete deletion, however some files may have already been removed.)")
 		else:
@@ -131,8 +140,8 @@ func confirm_delete_world():
 		update_displayed_worlds_list_text()
 
 func _on_duplicate_world_pressed():
-	if not worlds_list_text.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
-		worlds_names.append("Copy of " + worlds_names[worlds_list_text.get_selected_items()[0]])
+	if not displayed_worlds_itemlist.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
+		worlds_names.append("Copy of " + worlds_names[displayed_worlds_itemlist.get_selected_items()[0]])
 		disable_world_selected_requiring_buttons()
 		update_displayed_worlds_list_text()
 

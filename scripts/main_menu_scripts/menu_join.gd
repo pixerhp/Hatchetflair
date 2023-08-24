@@ -14,6 +14,7 @@ func _ready():
 	
 	disable_server_selected_requiring_buttons()
 	hide_all_servers_menu_popups()
+	return
 
 
 func join_server(servers_list_index: int = 0):
@@ -22,11 +23,13 @@ func join_server(servers_list_index: int = 0):
 	print("Chosen server's nickname: " + servers_txtfile_lines[(servers_list_index*2)+1])
 	print("Chosen server's IP: " + servers_txtfile_lines[(servers_list_index*2)+2])
 	NetworkManager.start_game(true, false, true, servers_txtfile_lines[(servers_list_index*2)+2])
+	return
 
 func _on_join_button_pressed():
 	var displayed_servers_list_text = $JoinScreenUI/SavedServersList
 	if not displayed_servers_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
 		join_server(displayed_servers_list_text.get_selected_items()[0])
+	return
 
 
 func open_add_server_popup():
@@ -34,18 +37,20 @@ func open_add_server_popup():
 	$AddServerPopup/ServerIPInput.clear()
 	$AddServerPopup/ServerNicknameInput.clear()
 	$AddServerPopup.show()
+	return
 
 func confirm_add_server():
-	var popup = $AddServerPopup
+	var popup: Node = $AddServerPopup
 	
-	# Figure out what the new contents for the servers-list text file should be and replace the old contents.
-	var file_contents = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
+	# Determine the updated servers-list txtfile contents and replace the old contents.
+	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
 	file_contents.append(popup.get_node("ServerNicknameInput").text)
 	file_contents.append(popup.get_node("ServerIPInput").text)
 	FileManager.write_txtfile_from_array_of_lines(servers_list_txtfile_location, file_contents)
 	
 	update_the_displayed_servers_list()
 	popup.hide()
+	return
 
 func open_edit_server_popup():
 	hide_all_servers_menu_popups()
