@@ -47,14 +47,14 @@ func setup_game_window_title(attempt_to_include_a_splash_text: bool = true):
 		return
 	
 	# Get the contents of the splash texts txtfile.
-	var splashes_file_contents: Array[String] = FileManager.read_txtfile_lines_as_array("res://assets/text_files/window_splash_texts.txt")
-	if splashes_file_contents == []:
+	var splashes_txtfile_contents: Array[String] = FileManager.read_txtfile_lines_as_array("res://assets/text_files/window_splash_texts.txt")
+	if splashes_txtfile_contents == []:
 		push_warning("Either an issue accessing the splash_texts file occured, or the file was completely empty. (Leaving window title splashless.)")
 		return
 	
 	# Usable splashes don't include the lines from the txtfile that are blank or start with an indent.
 	var splashes: Array[String] = []
-	for line in splashes_file_contents:
+	for line in splashes_txtfile_contents:
 		if (line != "") and (not line.begins_with("\t")):
 			splashes.append(line)
 	

@@ -41,11 +41,11 @@ func sort_txtfile_contents_alphabetically(file_location: String, skipped_lines: 
 	if file_contents.size() == 0:
 		push_warning("Attempted to alphabetically sort the contents of \"" + file_location + "\", but it had no contents. (Aborting sort.)")
 		return
-	elif (file_contents.size() == skipped_lines) or (file_contents.size() == skipped_lines + num_of_lines_in_group):
+	if (file_contents.size() == skipped_lines) or (file_contents.size() == skipped_lines + num_of_lines_in_group):
 		# The file has very few lines, such that attempting to sort it wouldn't change anything, wasting time.
 		# This is a common and intended situation, so there's no need for a warning/error message.
 		return
-	elif ((file_contents.size() - skipped_lines) % num_of_lines_in_group != 0):
+	if ((file_contents.size() - skipped_lines) % num_of_lines_in_group != 0):
 		push_error("Attempted to alphabetically sort the content lines of \"", file_location, "\", but it had the wrong number of lines. (Aborting sort.) ",
 		"(The sort expected [", str(num_of_lines_in_group), "k + ", str(skipped_lines), "] lines, but the file contained ", str(file_contents.size()), " lines instead.)")
 		return
@@ -89,17 +89,32 @@ func sort_txtfile_contents_alphabetically(file_location: String, skipped_lines: 
 	write_txtfile_from_array_of_lines(file_location, file_contents)
 	return
 
-func erase_dir_contents(dir: String) -> bool:
+func delete_dir(dir: String) -> bool:
 	if not DirAccess.dir_exists_absolute(dir):
-		push_warning("The \"erase_dir_contents()\" func found that the directory specified didn't exist: ", dir)
+		push_error("The \"delete_dir()\" func found that the directory specified didn't exist: ", dir)
+		return true
+	
+	if delete_dir_contents(dir):
+		push_error("An error was enountered by deeper nested \"delete_dir_contents()\" whilst deleting the contents of: ", dir, " (Abandoning deletion.)")
+		return true
+	
+	DirAccess.remove_absolute(dir)
+	if DirAccess.dir_exists_absolute(dir):
+		push_error("The contents of: ", dir, " were successfully removed, but said directory itself persisted through attempted deletion.")
+		return true
+	
+	return false
+
+func delete_dir_contents(dir: String) -> bool:
+	if not DirAccess.dir_exists_absolute(dir):
+		push_error("The \"delete_dir_contents()\" func found that the directory specified didn't exist: ", dir)
 		return true
 	
 	# Delete the contents of all deeper nested directories and all of their files first.
 	for deeper_nested_dir in DirAccess.get_directories_at(dir):
-		if erase_dir_contents(dir + "/" + deeper_nested_dir):
-			push_warning("The \"erase_dir_contents()\" func encountered an error deleting directory: ", dir, "/", deeper_nested_dir)
+		if delete_dir(dir + "/" + deeper_nested_dir):
+			push_error("The deeper nested \"delete_dir()\" func encountered an error deleting directory: ", dir, "/", deeper_nested_dir)
 			return true
-		DirAccess.remove_absolute(dir + "/" + deeper_nested_dir)
 	
 	# Delete all of the (non-directory) files in the current directory.
 	for file in DirAccess.get_files_at(dir):
@@ -107,15 +122,75 @@ func erase_dir_contents(dir: String) -> bool:
 	
 	return false
 
-func determine_first_available_dir_with_name(dir_path: String) -> String:
-	if not DirAccess.dir_exists_absolute(dir_path):
-		return(dir_path)
+func copy_dir_to_dir(from_dir: String, to_dir: String, replace_if_already_exists: bool) -> bool:
+	if not DirAccess.dir_exists_absolute(from_dir):
+		push_error("The \"copy_dir_to_dir()\" func found that the \"from\" directory specified doesn't exist: ", from_dir)
+		return true
+	
+	if replace_if_already_exists:
+		# Empty out the destination directory for replacement.
+		if DirAccess.dir_exists_absolute(to_dir):
+			delete_dir_contents(to_dir)
 	else:
-		# Find an alternate directory name which isn't already taken.
-		var attempt_number: int = 1
-		while(DirAccess.dir_exists_absolute(dir_path + " alt_" + str(attempt_number)) == true):
-				attempt_number += 1
-		return(dir_path + " alt_" + str(attempt_number))
+		# Find an available destination directory name and create the directory.
+		to_dir = first_unused_dir_alt(to_dir)
+		DirAccess.make_dir_recursive_absolute(to_dir)
+		if not DirAccess.dir_exists_absolute(to_dir):
+			push_error("The \"copy_dir_to_dir()\" func failed to create or find dir: \"", to_dir, " (Abandoning copying.)")
+			return(true)
+	
+	# Copy all of the contents into the destination directory.
+	if copy_dir_contents_into_dir(from_dir, to_dir, false):
+		push_warning("A deeper nested layer of \"copy_dir_contents_into_dir()\" used by \"copy_dir_to_dir()\" encountered an error. (Returning error.")
+		return(true)
+	
+	return(false)
+
+func copy_dir_contents_into_dir(from_dir: String, to_dir: String, replace_if_already_exists: bool) -> bool:
+	if not DirAccess.dir_exists_absolute(from_dir):
+		push_error("The \"copy_dir_contents_into_dir()\" func found that the \"from\" directory specified doesn't exist: ", from_dir)
+		return true
+	if not DirAccess.dir_exists_absolute(to_dir):
+		push_error("The \"copy_dir_contents_into_dir()\" func found that the \"to\" directory specified doesn't exist: ", to_dir)
+		return true
+	
+	if replace_if_already_exists:
+		delete_dir_contents(to_dir)
+	
+	# Copy all of the (non-directory) files.
+	for file in DirAccess.get_files_at(from_dir):
+		DirAccess.copy_absolute(from_dir + "/" + file, to_dir + "/" + file)
+	
+	# Copy all of the directories and their files.
+	for sub_dir in DirAccess.get_directories_at(from_dir):
+		if copy_dir_to_dir(from_dir + "/" + sub_dir, to_dir + "/" + sub_dir, false):
+			push_warning("A deeper nested layer of \"copy_dir_to_dir()\" used by \"copy_dir_contents_into_dir()\" encountered an error. (Returning error.")
+			return(true)
+	
+	return(false)
+
+# Note: You should *not* include a "/" at the end of the opening path if you input both paths.
+func first_unused_dir_alt(dir_opening_path: String, dir_ending_path: String = "") -> String:
+	if dir_ending_path == "":
+		# Find and output the first usable alt of the full path.
+		if not DirAccess.dir_exists_absolute(dir_opening_path):
+			return(dir_opening_path)
+		else:
+			# The simple solution is already used, so find an alternate directory name which isn't taken.
+			var attempt_number: int = 1
+			while(DirAccess.dir_exists_absolute(dir_opening_path + " alt_" + str(attempt_number))):
+					attempt_number += 1
+			return(dir_opening_path + " alt_" + str(attempt_number))
+	else:
+		# Find the first usable alt of the full path, and output only the segment at end of said path.
+		if not DirAccess.dir_exists_absolute(dir_opening_path + "/" + dir_ending_path):
+			return(dir_ending_path)
+		else:
+		# The simple solution is already used, so find an alternate directory name which isn't taken.
+			var attempt_number: int = 1
+			while(DirAccess.dir_exists_absolute(dir_opening_path + "/" + dir_ending_path + " alt_" + str(attempt_number))):
+					attempt_number += 1
+			return(dir_ending_path + " alt_" + str(attempt_number))
 
 
 # FILE ENSURANCE/CREATION FUNCTIONS:
@@ -150,6 +225,3 @@ func ensure_essential_game_dirs_and_files_exist() -> bool:
 		return(true)
 	else:
 		return(false)
-
-
-# VERSION UPDATING/DOWNDATING FUNCTIONS:

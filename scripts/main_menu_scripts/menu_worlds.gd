@@ -45,7 +45,7 @@ func open_new_world_popup():
 func confirm_new_world():
 	var popup = $NewWorldPopup
 	var name_of_new_world: String = popup.get_node("WorldNameInput").text
-	var dir_of_new_world: String = FileManager.determine_first_available_dir_with_name("user://storage/worlds/" + name_of_new_world)
+	var dir_of_new_world: String = FileManager.first_unused_dir_alt("user://storage/worlds/" + name_of_new_world)
 	var seed_of_new_world: String = popup.get_node("WorldSeedInput").text
 	
 	# Randomize the worldgen seed if the popup's seed input was left blank.
@@ -88,7 +88,11 @@ func open_edit_world_popup():
 	var popup: Node = $EditWorldPopup
 	popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + worlds_list_contents[(selected_world_index*2)+1] + "\""
 	popup.get_node("WorldNameInput").text = worlds_list_contents[(selected_world_index*2)+1]
-	popup.get_node("WorldSeedInput").text = world_info_lines[3].substr(23)
+	if world_info_lines.size() < 4:
+		push_warning("When opening the editing a world popup, the file contents of world_info.txt were not long enough to have a seed. (Aborting popup.)")
+		return
+	else:
+		popup.get_node("WorldSeedInput").text = world_info_lines[3].substr(23)
 	popup.show()
 	return
 
@@ -104,7 +108,7 @@ func confirm_edit_world():
 	var popup: Node = $EditWorldPopup
 	var new_world_name: String = popup.get_node("WorldNameInput").text
 	var old_world_dir_name: String = file_contents[(selected_server_index*2)+2]
-	var new_world_dir: String = FileManager.determine_first_available_dir_with_name("user://storage/worlds/" + new_world_name)
+	var new_world_dir: String = FileManager.first_unused_dir_alt("user://storage/worlds/" + new_world_name)
 	var new_world_dir_name: String = new_world_dir.substr(new_world_dir.rfind("/") + 1)
 	file_contents[(selected_server_index*2)+1] = new_world_name
 	file_contents[(selected_server_index*2)+2] = new_world_dir_name
@@ -153,10 +157,8 @@ func confirm_delete_world():
 	if not DirAccess.dir_exists_absolute(dir_to_delete):
 		push_warning("Attempted to finilize deleting a world, but its directory could not be found: ", dir_to_delete, " (Aborting deletion.)")
 		return 
-	if FileManager.erase_dir_contents(dir_to_delete):
+	if FileManager.delete_dir(dir_to_delete):
 		push_warning("An error was encountered while erasing the contents of a world's directory: ", dir_to_delete, " (Aborted remaining deletion, however some files may have already been erased.)")
-	else:
-		DirAccess.remove_absolute(dir_to_delete)
 		
 		worlds_list_contents.remove_at((displayed_worlds_itemlist.get_selected_items()[0]*2)+2)
 		worlds_list_contents.remove_at((displayed_worlds_itemlist.get_selected_items()[0]*2)+1)
@@ -173,22 +175,23 @@ func _on_duplicate_world_pressed():
 		push_warning("Attempted to duplicate a world, but none of the displayed items were selected. (Did nothing.)")
 		return
 	
-	# update the worlds list text file contents
+	# Update the worlds-list text-file contents.
 	var worlds_list_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	var selected_world_index: int = displayed_worlds_itemlist.get_selected_items()[0]
-	var copys_world_name: String = "Copy of " + worlds_list_contents[(selected_world_index*2)+1]
-	var copys_world_dir: String = FileManager.determine_first_available_dir_with_name("user://storage/worlds/" + copys_world_name)
-	var copys_world_dir_name: String = copys_world_dir.substr(copys_world_dir.rfind("/") + 1)
+	var orig_world_name: String = worlds_list_contents[(selected_world_index*2)+1]
+	var from_dir_name: String = worlds_list_contents[(selected_world_index*2)+2]
+	var from_dir: String = "user://storage/worlds/" + from_dir_name
+	var copys_world_name: String = "Copy of " + orig_world_name
+	var to_dir_name: String = FileManager.first_unused_dir_alt("user://storage/worlds/", copys_world_name)
+	var to_dir: String = "user://storage/worlds/" + to_dir_name
 	worlds_list_contents.append(copys_world_name)
-	worlds_list_contents.append(copys_world_dir_name)
+	worlds_list_contents.append(to_dir_name)
+	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, worlds_list_contents)
 	
-	# find an available dir name for the copy
+	# Copy the entire world's directory to the new directory location.
+	DirAccess.make_dir_absolute(to_dir)
+	FileManager.copy_dir_contents_into_dir(from_dir, to_dir, false)
 	
-	# copy the entire dir of the world to the new world dir
-	
-	
-	
-	worlds_names.append("Copy of " + worlds_names[displayed_worlds_itemlist.get_selected_items()[0]])
 	disable_world_selected_requiring_buttons()
 	update_displayed_worlds_list_text()
 	return
