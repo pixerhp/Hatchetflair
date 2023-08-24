@@ -82,12 +82,12 @@ func open_edit_world_popup():
 		push_warning("Attempted to open the EditWorld popup despite no displayed world item being selected. (Did nothing.)")
 		return
 	
-	var worlds_list_txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var worlds_list_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	var selected_world_index: int = displayed_worlds_itemlist.get_selected_items()[0]
-	var world_info_lines: Array[String] = FileManager.read_txtfile_lines_as_array("user://storage/worlds/"+worlds_list_txtfile_lines[(selected_world_index*2)+2]+"/world_info.txt")
+	var world_info_lines: Array[String] = FileManager.read_txtfile_lines_as_array("user://storage/worlds/" + worlds_list_contents[(selected_world_index*2)+2] + "/world_info.txt")
 	var popup: Node = $EditWorldPopup
-	popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + worlds_list_txtfile_lines[(selected_world_index*2)+1] + "\""
-	popup.get_node("WorldNameInput").text = worlds_list_txtfile_lines[(selected_world_index*2)+1]
+	popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + worlds_list_contents[(selected_world_index*2)+1] + "\""
+	popup.get_node("WorldNameInput").text = worlds_list_contents[(selected_world_index*2)+1]
 	popup.get_node("WorldSeedInput").text = world_info_lines[3].substr(23)
 	popup.show()
 	return
@@ -168,10 +168,30 @@ func confirm_delete_world():
 	return
 
 func _on_duplicate_world_pressed():
-	if not displayed_worlds_itemlist.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
-		worlds_names.append("Copy of " + worlds_names[displayed_worlds_itemlist.get_selected_items()[0]])
-		disable_world_selected_requiring_buttons()
-		update_displayed_worlds_list_text()
+	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
+	if displayed_worlds_itemlist.get_selected_items().is_empty():
+		push_warning("Attempted to duplicate a world, but none of the displayed items were selected. (Did nothing.)")
+		return
+	
+	# update the worlds list text file contents
+	var worlds_list_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var selected_world_index: int = displayed_worlds_itemlist.get_selected_items()[0]
+	var copys_world_name: String = "Copy of " + worlds_list_contents[(selected_world_index*2)+1]
+	var copys_world_dir: String = FileManager.determine_first_available_dir_with_name("user://storage/worlds/" + copys_world_name)
+	var copys_world_dir_name: String = copys_world_dir.substr(copys_world_dir.rfind("/") + 1)
+	worlds_list_contents.append(copys_world_name)
+	worlds_list_contents.append(copys_world_dir_name)
+	
+	# find an available dir name for the copy
+	
+	# copy the entire dir of the world to the new world dir
+	
+	
+	
+	worlds_names.append("Copy of " + worlds_names[displayed_worlds_itemlist.get_selected_items()[0]])
+	disable_world_selected_requiring_buttons()
+	update_displayed_worlds_list_text()
+	return
 
 
 # Update the text of the visible worlds-list for the player.
