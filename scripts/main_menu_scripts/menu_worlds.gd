@@ -189,8 +189,7 @@ func _on_duplicate_world_pressed():
 	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, worlds_list_contents)
 	
 	# Copy the entire world's directory to the new directory location.
-	DirAccess.make_dir_absolute(to_dir)
-	FileManager.copy_dir_contents_into_dir(from_dir, to_dir, false)
+	FileManager.copy_dir_to_dir(from_dir, to_dir, false)
 	
 	disable_world_selected_requiring_buttons()
 	update_displayed_worlds_list_text()
