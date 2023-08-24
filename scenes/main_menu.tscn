@@ -83,13 +83,13 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Start World"
+text = "Start world"
 
 [node name="JoinWorld" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Join World"
+text = "Join world"
 
 [node name="Settings" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
 custom_minimum_size = Vector2(110, 0)
@@ -757,7 +757,8 @@ Playtesters:
 	[wave]LandOcto950[/wave]
 	[wave]Redstone[/wave]
 Other contributions:
-	[wave]Stranded Software Developer[/wave]"
+	[wave]Stranded Software Developer[/wave]
+	[wave]Blue[/wave]"
 fit_content = true
 autowrap_mode = 0
 
