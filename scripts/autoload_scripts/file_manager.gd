@@ -107,7 +107,7 @@ func erase_dir_contents(dir: String) -> bool:
 	
 	return false
 
-func copy_dir_to_other_dir(orig_dir: String, new_dir: String, replace_new_dir_contents_if_exists: bool = true) -> void:
+func copy_dir_contents_to_dir(orig_dir: String, new_dir: String, replace_new_dir_contents_if_exists: bool = true) -> void:
 	pass
 
 
