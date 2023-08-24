@@ -104,7 +104,7 @@ func open_remove_server_popup():
 func confirm_remove_server():
 	var displayed_servers_itemlist = $JoinScreenUI/SavedServersList
 	if displayed_servers_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to finilize removing a saved server whilst none of the displayed items were selected. (Did nothing.)")
+		push_warning("Attempted to finilize removing a saved server, but none of the displayed items were selected. (Did nothing.)")
 		return
 	
 	# Determine what the contents of the servers list text file should be after the removal and replace the old contents.

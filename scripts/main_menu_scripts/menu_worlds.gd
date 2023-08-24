@@ -130,34 +130,42 @@ func confirm_edit_world():
 
 func open_delete_world_popup():
 	hide_all_worlds_menu_popups()
-	var displayed_worlds_list_text = get_node("WorldsScreenUI/SavedWorldsList")
-	if not displayed_worlds_list_text.get_selected_items().is_empty(): # Don't do anything if no world is selected.
-		var delete_world_popup = get_node("DeleteWorldPopup")
-		delete_world_popup.get_node("PopupTitleText").text = "[center]Are you sure you want to delete world:\n\"" + FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)[(displayed_worlds_list_text.get_selected_items()[0] * 2) + 1] +"\"?\n(This action cannot be undone.)[/center]"
-		delete_world_popup.show()
+	
+	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
+	if displayed_worlds_itemlist.get_selected_items().is_empty():
+		push_warning("Attempted to open the DeleteWorld popup despite no displayed world item being selected. (Did nothing.)")
+		return
+	
+	var name_of_world_to_delete: String = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)[(displayed_worlds_itemlist.get_selected_items()[0]*2)+1]
+	$DeleteWorldPopup/PopupTitleText.text = "[center]Are you sure you want to delete world:\n\"" + name_of_world_to_delete +"\"?\n(This action cannot be undone.)[/center]"
+	$DeleteWorldPopup.show()
+	return
 
 func confirm_delete_world():
-	if not displayed_worlds_itemlist.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
-		var worlds_list_file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
-		var dir_to_delete: String = "user://storage/worlds/" + worlds_list_file_contents[(displayed_worlds_itemlist.get_selected_items()[0] * 2) + 2]
+	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
+	if displayed_worlds_itemlist.get_selected_items().is_empty():
+		push_warning("Attempted to finilize deleting a world, but none of the displayed items were selected. (Did nothing.)")
+		return
+	
+	# Delete all of the files in the world's folder and then said folder itself. Then if successful, edit the worlds list txtfile.
+	var worlds_list_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var dir_to_delete: String = "user://storage/worlds/" + worlds_list_contents[(displayed_worlds_itemlist.get_selected_items()[0]*2)+2]
+	if not DirAccess.dir_exists_absolute(dir_to_delete):
+		push_warning("Attempted to finilize deleting a world, but its directory could not be found: ", dir_to_delete, " (Aborting deletion.)")
+		return 
+	if FileManager.erase_dir_contents(dir_to_delete):
+		push_warning("An error was encountered while erasing the contents of a world's directory: ", dir_to_delete, " (Aborted remaining deletion, however some files may have already been erased.)")
+	else:
+		DirAccess.remove_absolute(dir_to_delete)
 		
-		# It doesn't make sense to try to delete the world if you can't even find it.
-		if DirAccess.dir_exists_absolute(dir_to_delete):
-			# Delete all of the files in the world's folder and then said folder itself.
-			if (FileManager.erase_dir_contents(dir_to_delete) == false):
-				DirAccess.remove_absolute(dir_to_delete)
-				
-				# If successful, remove knowledge of the world from the worlds list text file.
-				worlds_list_file_contents.remove_at((displayed_worlds_itemlist.get_selected_items()[0] * 2) + 2)
-				worlds_list_file_contents.remove_at((displayed_worlds_itemlist.get_selected_items()[0] * 2) + 1)
-			else:
-				push_warning("When attempting to delete a world, an error was encountered trying to delete its folder.(Aborting complete deletion, however some files may have already been removed.)")
-		else:
-			push_warning("When attempting to delete a world, its folder could not be found. (Aborting deletion.)")
-		
-		get_node("DeleteWorldPopup").hide()
-		disable_world_selected_requiring_buttons()
-		update_displayed_worlds_list_text()
+		worlds_list_contents.remove_at((displayed_worlds_itemlist.get_selected_items()[0]*2)+2)
+		worlds_list_contents.remove_at((displayed_worlds_itemlist.get_selected_items()[0]*2)+1)
+		FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, worlds_list_contents)
+	
+	$DeleteWorldPopup.hide()
+	disable_world_selected_requiring_buttons()
+	update_displayed_worlds_list_text()
+	return
 
 func _on_duplicate_world_pressed():
 	if not displayed_worlds_itemlist.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
