@@ -45,41 +45,30 @@ func open_new_world_popup():
 func confirm_new_world():
 	var popup = $NewWorldPopup
 	var name_of_new_world: String = popup.get_node("WorldNameInput").text
-	var dir_of_new_world: String = ""
+	var dir_of_new_world: String = FileManager.determine_first_available_dir_with_name("user://storage/worlds/" + name_of_new_world)
 	var seed_of_new_world: String = popup.get_node("WorldSeedInput").text
 	
 	# Randomize the worldgen seed if the popup's seed input was left blank.
 	if seed_of_new_world == "":
-		var random: RandomNumberGenerator = RandomNumberGenerator.new()
-		random.randomize()
-		seed_of_new_world = str(random.randi() - 4294967296 + random.randi())
+		seed_of_new_world = str(GlobalStuff.random_worldgen_seed())
 	
 	# Determine the updated worlds-list txtfile contents and replace the old contents.
 	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	file_contents.append(name_of_new_world)
-	if not DirAccess.dir_exists_absolute("user://storage/worlds/"+name_of_new_world):
-		# The world's name isn't already also the directory name of some other world, so we can use it.
-		dir_of_new_world = name_of_new_world
-		file_contents.append(dir_of_new_world)
-	else:
-		# Find an unused directory name for the new world.
-		var alt_dir_name_attempt_num: int = 1
-		while(true == DirAccess.dir_exists_absolute("user://storage/worlds/"+name_of_new_world+" alt_"+str(alt_dir_name_attempt_num))):
-				alt_dir_name_attempt_num += 1
-		dir_of_new_world = name_of_new_world + " alt_" + str(alt_dir_name_attempt_num)
-		file_contents.append(dir_of_new_world)
+	file_contents.append(dir_of_new_world.substr(dir_of_new_world.rfind("/") + 1))
+	print(file_contents)
 	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, file_contents)
 	
 	# Set-up the new world's directories and files.
-	DirAccess.make_dir_recursive_absolute("user://storage/worlds/"+dir_of_new_world)
-	DirAccess.make_dir_recursive_absolute("user://storage/worlds/"+dir_of_new_world+"/chunks")
+	DirAccess.make_dir_recursive_absolute(dir_of_new_world)
+	DirAccess.make_dir_recursive_absolute(dir_of_new_world + "/chunks")
 	var world_info_txtfile_lines: Array[String] = [
 		GlobalStuff.game_version_entire,
 		"creation date-time (utc): " + Time.get_datetime_string_from_system(true, true),
 		"last-played date-time (utc): unplayed",
 		"world generation seed: " + seed_of_new_world,
 	]
-	FileManager.write_txtfile_from_array_of_lines("user://storage/worlds/"+dir_of_new_world+"/world_info.txt", world_info_txtfile_lines)
+	FileManager.write_txtfile_from_array_of_lines(dir_of_new_world + "/world_info.txt", world_info_txtfile_lines)
 	
 	update_displayed_worlds_list_text()
 	popup.hide()
@@ -103,19 +92,41 @@ func open_edit_world_popup():
 	popup.show()
 	return
 
-######## REMEMBER TO MAKE IT RENAME A DIRECTORY/FOLDER IF YOU RENAME THE WORLD
 func confirm_edit_world():
-	if not displayed_worlds_itemlist.get_selected_items().is_empty(): # Crash prevention for if no world is selected.
-		var edit_world_popup = get_node("EditWorldPopup")
-		worlds_names[displayed_worlds_itemlist.get_selected_items()[0]] = edit_world_popup.get_node("WorldNameInput").text
-		if (edit_world_popup.get_node("WorldSeedInput").text == ""):
-			var random = RandomNumberGenerator.new()
-			random.randomize()
-			worlds_seeds[displayed_worlds_itemlist.get_selected_items()[0]] = random.randi() + random.randi() - 4294967296
-		else:
-			worlds_seeds[displayed_worlds_itemlist.get_selected_items()[0]] = int(edit_world_popup.get_node("WorldSeedInput").text)
-		update_displayed_worlds_list_text()
-		edit_world_popup.hide()
+	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
+	if displayed_worlds_itemlist.get_selected_items().is_empty():
+		push_warning("Attempted to finilize editing a saved world whilst none of the displayed worlds items were selected. (Did nothing.)")
+		return
+	
+	# Determine what the contents of the worlds list text file should be after editing and replace its old contents.
+	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var selected_server_index: int = displayed_worlds_itemlist.get_selected_items()[0]
+	var popup: Node = $EditWorldPopup
+	var new_world_name: String = popup.get_node("WorldNameInput").text
+	var old_world_dir_name: String = file_contents[(selected_server_index*2)+2]
+	var new_world_dir: String = FileManager.determine_first_available_dir_with_name("user://storage/worlds/" + new_world_name)
+	var new_world_dir_name: String = new_world_dir.substr(new_world_dir.rfind("/") + 1)
+	file_contents[(selected_server_index*2)+1] = new_world_name
+	file_contents[(selected_server_index*2)+2] = new_world_dir_name
+	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, file_contents)
+	
+	# Determine what the contents of the world info text file should be after editing and replace its old contents.
+	file_contents = FileManager.read_txtfile_lines_as_array("user://storage/worlds/" + old_world_dir_name + "/world_info.txt")
+	var new_world_seed: String = popup.get_node("WorldSeedInput").text
+	if new_world_seed == "":
+		new_world_seed = str(GlobalStuff.random_worldgen_seed())
+	if file_contents.size() < 4:
+		push_warning("When finalizing editing a world, the file contents of world_info.txt were not long enough to have a seed.")
+	else:
+		file_contents[3] = "world generation seed: " + new_world_seed
+		FileManager.write_txtfile_from_array_of_lines("user://storage/worlds/" + old_world_dir_name + "/world_info.txt", file_contents)
+	
+	if new_world_dir_name != old_world_dir_name:
+		DirAccess.rename_absolute("user://storage/worlds/" + old_world_dir_name, new_world_dir)
+	
+	update_displayed_worlds_list_text()
+	popup.hide()
+	return
 
 func open_delete_world_popup():
 	hide_all_worlds_menu_popups()

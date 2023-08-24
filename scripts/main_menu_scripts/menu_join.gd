@@ -72,10 +72,10 @@ func open_edit_server_popup():
 func confirm_edit_server():
 	var displayed_servers_itemlist = $JoinScreenUI/SavedServersList
 	if displayed_servers_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to finilize editing a saved server whilst none of the displayed items were selected. (Did nothing.)")
+		push_warning("Attempted to finilize editing a saved server whilst none of the displayed servers items were selected. (Did nothing.)")
 		return
 	
-	# Determine what the contents of the servers list text file should be after editing and replace the old contents.
+	# Determine what the contents of the servers list text file should be after editing and replace its old contents.
 	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
 	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
 	var popup = $EditServerPopup

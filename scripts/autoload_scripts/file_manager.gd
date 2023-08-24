@@ -107,8 +107,15 @@ func erase_dir_contents(dir: String) -> bool:
 	
 	return false
 
-func copy_dir_contents_to_dir(orig_dir: String, new_dir: String, replace_new_dir_contents_if_exists: bool = true) -> void:
-	pass
+func determine_first_available_dir_with_name(dir_path: String) -> String:
+	if not DirAccess.dir_exists_absolute(dir_path):
+		return(dir_path)
+	else:
+		# Find an alternate directory name which isn't already taken.
+		var attempt_number: int = 1
+		while(DirAccess.dir_exists_absolute(dir_path + " alt_" + str(attempt_number)) == true):
+				attempt_number += 1
+		return(dir_path + " alt_" + str(attempt_number))
 
 
 # FILE ENSURANCE/CREATION FUNCTIONS:

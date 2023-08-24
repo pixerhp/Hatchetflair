@@ -65,6 +65,11 @@ func setup_game_window_title(attempt_to_include_a_splash_text: bool = true):
 		DisplayServer.window_set_title(game_name+"   "+game_version_entire+"   ---   "+splashes.pick_random())
 		return
 
+func random_worldgen_seed() -> int:
+	var random: RandomNumberGenerator = RandomNumberGenerator.new()
+	random.randomize()
+	return(random.randi() - 4294967296 + random.randi())
+
 
 func _process(_delta):
 	# Global hotkeys.
