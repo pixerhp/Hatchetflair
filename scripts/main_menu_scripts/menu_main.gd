@@ -5,8 +5,6 @@ func _ready() -> void:
 	# Sets a callback for when connection status changes.
 	NetworkManager.network_status_update.connect(self.network_status_update)
 	
-	FileManager.delete_dir_contents("user://storage/worlds/abcdefgh")
-	
 	# Update all essential files to work with the current version of the game.
 	# Does NOT update each world and its contents, that'd be done in the worlds menu.
 	if ensure_essential_files_are_up_to_date():

@@ -2,10 +2,6 @@ extends Control
 
 const worlds_list_txtfile_location: String = "user://storage/worlds_list.txt"
 
-@onready var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
-var worlds_names: Array[String] = []
-var worlds_seeds: Array[int] = []
-
 
 func _ready():
 	# Connect popup buttons to their associated functions.
