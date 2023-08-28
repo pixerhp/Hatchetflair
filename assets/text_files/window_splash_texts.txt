@@ -6,10 +6,11 @@
 	A smiley i occassionally use. i like having a nose.
 accidentally went down too many stairs and ended up in "second-basement"...
 	remnicient of dream-like logic and similar liminal feelings.
-sands, deserts and beaches?
-	although they aren't in the game yet, stuff like that would be lovely to have if executed well.
 bojler eladó
 	“boiler for sale” in hungarian, a popular hungarian meme phrase.
+but to answer that, we need to talk about parallel universes.
+	references pannenkoek2012's "SM64 - Watch for Rolling Rocks - 0.5x A Presses (Commentated)" video.
+	acknowledges the entire sm64 speedrunning, challenge and otherwise community.
 Catholic Christian!
 	i am designing the game with avoiding-tempting-players-into-sin in mind.
 creature-friends?
@@ -20,7 +21,7 @@ did you accidentally build the school 30 stories tall again?
 	a reference to the "Wayside School" books, especially the original 3.
 dragons?
 	eventually there will probably be dragons and dragonoids.
-early in development
+Early in development
 	the game is currently still in very early in development.
 everyone always forgets about nickel, beryllium and other elements, BUT I DIDN'T
 	elements are very cool.
@@ -39,7 +40,7 @@ hexagons are the bestagons!
 	hexagons are a cool tileable shape.
 icosahedrons are so pretty!
 	they really are, imagine little carryable icosahedrons of material.
-imagine using pickaxes instead of explosives for mining through stone
+i^2 = -1
 Ka-jackelmonoque, Quatuuvix.
 	fun sounding words i thought of a while ago.
 	bastardized segments of trying to pronounce the alphabet as one word.
@@ -47,11 +48,15 @@ lumber and wood types?
 	the game takes some amount of inspiration from games like LT2 and Oaklands.
 made with godot!
 	the game is currently being made in godot.
+picks are great for breaking up hard ground.
+	refutes the common game concept of picks only being used to mine through solid stone.
 (probably) not a horror game. =)
 	it would hypothetically be very easy to add more horror-ish elements into the game.
 	part of a sortof inside joke with someone.
 rhombic dodecahedrons?
 	an interesting 3d shape.
+sands, deserts and beaches?
+	although they aren't in the game yet, stuff like that would be lovely to have if executed well.
 seme!? ala kijetesantakalu!?
 	references the toki pona conlang, also that the game doesn't have raccoons.
 :sparkles:
