@@ -8,6 +8,7 @@ const game_version_engine: String = "1"
 const game_version_major: String = "8"
 const game_version_minor: String = "0"
 const game_version_entire: String = game_version_phase + " v" + game_version_engine + "." + game_version_major + "." + game_version_minor
+
 # Useful for getting and using certain parts of a version_entire from a file/other.
 func unconcat_ver_entire(version_entire: String) -> Array[String]:
 	# No need to do anything if the input is blank.
@@ -47,9 +48,9 @@ func _enter_tree() -> void:
 
 func setup_game_window_title(include_a_splashtext: bool = true):
 	if is_modded:
-		DisplayServer.window_set_title(game_name+"*   "+game_version_entire)
+		DisplayServer.window_set_title(game_name + "*   " + game_version_entire)
 	else:
-		DisplayServer.window_set_title(game_name+"   "+game_version_entire)
+		DisplayServer.window_set_title(game_name + "   " + game_version_entire)
 	if include_a_splashtext == false:
 		return
 	
