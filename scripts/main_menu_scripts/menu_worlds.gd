@@ -78,10 +78,10 @@ func open_edit_world_popup():
 		push_warning("Attempted to open the EditWorld popup despite no displayed world item being selected. (Did nothing.)")
 		return
 	
+	var popup: Node = $EditWorldPopup
 	var worlds_list_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	var selected_world_index: int = displayed_worlds_itemlist.get_selected_items()[0]
 	var world_info_lines: Array[String] = FileManager.read_txtfile_lines_as_array("user://storage/worlds/" + worlds_list_contents[(selected_world_index*2)+2] + "/world_info.txt")
-	var popup: Node = $EditWorldPopup
 	popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + worlds_list_contents[(selected_world_index*2)+1] + "\""
 	popup.get_node("WorldNameInput").text = worlds_list_contents[(selected_world_index*2)+1]
 	if world_info_lines.size() < 4:
@@ -99,9 +99,9 @@ func confirm_edit_world():
 		return
 	
 	# Determine what the contents of the worlds list text file should be after editing and replace its old contents.
+	var popup: Node = $EditWorldPopup
 	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	var selected_server_index: int = displayed_worlds_itemlist.get_selected_items()[0]
-	var popup: Node = $EditWorldPopup
 	var new_world_name: String = popup.get_node("WorldNameInput").text
 	var old_world_dir_name: String = file_contents[(selected_server_index*2)+2]
 	var new_world_dir: String = FileManager.first_unused_dir_alt("user://storage/worlds/" + new_world_name)
