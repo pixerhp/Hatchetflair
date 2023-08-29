@@ -1,13 +1,14 @@
 extends Node
 
-var all_global_stuff_initialized: bool = false
-var is_modded: bool = false # "true" currently only adds a `*` to the end of the games name in the window title.
 const game_name: String = "Hatchetflair"
 const game_version_phase: String = "pre-game"
 const game_version_engine: String = "1"
 const game_version_major: String = "8"
 const game_version_minor: String = "0"
 const game_version_entire: String = game_version_phase + " v" + game_version_engine + "." + game_version_major + "." + game_version_minor
+var game_is_modded: bool = false # Currently only affects the game window title (adds a `*` after the game name if true.)
+
+var all_global_stuff_initialized: bool = false
 
 # Useful for getting and using certain parts of a version_entire from a file/other.
 func unconcat_ver_entire(version_entire: String) -> Array[String]:
@@ -47,7 +48,7 @@ func _enter_tree() -> void:
 
 
 func setup_game_window_title(include_a_splashtext: bool = true):
-	if is_modded:
+	if game_is_modded:
 		DisplayServer.window_set_title(game_name + "*   " + game_version_entire)
 	else:
 		DisplayServer.window_set_title(game_name + "   " + game_version_entire)
@@ -68,7 +69,7 @@ func setup_game_window_title(include_a_splashtext: bool = true):
 		push_warning("The window splashes txtfile was accessed successfully, but contained no usable splashes. (Leaving window title splashless.)")
 		return
 	else:
-		if is_modded:
+		if game_is_modded:
 			DisplayServer.window_set_title(game_name+"*   "+game_version_entire+"   ---   "+splashes.pick_random())
 		else:
 			DisplayServer.window_set_title(game_name+"   "+game_version_entire+"   ---   "+splashes.pick_random())
