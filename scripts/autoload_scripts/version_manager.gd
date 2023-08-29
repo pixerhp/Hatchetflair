@@ -35,10 +35,10 @@ func compare_v_to_cv(in_v_entire: String) -> int:
 					return(-1)
 				elif (int(in_v_components[3]) > int(GlobalStuff.game_version_minor)):
 					return(1)
-	
-	# Reaching here is unintended function behavior and thus should return an error.
-	push_error("When comparing version \"", in_v_entire, "\" to the current ver., none of the return statements triggered.")
-	return(127)
+				else:
+					# Despite the two version strings not being strictly equal, 
+					# the two versions are similar enough to be considered fully compatable.
+					return(0)
 
 
 # Returns true only if one or more essential files failed to be (or be transversioned to) the correct version.
