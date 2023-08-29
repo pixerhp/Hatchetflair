@@ -3,14 +3,29 @@ extends Node
 
 # FILE INTERACTION FUNCTIONS:
 
-func read_txtfile_lines_as_array(file_location: String) -> Array[String]:
-	if not FileAccess.file_exists(file_location):
-		push_error("A text file: \"", file_location, "\" couldn't be found to have its lines read. (Returning [].)")
+func read_txtfile_firstline(file_path: String) -> String:
+	if not FileAccess.file_exists(file_path):
+		push_error("A text file: \"", file_path, "\" couldn't be found to have its first line read. (Returning \"\".)")
+		return("")
+	
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
+	if not file.is_open():
+		push_error("A text file: \"", file_path, "\" which was successfully found couldn't be opened to have its first line read. ",
+		"(FileAccess open error:) ", str(FileAccess.get_open_error()), " (Returning \"\".)")
+		return("")
+	
+	var line = file.get_line()
+	file.close()
+	return(line)
+
+func read_txtfile_lines_as_array(file_path: String) -> Array[String]:
+	if not FileAccess.file_exists(file_path):
+		push_error("A text file: \"", file_path, "\" couldn't be found to have its lines read. (Returning [].)")
 		return([])
 	
-	var file: FileAccess = FileAccess.open(file_location, FileAccess.READ)
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
 	if not file.is_open():
-		push_error("A text file: \"", file_location, "\" which was successfully found couldn't be opened to have its lines read. ",
+		push_error("A text file: \"", file_path, "\" which was successfully found couldn't be opened to have its lines read. ",
 		"(FileAccess open error:) ", str(FileAccess.get_open_error()), " (Returning [].)")
 		return([])
 	
@@ -25,10 +40,10 @@ func read_txtfile_lines_as_array(file_location: String) -> Array[String]:
 	
 	return(text_lines)
 
-func write_txtfile_from_array_of_lines(file_location: String, text_lines: Array[String]) -> void:
-	var file: FileAccess = FileAccess.open(file_location, FileAccess.WRITE)
+func write_txtfile_from_array_of_lines(file_path: String, text_lines: Array[String]) -> void:
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
 	if not file.is_open():
-		push_error("A text file: \"", file_location, "\" to be written-to or created could not be opened. (FileAccess open error:) ", str(FileAccess.get_open_error()))
+		push_error("A text file: \"", file_path, "\" to be written-to or created could not be opened. (FileAccess open error:) ", str(FileAccess.get_open_error()))
 		return
 	
 	for line in text_lines:
@@ -36,17 +51,17 @@ func write_txtfile_from_array_of_lines(file_location: String, text_lines: Array[
 	file.close()
 	return
 
-func sort_txtfile_contents_alphabetically(file_location: String, skipped_lines: int, num_of_lines_in_group: int = 1) -> void:
-	var file_contents: Array[String] = read_txtfile_lines_as_array(file_location)
+func sort_txtfile_contents_alphabetically(file_path: String, skipped_lines: int, num_of_lines_in_group: int = 1) -> void:
+	var file_contents: Array[String] = read_txtfile_lines_as_array(file_path)
 	if file_contents.size() == 0:
-		push_warning("Attempted to alphabetically sort the contents of \"" + file_location + "\", but it had no contents. (Aborting sort.)")
+		push_warning("Attempted to alphabetically sort the contents of \"" + file_path + "\", but it had no contents. (Aborting sort.)")
 		return
 	if (file_contents.size() == skipped_lines) or (file_contents.size() == skipped_lines + num_of_lines_in_group):
 		# The file has very few lines, such that attempting to sort it wouldn't change anything, wasting time.
 		# This is a common and intended situation, so there's no need for a warning/error message.
 		return
 	if ((file_contents.size() - skipped_lines) % num_of_lines_in_group != 0):
-		push_error("Attempted to alphabetically sort the content lines of \"", file_location, "\", but it had the wrong number of lines. (Aborting sort.) ",
+		push_error("Attempted to alphabetically sort the content lines of \"", file_path, "\", but it had the wrong number of lines. (Aborting sort.) ",
 		"(The sort expected [", str(num_of_lines_in_group), "k + ", str(skipped_lines), "] lines, but the file contained ", str(file_contents.size()), " lines instead.)")
 		return
 	
@@ -86,7 +101,7 @@ func sort_txtfile_contents_alphabetically(file_location: String, skipped_lines: 
 				else: # The last bit of concatenated info with nothing else surrounding it.
 					file_contents.append(current_concatenation)
 	
-	write_txtfile_from_array_of_lines(file_location, file_contents)
+	write_txtfile_from_array_of_lines(file_path, file_contents)
 	return
 
 func delete_dir(dir: String) -> bool:
@@ -122,48 +137,48 @@ func delete_dir_contents(dir: String) -> bool:
 	
 	return false
 
-func copy_dir_to_dir(from_dir: String, to_dir: String, replace_if_already_exists: bool) -> bool:
+func copy_dir_to_dir(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
 	if not DirAccess.dir_exists_absolute(from_dir):
 		push_error("The \"copy_dir_to_dir()\" func found that the \"from\" directory specified doesn't exist: ", from_dir)
 		return true
 	
 	if replace_if_already_exists:
 		# Empty out the destination directory for replacement.
-		if DirAccess.dir_exists_absolute(to_dir):
-			delete_dir_contents(to_dir)
+		if DirAccess.dir_exists_absolute(target_dir):
+			delete_dir_contents(target_dir)
 	else:
 		# Find an available destination directory name and create the directory.
-		to_dir = first_unused_dir_alt(to_dir)
-		DirAccess.make_dir_recursive_absolute(to_dir)
-		if not DirAccess.dir_exists_absolute(to_dir):
-			push_error("The \"copy_dir_to_dir()\" func failed to create or find dir: \"", to_dir, " (Abandoning copying.)")
+		target_dir = first_unused_dir_alt(target_dir)
+		DirAccess.make_dir_recursive_absolute(target_dir)
+		if not DirAccess.dir_exists_absolute(target_dir):
+			push_error("The \"copy_dir_to_dir()\" func failed to create or find dir: \"", target_dir, " (Abandoning copying.)")
 			return(true)
 	
 	# Copy all of the contents into the destination directory.
-	if copy_dir_contents_into_dir(from_dir, to_dir, false):
+	if copy_dir_contents_into_dir(from_dir, target_dir, false):
 		push_warning("A deeper nested layer of \"copy_dir_contents_into_dir()\" used by \"copy_dir_to_dir()\" encountered an error. (Returning error.")
 		return(true)
 	
 	return(false)
 
-func copy_dir_contents_into_dir(from_dir: String, to_dir: String, replace_if_already_exists: bool) -> bool:
+func copy_dir_contents_into_dir(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
 	if not DirAccess.dir_exists_absolute(from_dir):
 		push_error("The \"copy_dir_contents_into_dir()\" func found that the \"from\" directory specified doesn't exist: ", from_dir)
 		return true
-	if not DirAccess.dir_exists_absolute(to_dir):
-		push_error("The \"copy_dir_contents_into_dir()\" func found that the \"to\" directory specified doesn't exist: ", to_dir)
+	if not DirAccess.dir_exists_absolute(target_dir):
+		push_error("The \"copy_dir_contents_into_dir()\" func found that the \"to\" directory specified doesn't exist: ", target_dir)
 		return true
 	
 	if replace_if_already_exists:
-		delete_dir_contents(to_dir)
+		delete_dir_contents(target_dir)
 	
 	# Copy all of the (non-directory) files.
 	for file in DirAccess.get_files_at(from_dir):
-		DirAccess.copy_absolute(from_dir + "/" + file, to_dir + "/" + file)
+		DirAccess.copy_absolute(from_dir + "/" + file, target_dir + "/" + file)
 	
 	# Copy all of the directories and their files.
 	for sub_dir in DirAccess.get_directories_at(from_dir):
-		if copy_dir_to_dir(from_dir + "/" + sub_dir, to_dir + "/" + sub_dir, false):
+		if copy_dir_to_dir(from_dir + "/" + sub_dir, target_dir + "/" + sub_dir, false):
 			push_warning("A deeper nested layer of \"copy_dir_to_dir()\" used by \"copy_dir_contents_into_dir()\" encountered an error. (Returning error.")
 			return(true)
 	
@@ -196,7 +211,7 @@ func first_unused_dir_alt(dir_opening_path: String, dir_ending_path: String = ""
 # FILE ENSURANCE/CREATION FUNCTIONS:
 
 func ensure_essential_game_dirs_and_files_exist() -> bool:
-	var errors_were_encountered: bool = false
+	var any_failures_encountered: bool = false
 	
 	var directories_to_ensure: Array[String] = [
 		"user://storage",
@@ -205,23 +220,20 @@ func ensure_essential_game_dirs_and_files_exist() -> bool:
 	for dir in directories_to_ensure:
 		DirAccess.make_dir_recursive_absolute(dir)
 		if not DirAccess.dir_exists_absolute(dir):
-			errors_were_encountered = true
-			push_error("Essential game directory: \""+dir+"\" could not be created/found.")
+			any_failures_encountered = true
+			push_error("Essential game directory: \"", dir, "\" could not be created/found.")
 	
 	# If an essential file doesn't already exist, creates it blank except for version_entire in its first text line.
-	var file_locations_to_ensure: Array[String] = [
+	var file_paths_to_ensure: Array[String] = [
 		"user://storage/user_info.txt",
 		"user://storage/worlds_list.txt",
 		"user://storage/servers_list.txt",
 	]
-	for file_location in file_locations_to_ensure:
-		if not FileAccess.file_exists(file_location):
-			write_txtfile_from_array_of_lines(file_location, [GlobalStuff.game_version_entire])
-			if not FileAccess.file_exists(file_location):
-				errors_were_encountered = true
-				push_error("Essential game file: \""+file_location+"\" could not be created/found.")
+	for file_path in file_paths_to_ensure:
+		if not FileAccess.file_exists(file_path):
+			write_txtfile_from_array_of_lines(file_path, [GlobalStuff.game_version_entire])
+			if not FileAccess.file_exists(file_path):
+				any_failures_encountered = true
+				push_error("Essential game file: \"", file_path, "\" could not be created/found.")
 	
-	if errors_were_encountered:
-		return(true)
-	else:
-		return(false)
+	return(any_failures_encountered)
