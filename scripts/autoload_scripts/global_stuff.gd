@@ -6,7 +6,10 @@ const game_version_engine: String = "1"
 const game_version_major: String = "8"
 const game_version_minor: String = "0"
 const game_version_entire: String = game_version_phase + " v" + game_version_engine + "." + game_version_major + "." + game_version_minor
-var game_is_modded: bool = false # Currently only affects the game window title (adds a `*` after the game name if true.)
+
+# Alters the game window's title.
+var is_game_modded: bool = false
+var is_current_version_indev: bool = true
 
 var all_global_stuff_initialized: bool = false
 
@@ -48,10 +51,13 @@ func _enter_tree() -> void:
 
 
 func setup_game_window_title(include_a_splashtext: bool = true):
-	if game_is_modded:
-		DisplayServer.window_set_title(game_name + "*   " + game_version_entire)
-	else:
-		DisplayServer.window_set_title(game_name + "   " + game_version_entire)
+	var game_name_attachments: String = ""
+	if is_game_modded:
+		game_name_attachments += "*"
+	var version_attatchments: String = ""
+	if is_current_version_indev:
+		version_attatchments += " INDEV"
+	DisplayServer.window_set_title(game_name + game_name_attachments + "   " + game_version_entire + version_attatchments)
 	if include_a_splashtext == false:
 		return
 	
@@ -69,10 +75,7 @@ func setup_game_window_title(include_a_splashtext: bool = true):
 		push_warning("The window splashes txtfile was accessed successfully, but contained no usable splashes. (Leaving window title splashless.)")
 		return
 	else:
-		if game_is_modded:
-			DisplayServer.window_set_title(game_name+"*   "+game_version_entire+"   ---   "+splashes.pick_random())
-		else:
-			DisplayServer.window_set_title(game_name+"   "+game_version_entire+"   ---   "+splashes.pick_random())
+		DisplayServer.window_set_title(game_name + game_name_attachments + "   " + game_version_entire + version_attatchments + "   ---   " + splashes.pick_random())
 		return
 
 # Closes the game's program & window.
