@@ -248,10 +248,11 @@ func sync_worlds_list_txtfile_to_world_dirs():
 	# Replace the worlds-list text file contents with the newly synchronized ones.
 	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, worlds_list_txtfile_lines)
 
-func ensure_world_folder_has_its_essential_files(name_of_directory_folder_for_world: String):
+# !!! FUNCTION IS NOT USED YET, FEEL FREE TO GIVE IT USE LATER ON.
+func ensure_world_dir_has_required_files(name_of_directory_folder_for_world: String):
 	if not DirAccess.dir_exists_absolute("user://storage/worlds/" + name_of_directory_folder_for_world):
-		push_warning("Tried to ensure that the world folder: \"" + name_of_directory_folder_for_world +"\" has all essential files, but that world folder didn't even exist. (Creating it now.)")
-		DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + name_of_directory_folder_for_world)
+		push_error("Attempted to ensure that world dir: \"", name_of_directory_folder_for_world, "\" had all required files, but that world folder didn't even exist. (Aborting.)")
+		return
 	DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + name_of_directory_folder_for_world + "/chunks")
 	if not FileAccess.file_exists("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt"):
 		var file = FileAccess
