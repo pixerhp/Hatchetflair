@@ -54,10 +54,10 @@ func setup_game_window_title(include_a_splashtext: bool = true):
 	var game_name_attachments: String = ""
 	if is_game_modded:
 		game_name_attachments += "*"
-	var version_attatchments: String = ""
+	var game_version_attatchments: String = ""
 	if is_current_version_indev:
-		version_attatchments += " INDEV"
-	DisplayServer.window_set_title(game_name + game_name_attachments + "   " + game_version_entire + version_attatchments)
+		game_version_attatchments += " INDEV"
+	DisplayServer.window_set_title(game_name + game_name_attachments + "   " + game_version_entire + game_version_attatchments)
 	if include_a_splashtext == false:
 		return
 	
@@ -75,7 +75,7 @@ func setup_game_window_title(include_a_splashtext: bool = true):
 		push_warning("The window splashes txtfile was accessed successfully, but contained no usable splashes. (Leaving window title splashless.)")
 		return
 	else:
-		DisplayServer.window_set_title(game_name + game_name_attachments + "   " + game_version_entire + version_attatchments + "   ---   " + splashes.pick_random())
+		DisplayServer.window_set_title(game_name + game_name_attachments + "   " + game_version_entire + game_version_attatchments + "   ---   " + splashes.pick_random())
 		return
 
 # Closes the game's program & window.
