@@ -17,18 +17,21 @@ func _ready():
 	return
 
 
-func join_server(servers_list_index: int = 0):
-	var servers_txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
-	print("Chosen server's list-index: " + str(servers_list_index))
-	print("Chosen server's nickname: " + servers_txtfile_lines[(servers_list_index*2)+1])
-	print("Chosen server's IP: " + servers_txtfile_lines[(servers_list_index*2)+2])
-	NetworkManager.start_game(true, false, true, servers_txtfile_lines[(servers_list_index*2)+2])
+func join_server_by_index(servers_list_index: int = -1) -> void:
+	if servers_list_index == -1:
+		if not $JoinScreenUI/SavedServersList.get_selected_items().is_empty():
+			servers_list_index = $JoinScreenUI/SavedServersList.get_selected_items()[0]
+		else:
+			push_error("No servers list index was specified for joining a server's world. (Aborting joining server.)")
+			return
+	var servers_list_lines: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
+	var server_ip: String = servers_list_lines[(servers_list_index * 2) + 2]
+	
+	join_server_by_ip(server_ip)
 	return
 
-func _on_join_button_pressed():
-	var displayed_servers_list_text = $JoinScreenUI/SavedServersList
-	if not displayed_servers_list_text.get_selected_items().is_empty(): # Don't do anything if no worlds are selected.
-		join_server(displayed_servers_list_text.get_selected_items()[0])
+func join_server_by_ip(server_ip: String):
+	NetworkManager.start_game(true, false, true, server_ip)
 	return
 
 
@@ -41,11 +44,15 @@ func open_add_server_popup():
 
 func confirm_add_server():
 	var popup: Node = $AddServerPopup
+	var server_nickname: String = popup.get_node("ServerNicknameInput").text
+	if server_nickname == "":
+		server_nickname = "new remembered server"
+	var server_ip: String = popup.get_node("ServerIPInput").text
 	
 	# Determine the updated servers-list txtfile contents and replace the old contents.
 	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)
-	file_contents.append(popup.get_node("ServerNicknameInput").text)
-	file_contents.append(popup.get_node("ServerIPInput").text)
+	file_contents.append(server_nickname)
+	file_contents.append(server_ip)
 	FileManager.write_txtfile_from_array_of_lines(servers_list_txtfile_location, file_contents)
 	
 	update_the_displayed_servers_list()
@@ -97,7 +104,7 @@ func open_remove_server_popup():
 	
 	var popup = $RemoveServerPopup
 	var name_of_removable_server: String = FileManager.read_txtfile_lines_as_array(servers_list_txtfile_location)[(displayed_servers_itemlist.get_selected_items()[0]*2)+1]
-	popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + name_of_removable_server +"\"?\n(This action CANNOT be undone!)[/center]"
+	popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + name_of_removable_server +"\"?\n(This action cannot be undone.)[/center]"
 	popup.show()
 	return
 

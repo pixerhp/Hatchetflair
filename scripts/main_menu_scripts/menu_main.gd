@@ -1,7 +1,7 @@
 extends Control
 
 
-# Opens one of the titlescreen menus and hides all of the others.
+# Opens one of the titlescreen menus after hiding all of the others.
 func switch_to_menu(menu_name: String) -> void:
 	for child_menu in $Menus.get_children():
 		child_menu.visible = false
