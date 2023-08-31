@@ -237,3 +237,28 @@ func ensure_essential_game_dirs_and_files_exist() -> bool:
 				push_error("Essential game file: \"", file_path, "\" could not be created/found.")
 	
 	return(any_failures_encountered)
+
+func ensure_world_dir_has_required_files(world_dir_path: String, world_info_input: Array[String] = []) -> bool:
+	if not DirAccess.dir_exists_absolute(world_dir_path):
+		push_error("Attempted to ensure that world dir: ", world_dir_path, " had all required files, but that world folder didn't even exist. (Aborting.)")
+		return(true)
+	DirAccess.make_dir_recursive_absolute(world_dir_path + "/chunks")
+	if not DirAccess.dir_exists_absolute(world_dir_path + "/chunks"):
+		push_error("Failed to find dirs in world folder, even after attempting to create them: ", world_dir_path)
+		return(true)
+	if not FileAccess.file_exists(world_dir_path + "/world_info.txt"):
+		var world_info_lines: Array[String] = []
+		if world_info_input == []:
+			world_info_lines = [
+				GlobalStuff.game_version_entire,
+				"creation date-time (utc): " + Time.get_datetime_string_from_system(true, true),
+				"last-played date-time (utc): unplayed",
+				"world generation seed: " + str(GlobalStuff.random_worldgen_seed()),
+			]
+		else:
+			world_info_lines = world_info_input
+		FileManager.write_txtfile_from_array_of_lines(world_dir_path + "/world_info.txt", world_info_lines)
+		if not FileAccess.file_exists(world_dir_path + "/world_info.txt"):
+			push_error("Failed to create the world_info text file in world directory: ", world_dir_path)
+	
+	return(false)

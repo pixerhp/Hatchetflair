@@ -248,23 +248,6 @@ func sync_worlds_list_txtfile_to_world_dirs():
 	# Replace the worlds-list text file contents with the newly synchronized ones.
 	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, worlds_list_txtfile_lines)
 
-# !!! FUNCTION IS NOT USED YET, FEEL FREE TO GIVE IT USE LATER ON.
-func ensure_world_dir_has_required_files(name_of_directory_folder_for_world: String):
-	if not DirAccess.dir_exists_absolute("user://storage/worlds/" + name_of_directory_folder_for_world):
-		push_error("Attempted to ensure that world dir: \"", name_of_directory_folder_for_world, "\" had all required files, but that world folder didn't even exist. (Aborting.)")
-		return
-	DirAccess.make_dir_recursive_absolute("user://storage/worlds/" + name_of_directory_folder_for_world + "/chunks")
-	if not FileAccess.file_exists("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt"):
-		var file = FileAccess
-		file = FileAccess.open("user://storage/worlds/" + name_of_directory_folder_for_world + "/world_info.txt", FileAccess.WRITE)
-		file.store_line(GlobalStuff.game_version_entire)
-		file.store_line("date created: " + Time.get_datetime_string_from_system())
-		file.store_line("last played: unplayed")
-		var random = RandomNumberGenerator.new()
-		random.randomize()
-		file.store_line("world generation seed: " + str(random.randi() - 4294967296 + random.randi()))
-		file.close()
-
 
 func toggle_visibility_of_host_without_playing_toggle (button_value: bool) -> void:
 	$WorldsScreenUI/Toggles/HostWithoutPlay.disabled = not button_value
