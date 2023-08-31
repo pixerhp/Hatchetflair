@@ -3,21 +3,6 @@ extends Node
 
 # FILE INTERACTION FUNCTIONS:
 
-func read_txtfile_firstline(file_path: String) -> String:
-	if not FileAccess.file_exists(file_path):
-		push_error("A text file: \"", file_path, "\" couldn't be found to have its first line read. (Returning \"\".)")
-		return("")
-	
-	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
-	if not file.is_open():
-		push_error("A text file: \"", file_path, "\" which was successfully found couldn't be opened to have its first line read. ",
-		"(FileAccess open error:) ", str(FileAccess.get_open_error()), " (Returning \"\".)")
-		return("")
-	
-	var line = file.get_line()
-	file.close()
-	return(line)
-
 func read_txtfile_lines_as_array(file_path: String) -> Array[String]:
 	if not FileAccess.file_exists(file_path):
 		push_error("A text file: \"", file_path, "\" couldn't be found to have its lines read. (Returning [].)")
@@ -40,16 +25,56 @@ func read_txtfile_lines_as_array(file_path: String) -> Array[String]:
 	
 	return(text_lines)
 
-func write_txtfile_from_array_of_lines(file_path: String, text_lines: Array[String]) -> void:
+func read_txtfile_firstline(file_path: String) -> String:
+	if not FileAccess.file_exists(file_path):
+		push_error("A text file: \"", file_path, "\" couldn't be found to have its first line read. (Returning \"\".)")
+		return("")
+	
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
+	if not file.is_open():
+		push_error("A text file: \"", file_path, "\" which was successfully found couldn't be opened to have its first line read. ",
+		"(FileAccess open error:) ", str(FileAccess.get_open_error()), " (Returning \"\".)")
+		return("")
+	
+	var line = file.get_line()
+	file.close()
+	return(line)
+
+func read_txtfile_remaining_of_line_starting_with(file_path: String, substring: String) -> Array:
+	if not FileAccess.file_exists(file_path):
+		push_error("A text file: \"", file_path, "\" couldn't be found to have its lines read. (Returning \"\".)")
+		return(["", -1])
+	
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
+	if not file.is_open():
+		push_error("A text file: \"", file_path, "\" which was successfully found couldn't be opened to have its lines read. ",
+		"(FileAccess open error:) ", str(FileAccess.get_open_error()), " (Returning \"\".)")
+		return(["", -1])
+	
+	var line: String = ""
+	var line_number: int = 0
+	while file.eof_reached() == false:
+		line = file.get_line()
+		line_number += 1
+		if line.substr(0, substring.length()) == substring:
+			# A line beginning with the substring was found.
+			file.close()
+			return([line_number, line.substr(substring.length())])
+	
+	# A line which begins with the substring was not found.
+	file.close()
+	return(["", -1])
+
+func write_txtfile_from_array_of_lines(file_path: String, text_lines: Array[String]) -> bool:
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
 	if not file.is_open():
 		push_error("A text file: \"", file_path, "\" to be written-to or created could not be opened. (FileAccess open error:) ", str(FileAccess.get_open_error()))
-		return
+		return(true)
 	
 	for line in text_lines:
 		file.store_line(line)
 	file.close()
-	return
+	return(false)
 
 func sort_txtfile_contents_alphabetically(file_path: String, skipped_lines: int, num_of_lines_in_group: int = 1) -> void:
 	var file_contents: Array[String] = read_txtfile_lines_as_array(file_path)
@@ -208,7 +233,7 @@ func first_unused_dir_alt(dir_opening_path: String, dir_ending_path: String = ""
 			return(dir_ending_path + " alt_" + str(attempt_number))
 
 
-# FILE ENSURANCE/CREATION FUNCTIONS:
+# FILE CREATION AND ENSURANCE FUNCTIONS:
 
 func ensure_essential_game_dirs_and_files_exist() -> bool:
 	var any_failures_encountered: bool = false
@@ -237,6 +262,33 @@ func ensure_essential_game_dirs_and_files_exist() -> bool:
 				push_error("Essential game file: \"", file_path, "\" could not be created/found.")
 	
 	return(any_failures_encountered)
+
+func create_world_dirs_and_files(world_dir_path: String, world_name: String, world_seed: String) -> bool:
+	if DirAccess.dir_exists_absolute(world_dir_path):
+		push_warning("Attempted to create a world's dirs and files, but the world directory already existed: ", world_dir_path, 
+		" (Aborting world creation to prevent messing up whatever's already at/in that directory.)")
+		return(true)
+	DirAccess.make_dir_absolute(world_dir_path)
+	if not DirAccess.dir_exists_absolute(world_dir_path):
+		push_error("Failed to create world directory: ", world_dir_path)
+		return(true)
+	DirAccess.make_dir_absolute(world_dir_path + "/chunks")
+	
+	var world_info_txtfile_lines: Array[String] = [
+		GlobalStuff.game_version_entire,
+		"world_name: " + world_name,
+		"favorited?: false",
+		"last_played_date_utc: unplayed",
+		"creation_date_utc: " + Time.get_datetime_string_from_system(true, true),
+		"launch_count: 0",
+		"",
+		"world_seed: " + world_seed,
+	]
+	if FileManager.write_txtfile_from_array_of_lines(world_dir_path + "/world_info.txt", world_info_txtfile_lines):
+		push_error("Encountered an error attempting to write the world_info file while creating world files for world dir: ", world_dir_path)
+		return(true)
+	
+	return(false)
 
 func ensure_world_dir_has_required_files(world_dir_path: String, world_info_input: Array[String] = []) -> bool:
 	if not DirAccess.dir_exists_absolute(world_dir_path):

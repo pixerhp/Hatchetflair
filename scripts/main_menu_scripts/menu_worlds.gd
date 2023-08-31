@@ -66,15 +66,7 @@ func confirm_new_world():
 	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, file_contents)
 	
 	# Set-up the new world's directories and files.
-	DirAccess.make_dir_recursive_absolute(world_dir_path)
-	DirAccess.make_dir_recursive_absolute(world_dir_path + "/chunks")
-	var world_info_lines: Array[String] = [
-		GlobalStuff.game_version_entire,
-		"creation date-time (utc): " + Time.get_datetime_string_from_system(true, true),
-		"last-played date-time (utc): unplayed",
-		"world generation seed: " + world_seed,
-	]
-	FileManager.write_txtfile_from_array_of_lines(world_dir_path + "/world_info.txt", world_info_lines)
+	FileManager.create_world_dirs_and_files(world_dir_path, world_name, world_seed)
 	
 	update_displayed_worlds_list_text()
 	popup.hide()
@@ -89,13 +81,10 @@ func open_edit_world_popup():
 		return
 	var selected_world_index: int = displayed_worlds_itemlist.get_selected_items()[0]
 	var worlds_list_lines: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
-	var world_info_lines: Array[String] = FileManager.read_txtfile_lines_as_array("user://storage/worlds/" + worlds_list_lines[(selected_world_index*2)+2] + "/world_info.txt")
-	if world_info_lines.size() < 4:
-		push_error("When opening the edit world popup, the file contents of world_info.txt were not long enough to have a seed. (Aborted popup.)")
-		return
+	var world_info_file_path: String = "user://storage/worlds/" + worlds_list_lines[(selected_world_index*2)+2] + "/world_info.txt"
 	var popup: Node = $EditWorldPopup
 	var world_name: String = worlds_list_lines[(selected_world_index*2)+1]
-	var world_seed: String = world_info_lines[3].substr(23)
+	var world_seed: String = FileManager.read_txtfile_remaining_of_line_starting_with(world_info_file_path, "world_seed: ")[1]
 	
 	popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + world_name + "\""
 	popup.get_node("WorldNameInput").text = world_name
@@ -109,7 +98,7 @@ func confirm_edit_world():
 	if displayed_worlds_itemlist.get_selected_items().is_empty():
 		push_warning("Attempted to finilize editing a saved world whilst none of the displayed worlds items were selected. (Did nothing.)")
 		return
-	var selected_server_index: int = displayed_worlds_itemlist.get_selected_items()[0]
+	var selected_server_index: int = displayed_worlds_itemlist.get_selected_items()[1]
 	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	
 	var popup: Node = $EditWorldPopup
