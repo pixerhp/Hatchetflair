@@ -98,7 +98,7 @@ func confirm_edit_world():
 	if displayed_worlds_itemlist.get_selected_items().is_empty():
 		push_warning("Attempted to finilize editing a saved world whilst none of the displayed worlds items were selected. (Did nothing.)")
 		return
-	var selected_server_index: int = displayed_worlds_itemlist.get_selected_items()[1]
+	var selected_server_index: int = displayed_worlds_itemlist.get_selected_items()[0]
 	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
 	
 	var popup: Node = $EditWorldPopup
@@ -115,13 +115,10 @@ func confirm_edit_world():
 	file_contents[(selected_server_index*2)+2] = new_world_dir_name
 	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, file_contents)
 	
-	# Determine what the contents of the world info text file should be after editing and replace its old contents.
-	file_contents = FileManager.read_txtfile_lines_as_array(original_world_dir + "/world_info.txt")
-	if file_contents.size() < 4:
-		push_error("When finalizing editing a world, the file contents of world_info.txt were not long enough to have a seed. (Skipping seed-related portion.)")
-	else:
-		file_contents[3] = "world generation seed: " + edited_seed
-		FileManager.write_txtfile_from_array_of_lines(original_world_dir + "/world_info.txt", file_contents)
+	
+	# Update the world's world_info text file.
+	FileManager.write_txtfile_replace_end_of_line_starting_with(original_world_dir + "/world_info.txt", "world_name: ", edited_name)
+	FileManager.write_txtfile_replace_end_of_line_starting_with(original_world_dir + "/world_info.txt", "world_seed: ", edited_seed)
 	
 	if original_world_dir != new_world_dir:
 		DirAccess.rename_absolute(original_world_dir, new_world_dir)
