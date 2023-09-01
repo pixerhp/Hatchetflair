@@ -76,6 +76,22 @@ func write_txtfile_from_array_of_lines(file_path: String, text_lines: Array[Stri
 	file.close()
 	return(false)
 
+func write_txtfile_replace_end_of_line_starting_with(file_path: String, substring: String, replacement: String) -> bool:
+	if not FileAccess.file_exists(file_path):
+		push_error("A text file: \"", file_path, "\" couldn't be found to be read and written to. (Aborting.)")
+		return(true)
+	
+	var line_to_replace: int = read_txtfile_remaining_of_line_starting_with(file_path, substring)[0]
+	if line_to_replace == -1:
+		push_error("The line_starting substring: \"", substring, "\" could not be found in: ", file_path, " (Aborting.)")
+		return(true)
+	
+	var txtfile_lines: Array[String] = read_txtfile_lines_as_array(file_path)
+	txtfile_lines[line_to_replace - 1] = substring + replacement
+	write_txtfile_from_array_of_lines(file_path, txtfile_lines)
+	
+	return(false)
+
 func sort_txtfile_contents_alphabetically(file_path: String, skipped_lines: int, num_of_lines_in_group: int = 1) -> void:
 	var file_contents: Array[String] = read_txtfile_lines_as_array(file_path)
 	if file_contents.size() == 0:
