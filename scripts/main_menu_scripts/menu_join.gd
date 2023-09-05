@@ -31,6 +31,9 @@ func join_server_by_index(servers_list_index: int = -1) -> void:
 	return
 
 func join_server_by_ip(server_ip: String):
+	if server_ip == "":
+		push_warning("Attempted to join server by ip, but the ip was a blank string.")
+		return
 	NetworkManager.start_game(true, false, true, server_ip)
 	return
 

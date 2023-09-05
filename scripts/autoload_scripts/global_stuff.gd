@@ -9,7 +9,7 @@ const game_version_entire: String = game_version_phase + " v" + game_version_eng
 
 # Alters the game window's title.
 var is_game_modded: bool = false
-var is_current_version_indev: bool = true
+var is_current_version_indev: bool = false
 
 var all_global_stuff_initialized: bool = false
 

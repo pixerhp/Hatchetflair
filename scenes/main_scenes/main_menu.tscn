@@ -675,8 +675,8 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
-text = "[center]Adjustable settings are not yet supported 
-as the game is still in extremely early stages.[/center]"
+text = "[center]Adjustable settings and hotkeys
+are not supported yet.[/center]"
 fit_content = true
 autowrap_mode = 0
 
