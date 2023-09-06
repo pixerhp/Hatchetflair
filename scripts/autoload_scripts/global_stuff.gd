@@ -13,28 +13,6 @@ var is_current_version_indev: bool = true
 
 var all_global_stuff_initialized: bool = false
 
-# Useful for getting and using certain parts of a version_entire from a file/other.
-func unconcat_ver_entire(version_entire: String) -> Array[String]:
-	# No need to do anything if the input is blank.
-	if version_entire == "":
-		return([])
-	
-	var version_components: Array[String] = []
-	var remaining_version_string: String = version_entire
-	
-	# Get the phase and then remove it (and also " v") from what's left to search through.
-	version_components.append(remaining_version_string.substr(0, remaining_version_string.find(" ")))
-	remaining_version_string = remaining_version_string.erase(0, remaining_version_string.find(" ") + 2)
-	
-	# Get every number preceeded by a period, and then the remaining string if there's anything past the last period.
-	while remaining_version_string.find(".") != -1:
-		version_components.append(remaining_version_string.substr(0, remaining_version_string.find(".")))
-		remaining_version_string = remaining_version_string.erase(0, remaining_version_string.find(".") + 1)
-	if remaining_version_string != "":
-		version_components.append(remaining_version_string)
-	
-	return(version_components)
-
 
 func _enter_tree() -> void:
 	randomize() # Randomizes the global rng as it's a good place to do it.
