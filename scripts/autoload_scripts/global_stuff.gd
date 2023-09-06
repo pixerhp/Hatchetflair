@@ -3,13 +3,13 @@ extends Node
 const game_name: String = "Hatchetflair"
 const game_version_phase: String = "pre-game"
 const game_version_engine: String = "1"
-const game_version_major: String = "8"
+const game_version_major: String = "9"
 const game_version_minor: String = "0"
 const game_version_entire: String = game_version_phase + " v" + game_version_engine + "." + game_version_major + "." + game_version_minor
 
 # Alters the game window's title.
 var is_game_modded: bool = false
-var is_current_version_indev: bool = false
+var is_current_version_indev: bool = true
 
 var all_global_stuff_initialized: bool = false
 
