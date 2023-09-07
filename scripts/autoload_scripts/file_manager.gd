@@ -1,7 +1,7 @@
 extends Node
 
 
-# FILE INTERACTION FUNCTIONS:
+# GENERAL FILE INTERACTION FUNCTIONS:
 
 func read_txtfile_lines_as_array(file_path: String) -> Array[String]:
 	if not FileAccess.file_exists(file_path):
@@ -249,10 +249,11 @@ func first_unused_dir_alt(dir_opening_path: String, dir_ending_path: String = ""
 			return(dir_ending_path + " alt_" + str(attempt_number))
 
 
+
 # FILE CREATION AND ENSURANCE FUNCTIONS:
 
-func ensure_essential_game_dirs_and_files_exist() -> bool:
-	var any_failures_encountered: bool = false
+func ensure_essential_game_dirs_and_files_exist() -> Error:
+	var err: Error = OK
 	
 	var directories_to_ensure: Array[String] = [
 		"user://storage",
@@ -261,8 +262,8 @@ func ensure_essential_game_dirs_and_files_exist() -> bool:
 	for dir in directories_to_ensure:
 		DirAccess.make_dir_recursive_absolute(dir)
 		if not DirAccess.dir_exists_absolute(dir):
-			any_failures_encountered = true
-			push_error("Essential game directory: \"", dir, "\" could not be created/found.")
+			push_error("Essential game directory: \"", dir, "\" could not be found/created.")
+			err = FAILED
 	
 	# If an essential file doesn't already exist, creates it blank except for version_entire in its first text line.
 	var file_paths_to_ensure: Array[String] = [
@@ -274,10 +275,10 @@ func ensure_essential_game_dirs_and_files_exist() -> bool:
 		if not FileAccess.file_exists(file_path):
 			write_txtfile_from_array_of_lines(file_path, [GlobalStuff.game_version_entire])
 			if not FileAccess.file_exists(file_path):
-				any_failures_encountered = true
-				push_error("Essential game file: \"", file_path, "\" could not be created/found.")
+				push_error("Essential game file: \"", file_path, "\" could not be found/created.")
+				err = FAILED
 	
-	return(any_failures_encountered)
+	return(err)
 
 func create_world_dirs_and_files(world_dir_path: String, world_name: String, world_seed: String) -> bool:
 	if DirAccess.dir_exists_absolute(world_dir_path):

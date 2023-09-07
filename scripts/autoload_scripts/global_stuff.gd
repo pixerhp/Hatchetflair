@@ -17,7 +17,7 @@ var all_global_stuff_initialized: bool = false
 func _enter_tree() -> void:
 	randomize() # Randomizes the global rng as it's a good place to do it.
 	setup_game_window_title()
-	if FileManager.ensure_essential_game_dirs_and_files_exist():
+	if FileManager.ensure_essential_game_dirs_and_files_exist() == FAILED:
 		push_error("GlobalStuff encountered error(s) while attempting to ensure some or all essential dirs/files.")
 		get_tree().quit()
 	
