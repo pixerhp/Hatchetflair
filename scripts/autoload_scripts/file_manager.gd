@@ -51,6 +51,24 @@ func delete_dir_contents(dir_path: String, move_to_os_trash: bool) -> Error:
 			return FAILED
 		else:
 			return OK
+func delete_dirs(dir_paths: Array[String], move_to_os_trash: bool) -> Error:
+	var any_errors_occured: bool = false
+	for path in dir_paths:
+		if delete_dir(path, move_to_os_trash) != OK:
+			any_errors_occured = true
+	if any_errors_occured:
+		return FAILED
+	else:
+		return OK
+func delete_dirs_contents(dir_paths: Array[String], move_to_os_trash: bool) -> Error:
+	var any_errors_occured: bool = false
+	for path in dir_paths:
+		if delete_dir_contents(path, move_to_os_trash) != OK:
+			any_errors_occured = true
+	if any_errors_occured:
+		return FAILED
+	else:
+		return OK
 
 func copy_dir_to_path(from_dir: String, target_dir: String, empty_target_dir_first_if_exists: bool) -> Error:
 	var err: Error
