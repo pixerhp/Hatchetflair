@@ -1,9 +1,20 @@
 extends Node
 
 # Contents:
+# - Global constants
 # - Basic dirs & files interactions
 # - File reading and writing
 # - File creating and ensurance
+
+
+# GLOBAL CONSTANTS:
+
+# Paths for directories:
+const PATH_STORAGE: String = "user://storage"
+const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
+const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
+# Paths for folders:
+const PATH_SERVERS: String = PATH_STORAGE + "/servers_list.cfg"
 
 
 # BASIC DIRS & FILES INTERACTIONS:
