@@ -137,29 +137,41 @@ func get_available_dirname(path_opening: String, dir_name: String, start_with_al
 		return dir_name
 	else:
 		return dir_name + " alt" + str(alt_num)
-
-# Note: You should *not* include a "/" at the end of the opening path if you input both paths.
-func first_unused_dir_alt(dir_opening_path: String, dir_ending_path: String = "") -> String:
-	if dir_ending_path == "":
-		# Find and output the first usable alt of the full path.
-		if not DirAccess.dir_exists_absolute(dir_opening_path):
-			return(dir_opening_path)
-		else:
-			# The simple solution is already used, so find an alternate directory name which isn't taken.
-			var attempt_number: int = 1
-			while(DirAccess.dir_exists_absolute(dir_opening_path + " alt_" + str(attempt_number))):
-					attempt_number += 1
-			return(dir_opening_path + " alt_" + str(attempt_number))
+func get_available_dirpath(dir_path: String, start_with_alt0: bool) -> String:
+	var sep_index: int = dir_path.rfind('/')
+	var path_opening: String = dir_path.substr(0, sep_index + 1)
+	var dir_name: String = dir_path.substr(sep_index + 1)
+	return path_opening + get_available_dirname(path_opening, dir_name, start_with_alt0)
+func get_available_filename(path_opening: String, file_name: String, start_with_alt0: bool) -> String:
+	var list_of_file_names: PackedStringArray = DirAccess.get_files_at(path_opening)
+	var period_index: int = file_name.rfind('.')
+	var name_without_extension: String = file_name.substr(0, period_index)
+	var name_extension: String = file_name.substr(period_index)
+	var alt_num: int = list_of_file_names.size()
+	if start_with_alt0:
+		for index in list_of_file_names.size():
+			if not list_of_file_names.has(name_without_extension + " alt" + str(index) + name_extension):
+				alt_num = index
+				break
 	else:
-		# Find the first usable alt of the full path, and output only the segment at end of said path.
-		if not DirAccess.dir_exists_absolute(dir_opening_path + "/" + dir_ending_path):
-			return(dir_ending_path)
-		else:
-		# The simple solution is already used, so find an alternate directory name which isn't taken.
-			var attempt_number: int = 1
-			while(DirAccess.dir_exists_absolute(dir_opening_path + "/" + dir_ending_path + " alt_" + str(attempt_number))):
-					attempt_number += 1
-			return(dir_ending_path + " alt_" + str(attempt_number))
+		for index in list_of_file_names.size():
+			if index == 0:
+				if not list_of_file_names.has(file_name):
+					alt_num = index
+					break
+			else:
+				if not list_of_file_names.has(name_without_extension + " alt" + str(index) + name_extension):
+					alt_num = index
+					break
+	if (not start_with_alt0) and (alt_num == 0):
+		return file_name
+	else:
+		return name_without_extension + " alt" + str(alt_num) + name_extension
+func get_available_filepath(file_path: String, start_with_alt0: bool) -> String:
+	var sep_index: int = file_path.rfind('/')
+	var path_opening: String = file_path.substr(0, sep_index + 1)
+	var file_name: String = file_path.substr(sep_index + 1)
+	return path_opening + get_available_filename(path_opening, file_name, start_with_alt0)
 
 
 # FILE READING AND WRITING:
