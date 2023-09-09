@@ -115,6 +115,28 @@ func copy_dir_contents_into_dir(from_dir_path: String, target_dir_path: String, 
 	else:
 		return OK
 
+func get_available_dirname(path_opening: String, dir_name: String, start_with_alt0: bool) -> String:
+	var list_of_dir_names: PackedStringArray = DirAccess.get_directories_at(path_opening)
+	var alt_num: int = list_of_dir_names.size()
+	if start_with_alt0:
+		for index in list_of_dir_names.size():
+			if not list_of_dir_names.has(dir_name + " alt" + str(index)):
+				alt_num = index
+				break
+	else:
+		for index in list_of_dir_names.size():
+			if index == 0:
+				if not list_of_dir_names.has(dir_name):
+					alt_num = index
+					break
+			else:
+				if not list_of_dir_names.has(dir_name + " alt" + str(index)):
+					alt_num = index
+					break
+	if (not start_with_alt0) and (alt_num == 0):
+		return dir_name
+	else:
+		return dir_name + " alt" + str(alt_num)
 
 # Note: You should *not* include a "/" at the end of the opening path if you input both paths.
 func first_unused_dir_alt(dir_opening_path: String, dir_ending_path: String = "") -> String:

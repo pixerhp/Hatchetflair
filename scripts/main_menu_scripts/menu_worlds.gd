@@ -156,7 +156,7 @@ func confirm_delete_world():
 		return 
 	
 	# Delete the world's directory/folder and then edit the worlds list txtfile (second then first line due to array resizing.)
-	if FileManager.delete_dir(dir_to_delete):
+	if FileManager.delete_dir(dir_to_delete, false):
 		push_warning("An error was encountered deleting a world's directory: ", dir_to_delete)
 	worlds_list_lines.remove_at(world_index+1)
 	worlds_list_lines.remove_at(world_index)
