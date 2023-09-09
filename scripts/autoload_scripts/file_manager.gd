@@ -1,7 +1,129 @@
 extends Node
 
+# Contents:
+# - Basic dirs and files interactions
+# - File reading and writing
+# - File creating and ensurance
 
-# GENERAL FILE INTERACTION FUNCTIONS:
+
+# BASIC DIRS AND FILES INTERACTIONS:
+
+func delete_dir(dir_path: String, move_to_os_trash: bool) -> Error:
+	if move_to_os_trash:
+		var err: Error = OS.move_to_trash(ProjectSettings.globalize_path(dir_path))
+		push_error("Failed to move dir into OS trash: ", dir_path, " (Error val:) ", err)
+		return err
+	else:
+		delete_dir_contents(dir_path, false)
+		var err: Error = DirAccess.remove_absolute(dir_path)
+		if err != OK:
+			push_error("Failed to remove dir at path: ", dir_path, " (Error val:) ", err)
+			return FAILED
+		return OK
+func delete_dir_contents(dir_path: String, move_to_os_trash: bool) -> Error:
+	var err: Error
+	var any_errors_occured: bool = false
+	if move_to_os_trash:
+		for nested_dir_name in DirAccess.get_directories_at(dir_path):
+			err = OS.move_to_trash(ProjectSettings.globalize_path(dir_path))
+			if err != OK:
+				push_error("Failed to move dir into OS trash: ", dir_path + "/" + nested_dir_name, " (Error val:) ", err)
+				any_errors_occured = true
+		for file_name in DirAccess.get_files_at(dir_path):
+			err = OS.move_to_trash(ProjectSettings.globalize_path(dir_path + "/" + file_name))
+			if err != OK:
+				push_error("Failed to move file into OS trash: ", dir_path + "/" + file_name, " (Error val:) ", err)
+				any_errors_occured = true
+		if any_errors_occured:
+			return FAILED
+		else:
+			return OK
+	else:
+		for nested_dir_name in DirAccess.get_directories_at(dir_path):
+			if delete_dir(dir_path + "/" + nested_dir_name, false) != OK:
+				any_errors_occured = true
+		for file_name in DirAccess.get_files_at(dir_path):
+			err = DirAccess.remove_absolute(dir_path + "/" + file_name)
+			if err != OK:
+				push_error("Failed to delete file at path: ", dir_path + "/" + file_name, " (Error val:) ", err)
+				any_errors_occured = true
+		if any_errors_occured:
+			return FAILED
+		else:
+			return OK
+
+func copy_dir_to_path(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
+	if not DirAccess.dir_exists_absolute(from_dir):
+		push_error("Found that the \"from\" directory specified doesn't exist: ", from_dir)
+		return true
+	
+	if replace_if_already_exists:
+		# Empty out the destination directory for replacement.
+		if DirAccess.dir_exists_absolute(target_dir):
+			delete_dir_contents(target_dir)
+	else:
+		# Find an available destination directory name and create the directory.
+		target_dir = first_unused_dir_alt(target_dir)
+		DirAccess.make_dir_recursive_absolute(target_dir)
+		if not DirAccess.dir_exists_absolute(target_dir):
+			push_error("Failed to create or find dir: \"", target_dir, " (Abandoning copying.)")
+			return(true)
+	
+	# Copy all of the contents into the destination directory.
+	if copy_dir_contents_into_dir(from_dir, target_dir, false):
+		push_warning("Deeper-nested-layer of directory copying encountered an error. (Returning error.")
+		return(true)
+	
+	return(false)
+
+func copy_dir_contents_into_dir(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
+	if not DirAccess.dir_exists_absolute(from_dir):
+		push_error("Found that the \"from\" directory specified doesn't exist: ", from_dir)
+		return true
+	if not DirAccess.dir_exists_absolute(target_dir):
+		push_error("Found that the \"target\" directory specified doesn't exist: ", target_dir)
+		return true
+	
+	if replace_if_already_exists:
+		delete_dir_contents(target_dir)
+	
+	# Copy all of the (non-directory) files.
+	for file in DirAccess.get_files_at(from_dir):
+		DirAccess.copy_absolute(from_dir + "/" + file, target_dir + "/" + file)
+	
+	# Copy all of the directories and their files.
+	for sub_dir in DirAccess.get_directories_at(from_dir):
+		if copy_dir_to_path(from_dir + "/" + sub_dir, target_dir + "/" + sub_dir, false):
+			push_warning("Deeper-nested-layer of directory copying encountered an error. (Returning error.")
+			return(true)
+	
+	return(false)
+
+# Note: You should *not* include a "/" at the end of the opening path if you input both paths.
+func first_unused_dir_alt(dir_opening_path: String, dir_ending_path: String = "") -> String:
+	if dir_ending_path == "":
+		# Find and output the first usable alt of the full path.
+		if not DirAccess.dir_exists_absolute(dir_opening_path):
+			return(dir_opening_path)
+		else:
+			# The simple solution is already used, so find an alternate directory name which isn't taken.
+			var attempt_number: int = 1
+			while(DirAccess.dir_exists_absolute(dir_opening_path + " alt_" + str(attempt_number))):
+					attempt_number += 1
+			return(dir_opening_path + " alt_" + str(attempt_number))
+	else:
+		# Find the first usable alt of the full path, and output only the segment at end of said path.
+		if not DirAccess.dir_exists_absolute(dir_opening_path + "/" + dir_ending_path):
+			return(dir_ending_path)
+		else:
+		# The simple solution is already used, so find an alternate directory name which isn't taken.
+			var attempt_number: int = 1
+			while(DirAccess.dir_exists_absolute(dir_opening_path + "/" + dir_ending_path + " alt_" + str(attempt_number))):
+					attempt_number += 1
+			return(dir_ending_path + " alt_" + str(attempt_number))
+
+
+# FILE READING AND WRITING:
 
 func read_txtfile_lines_as_array(file_path: String) -> Array[String]:
 	if not FileAccess.file_exists(file_path):
@@ -145,112 +267,8 @@ func sort_txtfile_contents_alphabetically(file_path: String, skipped_lines: int,
 	write_txtfile_from_array_of_lines(file_path, file_contents)
 	return
 
-func delete_dir(dir: String) -> bool:
-	if not DirAccess.dir_exists_absolute(dir):
-		push_error("Found that the directory specified didn't exist: ", dir)
-		return true
-	
-	if delete_dir_contents(dir):
-		push_error("Deeper-nested-layer of directory deletion encountered an error attempting to delete the contents of: ", dir, " (Abandoning deletion.)")
-		return true
-	
-	DirAccess.remove_absolute(dir)
-	if DirAccess.dir_exists_absolute(dir):
-		push_error("The contents of: ", dir, " were successfully removed, but said directory itself persisted through attempted deletion.")
-		return true
-	
-	return false
 
-func delete_dir_contents(dir: String) -> bool:
-	if not DirAccess.dir_exists_absolute(dir):
-		push_error("Found that the directory specified didn't exist: ", dir)
-		return true
-	
-	# Delete the contents of all deeper nested directories and all of their files first.
-	for deeper_nested_dir in DirAccess.get_directories_at(dir):
-		if delete_dir(dir + "/" + deeper_nested_dir):
-			push_error("Deeper-nested-layer of directory deletion encountered an error attempting to delete directory: ", dir, "/", deeper_nested_dir)
-			return true
-	
-	# Delete all of the (non-directory) files in the current directory.
-	for file in DirAccess.get_files_at(dir):
-		DirAccess.remove_absolute(dir + "/" + file)
-	
-	return false
-
-func copy_dir_to_path(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
-	if not DirAccess.dir_exists_absolute(from_dir):
-		push_error("Found that the \"from\" directory specified doesn't exist: ", from_dir)
-		return true
-	
-	if replace_if_already_exists:
-		# Empty out the destination directory for replacement.
-		if DirAccess.dir_exists_absolute(target_dir):
-			delete_dir_contents(target_dir)
-	else:
-		# Find an available destination directory name and create the directory.
-		target_dir = first_unused_dir_alt(target_dir)
-		DirAccess.make_dir_recursive_absolute(target_dir)
-		if not DirAccess.dir_exists_absolute(target_dir):
-			push_error("Failed to create or find dir: \"", target_dir, " (Abandoning copying.)")
-			return(true)
-	
-	# Copy all of the contents into the destination directory.
-	if copy_dir_contents_into_dir(from_dir, target_dir, false):
-		push_warning("Deeper-nested-layer of directory copying encountered an error. (Returning error.")
-		return(true)
-	
-	return(false)
-
-func copy_dir_contents_into_dir(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
-	if not DirAccess.dir_exists_absolute(from_dir):
-		push_error("Found that the \"from\" directory specified doesn't exist: ", from_dir)
-		return true
-	if not DirAccess.dir_exists_absolute(target_dir):
-		push_error("Found that the \"target\" directory specified doesn't exist: ", target_dir)
-		return true
-	
-	if replace_if_already_exists:
-		delete_dir_contents(target_dir)
-	
-	# Copy all of the (non-directory) files.
-	for file in DirAccess.get_files_at(from_dir):
-		DirAccess.copy_absolute(from_dir + "/" + file, target_dir + "/" + file)
-	
-	# Copy all of the directories and their files.
-	for sub_dir in DirAccess.get_directories_at(from_dir):
-		if copy_dir_to_path(from_dir + "/" + sub_dir, target_dir + "/" + sub_dir, false):
-			push_warning("Deeper-nested-layer of directory copying encountered an error. (Returning error.")
-			return(true)
-	
-	return(false)
-
-# Note: You should *not* include a "/" at the end of the opening path if you input both paths.
-func first_unused_dir_alt(dir_opening_path: String, dir_ending_path: String = "") -> String:
-	if dir_ending_path == "":
-		# Find and output the first usable alt of the full path.
-		if not DirAccess.dir_exists_absolute(dir_opening_path):
-			return(dir_opening_path)
-		else:
-			# The simple solution is already used, so find an alternate directory name which isn't taken.
-			var attempt_number: int = 1
-			while(DirAccess.dir_exists_absolute(dir_opening_path + " alt_" + str(attempt_number))):
-					attempt_number += 1
-			return(dir_opening_path + " alt_" + str(attempt_number))
-	else:
-		# Find the first usable alt of the full path, and output only the segment at end of said path.
-		if not DirAccess.dir_exists_absolute(dir_opening_path + "/" + dir_ending_path):
-			return(dir_ending_path)
-		else:
-		# The simple solution is already used, so find an alternate directory name which isn't taken.
-			var attempt_number: int = 1
-			while(DirAccess.dir_exists_absolute(dir_opening_path + "/" + dir_ending_path + " alt_" + str(attempt_number))):
-					attempt_number += 1
-			return(dir_ending_path + " alt_" + str(attempt_number))
-
-
-
-# FILE CREATION AND ENSURANCE FUNCTIONS:
+# FILE CREATING AND ENSURANCE:
 
 func ensure_essential_game_dirs_and_files_exist() -> Error:
 	var err: Error = OK
