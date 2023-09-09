@@ -31,6 +31,15 @@ func delete_dir(dir_path: String, move_to_os_trash: bool) -> Error:
 			push_error("Failed to remove dir at path: ", dir_path, " (Error val:) ", err)
 			return FAILED
 		return OK
+func delete_dirs(dir_paths: Array[String], move_to_os_trash: bool) -> Error:
+	var any_errors_occured: bool = false
+	for path in dir_paths:
+		if delete_dir(path, move_to_os_trash) != OK:
+			any_errors_occured = true
+	if any_errors_occured:
+		return FAILED
+	else:
+		return OK
 func delete_dir_contents(dir_path: String, move_to_os_trash: bool) -> Error:
 	var err: Error
 	var any_errors_occured: bool = false
@@ -62,15 +71,6 @@ func delete_dir_contents(dir_path: String, move_to_os_trash: bool) -> Error:
 			return FAILED
 		else:
 			return OK
-func delete_dirs(dir_paths: Array[String], move_to_os_trash: bool) -> Error:
-	var any_errors_occured: bool = false
-	for path in dir_paths:
-		if delete_dir(path, move_to_os_trash) != OK:
-			any_errors_occured = true
-	if any_errors_occured:
-		return FAILED
-	else:
-		return OK
 func delete_dirs_contents(dir_paths: Array[String], move_to_os_trash: bool) -> Error:
 	var any_errors_occured: bool = false
 	for path in dir_paths:
@@ -114,6 +114,7 @@ func copy_dir_contents_into_dir(from_dir_path: String, target_dir_path: String, 
 		return FAILED
 	else:
 		return OK
+
 
 # Note: You should *not* include a "/" at the end of the opening path if you input both paths.
 func first_unused_dir_alt(dir_opening_path: String, dir_ending_path: String = "") -> String:
