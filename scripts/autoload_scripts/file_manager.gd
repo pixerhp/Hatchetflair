@@ -1,12 +1,12 @@
 extends Node
 
 # Contents:
-# - Basic dirs and files interactions
+# - Basic dirs & files interactions
 # - File reading and writing
 # - File creating and ensurance
 
 
-# BASIC DIRS AND FILES INTERACTIONS:
+# BASIC DIRS & FILES INTERACTIONS:
 
 func delete_dir(dir_path: String, move_to_os_trash: bool) -> Error:
 	if move_to_os_trash:
@@ -52,52 +52,39 @@ func delete_dir_contents(dir_path: String, move_to_os_trash: bool) -> Error:
 		else:
 			return OK
 
-func copy_dir_to_path(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
-	if not DirAccess.dir_exists_absolute(from_dir):
-		push_error("Found that the \"from\" directory specified doesn't exist: ", from_dir)
-		return true
-	
-	if replace_if_already_exists:
-		# Empty out the destination directory for replacement.
-		if DirAccess.dir_exists_absolute(target_dir):
-			delete_dir_contents(target_dir)
+func copy_dir_to_path(from_dir: String, target_dir: String, empty_target_dir_first_if_exists: bool) -> Error:
+	var err: Error
+	if DirAccess.dir_exists_absolute(target_dir):
+		if empty_target_dir_first_if_exists:
+			delete_dir_contents(target_dir, false)
 	else:
-		# Find an available destination directory name and create the directory.
-		target_dir = first_unused_dir_alt(target_dir)
-		DirAccess.make_dir_recursive_absolute(target_dir)
-		if not DirAccess.dir_exists_absolute(target_dir):
-			push_error("Failed to create or find dir: \"", target_dir, " (Abandoning copying.)")
-			return(true)
-	
-	# Copy all of the contents into the destination directory.
-	if copy_dir_contents_into_dir(from_dir, target_dir, false):
-		push_warning("Deeper-nested-layer of directory copying encountered an error. (Returning error.")
-		return(true)
-	
-	return(false)
-
-func copy_dir_contents_into_dir(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
-	if not DirAccess.dir_exists_absolute(from_dir):
-		push_error("Found that the \"from\" directory specified doesn't exist: ", from_dir)
-		return true
-	if not DirAccess.dir_exists_absolute(target_dir):
-		push_error("Found that the \"target\" directory specified doesn't exist: ", target_dir)
-		return true
-	
-	if replace_if_already_exists:
-		delete_dir_contents(target_dir)
-	
-	# Copy all of the (non-directory) files.
-	for file in DirAccess.get_files_at(from_dir):
-		DirAccess.copy_absolute(from_dir + "/" + file, target_dir + "/" + file)
-	
-	# Copy all of the directories and their files.
-	for sub_dir in DirAccess.get_directories_at(from_dir):
-		if copy_dir_to_path(from_dir + "/" + sub_dir, target_dir + "/" + sub_dir, false):
-			push_warning("Deeper-nested-layer of directory copying encountered an error. (Returning error.")
-			return(true)
-	
-	return(false)
+		err = DirAccess.make_dir_recursive_absolute(target_dir)
+		if err != OK:
+			push_error("Failed to create dir at path: ", target_dir, " (Error val:) ", err)
+			return FAILED
+	if copy_dir_contents_into_dir(from_dir, target_dir, false) != OK:
+		return FAILED
+	else:
+		return OK
+func copy_dir_contents_into_dir(from_dir_path: String, target_dir_path: String, empty_target_dir_first: bool) -> Error:
+	if empty_target_dir_first:
+		if delete_dir_contents(target_dir_path, false) != OK:
+			return FAILED
+	var err: Error
+	var any_errors_occured: bool = false
+	for file_name in DirAccess.get_files_at(from_dir_path):
+		err = DirAccess.copy_absolute(from_dir_path + "/" + file_name, target_dir_path + "/" + file_name)
+		if err != OK:
+			push_error("Failed to copy file: ", from_dir_path + "/" + file_name, 
+			" to: ", target_dir_path + "/" + file_name, " (Error val:) ", err)
+			any_errors_occured = true
+	for nested_dir_name in DirAccess.get_directories_at(from_dir_path):
+		if copy_dir_to_path(from_dir_path + "/" + nested_dir_name, target_dir_path + "/" + nested_dir_name, false) != OK:
+			any_errors_occured = true
+	if any_errors_occured:
+		return FAILED
+	else:
+		return OK
 
 # Note: You should *not* include a "/" at the end of the opening path if you input both paths.
 func first_unused_dir_alt(dir_opening_path: String, dir_ending_path: String = "") -> String:
