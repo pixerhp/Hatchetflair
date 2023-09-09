@@ -147,11 +147,11 @@ func sort_txtfile_contents_alphabetically(file_path: String, skipped_lines: int,
 
 func delete_dir(dir: String) -> bool:
 	if not DirAccess.dir_exists_absolute(dir):
-		push_error("The \"delete_dir()\" func found that the directory specified didn't exist: ", dir)
+		push_error("Found that the directory specified didn't exist: ", dir)
 		return true
 	
 	if delete_dir_contents(dir):
-		push_error("An error was enountered by deeper nested \"delete_dir_contents()\" whilst deleting the contents of: ", dir, " (Abandoning deletion.)")
+		push_error("Deeper-nested-layer of directory deletion encountered an error attempting to delete the contents of: ", dir, " (Abandoning deletion.)")
 		return true
 	
 	DirAccess.remove_absolute(dir)
@@ -163,13 +163,13 @@ func delete_dir(dir: String) -> bool:
 
 func delete_dir_contents(dir: String) -> bool:
 	if not DirAccess.dir_exists_absolute(dir):
-		push_error("The \"delete_dir_contents()\" func found that the directory specified didn't exist: ", dir)
+		push_error("Found that the directory specified didn't exist: ", dir)
 		return true
 	
 	# Delete the contents of all deeper nested directories and all of their files first.
 	for deeper_nested_dir in DirAccess.get_directories_at(dir):
 		if delete_dir(dir + "/" + deeper_nested_dir):
-			push_error("The deeper nested \"delete_dir()\" func encountered an error deleting directory: ", dir, "/", deeper_nested_dir)
+			push_error("Deeper-nested-layer of directory deletion encountered an error attempting to delete directory: ", dir, "/", deeper_nested_dir)
 			return true
 	
 	# Delete all of the (non-directory) files in the current directory.
@@ -178,9 +178,9 @@ func delete_dir_contents(dir: String) -> bool:
 	
 	return false
 
-func copy_dir_to_dir(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
+func copy_dir_to_path(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
 	if not DirAccess.dir_exists_absolute(from_dir):
-		push_error("The \"copy_dir_to_dir()\" func found that the \"from\" directory specified doesn't exist: ", from_dir)
+		push_error("Found that the \"from\" directory specified doesn't exist: ", from_dir)
 		return true
 	
 	if replace_if_already_exists:
@@ -192,22 +192,22 @@ func copy_dir_to_dir(from_dir: String, target_dir: String, replace_if_already_ex
 		target_dir = first_unused_dir_alt(target_dir)
 		DirAccess.make_dir_recursive_absolute(target_dir)
 		if not DirAccess.dir_exists_absolute(target_dir):
-			push_error("The \"copy_dir_to_dir()\" func failed to create or find dir: \"", target_dir, " (Abandoning copying.)")
+			push_error("Failed to create or find dir: \"", target_dir, " (Abandoning copying.)")
 			return(true)
 	
 	# Copy all of the contents into the destination directory.
 	if copy_dir_contents_into_dir(from_dir, target_dir, false):
-		push_warning("A deeper nested layer of \"copy_dir_contents_into_dir()\" used by \"copy_dir_to_dir()\" encountered an error. (Returning error.")
+		push_warning("Deeper-nested-layer of directory copying encountered an error. (Returning error.")
 		return(true)
 	
 	return(false)
 
 func copy_dir_contents_into_dir(from_dir: String, target_dir: String, replace_if_already_exists: bool) -> bool:
 	if not DirAccess.dir_exists_absolute(from_dir):
-		push_error("The \"copy_dir_contents_into_dir()\" func found that the \"from\" directory specified doesn't exist: ", from_dir)
+		push_error("Found that the \"from\" directory specified doesn't exist: ", from_dir)
 		return true
 	if not DirAccess.dir_exists_absolute(target_dir):
-		push_error("The \"copy_dir_contents_into_dir()\" func found that the \"to\" directory specified doesn't exist: ", target_dir)
+		push_error("Found that the \"target\" directory specified doesn't exist: ", target_dir)
 		return true
 	
 	if replace_if_already_exists:
@@ -219,8 +219,8 @@ func copy_dir_contents_into_dir(from_dir: String, target_dir: String, replace_if
 	
 	# Copy all of the directories and their files.
 	for sub_dir in DirAccess.get_directories_at(from_dir):
-		if copy_dir_to_dir(from_dir + "/" + sub_dir, target_dir + "/" + sub_dir, false):
-			push_warning("A deeper nested layer of \"copy_dir_to_dir()\" used by \"copy_dir_contents_into_dir()\" encountered an error. (Returning error.")
+		if copy_dir_to_path(from_dir + "/" + sub_dir, target_dir + "/" + sub_dir, false):
+			push_warning("Deeper-nested-layer of directory copying encountered an error. (Returning error.")
 			return(true)
 	
 	return(false)

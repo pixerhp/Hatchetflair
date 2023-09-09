@@ -186,7 +186,7 @@ func _on_duplicate_world_pressed():
 	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, worlds_list_lines)
 	
 	# Create the copy's directory, and copy all of the contents of the original world's directory to it.
-	FileManager.copy_dir_to_dir(originals_dir_path, copys_dir_path, false)
+	FileManager.copy_dir_to_path(originals_dir_path, copys_dir_path, false)
 	
 	disable_world_selected_requiring_buttons()
 	update_displayed_worlds_list_text()
