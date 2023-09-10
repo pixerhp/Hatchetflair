@@ -1,12 +1,12 @@
 extends Node
 
 const GAME_NAME: String = "Hatchetflair"
-const V_ENGINE: String = "1"
+const V_MODEL: String = "1"
 const V_MAJOR: String = "0"
 const V_MINOR: String = "9"
 const V_PATCH: String = "0"
 const V_COUNT: String = "9" # n, where the current version is the nth version to exist.
-const V_ENTIRE: String = V_ENGINE + "_" + V_MAJOR + "_" + V_MINOR + "_" + V_PATCH + "_" + V_COUNT
+const V_ENTIRE: String = V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + "." + V_COUNT
 var TITLE_ENTIRE: String = ""
 
 # Alter the game's title.
@@ -40,7 +40,7 @@ func _initialize_title_entire() -> void:
 	if IS_INDEV:
 		v_exts += " [INDEV]"
 	TITLE_ENTIRE = (
-		GAME_NAME + name_exts + " v" + V_ENGINE + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
+		GAME_NAME + name_exts + " v" + V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
 	)
 	return
 
