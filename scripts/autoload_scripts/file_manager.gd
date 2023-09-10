@@ -183,7 +183,6 @@ func read_file_lines(file_path: String) -> PackedStringArray:
 		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
 		return []
 	return file.get_as_text().split("\n", false)
-
 func read_file_first_line(file_path: String) -> String:
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
 	var err: Error = FileAccess.get_open_error()
@@ -191,6 +190,24 @@ func read_file_first_line(file_path: String) -> String:
 		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
 		return ""
 	return(file.get_line())
+
+func write_file_from_lines(file_path: String, lines: PackedStringArray) -> Error:
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return err
+	file.store_string("\n".join(lines))
+	return OK
+func write_file_from_string(file_path: String, text: String) -> Error:
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return err
+	file.store_string(text)
+	return OK
+
 
 func read_txtfile_remaining_of_line_starting_with(file_path: String, substring: String) -> Array:
 	if not FileAccess.file_exists(file_path):
@@ -217,17 +234,6 @@ func read_txtfile_remaining_of_line_starting_with(file_path: String, substring: 
 	file.close()
 	return(["", -1])
 
-func write_txtfile_from_array_of_lines(file_path: String, text_lines: Array[String]) -> bool:
-	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
-	if not file.is_open():
-		push_error("A text file: \"", file_path, "\" to be written-to or created could not be opened. (FileAccess open error:) ", str(FileAccess.get_open_error()))
-		return(true)
-	
-	for line in text_lines:
-		file.store_line(line)
-	file.close()
-	return(false)
-
 func write_txtfile_replace_end_of_line_starting_with(file_path: String, substring: String, replacement: String) -> bool:
 	if not FileAccess.file_exists(file_path):
 		push_error("A text file: \"", file_path, "\" couldn't be found to be read and written to. (Aborting.)")
@@ -240,7 +246,7 @@ func write_txtfile_replace_end_of_line_starting_with(file_path: String, substrin
 	
 	var txtfile_lines: Array[String] = read_file_lines(file_path)
 	txtfile_lines[line_to_replace - 1] = substring + replacement
-	write_txtfile_from_array_of_lines(file_path, txtfile_lines)
+	write_file_from_lines(file_path, txtfile_lines)
 	
 	return(false)
 
@@ -294,7 +300,7 @@ func sort_txtfile_contents_alphabetically(file_path: String, skipped_lines: int,
 				else: # The last bit of concatenated info with nothing else surrounding it.
 					file_contents.append(current_concatenation)
 	
-	write_txtfile_from_array_of_lines(file_path, file_contents)
+	write_file_from_lines(file_path, file_contents)
 	return
 
 
@@ -321,7 +327,7 @@ func ensure_essential_game_dirs_and_files_exist() -> Error:
 	]
 	for file_path in file_paths_to_ensure:
 		if not FileAccess.file_exists(file_path):
-			write_txtfile_from_array_of_lines(file_path, [GlobalStuff.game_version_entire])
+			write_file_from_lines(file_path, [GlobalStuff.game_version_entire])
 			if not FileAccess.file_exists(file_path):
 				push_error("Essential game file: \"", file_path, "\" could not be found/created.")
 				err = FAILED
