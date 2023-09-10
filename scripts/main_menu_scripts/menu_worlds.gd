@@ -25,7 +25,7 @@ func start_world_by_index(worlds_list_index: int = -1):
 			push_error("No worlds list index was specified for starting playing a world. (Aborting starting world.)")
 			return
 	
-	var worlds_list_lines: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var worlds_list_lines: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
 	var world_dir_path: String = "user://storage/worlds/" + worlds_list_lines[(worlds_list_index * 2) + 2]
 	
 	start_world_by_specifics(world_dir_path, $WorldsScreenUI/Toggles/AllowJoining.button_pressed, $WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed)
@@ -61,7 +61,7 @@ func confirm_new_world():
 	var world_dir_path: String = "user://storage/worlds/" + world_dir_name
 	
 	# Determine the updated worlds-list txtfile contents and replace the old contents.
-	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var file_contents: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
 	file_contents.append(world_name)
 	file_contents.append(world_dir_name)
 	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, file_contents)
@@ -81,7 +81,7 @@ func open_edit_world_popup():
 		push_warning("Attempted to open the edit world popup despite no displayed world items being selected. (Aborted popup.)")
 		return
 	var selected_world_index: int = displayed_worlds_itemlist.get_selected_items()[0]
-	var worlds_list_lines: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var worlds_list_lines: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
 	var world_info_file_path: String = "user://storage/worlds/" + worlds_list_lines[(selected_world_index*2)+2] + "/world_info.txt"
 	var popup: Node = $EditWorldPopup
 	var world_name: String = worlds_list_lines[(selected_world_index*2)+1]
@@ -100,7 +100,7 @@ func confirm_edit_world():
 		push_warning("Attempted to finilize editing a saved world whilst none of the displayed worlds items were selected. (Did nothing.)")
 		return
 	var selected_server_index: int = displayed_worlds_itemlist.get_selected_items()[0]
-	var file_contents: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var file_contents: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
 	
 	var popup: Node = $EditWorldPopup
 	var edited_name: String = popup.get_node("WorldNameInput").text
@@ -137,7 +137,7 @@ func open_delete_world_popup():
 	if displayed_worlds_itemlist.get_selected_items().is_empty():
 		push_warning("Attempted to open the delete world popup despite no displayed world items being selected. (Did nothing.)")
 		return
-	var name_of_world_to_delete: String = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)[(displayed_worlds_itemlist.get_selected_items()[0]*2)+1]
+	var name_of_world_to_delete: String = FileManager.read_file_lines(worlds_list_txtfile_location)[(displayed_worlds_itemlist.get_selected_items()[0]*2)+1]
 	
 	$DeleteWorldPopup/PopupTitleText.text = "[center]Are you sure you want to delete world:\n\"" + name_of_world_to_delete +"\"?\n(This action cannot be undone.)[/center]"
 	$DeleteWorldPopup.show()
@@ -149,7 +149,7 @@ func confirm_delete_world():
 		push_warning("Attempted to finilize deleting a world, but none of the displayed items were selected. (Aborted deletion.)")
 		return
 	var world_index: int = (displayed_worlds_itemlist.get_selected_items()[0]*2)+1
-	var worlds_list_lines: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var worlds_list_lines: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
 	var dir_to_delete: String = "user://storage/worlds/" + worlds_list_lines[(displayed_worlds_itemlist.get_selected_items()[0]*2)+2]
 	if not DirAccess.dir_exists_absolute(dir_to_delete):
 		push_warning("Attempted to finilize deleting a world, but its directory could not be found: ", dir_to_delete, " (Aborting deletion.)")
@@ -173,7 +173,7 @@ func _on_duplicate_world_pressed():
 		push_warning("Attempted to duplicate a world, but none of the displayed items were selected. (Did nothing.)")
 		return
 	var selected_world_index: int = displayed_worlds_itemlist.get_selected_items()[0]
-	var worlds_list_lines: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var worlds_list_lines: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
 	var originals_world_name: String = worlds_list_lines[(selected_world_index*2)+1]
 	var originals_dir_path: String = "user://storage/worlds/" + worlds_list_lines[(selected_world_index*2)+2]
 	var copys_world_name: String = "Copy of " + originals_world_name
@@ -197,7 +197,7 @@ func update_displayed_worlds_list_text():
 	sync_worlds_list_txtfile_to_world_dirs()
 	FileManager.sort_txtfile_contents_alphabetically(worlds_list_txtfile_location, 1, 2)
 	
-	var worlds_list_txtfile_lines = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var worlds_list_txtfile_lines = FileManager.read_file_lines(worlds_list_txtfile_location)
 	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
 	displayed_worlds_itemlist.clear()
 	
@@ -214,7 +214,7 @@ func sync_worlds_list_txtfile_to_world_dirs():
 			return
 	
 	var existing_world_dir_names: PackedStringArray = DirAccess.open("user://storage/worlds").get_directories()
-	var worlds_list_txtfile_lines: Array[String] = FileManager.read_txtfile_lines_as_array(worlds_list_txtfile_location)
+	var worlds_list_txtfile_lines: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
 	
 	# Remove listed worlds who's dirs don't exist (from what will become replacement worlds-list content lines.)
 	var indeces_for_removal: Array[int] = []

@@ -25,6 +25,8 @@ func _enter_tree() -> void:
 		push_error("Ensuring that the game's essential files are (or transversioned to) the correct version failed, this may lead to crashes or other unintended behavior.
 		If you decide to play anyways, you should create a personal backup of your worlds and any other files you care about first.")
 	
+	print(FileManager.read_file_lines("user://storage/servers_list.txt"))
+	
 	all_global_stuff_initialized = true
 
 
@@ -40,8 +42,8 @@ func setup_game_window_title(include_a_splashtext: bool = true):
 		return
 	
 	# Get the contents of the splash texts txtfile and exclude all lines which are blank or start with a tab indent.
-	var splashes_txtfile_contents: Array[String] = FileManager.read_txtfile_lines_as_array("res://assets/text_files/window_splash_texts.txt")
-	if splashes_txtfile_contents == []:
+	var splashes_txtfile_contents: PackedStringArray = FileManager.read_file_lines("res://assets/text_files/window_splash_texts.txt")
+	if splashes_txtfile_contents.is_empty():
 		push_warning("Either an issue accessing the splash_texts file occured, or the file was completely empty. (Leaving window title splashless.)")
 		return
 	var splashes: Array[String] = []

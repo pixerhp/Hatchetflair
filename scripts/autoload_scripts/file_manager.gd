@@ -176,27 +176,13 @@ func get_available_filepath(file_path: String, start_with_alt0: bool) -> String:
 
 # FILE READING AND WRITING:
 
-func read_txtfile_lines_as_array(file_path: String) -> Array[String]:
-	if not FileAccess.file_exists(file_path):
-		push_error("A text file: \"", file_path, "\" couldn't be found to have its lines read. (Returning [].)")
-		return([])
-	
+func read_file_lines(file_path: String) -> PackedStringArray:
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
-	if not file.is_open():
-		push_error("A text file: \"", file_path, "\" which was successfully found couldn't be opened to have its lines read. ",
-		"(FileAccess open error:) ", str(FileAccess.get_open_error()), " (Returning [].)")
-		return([])
-	
-	# Get all of the lines of the text file.
-	var text_lines: Array[String] = []
-	while file.eof_reached() == false:
-		text_lines.append(file.get_line())
-	file.close()
-	
-	if (text_lines.size() > 0) and (text_lines[text_lines.size()-1] == ""):
-		text_lines.pop_back()
-	
-	return(text_lines)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return []
+	return file.get_as_text().split("\n", false)
 
 func read_txtfile_firstline(file_path: String) -> String:
 	if not FileAccess.file_exists(file_path):
@@ -259,14 +245,14 @@ func write_txtfile_replace_end_of_line_starting_with(file_path: String, substrin
 		push_error("The line_starting substring: \"", substring, "\" could not be found in: ", file_path, " (Aborting.)")
 		return(true)
 	
-	var txtfile_lines: Array[String] = read_txtfile_lines_as_array(file_path)
+	var txtfile_lines: Array[String] = read_file_lines(file_path)
 	txtfile_lines[line_to_replace - 1] = substring + replacement
 	write_txtfile_from_array_of_lines(file_path, txtfile_lines)
 	
 	return(false)
 
 func sort_txtfile_contents_alphabetically(file_path: String, skipped_lines: int, num_of_lines_in_group: int = 1) -> void:
-	var file_contents: Array[String] = read_txtfile_lines_as_array(file_path)
+	var file_contents: Array[String] = read_file_lines(file_path)
 	if file_contents.size() == 0:
 		push_warning("Attempted to alphabetically sort the contents of \"" + file_path + "\", but it had no contents. (Aborting sort.)")
 		return
