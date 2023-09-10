@@ -1,12 +1,12 @@
 extends Node
 
 const GAME_NAME: String = "Hatchetflair"
-const V_PHASE: String = "pre-game"
 const V_ENGINE: String = "1"
 const V_MAJOR: String = "0"
 const V_MINOR: String = "9"
+const V_PATCH: String = "0"
 const V_COUNT: String = "9" # n, where the current version is the nth version to exist.
-const V_ENTIRE: String = V_ENGINE + "_" + V_MAJOR + "_" + V_MINOR + "_" + V_COUNT
+const V_ENTIRE: String = V_ENGINE + "_" + V_MAJOR + "_" + V_MINOR + "_" + V_PATCH + "_" + V_COUNT
 var TITLE_ENTIRE: String = ""
 
 # Alter the game's title.
@@ -33,15 +33,14 @@ func _enter_tree() -> void:
 
 
 func _initialize_title_entire() -> void:
-	var name_extensions: String = ""
+	var name_exts: String = ""
 	if IS_MODDED:
-		name_extensions += "*"
-	var v_extensions: String = ""
+		name_exts += "*"
+	var v_exts: String = ""
 	if IS_INDEV:
-		v_extensions += " [INDEV]"
+		v_exts += " [INDEV]"
 	TITLE_ENTIRE = (
-		GAME_NAME + name_extensions + " ~ " + 
-		V_PHASE + " v" + V_ENGINE + "." + V_MAJOR + "." + V_MINOR + v_extensions
+		GAME_NAME + name_exts + " v" + V_ENGINE + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
 	)
 	return
 
@@ -70,18 +69,8 @@ func _set_window_title(include_splash: bool = true) -> Error:
 		DisplayServer.window_set_title(TITLE_ENTIRE)
 		return OK
 	else:
-		DisplayServer.window_set_title(TITLE_ENTIRE + "   ---   " + usable_splashes.pick_random())
+		DisplayServer.window_set_title(TITLE_ENTIRE + "   ~   " + usable_splashes.pick_random())
 		return OK
-
-# Closes the game's program & window.
-func quit_game() -> void:
-	get_tree().quit()  
-
-func get_rand_seed() -> int:
-	var random: RandomNumberGenerator = RandomNumberGenerator.new()
-	random.randomize()
-	return(random.randi() - 4294967296 + random.randi())
-
 
 func _process(_delta):
 	# Global hotkeys.
@@ -92,3 +81,13 @@ func _process(_delta):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	if Input.is_action_just_pressed("Screenshot"):
 		pass
+
+# Closes the game's program & window.
+func quit_game() -> void:
+	get_tree().quit()  
+
+
+func get_rand() -> int:
+	var random: RandomNumberGenerator = RandomNumberGenerator.new()
+	random.randomize()
+	return(random.randi() - 4294967296 + random.randi())
