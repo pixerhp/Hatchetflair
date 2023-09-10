@@ -9,11 +9,12 @@ extends Node
 
 # GLOBAL CONSTANTS:
 
-# Paths for directories:
+const PATH_ASSETS: String = "res://assets"
+const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/window_splash_texts.txt"
+
 const PATH_STORAGE: String = "user://storage"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
-# Paths for folders:
 const PATH_SERVERS: String = PATH_STORAGE + "/servers_list.cfg"
 
 

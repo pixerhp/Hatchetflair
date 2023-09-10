@@ -1,68 +1,83 @@
 extends Node
 
-const game_name: String = "Hatchetflair"
-const game_version_phase: String = "pre-game"
-const game_version_engine: String = "1"
-const game_version_major: String = "9"
-const game_version_minor: String = "0"
-const game_version_entire: String = game_version_phase + " v" + game_version_engine + "." + game_version_major + "." + game_version_minor
+const GAME_NAME: String = "Hatchetflair"
+const V_PHASE: String = "pre-game"
+const V_ENGINE: String = "1"
+const V_MAJOR: String = "0"
+const V_MINOR: String = "9"
+const V_COUNT: String = "9" # n, where the current version is the nth version to exist.
+const V_ENTIRE: String = V_ENGINE + "_" + V_MAJOR + "_" + V_MINOR + "_" + V_COUNT
+var TITLE_ENTIRE: String = ""
 
-# Alters the game window's title.
-var is_game_modded: bool = false
-var is_current_version_indev: bool = true
+# Alter the game's title.
+const IS_MODDED: bool = false
+const IS_INDEV: bool = true
 
-var all_global_stuff_initialized: bool = false
+var globals_ready: bool = false
 
+# =-= =-= =-= =-= =-= =-= =-= <~
 
 func _enter_tree() -> void:
 	randomize() # Randomizes the global rng as it's a good place to do it.
-	setup_game_window_title()
-	if FileManager.ensure_essential_game_dirs_and_files_exist() == FAILED:
-		push_error("GlobalStuff encountered error(s) while attempting to ensure some or all essential dirs/files.")
-		get_tree().quit()
+	_initialize_title_entire()
+	_set_window_title()
 	
-	if VersionManager.ensure_cv_essential_files():
-		push_error("Ensuring that the game's essential files are (or transversioned to) the correct version failed, this may lead to crashes or other unintended behavior.
-		If you decide to play anyways, you should create a personal backup of your worlds and any other files you care about first.")
+#	if FileManager.ensure_essential_game_dirs_and_files_exist() == FAILED:
+#		push_error("GlobalStuff encountered error(s) while attempting to ensure some or all essential dirs/files.")
+#		get_tree().quit()
+#	if VersionManager.ensure_cv_essential_files():
+#		push_error("Ensuring that the game's essential files are (or transversioned to) the correct version failed, this may lead to crashes or other unintended behavior.
+#		If you decide to play anyways, you should create a personal backup of your worlds and any other files you care about first.")
 	
-	print(FileManager.read_file_first_line("user://storage/servers_list.txt"))
-	
-	all_global_stuff_initialized = true
+	globals_ready = true
 
 
-func setup_game_window_title(include_a_splashtext: bool = true):
-	var game_name_attachments: String = ""
-	if is_game_modded:
-		game_name_attachments += "*"
-	var game_version_attatchments: String = ""
-	if is_current_version_indev:
-		game_version_attatchments += " INDEV"
-	DisplayServer.window_set_title(game_name + game_name_attachments + "   " + game_version_entire + game_version_attatchments)
-	if include_a_splashtext == false:
-		return
+func _initialize_title_entire() -> void:
+	var name_extensions: String = ""
+	if IS_MODDED:
+		name_extensions += "*"
+	var v_extensions: String = ""
+	if IS_INDEV:
+		v_extensions += " [INDEV]"
+	TITLE_ENTIRE = (
+		GAME_NAME + name_extensions + " ~ " + 
+		V_PHASE + " v" + V_ENGINE + "." + V_MAJOR + "." + V_MINOR + v_extensions
+	)
+	return
+
+func _set_window_title(include_splash: bool = true) -> Error:
+	if not include_splash:
+		DisplayServer.window_set_title(TITLE_ENTIRE)
+		return OK
 	
-	# Get the contents of the splash texts txtfile and exclude all lines which are blank or start with a tab indent.
-	var splashes_txtfile_contents: PackedStringArray = FileManager.read_file_lines("res://assets/text_files/window_splash_texts.txt")
-	if splashes_txtfile_contents.is_empty():
-		push_warning("Either an issue accessing the splash_texts file occured, or the file was completely empty. (Leaving window title splashless.)")
-		return
-	var splashes: Array[String] = []
-	for line in splashes_txtfile_contents:
-		if (line != "") and (not line.begins_with("\t")):
-			splashes.append(line)
+	var splashes_file_lines: PackedStringArray = FileManager.read_file_lines(FileManager.PATH_SPLASHES)
+	var usable_splashes: Array = []
+	# Resize the usable splashes array so that it's not resized repeatedly for each splash added.
+	# Since we don't know the number of usable splashes yet, we make it the same size for now and remove the excess later.
+	usable_splashes.resize(splashes_file_lines.size())
+	# Determine which lines from the array are usable splashes (not a comment, or blank line, etc.)
+	var index: int = 0
+	for item in splashes_file_lines:
+		if (item != "") and (not item.begins_with('#')) and (not item.begins_with("\t")) and (not item.begins_with(" ")):
+			usable_splashes[index] = item
+			index += 1
+	# Resize the array to snuggly fit just the elements we wanted.
+	if usable_splashes.find(null) != -1:
+		usable_splashes.resize(usable_splashes.find(null))
 	
-	if splashes.is_empty():
-		push_warning("The window splashes txtfile was accessed successfully, but contained no usable splashes. (Leaving window title splashless.)")
-		return
+	if usable_splashes.is_empty():
+		push_warning("No usable splash texts. (Leaving window-title splashless.)")
+		DisplayServer.window_set_title(TITLE_ENTIRE)
+		return OK
 	else:
-		DisplayServer.window_set_title(game_name + game_name_attachments + "   " + game_version_entire + game_version_attatchments + "   ---   " + splashes.pick_random())
-		return
+		DisplayServer.window_set_title(TITLE_ENTIRE + "   ---   " + usable_splashes.pick_random())
+		return OK
 
 # Closes the game's program & window.
 func quit_game() -> void:
 	get_tree().quit()  
 
-func random_worldgen_seed() -> int:
+func get_rand_seed() -> int:
 	var random: RandomNumberGenerator = RandomNumberGenerator.new()
 	random.randomize()
 	return(random.randi() - 4294967296 + random.randi())
