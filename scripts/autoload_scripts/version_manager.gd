@@ -102,7 +102,7 @@ func ensure_cv_essential_files() -> bool:
 func transversion_file(file_path: String, file_style: String, target_version: String = GlobalStuff.game_version_entire) -> bool:
 	match file_style:
 		"user_info":
-			match compare_v_to_cv(FileManager.read_txtfile_firstline(file_path)):
+			match compare_v_to_cv(FileManager.read_file_first_line(file_path)):
 				-1:
 					# NOTE: will contain actual file converting (returning false) later when other supported versions exist.
 					return(true)
@@ -112,10 +112,10 @@ func transversion_file(file_path: String, file_style: String, target_version: St
 					# NOTE: will contain actual file converting (returning false) later when other supported versions exist.
 					return(true)
 				128:
-					push_transversion_v_comparison_error(file_path, file_style, FileManager.read_txtfile_firstline(file_path), target_version)
+					push_transversion_v_comparison_error(file_path, file_style, FileManager.read_file_first_line(file_path), target_version)
 					return(true)
 		"worlds_or_servers_list":
-			match compare_v_to_cv(FileManager.read_txtfile_firstline(file_path)):
+			match compare_v_to_cv(FileManager.read_file_first_line(file_path)):
 				-1:
 					# NOTE: will contain actual file converting (returning false) later when other supported versions exist.
 					return(true)
@@ -125,7 +125,7 @@ func transversion_file(file_path: String, file_style: String, target_version: St
 					# NOTE: will contain actual file converting (returning false) later when other supported versions exist.
 					return(true)
 				128:
-					push_transversion_v_comparison_error(file_path, file_style, FileManager.read_txtfile_firstline(file_path), target_version)
+					push_transversion_v_comparison_error(file_path, file_style, FileManager.read_file_first_line(file_path), target_version)
 					return(true)
 	
 	push_error("File contents style not currently supported for transversioning: ", file_style)

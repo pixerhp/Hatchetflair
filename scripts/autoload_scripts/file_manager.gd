@@ -184,20 +184,13 @@ func read_file_lines(file_path: String) -> PackedStringArray:
 		return []
 	return file.get_as_text().split("\n", false)
 
-func read_txtfile_firstline(file_path: String) -> String:
-	if not FileAccess.file_exists(file_path):
-		push_error("A text file: \"", file_path, "\" couldn't be found to have its first line read. (Returning \"\".)")
-		return("")
-	
+func read_file_first_line(file_path: String) -> String:
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
-	if not file.is_open():
-		push_error("A text file: \"", file_path, "\" which was successfully found couldn't be opened to have its first line read. ",
-		"(FileAccess open error:) ", str(FileAccess.get_open_error()), " (Returning \"\".)")
-		return("")
-	
-	var line = file.get_line()
-	file.close()
-	return(line)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return ""
+	return(file.get_line())
 
 func read_txtfile_remaining_of_line_starting_with(file_path: String, substring: String) -> Array:
 	if not FileAccess.file_exists(file_path):

@@ -25,7 +25,7 @@ func _enter_tree() -> void:
 		push_error("Ensuring that the game's essential files are (or transversioned to) the correct version failed, this may lead to crashes or other unintended behavior.
 		If you decide to play anyways, you should create a personal backup of your worlds and any other files you care about first.")
 	
-	print(FileManager.read_file_lines("user://storage/servers_list.txt"))
+	print(FileManager.read_file_first_line("user://storage/servers_list.txt"))
 	
 	all_global_stuff_initialized = true
 
