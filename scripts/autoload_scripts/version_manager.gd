@@ -50,7 +50,7 @@ func compare_v_to_cv(in_v_entire: String) -> int:
 		push_warning()
 		return(127)
 	# If the input version is obviously the same as the current one then we don't need to do any special comparing.
-	if in_v_entire == GlobalStuff.game_version_entire:
+	if in_v_entire == GeneralGlobals.game_version_entire:
 		return(0)
 	
 	var in_v_components: Array[String] = deconcat_v_entire(in_v_entire)
@@ -61,21 +61,21 @@ func compare_v_to_cv(in_v_entire: String) -> int:
 		return(1)
 	else:
 		# If the phases are equal, compare the engine versions.
-		if (int(in_v_components[1]) < int(GlobalStuff.game_version_engine)):
+		if (int(in_v_components[1]) < int(GeneralGlobals.game_version_engine)):
 			return(-1)
-		elif (int(in_v_components[1]) > int(GlobalStuff.game_version_engine)):
+		elif (int(in_v_components[1]) > int(GeneralGlobals.game_version_engine)):
 			return(1)
 		else:
 			# If the engine versions are equal, compare the major versions.
-			if (int(in_v_components[2]) < int(GlobalStuff.game_version_major)):
+			if (int(in_v_components[2]) < int(GeneralGlobals.game_version_major)):
 				return(-1)
-			elif (int(in_v_components[2]) > int(GlobalStuff.game_version_major)):
+			elif (int(in_v_components[2]) > int(GeneralGlobals.game_version_major)):
 				return(1)
 			else:
 				# If the major versions are equal, compare the minor versions.
-				if (int(in_v_components[3]) < int(GlobalStuff.game_version_minor)):
+				if (int(in_v_components[3]) < int(GeneralGlobals.game_version_minor)):
 					return(-1)
-				elif (int(in_v_components[3]) > int(GlobalStuff.game_version_minor)):
+				elif (int(in_v_components[3]) > int(GeneralGlobals.game_version_minor)):
 					return(1)
 				else:
 					# Despite the two version strings not being strictly equal, 
@@ -99,7 +99,7 @@ func ensure_cv_essential_files() -> bool:
 	return(any_failures_encountered)
 
 # Returns whether or not the file failed to be successfully brought to the target version.
-func transversion_file(file_path: String, file_style: String, target_version: String = GlobalStuff.game_version_entire) -> bool:
+func transversion_file(file_path: String, file_style: String, target_version: String = GeneralGlobals.game_version_entire) -> bool:
 	match file_style:
 		"user_info":
 			match compare_v_to_cv(FileManager.read_file_first_line(file_path)):

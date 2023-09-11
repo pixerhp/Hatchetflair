@@ -56,7 +56,7 @@ func confirm_new_world():
 	if popup.get_node("WorldSeedInput").text != "":
 		world_seed = str(int(popup.get_node("WorldSeedInput").text))
 	else:
-		world_seed = str(GlobalStuff.random_worldgen_seed())
+		world_seed = str(GeneralGlobals.random_worldgen_seed())
 	var world_dir_name: String = FileManager.first_unused_dir_alt("user://storage/worlds/", world_name)
 	var world_dir_path: String = "user://storage/worlds/" + world_dir_name
 	
@@ -108,7 +108,7 @@ func confirm_edit_world():
 	if popup.get_node("WorldSeedInput").text != "":
 		edited_seed = str(int(popup.get_node("WorldSeedInput").text))
 	else:
-		edited_seed = str(GlobalStuff.random_worldgen_seed())
+		edited_seed = str(GeneralGlobals.random_worldgen_seed())
 	var original_world_dir: String = "user://storage/worlds/" + file_contents[(selected_server_index*2)+2]
 	var new_world_dir_name: String = FileManager.first_unused_dir_alt("user://storage/worlds/", edited_name)
 	var new_world_dir: String = "user://storage/worlds/" + new_world_dir_name

@@ -328,7 +328,7 @@ func ensure_essential_game_dirs_and_files_exist() -> Error:
 	]
 	for file_path in file_paths_to_ensure:
 		if not FileAccess.file_exists(file_path):
-			write_file_from_lines(file_path, [GlobalStuff.game_version_entire])
+			write_file_from_lines(file_path, [GeneralGlobals.game_version_entire])
 			if not FileAccess.file_exists(file_path):
 				push_error("Essential game file: \"", file_path, "\" could not be found/created.")
 				err = FAILED
@@ -347,7 +347,7 @@ func create_world_dirs_and_files(world_dir_path: String, world_name: String, wor
 	DirAccess.make_dir_absolute(world_dir_path + "/chunks")
 	
 	var world_info_txtfile_lines: Array[String] = [
-		GlobalStuff.game_version_entire,
+		GeneralGlobals.game_version_entire,
 		"world_name: " + world_name,
 		"favorited?: false",
 		"last_played_date_utc: unplayed",
@@ -374,10 +374,10 @@ func ensure_world_dir_has_required_files(world_dir_path: String, world_info_inpu
 		var world_info_lines: Array[String] = []
 		if world_info_input == []:
 			world_info_lines = [
-				GlobalStuff.game_version_entire,
+				GeneralGlobals.game_version_entire,
 				"creation date-time (utc): " + Time.get_datetime_string_from_system(true, true),
 				"last-played date-time (utc): unplayed",
-				"world generation seed: " + str(GlobalStuff.random_worldgen_seed()),
+				"world generation seed: " + str(GeneralGlobals.random_worldgen_seed()),
 			]
 		else:
 			world_info_lines = world_info_input
