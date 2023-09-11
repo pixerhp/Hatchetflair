@@ -209,7 +209,7 @@ func write_file_from_string(file_path: String, text: String) -> Error:
 	file.store_string(text)
 	return OK
 
-func read_cfg(file_path: String, skip_section: String = "") -> Dictionary:
+func read_cfg(file_path: String, skip_sections: PackedStringArray = []) -> Dictionary:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)
 	if err != OK:
@@ -218,10 +218,11 @@ func read_cfg(file_path: String, skip_section: String = "") -> Dictionary:
 	var dictionary: Dictionary = {}
 	var section_data: Dictionary = {}
 	for section in cfg.get_sections():
-		section_data = {}
-		for key in cfg.get_section_keys(section):
-			section_data[key] = cfg.get_value(section, key)
-		dictionary[section] = section_data
+		if not skip_sections.has(section):
+			section_data = {}
+			for key in cfg.get_section_keys(section):
+				section_data[key] = cfg.get_value(section, key)
+			dictionary[section] = section_data
 	return dictionary
 func read_cfg_section(file_path: String, section: String) -> Dictionary:
 	var cfg: ConfigFile = ConfigFile.new()
@@ -236,14 +237,46 @@ func read_cfg_section(file_path: String, section: String) -> Dictionary:
 	for key in cfg.get_section_keys(section):
 		section_data[key] = cfg.get_value(section, key)
 	return section_data
-func read_cfg_sections_list(file_path: String) -> PackedStringArray:
-	return []
-func read_cfg_keyval_to_section(file_path: String, key: Variant, sect: String) -> Dictionary:
-	return {}
-func read_cfg_section_to_keyval(file_path: String, sect: String, key: Variant) -> Dictionary:
-	return {}
+func read_cfg_list_sections(file_path: String) -> PackedStringArray:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: Error = cfg.load(file_path)
+	if err != OK:
+		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
+		return []
+	return cfg.get_sections()
+func read_cfg_section_to_keyval(file_path: String, key: Variant) -> Dictionary:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: Error = cfg.load(file_path)
+	if err != OK:
+		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
+		return {}
+	var dictionary: Dictionary = {}
+	for section in cfg.get_sections():
+		if cfg.has_section_key(section, key):
+			dictionary[section] = cfg.get_value(section, key)
+	return dictionary
+func read_cfg_keyval_to_section(file_path: String, key: Variant) -> Dictionary:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: Error = cfg.load(file_path)
+	if err != OK:
+		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
+		return {}
+	var dictionary: Dictionary = {}
+	for section in cfg.get_sections():
+		if cfg.has_section_key(section, key):
+			dictionary[cfg.get_value(section, key)] = section
+	return dictionary
 func read_cfg_keyval_to_keyval(file_path: String, key1: Variant, key2: Variant) -> Dictionary:
-	return {}
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: Error = cfg.load(file_path)
+	if err != OK:
+		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
+		return {}
+	var dictionary: Dictionary = {}
+	for section in cfg.get_sections():
+		if cfg.has_section_key(section, key1) and cfg.has_section_key(section, key2):
+			dictionary[cfg.get_value(section, key1)] = cfg.get_value(section, key2)
+	return dictionary
 
 func write_cfg_from_dict(file_path: String, dict: Dictionary) -> Error:
 	var cfg: ConfigFile = ConfigFile.new()

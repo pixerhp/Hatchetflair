@@ -29,16 +29,6 @@ func _enter_tree() -> void:
 #		push_error("Ensuring that the game's essential files are (or transversioned to) the correct version failed, this may lead to crashes or other unintended behavior.
 #		If you decide to play anyways, you should create a personal backup of your worlds and any other files you care about first.")
 	
-	var dictionary_to_write: Dictionary = {
-		"section_1":{"key1":"value1", "key2":"value2", "key3":"value3",},
-		"section_2":{"key4":"value4", "key5":"value5", "key6":"value6",},
-		"section_3":{"key7":"value7", "key8":"value8", "key9":"value9",},
-	}
-	FileManager.write_cfg_from_dict("user://write_test", dictionary_to_write)
-	print(FileManager.read_cfg("user://write_test"))
-	print()
-	print(FileManager.read_cfg_section("user://write_test", "section_4"))
-	
 	globals_ready = true
 	return
 
