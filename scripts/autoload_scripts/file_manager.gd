@@ -11,7 +11,7 @@ extends Node
 # GLOBAL CONSTANTS:
 
 const PATH_ASSETS: String = "res://assets"
-const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/window_splash_texts.txt"
+const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
 
 const PATH_STORAGE: String = "user://storage"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
