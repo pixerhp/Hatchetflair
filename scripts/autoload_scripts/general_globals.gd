@@ -18,7 +18,7 @@ var globals_ready: bool = false
 # =-= =-= =-= =-= =-= =-= =-= <~
 
 func _enter_tree() -> void:
-	randomize() # Randomizes the global rng as it's a good place to do it.
+	randomize() # Randomizes global rng.
 	_initialize_title_entire()
 	_set_window_title()
 	
@@ -30,6 +30,7 @@ func _enter_tree() -> void:
 #		If you decide to play anyways, you should create a personal backup of your worlds and any other files you care about first.")
 	
 	globals_ready = true
+	return
 
 
 func _initialize_title_entire() -> void:
@@ -93,7 +94,7 @@ func quit_game() -> void:
 	get_tree().quit()  
 
 
-func get_rand() -> int:
+func get_rand_int() -> int:
 	var random: RandomNumberGenerator = RandomNumberGenerator.new()
 	random.randomize()
 	return(random.randi() - 4294967296 + random.randi())
