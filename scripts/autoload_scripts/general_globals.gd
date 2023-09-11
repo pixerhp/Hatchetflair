@@ -36,7 +36,8 @@ func _enter_tree() -> void:
 	}
 	FileManager.write_cfg_from_dict("user://write_test", dictionary_to_write)
 	print(FileManager.read_cfg("user://write_test"))
-	
+	print()
+	print(FileManager.read_cfg_section("user://write_test", "section_4"))
 	
 	globals_ready = true
 	return
