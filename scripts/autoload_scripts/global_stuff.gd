@@ -1,6 +1,7 @@
 extends Node
 
 const GAME_NAME: String = "Hatchetflair"
+const GAME_PHASE: String = "pre-game"
 const V_MODEL: String = "1"
 const V_MAJOR: String = "0"
 const V_MINOR: String = "9"
@@ -39,9 +40,14 @@ func _initialize_title_entire() -> void:
 	var v_exts: String = ""
 	if IS_INDEV:
 		v_exts += " [INDEV]"
-	TITLE_ENTIRE = (
-		GAME_NAME + name_exts + " v" + V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
-	)
+	if (GAME_PHASE != "release") and (GAME_PHASE != "gold") and (GAME_PHASE != "rose-gold"):
+		TITLE_ENTIRE = (
+			GAME_NAME + name_exts + " [" + GAME_PHASE + "] v" + V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
+		)
+	else:
+		TITLE_ENTIRE = (
+			GAME_NAME + name_exts + " v" + V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
+		)
 	return
 
 func _set_window_title(include_splash: bool = true) -> Error:
