@@ -6,8 +6,7 @@ const V_MODEL: String = "1"
 const V_MAJOR: String = "0"
 const V_MINOR: String = "9"
 const V_PATCH: String = "0"
-const V_COUNT: String = "9" # n, where the current version is the nth version to exist.
-const V_ENTIRE: String = V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + "." + V_COUNT
+const V_ENTIRE: String = V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH
 var TITLE_ENTIRE: String = ""
 
 # Alter the game's title.
@@ -40,6 +39,7 @@ func _initialize_title_entire() -> void:
 	var v_exts: String = ""
 	if IS_INDEV:
 		v_exts += " [INDEV]"
+	# Include phase in the title only if the game is not at/past release stage.
 	if (GAME_PHASE != "release") and (GAME_PHASE != "gold") and (GAME_PHASE != "rose-gold"):
 		TITLE_ENTIRE = (
 			GAME_NAME + name_exts + " [" + GAME_PHASE + "] v" + V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
