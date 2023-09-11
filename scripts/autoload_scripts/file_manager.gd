@@ -210,46 +210,54 @@ func write_file_from_string(file_path: String, text: String) -> Error:
 	return OK
 
 
-func read_txtfile_remaining_of_line_starting_with(file_path: String, substring: String) -> Array:
-	if not FileAccess.file_exists(file_path):
-		push_error("A text file: \"", file_path, "\" couldn't be found to have its lines read. (Returning \"\".)")
-		return(["", -1])
+func read_cfg(file_path: String, skip_section: String = "") -> Dictionary:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: Error = cfg.load(file_path)
+	if err != OK:
+		push_error("Failed to read cfgfile at ", file_path, " (Error val:) ", err)
 	
-	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
-	if not file.is_open():
-		push_error("A text file: \"", file_path, "\" which was successfully found couldn't be opened to have its lines read. ",
-		"(FileAccess open error:) ", str(FileAccess.get_open_error()), " (Returning \"\".)")
-		return(["", -1])
-	
-	var line: String = ""
-	var line_number: int = 0
-	while file.eof_reached() == false:
-		line = file.get_line()
-		line_number += 1
-		if line.substr(0, substring.length()) == substring:
-			# A line beginning with the substring was found.
-			file.close()
-			return([line_number, line.substr(substring.length())])
-	
-	# A line which begins with the substring was not found.
-	file.close()
-	return(["", -1])
+	var dictionary: Dictionary
+	var section_data: Dictionary
+	for section in cfg.get_sections():
+		section_data = {}
+		for key in cfg.get_section_keys(section):
+			section_data[key] = cfg.get_value(section, key)
+		dictionary[section] = section_data
+	return dictionary
+func read_cfg_section(file_path: String, section: String) -> Dictionary:
+	return {}
+func read_cfg_sections_list(file_path: String) -> PackedStringArray:
+	return []
+func read_cfg_keyval_to_section(file_path: String, key: Variant, sect: String) -> Dictionary:
+	return {}
+func read_cfg_section_to_keyval(file_path: String, sect: String, key: Variant) -> Dictionary:
+	return {}
+func read_cfg_keyval_to_keyval(file_path: String, key1: Variant, key2: Variant) -> Dictionary:
+	return {}
 
-func write_txtfile_replace_end_of_line_starting_with(file_path: String, substring: String, replacement: String) -> bool:
-	if not FileAccess.file_exists(file_path):
-		push_error("A text file: \"", file_path, "\" couldn't be found to be read and written to. (Aborting.)")
-		return(true)
+func write_cfg_from_dict(file_path: String, dict: Dictionary) -> Error:
+	var cfg: ConfigFile = ConfigFile.new()
+	var any_errors_occured: bool = false
 	
-	var line_to_replace: int = read_txtfile_remaining_of_line_starting_with(file_path, substring)[0]
-	if line_to_replace == -1:
-		push_error("The line_starting substring: \"", substring, "\" could not be found in: ", file_path, " (Aborting.)")
-		return(true)
+	for section in dict.keys():
+		if typeof(dict[section]) == TYPE_DICTIONARY:
+			for key in dict[section].keys():
+				cfg.set_value(section, key, dict[section][key])
+		else:
+			push_error("Dictionary key ", section, " did not have a dictionary as its value.")
+			any_errors_occured = true
 	
-	var txtfile_lines: Array[String] = read_file_lines(file_path)
-	txtfile_lines[line_to_replace - 1] = substring + replacement
-	write_file_from_lines(file_path, txtfile_lines)
-	
-	return(false)
+	var err: Error = cfg.save(file_path)
+	if err != OK:
+		push_error("Failed to save cfgfile to ", file_path, " (Error val:) ", err)
+		any_errors_occured = true
+	if any_errors_occured:
+		return FAILED
+	else:
+		return OK
+
+
+
 
 func sort_txtfile_contents_alphabetically(file_path: String, skipped_lines: int, num_of_lines_in_group: int = 1) -> void:
 	var file_contents: Array[String] = read_file_lines(file_path)
