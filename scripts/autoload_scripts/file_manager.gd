@@ -4,6 +4,7 @@ extends Node
 # - Global constants
 # - Basic dirs & files interactions
 # - File reading and writing
+# - File organization
 # - File creating and ensurance
 
 
@@ -278,7 +279,7 @@ func read_cfg_keyval_to_keyval(file_path: String, key1: Variant, key2: Variant) 
 			dictionary[cfg.get_value(section, key1)] = cfg.get_value(section, key2)
 	return dictionary
 
-func write_cfg_from_dict(file_path: String, dict: Dictionary) -> Error:
+func write_cfg(file_path: String, dict: Dictionary) -> Error:
 	var cfg: ConfigFile = ConfigFile.new()
 	var any_errors_occured: bool = false
 	
@@ -299,6 +300,21 @@ func write_cfg_from_dict(file_path: String, dict: Dictionary) -> Error:
 	else:
 		return OK
 
+
+# FILE ORGANIZATION:
+
+func sort_file_lines_alphabetically(file_path: String, ascending: bool = true) -> Error:
+	# Note: Would be a PackedStringArray, but as of typing it doesn't support direct custom sorts.
+	var lines: Array = Array(read_file_lines(file_path))
+	if lines.is_empty():
+		push_warning("File contained no lines to sort.")
+		return OK # Returning OK because that could just be a normal situation.
+	if ascending:
+		lines.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) < 0)
+	else:
+		lines.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) > 0)
+	write_file_from_lines(file_path, lines)
+	return OK
 
 
 
