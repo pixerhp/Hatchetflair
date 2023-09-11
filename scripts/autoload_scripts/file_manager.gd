@@ -308,13 +308,46 @@ func sort_file_lines_alphabetically(file_path: String, ascending: bool = true) -
 	var lines: Array = Array(read_file_lines(file_path))
 	if lines.is_empty():
 		push_warning("File contained no lines to sort.")
-		return OK # Returning OK because that could just be a normal situation.
+		return OK # Returning OK because this could be a normal situation.
 	if ascending:
 		lines.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) < 0)
 	else:
 		lines.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) > 0)
 	write_file_from_lines(file_path, lines)
 	return OK
+
+func sort_file_line_groups_alphabetically(file_path: String, ascending: bool = true, skip: int = 0, group_size: int = 1) -> Error:
+	# Note: Would be a PackedStringArray, but as of typing it doesn't support direct custom sorts.
+	var lines: Array = Array(read_file_lines(file_path))
+	if lines.is_empty():
+		if (skip == 0):
+			push_warning("File ", file_path, " contained no lines to sort.")
+			return OK # Returning OK because this could be a normal situation.
+		else:
+			push_error("File ", file_path, " contained no lines despite intention to skip ", skip, " lines.")
+			return FAILED
+	if (lines.size() == skip) or (lines.size() == skip + group_size):
+		# The file is already sorted due to having minimum content.
+		return OK
+	if ((lines.size() - skip) % group_size != 0):
+		push_error("File ", file_path, " contained the wrong number of lines.", 
+		" Expected ", str(group_size), "k+", str(skip), ", but found ", str(lines.size()), ".")
+		return FAILED
+	
+	if group_size < 2:
+		var skipped_lines: Array = lines.slice(0, skip)
+		var line_groups_to_sort: Array = lines.slice(skip)
+	
+	# NOTE TO SELF: MAKE line_groups_to_sort AN ARRAY OF ARRAYS, WHERE EACH NESTED ARRAY IS A GROUP TO SORT USING INDEX 0's VALUE
+	
+	
+	
+	
+	
+	return OK
+
+
+# func sort_file_lines_and_comments_alphabetically
 
 
 
