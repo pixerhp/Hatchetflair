@@ -225,6 +225,8 @@ func read_cfg(file_path: String, skip_sections: PackedStringArray = []) -> Dicti
 				section_data[key] = cfg.get_value(section, key)
 			dictionary[section] = section_data
 	return dictionary
+func read_cfg_keyval():
+	pass
 func read_cfg_section(file_path: String, section: String) -> Dictionary:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)
@@ -299,6 +301,8 @@ func write_cfg(file_path: String, dict: Dictionary) -> Error:
 		return FAILED
 	else:
 		return OK
+func write_cfg_keyval():
+	pass
 
 
 # FILE ORGANIZATION:
