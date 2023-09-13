@@ -225,8 +225,13 @@ func read_cfg(file_path: String, skip_sections: PackedStringArray = []) -> Dicti
 				section_data[key] = cfg.get_value(section, key)
 			dictionary[section] = section_data
 	return dictionary
-func read_cfg_keyval():
-	pass
+func read_cfg_keyval(file_path: String, section: String, key: Variant) -> Variant:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: Error = cfg.load(file_path)
+	if err != OK:
+		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
+		return null
+	return cfg.get_value(section, key)
 func read_cfg_section(file_path: String, section: String) -> Dictionary:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)
@@ -301,8 +306,18 @@ func write_cfg(file_path: String, dict: Dictionary) -> Error:
 		return FAILED
 	else:
 		return OK
-func write_cfg_keyval():
-	pass
+func write_cfg_keyval(file_path: String, section: String, key: String, value: Variant) -> Error:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: Error = cfg.load(file_path)
+	if err != OK:
+		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
+		return err
+	cfg.set_value(section, key, value)
+	err = cfg.save(file_path)
+	if err != OK:
+		push_error("Failed to save cfgfile to ", file_path, " (Error val:) ", err)
+		return(err)
+	return OK
 
 
 # FILE ORGANIZATION:
