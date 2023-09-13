@@ -375,65 +375,7 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 	if write_file_from_lines(file_path, skipped_lines + lines_to_group) != OK:
 		return FAILED
 	return OK
-
-
-# func sort_file_lines_and_comments_alphabetically
-# (Think of something like the splash texts file.)
-
-
-
-func sort_txtfile_contents_alphabetically(file_path: String, skipped_lines: int, num_of_lines_in_group: int = 1) -> void:
-	var file_contents: Array[String] = read_file_lines(file_path)
-	if file_contents.size() == 0:
-		push_warning("Attempted to alphabetically sort the contents of \"" + file_path + "\", but it had no contents. (Aborting sort.)")
-		return
-	if (file_contents.size() == skipped_lines) or (file_contents.size() == skipped_lines + num_of_lines_in_group):
-		# The file has very few lines, such that attempting to sort it wouldn't change anything, wasting time.
-		# This is a common and intended situation, so there's no need for a warning/error message.
-		return
-	if ((file_contents.size() - skipped_lines) % num_of_lines_in_group != 0):
-		push_error("Attempted to alphabetically sort the content lines of \"", file_path, "\", but it had the wrong number of lines. (Aborting sort.) ",
-		"(The sort expected [", str(num_of_lines_in_group), "k + ", str(skipped_lines), "] lines, but the file contained ", str(file_contents.size()), " lines instead.)")
-		return
-	
-	if num_of_lines_in_group < 2:
-		# (A zero or negative group size is simply treated as a group size of 1.)
-		# No concatenation is needed, so simply sort the section of items after the skipped lines.
-		var content_of_skipped_lines: Array[String] = file_contents.slice(0, skipped_lines)
-		var lines_to_be_sorted: Array[String] = file_contents.slice(skipped_lines)
-		lines_to_be_sorted.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0) # (Custom func ensures 1 < 2 < 10)
-		file_contents = content_of_skipped_lines + lines_to_be_sorted
-	else:
-		# Concatenate together all lines in each "group" (with item-length keys at the end,) so that they stay together after the sort is finished.
-		# [str1, str2, str3] -> [str1str2str3:{length of str2}:{length of str1}];   [a, bb, ccc, dddd] -> [abbcccdddd:3:2:1]
-		var content_of_skipped_lines: Array[String] = file_contents.slice(0, skipped_lines)
-		var concatenated_lines: Array[String] = []
-		for index_of_last_group_item in range(file_contents.size()-1, skipped_lines-1, -1 * num_of_lines_in_group):
-			var current_concatenation_item: String
-			for index in range(index_of_last_group_item, index_of_last_group_item - num_of_lines_in_group, -1):
-				current_concatenation_item = file_contents[index] + current_concatenation_item
-				if index != index_of_last_group_item:
-					current_concatenation_item = current_concatenation_item + ":" + str(file_contents[index].length())
-			concatenated_lines.append(current_concatenation_item)
-		
-		# Sort the concatenated items alphabetically (a to z.) (The custom function is so that 1 < 2 < 10.)
-		concatenated_lines.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0)
-		
-		# Determine the final results of the sort, unconcatenating grouped lines back apart.
-		file_contents = content_of_skipped_lines
-		var index_of_seperator: int = 0
-		for current_concatenation in concatenated_lines:
-			for item_num in range(1, num_of_lines_in_group + 1):
-				if item_num != num_of_lines_in_group:
-					# Find the rightmost instance of ":" in the current state of current_concatenation.
-					index_of_seperator = current_concatenation.rfind(":")
-					file_contents.append(current_concatenation.substr(0, int(current_concatenation.substr(index_of_seperator+1))))
-					current_concatenation = current_concatenation.substr(int(current_concatenation.substr(index_of_seperator+1)), index_of_seperator - int(current_concatenation.substr(index_of_seperator+1)))
-				else: # The last bit of concatenated info with nothing else surrounding it.
-					file_contents.append(current_concatenation)
-	
-	write_file_from_lines(file_path, file_contents)
-	return
+#func sort_file_lines_and_comments_alphabetically (Think of something like sorting the splash texts file.)
 
 
 # FILE CREATING AND ENSURANCE:
