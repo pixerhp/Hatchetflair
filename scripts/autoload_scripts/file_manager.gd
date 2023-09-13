@@ -5,7 +5,8 @@ extends Node
 # - Basic dirs & files interactions
 # - File reading and writing
 # - File organization
-# - File creating and ensurance
+# - File ensurance
+# - File creating
 
 
 # GLOBAL CONSTANTS:
@@ -14,9 +15,9 @@ const PATH_ASSETS: String = "res://assets"
 const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
 
 const PATH_STORAGE: String = "user://storage"
+const PATH_SERVERS: String = PATH_STORAGE + "/servers_list.cfg"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
-const PATH_SERVERS: String = PATH_STORAGE + "/servers_list.cfg"
 
 
 # BASIC DIRS & FILES INTERACTIONS:
@@ -288,7 +289,7 @@ func read_cfg_keyval_to_keyval(file_path: String, key1: String, key2: String) ->
 
 func write_cfg(file_path: String, dict: Dictionary) -> Error:
 	var cfg: ConfigFile = ConfigFile.new()
-	var any_errors_occured: bool = false
+	var any_errors_encountered: bool = false
 	
 	for section in dict.keys():
 		if typeof(dict[section]) == TYPE_DICTIONARY:
@@ -296,13 +297,13 @@ func write_cfg(file_path: String, dict: Dictionary) -> Error:
 				cfg.set_value(section, key, dict[section][key])
 		else:
 			push_error("Dictionary key ", section, " did not have a dictionary as its value.")
-			any_errors_occured = true
+			any_errors_encountered = true
 	
 	var err: Error = cfg.save(file_path)
 	if err != OK:
 		push_error("Failed to save cfgfile to ", file_path, " (Error val:) ", err)
-		any_errors_occured = true
-	if any_errors_occured:
+		any_errors_encountered = true
+	if any_errors_encountered:
 		return FAILED
 	else:
 		return OK
@@ -394,35 +395,30 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 #func sort_cfg ?
 
 
-# FILE CREATING AND ENSURANCE:
+# FILE ENSURANCE:
 
-func ensure_essential_game_dirs_and_files_exist() -> Error:
-	var err: Error = OK
-	
-	var directories_to_ensure: Array[String] = [
-		"user://storage",
-		"user://storage/worlds",
+func ensure_required_dirs() -> Error:
+	var any_errors_encountered: bool = false
+	var err: Error
+	var directories_to_ensure_exist: Array[String] = [
+		PATH_STORAGE,
+		PATH_SERVERS,
+		PATH_WORLDS,
+		PATH_SCREENSHOTS,
 	]
-	for dir in directories_to_ensure:
-		DirAccess.make_dir_recursive_absolute(dir)
+	for dir in directories_to_ensure_exist:
 		if not DirAccess.dir_exists_absolute(dir):
-			push_error("Essential game directory: \"", dir, "\" could not be found/created.")
-			err = FAILED
-	
-	# If an essential file doesn't already exist, creates it blank except for version_entire in its first text line.
-	var file_paths_to_ensure: Array[String] = [
-		"user://storage/user_info.txt",
-		"user://storage/worlds_list.txt",
-		"user://storage/servers_list.txt",
-	]
-	for file_path in file_paths_to_ensure:
-		if not FileAccess.file_exists(file_path):
-			write_file_from_lines(file_path, [GeneralGlobals.game_version_entire])
-			if not FileAccess.file_exists(file_path):
-				push_error("Essential game file: \"", file_path, "\" could not be found/created.")
-				err = FAILED
-	
-	return(err)
+			err = DirAccess.make_dir_recursive_absolute(dir)
+			if err != OK:
+				push_error("Failed to find or create directory: ", dir, " (Error val:) ", err)
+				any_errors_encountered = true
+	if any_errors_encountered:
+		return FAILED
+	else:
+		return OK
+
+
+# FILE CREATING:
 
 func create_world_dirs_and_files(world_dir_path: String, world_name: String, world_seed: String) -> bool:
 	if DirAccess.dir_exists_absolute(world_dir_path):
