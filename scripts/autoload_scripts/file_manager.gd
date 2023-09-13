@@ -225,7 +225,7 @@ func read_cfg(file_path: String, skip_sections: PackedStringArray = []) -> Dicti
 				section_data[key] = cfg.get_value(section, key)
 			dictionary[section] = section_data
 	return dictionary
-func read_cfg_keyval(file_path: String, section: String, key: Variant) -> Variant:
+func read_cfg_keyval(file_path: String, section: String, key: String) -> Variant:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)
 	if err != OK:
@@ -252,7 +252,7 @@ func read_cfg_list_sections(file_path: String) -> PackedStringArray:
 		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
 		return []
 	return cfg.get_sections()
-func read_cfg_section_to_keyval(file_path: String, key: Variant) -> Dictionary:
+func read_cfg_section_to_keyval(file_path: String, key: String) -> Dictionary:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)
 	if err != OK:
@@ -263,7 +263,7 @@ func read_cfg_section_to_keyval(file_path: String, key: Variant) -> Dictionary:
 		if cfg.has_section_key(section, key):
 			dictionary[section] = cfg.get_value(section, key)
 	return dictionary
-func read_cfg_keyval_to_section(file_path: String, key: Variant) -> Dictionary:
+func read_cfg_keyval_to_section(file_path: String, key: String) -> Dictionary:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)
 	if err != OK:
@@ -274,7 +274,7 @@ func read_cfg_keyval_to_section(file_path: String, key: Variant) -> Dictionary:
 		if cfg.has_section_key(section, key):
 			dictionary[cfg.get_value(section, key)] = section
 	return dictionary
-func read_cfg_keyval_to_keyval(file_path: String, key1: Variant, key2: Variant) -> Dictionary:
+func read_cfg_keyval_to_keyval(file_path: String, key1: String, key2: String) -> Dictionary:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)
 	if err != OK:
@@ -391,6 +391,7 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 		return FAILED
 	return OK
 #func sort_file_lines_and_comments_alphabetically (Think of something like sorting the splash texts file.)
+#func sort_cfg ?
 
 
 # FILE CREATING AND ENSURANCE:
