@@ -1,15 +1,16 @@
 extends Node
 
-# Contents:
-# - Global constants
-# - Basic dirs & files interactions
-# - File reading and writing
-# - File organization
-# - File ensurance
-# - File creating
+#-=-=-=-# TABLE OF CONTENTS:
+
+# [contents]:
+# ~ global constants
+# ~ dir & file interactions
+# ~ reading & writing
+# ~ file organizing
+# ~ game-specific
 
 
-# GLOBAL CONSTANTS:
+#-=-=-=-# GLOBAL CONSTANTS:
 
 const PATH_ASSETS: String = "res://assets"
 const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
@@ -20,7 +21,7 @@ const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
 
 
-# BASIC DIRS & FILES INTERACTIONS:
+#-=-=-=-# DIR & FILE INTERACTIONS:
 
 func delete_dir(dir_path: String, move_to_os_trash: bool) -> Error:
 	if move_to_os_trash:
@@ -177,7 +178,7 @@ func get_available_filepath(file_path: String, start_with_alt0: bool) -> String:
 	return path_opening + get_available_filename(path_opening, file_name, start_with_alt0)
 
 
-# FILE READING AND WRITING:
+#-=-=-=-# READING & WRITING:
 
 func read_file_lines(file_path: String) -> PackedStringArray:
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
@@ -321,7 +322,7 @@ func write_cfg_keyval(file_path: String, section: String, key: String, value: Va
 	return OK
 
 
-# FILE ORGANIZATION:
+#-=-=-=-# FILE ORGANIZING:
 
 func sort_file_lines_alphabetically(file_path: String, skip: int = 0, ascending: bool = true) -> Error:
 	# Note: Would be a PackedStringArray, but as of typing it doesn't support direct custom sorts.
@@ -395,7 +396,7 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 #func sort_cfg ?
 
 
-# FILE ENSURANCE:
+#-=-=-=-# GAME-SPECIFIC:
 
 func ensure_required_dirs() -> Error:
 	var any_errors_encountered: bool = false
@@ -416,9 +417,27 @@ func ensure_required_dirs() -> Error:
 		return FAILED
 	else:
 		return OK
+func ensure_world():
+	pass
 
+#func create_world(dir_name: String, world_info: Dictionary) -> Error:
+#	return OK
+func create_world():
+	pass
+func edit_world():
+	pass
+func delete_world():
+	pass
+func duplicate_world():
+	pass
 
-# FILE CREATING:
+func add_remembered_server_item():
+	pass
+func edit_remembered_server_item():
+	pass
+func remove_remembered_server_item():
+	pass
+
 
 func create_world_dirs_and_files(world_dir_path: String, world_name: String, world_seed: String) -> bool:
 	if DirAccess.dir_exists_absolute(world_dir_path):
@@ -471,3 +490,5 @@ func ensure_world_dir_has_required_files(world_dir_path: String, world_info_inpu
 			push_error("Failed to create the world_info text file in world directory: ", world_dir_path)
 	
 	return(false)
+
+#-=-=-=-#
