@@ -307,22 +307,32 @@ func write_cfg_keyval():
 
 # FILE ORGANIZATION:
 
-func sort_file_lines_alphabetically(file_path: String, ascending: bool = true) -> Error:
+func sort_file_lines_alphabetically(file_path: String, skip: int = 0, ascending: bool = true) -> Error:
 	# Note: Would be a PackedStringArray, but as of typing it doesn't support direct custom sorts.
+	# Note2: Would also rather be Array[String] than Array, but I can't get PackedStringArray -> Array[Strings] to work.
 	var lines: Array = Array(read_file_lines(file_path))
 	if lines.is_empty():
 		push_warning("File contained no lines to sort.")
 		return OK # Returning OK because this could be a normal situation.
+	var skipped: Array = lines.slice(0, skip)
+	var to_sort: Array = lines.slice(skip)
 	if ascending:
-		lines.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) < 0)
+		to_sort.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) < 0)
 	else:
-		lines.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) > 0)
-	write_file_from_lines(file_path, lines)
+		to_sort.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) > 0)
+	if write_file_from_lines(file_path, skipped + to_sort) != OK:
+		return FAILED
 	return OK
-
-func sort_file_line_groups_alphabetically(file_path: String, ascending: bool = true, skip: int = 0, group_size: int = 1) -> Error:
+# Possible future/alt stuff: 2 bools/funcs, one for whether groups should be sorted against eachother using first item,
+# & one for whether items within a group should be sorted.
+func sort_file_line_groups_alphabetically(file_path: String, group_size: int, skip: int, ascending: bool = true) -> Error:
+	if group_size < 1:
+			group_size = 1
+	if group_size == 1:
+		sort_file_lines_alphabetically(file_path, skip, ascending)
 	# Note: Would be a PackedStringArray, but as of typing it doesn't support direct custom sorts.
-	var lines: Array = Array(read_file_lines(file_path))
+	# Note2: Would also rather be Array[String] than Array, but I can't get PackedStringArray -> Array[Strings] to work.
+	var lines: Array = read_file_lines(file_path)
 	if lines.is_empty():
 		if (skip == 0):
 			push_warning("File ", file_path, " contained no lines to sort.")
@@ -338,20 +348,37 @@ func sort_file_line_groups_alphabetically(file_path: String, ascending: bool = t
 		" Expected ", str(group_size), "k+", str(skip), ", but found ", str(lines.size()), ".")
 		return FAILED
 	
-	if group_size < 2:
-		var skipped_lines: Array = lines.slice(0, skip)
-		var line_groups_to_sort: Array = lines.slice(skip)
+	var skipped_lines: Array = lines.slice(0, skip)
+	# Convert the array of lines to sort into an array (each element is a group) of arrays (the lines in each group.)
+	var lines_to_group: Array = lines.slice(skip)
+	var line_groups: Array[Array] = []
+	line_groups.resize(int(float(lines_to_group.size()) / float(group_size)))
+	var group_of_lines: Array = []
+	group_of_lines.resize(group_size)
+	for group_index in range(0, int(float(lines_to_group.size()) / float(group_size))):
+		for line_index in range(0, group_size):
+			group_of_lines[line_index] = lines_to_group[(group_index * group_size) + line_index]
+		line_groups[group_index] = group_of_lines.duplicate()
 	
-	# NOTE TO SELF: MAKE line_groups_to_sort AN ARRAY OF ARRAYS, WHERE EACH NESTED ARRAY IS A GROUP TO SORT USING INDEX 0's VALUE
-	
-	
-	
-	
-	
+	# Sort the array of line groups by the value their first line.
+	if ascending:
+		print(line_groups)
+		line_groups.sort_custom(func(a: Array, b: Array) -> bool: return a[0].naturalnocasecmp_to(b[0]) < 0)
+		print(line_groups)
+	else:
+		line_groups.sort_custom(func(a: Array, b: Array) -> bool: return a[0].naturalnocasecmp_to(b[0]) > 0)
+	# Concatenate the groups of lines back into a single array of all of the lines.
+	for group_index in range(0, line_groups.size()):
+		for line_index in range(0, line_groups[group_index].size()):
+			lines_to_group[(group_index * group_size) + line_index] = line_groups[group_index][line_index]
+	# Overwrite the file with the new sorted lines.
+	if write_file_from_lines(file_path, skipped_lines + lines_to_group) != OK:
+		return FAILED
 	return OK
 
 
 # func sort_file_lines_and_comments_alphabetically
+# (Think of something like the splash texts file.)
 
 
 
