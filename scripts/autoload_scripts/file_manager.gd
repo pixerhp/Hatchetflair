@@ -439,15 +439,22 @@ func ensure_required_files():
 func ensure_world():
 	pass
 
-func create_world(dir_name: String, cfg_data: Dictionary) -> Error:
-	if not (cfg_data.has("meta_data") and cfg_data.has("generation_settings") and cfg_data.has("situation_data")
-	and cfg_data.has("players_data")):
-		push_error("Incorrect configuration data input. Configuration data should be a dictionary of dictionaries, ",
-		"in compatable format with the write_cfg function, consisting of all required sections. (meta_data, etc. See code.)")
-		return FAILED
+#func create_world(cfg_data: Dictionary) -> Error:
+func create_world(world_name: String, world_seed: String) -> Error:
+	# Normalize the world name.
+	world_name = world_name.replace("\n", "")
+	world_name = world_name.replace("\r", "")
+	world_name = world_name.replace("\t", "")
+	if world_name == "":
+		world_name = "new world"
+	# Normalize the world seed.
+	if world_seed != "":
+		world_seed = str(int(world_seed))
+	else:
+		world_seed = str(GeneralGlobals.get_rand_int())
 	
 	# Create the world's directory and subdirectories.
-	dir_name = get_available_dirname(PATH_WORLDS, dir_name, false)
+	var dir_name: String = get_available_dirname(PATH_WORLDS, world_name, false)
 	var dir_path = PATH_WORLDS + "/" + dir_name
 	var err: Error
 	err = DirAccess.make_dir_absolute(dir_path)
@@ -459,21 +466,28 @@ func create_world(dir_name: String, cfg_data: Dictionary) -> Error:
 		push_error("Failed to create directory: ", dir_path + "/chunks", " (Error val:) ", err)
 		return err
 	
-	if not cfg_data["meta_data"].has("name"):
-		cfg_data["meta_data"]["name"] = dir_name
-	if not cfg_data["meta_data"].has("favorited?"):
-		cfg_data["meta_data"]["favorited?"] = false
-	if not cfg_data["generation_settings"].has("seed"):
-		cfg_data["generation_settings"]["seed"] = str(GeneralGlobals.get_rand_int())
+	# Set up the dictionary that will be used to create the world info cfg file.
+	var cfg_data: Dictionary = {
+		"meta_data": {
+			"version": GeneralGlobals.V_ENTIRE,
+			"world_name": world_name,
+			"favorited": false,
+			"creation_date_utc": Time.get_datetime_string_from_system(true, true),
+			"last_played_date_utc": "unplayed",
+			"launch_count": 0,
+		},
+		"generation_settings": {
+			"seed": world_seed,
+		},
+		"world_data": {
+			"placeholder": "314"
+		},
+		"players_data": {
+			"placeholder": "314"
+		},
+	}
 	
-	cfg_data["meta_data"]["version"] = GeneralGlobals.V_ENTIRE
-	cfg_data["meta_data"]["creation_date_utc"] = Time.get_datetime_string_from_system(true, true)
-	cfg_data["meta_data"]["last_played_date_utc"] = "unplayed"
-	cfg_data["meta_data"]["launch_count"] = 0
-	#cfg_data["situation_data"]["ingame_date"] = thing
-	#cfg_data["situation_data"]["progression or other flags"] = []
-	cfg_data["players_data"] = {}
-	
+	# Write the world info cfg file and return.
 	if write_cfg(dir_path + "/world_data.cfg", cfg_data) != OK:
 		return FAILED
 	return OK
@@ -481,8 +495,8 @@ func delete_world(dir_name: String) -> Error:
 	if  delete_dir(PATH_WORLDS + "/" + dir_name, true) != OK:
 		return FAILED
 	return OK
-func duplicate_world(orig_dir_name: String) -> Error:
-	if copy_dir_to_path(PATH_WORLDS + "/" + orig_dir_name, PATH_WORLDS + "/" + get_available_dirname(PATH_WORLDS, orig_dir_name, false), true) != OK:
+func duplicate_world(dir_name: String) -> Error:
+	if copy_dir_to_path(PATH_WORLDS + "/" + dir_name, PATH_WORLDS + "/" + get_available_dirname(PATH_WORLDS, dir_name, false), true) != OK:
 		return FAILED
 	return OK
 

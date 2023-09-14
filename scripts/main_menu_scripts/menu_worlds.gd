@@ -7,8 +7,7 @@ var dir_name_to_world_name: Dictionary = {}
 
 
 
-# OLD, DELETE LATER:
-const worlds_list_txtfile_location: String = "user://storage/worlds_list.txt"
+const worlds_list_txtfile_location = ""
 
 
 func _ready():
@@ -31,7 +30,7 @@ func sync_worlds() -> Error:
 	# Set up the dir names to world names dictionary:
 	dir_name_to_world_name.clear()
 	for dir_name in world_dir_names:
-		dir_name_to_world_name[dir_name] = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name, "meta_data", "name")
+		dir_name_to_world_name[dir_name] = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world_data.cfg", "meta_data", "world_name")
 		if dir_name_to_world_name[dir_name] == null:
 			dir_name_to_world_name[dir_name] = "<error: reading cfg keyval returned null>"
 			any_errors_encountered = true
@@ -46,62 +45,43 @@ func update_worlds_list() -> void:
 		worlds_list_node.add_item(world_name)
 	return
 
-
-func start_world_by_index(worlds_list_index: int = -1):
-	if worlds_list_index == -1:
-		if not worlds_list_node.get_selected_items().is_empty():
-			worlds_list_index = worlds_list_node.get_selected_items()[0]
+func start_world_by_index(list_index: int = -1) -> Error:
+	if list_index == -1:
+		if worlds_list_node.get_selected_items().is_empty():
+			push_warning("No list index was specified.")
+			return FAILED
 		else:
-			push_error("No worlds list index was specified for starting playing a world. (Aborting starting world.)")
-			return
-	
-	var worlds_list_lines: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
-	var world_dir_path: String = "user://storage/worlds/" + worlds_list_lines[(worlds_list_index * 2) + 2]
-	
-	start_world_by_specifics(world_dir_path, $WorldsScreenUI/Toggles/AllowJoining.button_pressed, $WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed)
-	return
-
-func start_world_by_specifics(world_dir_path: String, allow_multiplayer_joining: bool = $WorldsScreenUI/Toggles/AllowJoining.button_pressed, host_without_playing: bool = $WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed):
-	if not DirAccess.dir_exists_absolute(world_dir_path):
-		push_warning("Attempted to start a world, but its specified directory path couldn't be found: ", world_dir_path, " (Aborting starting world.)")
-		return
-	NetworkManager.start_game(not host_without_playing, true, allow_multiplayer_joining)
-	return
+			list_index = worlds_list_node.get_selected_items()[0]
+	start_world_by_specifics(FileManager.PATH_WORLDS + "/" + world_dir_names[list_index], $WorldsScreenUI/Toggles/AllowJoining.button_pressed, $WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed)
+	return OK
+func start_world_by_specifics(world_dir_path: String, 
+allow_multiplayer_joining: bool = $WorldsScreenUI/Toggles/AllowJoining.button_pressed, 
+host_without_playing: bool = $WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed) -> Error:
+	print("Although technically not using it yet, use world files when loading a world later. ", world_dir_path)
+	if NetworkManager.start_game(not host_without_playing, true, allow_multiplayer_joining) != OK:
+		return FAILED
+	else:
+		return OK
 
 
-func open_new_world_popup():
+func open_new_world_popup() -> void:
 	hide_all_worlds_menu_popups()
 	$NewWorldPopup/WorldNameInput.clear()
 	$NewWorldPopup/WorldSeedInput.clear()
 	$NewWorldPopup.show()
 	$NewWorldPopup/WorldNameInput.grab_focus()
 	return
-
-func confirm_new_world():
+func confirm_new_world() -> Error:
 	var popup: Node = $NewWorldPopup
 	var world_name: String = popup.get_node("WorldNameInput").text
-	if world_name == "":
-		world_name = "new world"
-	var world_seed: String = ""
-	if popup.get_node("WorldSeedInput").text != "":
-		world_seed = str(int(popup.get_node("WorldSeedInput").text))
-	else:
-		world_seed = str(GeneralGlobals.random_worldgen_seed())
-	var world_dir_name: String = FileManager.first_unused_dir_alt("user://storage/worlds/", world_name)
-	var world_dir_path: String = "user://storage/worlds/" + world_dir_name
-	
-	# Determine the updated worlds-list txtfile contents and replace the old contents.
-	var file_contents: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
-	file_contents.append(world_name)
-	file_contents.append(world_dir_name)
-	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, file_contents)
-	
-	# Set-up the new world's directories and files.
-	FileManager.create_world_dirs_and_files(world_dir_path, world_name, world_seed)
-	
+	var world_seed: String = popup.get_node("WorldSeedInput").text
+	var err: Error = FileManager.create_world(world_name, world_seed)
 	update_worlds_list()
 	popup.hide()
-	return
+	if err != OK:
+		return FAILED
+	else:
+		return OK
 
 func open_edit_world_popup():
 	hide_all_worlds_menu_popups()
@@ -224,9 +204,9 @@ func _on_duplicate_world_pressed():
 
 
 func toggle_visibility_of_host_without_playing_toggle (button_value: bool) -> void:
-	$WorldsScreenUI/Toggles/HostWithoutPlay.disabled = not button_value
+	$WorldsScreenUI/Toggles/HostWithoutPlaying.disabled = not button_value
 	if not button_value:
-		$WorldsScreenUI/Toggles/HostWithoutPlay.button_pressed = false
+		$WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed = false
 
 func _on_worlds_list_item_selected():
 	hide_all_worlds_menu_popups()

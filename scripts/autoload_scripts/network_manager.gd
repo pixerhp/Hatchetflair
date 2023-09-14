@@ -16,7 +16,7 @@ func _ready() -> void:
 	multiplayer.auth_callback = authenticate
 
 # Called from the menu to start a server or join a server.
-func start_game(is_player: bool, is_server: bool, allow_others: bool, ip_address: String = "") -> void:
+func start_game(is_player: bool, is_server: bool, allow_others: bool, ip_address: String = "") -> Error:
 	if is_server:
 		start_server()
 		network_status_update("Server started.", true, false)
@@ -27,6 +27,7 @@ func start_game(is_player: bool, is_server: bool, allow_others: bool, ip_address
 		multiplayer.multiplayer_peer.refuse_new_connections = not allow_others
 	else:
 		start_client(ip_address)
+	return OK
 
 # Updates/displays the current connecting status using the NetworkInfoOverlay menu.
 func network_status_update(message: String, should_display: bool, show_back_button: bool):
