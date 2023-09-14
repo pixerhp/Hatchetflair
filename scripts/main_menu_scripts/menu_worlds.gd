@@ -1,6 +1,10 @@
 extends Control
 
 var world_dir_names: Array[String] = []
+var dir_name_to_world_name: Dictionary = {}
+
+@onready var worlds_list_node: Node = $WorldsScreenUI/SavedWorldsList
+
 
 
 # OLD, DELETE LATER:
@@ -21,10 +25,32 @@ func _ready():
 	return
 
 
+func sync_worlds() -> Error:
+	var any_errors_encountered: bool = false
+	world_dir_names.assign(DirAccess.get_directories_at(FileManager.PATH_WORLDS))
+	# Set up the dir names to world names dictionary:
+	dir_name_to_world_name.clear()
+	for dir_name in world_dir_names:
+		dir_name_to_world_name[dir_name] = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name, "meta_data", "name")
+		if dir_name_to_world_name[dir_name] == null:
+			dir_name_to_world_name[dir_name] = "<error: reading cfg keyval returned null>"
+			any_errors_encountered = true
+	if any_errors_encountered:
+		return FAILED
+	else:
+		return OK
+func update_worlds_list() -> void:
+	sync_worlds()
+	worlds_list_node.clear()
+	for world_name in dir_name_to_world_name.values():
+		worlds_list_node.add_item(world_name)
+	return
+
+
 func start_world_by_index(worlds_list_index: int = -1):
 	if worlds_list_index == -1:
-		if not $WorldsScreenUI/SavedWorldsList.get_selected_items().is_empty():
-			worlds_list_index = $WorldsScreenUI/SavedWorldsList.get_selected_items()[0]
+		if not worlds_list_node.get_selected_items().is_empty():
+			worlds_list_index = worlds_list_node.get_selected_items()[0]
 		else:
 			push_error("No worlds list index was specified for starting playing a world. (Aborting starting world.)")
 			return
@@ -73,14 +99,14 @@ func confirm_new_world():
 	# Set-up the new world's directories and files.
 	FileManager.create_world_dirs_and_files(world_dir_path, world_name, world_seed)
 	
-	update_displayed_worlds_list_text()
+	update_worlds_list()
 	popup.hide()
 	return
 
 func open_edit_world_popup():
 	hide_all_worlds_menu_popups()
 	
-	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
+	var displayed_worlds_itemlist: Node = worlds_list_node
 	if displayed_worlds_itemlist.get_selected_items().is_empty():
 		push_warning("Attempted to open the edit world popup despite no displayed world items being selected. (Aborted popup.)")
 		return
@@ -99,7 +125,7 @@ func open_edit_world_popup():
 	return
 
 func confirm_edit_world():
-	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
+	var displayed_worlds_itemlist: Node = worlds_list_node
 	if displayed_worlds_itemlist.get_selected_items().is_empty():
 		push_warning("Attempted to finilize editing a saved world whilst none of the displayed worlds items were selected. (Did nothing.)")
 		return
@@ -130,14 +156,14 @@ func confirm_edit_world():
 	if original_world_dir != new_world_dir:
 		DirAccess.rename_absolute(original_world_dir, new_world_dir)
 	
-	update_displayed_worlds_list_text()
+	update_worlds_list()
 	popup.hide()
 	return
 
 func open_delete_world_popup():
 	hide_all_worlds_menu_popups()
 	
-	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
+	var displayed_worlds_itemlist: Node = worlds_list_node
 	if displayed_worlds_itemlist.get_selected_items().is_empty():
 		push_warning("Attempted to open the delete world popup despite no displayed world items being selected. (Did nothing.)")
 		return
@@ -148,7 +174,7 @@ func open_delete_world_popup():
 	return
 
 func confirm_delete_world():
-	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
+	var displayed_worlds_itemlist: Node = worlds_list_node
 	if displayed_worlds_itemlist.get_selected_items().is_empty():
 		push_warning("Attempted to finilize deleting a world, but none of the displayed items were selected. (Aborted deletion.)")
 		return
@@ -168,11 +194,11 @@ func confirm_delete_world():
 	
 	$DeleteWorldPopup.hide()
 	disable_world_selected_requiring_buttons()
-	update_displayed_worlds_list_text()
+	update_worlds_list()
 	return
 
 func _on_duplicate_world_pressed():
-	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
+	var displayed_worlds_itemlist: Node = worlds_list_node
 	if displayed_worlds_itemlist.get_selected_items().is_empty():
 		push_warning("Attempted to duplicate a world, but none of the displayed items were selected. (Did nothing.)")
 		return
@@ -193,20 +219,8 @@ func _on_duplicate_world_pressed():
 	FileManager.copy_dir_to_path(originals_dir_path, copys_dir_path, false)
 	
 	disable_world_selected_requiring_buttons()
-	update_displayed_worlds_list_text()
+	update_worlds_list()
 	return
-
-
-func update_displayed_worlds_list_text():
-	sync_worlds_list_txtfile_to_world_dirs()
-	FileManager.sort_file_line_groups_alphabetically(worlds_list_txtfile_location, 2, 1)
-	
-	var worlds_list_txtfile_lines = FileManager.read_file_lines(worlds_list_txtfile_location)
-	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
-	displayed_worlds_itemlist.clear()
-	
-	for index in range(1, worlds_list_txtfile_lines.size()-1, 2):
-		displayed_worlds_itemlist.add_item(worlds_list_txtfile_lines[index])
 
 
 func sync_worlds_list_txtfile_to_world_dirs():

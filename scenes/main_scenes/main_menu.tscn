@@ -831,7 +831,7 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Settings" to="." method="switch_to_menu" binds= ["SettingsScreen"]]
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Credits" to="." method="switch_to_menu" binds= ["CreditsScreen"]]
 [connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Quit" to="." method="_on_quit_button_pressed"]
-[connection signal="visibility_changed" from="Menus/WorldsScreen" to="Menus/WorldsScreen" method="update_displayed_worlds_list_text"]
+[connection signal="visibility_changed" from="Menus/WorldsScreen" to="Menus/WorldsScreen" method="update_worlds_list"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
 [connection signal="item_activated" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="start_world_by_index"]
 [connection signal="item_selected" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="_on_worlds_list_item_selected" unbinds=1]
