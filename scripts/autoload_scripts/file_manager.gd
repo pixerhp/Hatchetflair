@@ -420,10 +420,32 @@ func ensure_required_dirs() -> Error:
 func ensure_world():
 	pass
 
-#func create_world(dir_name: String, world_info: Dictionary) -> Error:
-#	return OK
-func create_world():
-	pass
+func create_world(dir_name: String, configuration_data: Dictionary) -> Error:
+	if (configuration_data.has("meta_info") and configuration_data.has("generation_settings")):
+		push_error("Incorrect configuration data input. Configuration data should be a dictionary of dictionaries, ",
+		"in compatable format with the write_cfg function, and consist of required sections like meta_info and others.")
+		return FAILED
+	
+	# Create the world's directory and subdirectories.
+	dir_name = get_available_dirname(PATH_WORLDS, dir_name, false)
+	var dir_path = PATH_WORLDS + "/" + dir_name
+	var err: Error
+	err = DirAccess.make_dir_absolute(dir_path)
+	if err != OK:
+		push_error("Failed to create directory: ", dir_path, " (Error val:) ", err)
+		return err
+	err = DirAccess.make_dir_absolute(dir_path + "/chunks")
+	if err != OK:
+		push_error("Failed to create directory: ", dir_path + "/chunks", " (Error val:) ", err)
+		return err
+	
+	if not configuration_data["meta_info"].has("name"):
+		configuration_data["meta_info"]["name"] = dir_name
+	
+	
+	
+	
+	return OK
 func edit_world():
 	pass
 func delete_world():
@@ -431,11 +453,11 @@ func delete_world():
 func duplicate_world():
 	pass
 
-func add_remembered_server_item():
+func add_remembered_server():
 	pass
-func edit_remembered_server_item():
+func edit_remembered_server():
 	pass
-func remove_remembered_server_item():
+func remove_remembered_server():
 	pass
 
 

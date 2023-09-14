@@ -29,6 +29,9 @@ func _enter_tree() -> void:
 #		push_error("Ensuring that the game's essential files are (or transversioned to) the correct version failed, this may lead to crashes or other unintended behavior.
 #		If you decide to play anyways, you should create a personal backup of your worlds and any other files you care about first.")
 	
+	var dict: Dictionary = {"in1": "out1"}
+	print(dict.has("out1"))
+	
 	globals_ready = true
 	return
 
