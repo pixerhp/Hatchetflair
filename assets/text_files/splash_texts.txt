@@ -1,104 +1,129 @@
-# Note, lines which are blank or start with a '#', '\t' or ' ' (spacebar) aren't used as a splash.
-# Generally try to keep the list in alphabetical order.
+# Note, lines which are blank *or* start with a '#', '\t' or ' ' (spacebar) aren't used as splashes.
+# Please generally keep all sections in alphabetical order.
+
+
+#-=-=-=-#   CODING & OTHER DEVELOPERS:
+
+bojler eladó
+	“boiler for sale” in hungarian, a popular hungarian meme phrase. (SteveMC32 is Hungarian.)
+declaring and initializing a punch to the face!
+	humorous code-themed sentence.
+SOUND TEST: MONO OR STEREO?
+
+
+#-=-=-=-#   HATCHETFLAIR AND OTHER PERSONAL:
 
 238
-	Another interesting number.
+	A peculiar number.
 314
-	it's an integer that i like, and 3:14 is an interesting time.
+	An integer I like, and (as 3:14) an interesting time of decision.
 =^)
-	A smiley i occassionally use. i like having a nose.
-accidentally went down too many stairs and ended up in "second-basement"...
-	remnicient of dream-like logic and similar liminal feelings.
-a world-class scrabble player and a digital armadillo enter a laboratory...
-	references an obscure indie game jam which i had nothing to do with
-	https://daring-owl-studios.itch.io/you-lose-good-day-sir-final
-bojler eladó
-	“boiler for sale” in hungarian, a popular hungarian meme phrase.
+	A smiley I occassionally use. (I like having a nose.)
 'B' staircase
 	A reference to a game jam game named "you, the game" I contributed to.
 	(One of the levels had a prominent staircase made out of tiles which were literally the letter "B".)
-But is air resistance really negligible?
-	Air resistance is almost always considered negligable in physics questions.
-but to answer that, we need to talk about parallel universes.
-	references pannenkoek2012's "SM64 - Watch for Rolling Rocks - 0.5x A Presses (Commentated)" video.
-	acknowledges the entire sm64 speedrunning, challenge and otherwise community.
 Catholic Christian!
 	i am designing the game with avoiding-tempting-players-into-sin in mind.
 creature-friends?
-	the game is likely to have a variety of creature-sapients.
+	The game is likely to have a large variety of creaturish-sapients.
 Cubic chunks!
 	the game will have cubic chunks, meaning one can be above/below another.
-declaring and initializing a punch to the face!
-	humorous code-themed sentence.
-did you accidentally build the school 30 stories tall again?
-	a reference to the "Wayside School" books, especially the original 3.
 dragons?
 	eventually there will probably be dragons and dragonoids.
-draw what you see, not what you think you see.
-	fairly good art advice.
-dyed clothing is my favorite shark-drop
-	a vague reference to The Blockheads by David Frampton.
-everyone always forgets about nickel, beryllium, and other elements, BUT I DIDN'T
-	elements are very cool.
 flerovian and noct!
 	words i generally like and use to describe certain flavors of my fantasy themed ideas.
 	also references provious game/other ideas, like "Lands of Fleradove".
 fluffy-things?
-Get out of bounds.
+grass ropes?
 Hatchetflash, Hatchetflare, Hatchetflair or other?
-	I still don't feel certain about what the game's name should be.
+	I've felt uncertain about the game's name on multiple occasions.
 hello! have a lovely day! ~PHP
 	PHP stands for Pixer H Pinecone.
-hexagons are the bestagons!
-	hexagons are a cool tileable shape.
-icosahedrons are so pretty!
-	they really are, imagine little carryable icosahedrons of material.
-i^2 = -1
-It's still Bill's fault!
-	A reference to Secret of Evermore's secret post-credits text: "IT'S BILL'S FAULT"
 Ka-jackelmonoque, Quatuuvix.
 	fun sounding words i thought of a while ago.
 	bastardized segments of trying to pronounce the alphabet as one word.
-lazy-day! (drops a garbage block on you.)
-	I know someone who always thought that Naval Piranha in Tetris Attack (SNES) says this.
 picks are great for breaking up hard ground.
-	refutes the common game concept of picks only being used to mine through solid stone.
+	A break from the more stereotypical use of picks, mining through solid stone.
 (probably) not a horror game. =)
-	it would hypothetically be very easy to add more horror-ish elements into the game.
-	part of a sortof inside joke with someone.
-rhombic dodecahedrons?
-	an interesting 3d shape.
+	It would be easy. =)
 sands, deserts and beaches?
 	although they aren't in the game yet, stuff like that would be lovely to have if executed well.
-seme!? ala kijetesantakalu!?
-	references the toki pona conlang, also that the game doesn't have raccoons.
-SOUND TEST: MONO OR STEREO?
 :sparkles:
 	I commonly react to things with a sparkle emoji. (what, it's fun!)
-STEEEVOOOOOOOOOOOOO!!!
-	a reference to "carlsagan42" and "Stevo" (a mario maker troll-level creator.)
 sticks and strawberries?
-	a classic splash. the question mark is because those don't currently exist.
-tau > pi
-	I believe that tau is the circle constant and that pi is only the semicircle constant.
-	Quite literally: 6.28... > 3.14...
-tesseracts are cool!
-	a tesseract is the four-dimensional analogue of the cube.
-Thanks Godot!
+	A classic splash from my first coding attempt at this game. 
+	The question mark, similar to other splashes, is because that content isn't currently in the game.
 that lovely azure color between blue and purple?
 	A color I tend to like.
 that lovely rose color slightly-magenta-shifted from red?
 	A color I tend to like.
-to have significant combat or to not have significant combat, that is the question...
-	A design question for the game I've struggled with for a very long time.
+to combat or not to combat, that is the question...
+	Design-wise, I have been struggling with how significant the combat in this game should be for a long time.
+	Also a reference to Shakespeare's Hamlet, specifically: "to be, or not to be"
 unincorporated!
-	corporations are very money-oriented by design, so i want us to stay like this.
-probably various cuils of abstraction away from normal.
-	a reference to cuils, a proposed unit of abstraction.
-Weaire–Phelan structure?
-	like a 3D analogue to hexagons in having the most volume but least surface area when tesselated.
+	corporations built to have making money as their main goal. I would like to avoid that for this game.
+wood-ash cement?
+
+
+#-=-=-=-#   LIMINAL / ASREMIC / DREAM-LIKE / STRANGE:
+
+accidentally went down too many stairs and ended up in "second-basement"...
+	remnicient of dream-like logic and similar liminal feelings.
+Get out of bounds.
 when you open a closet but it's actually a new room which is a weird dusty furnitureless reflection of the other room...
 	dream-like logic and liminal-space-esque-ness.
-wood-ash cement?
+
+
+#-=-=-=-#   MATHEMATICS / GEOMETRY / PHYSICS / CHEMISTRY:
+
+But is air resistance really negligible?
+	Air resistance is almost always considered negligable in physics questions.
+everyone always forgets about nickel, beryllium, and other elements, BUT I DIDN'T
+	elements are very cool.
+hexagons are the bestagons!
+	hexagons are a cool tileable shape.
+i^2 = -1
+	(complex numbers)
+icosahedrons are so pretty!
+rhombic dodecahedrons?
+	An interesting 3D shape.
+tau > pi
+	I believe that tau is the circle constant.
+	Also a pun on 6.28... > 3.14... being a mathematically true statement.
+titanic tesseracts!
+	(Tesseracts are the 4-dimensional analogue of cubes.)
+Weaire–Phelan structure?
+	like a 3D analogue to hexagons in having the most volume but least surface area when tesselated.
+
+
+#-=-=-=-#   MISCELLANEOUS:
+
+draw what you see, not what you think you see.
+	fairly good art advice.
+
+
+#-=-=-=-#   REFERENCES:
+
+a world-class scrabble player and a digital armadillo enter a laboratory...
+	references an obscure indie game jam which i had nothing to do with
+	https://daring-owl-studios.itch.io/you-lose-good-day-sir-final
+but to answer that, we need to talk about parallel universes.
+	references pannenkoek2012's "SM64 - Watch for Rolling Rocks - 0.5x A Presses (Commentated)" video.
+	acknowledges the entire sm64 speedrunning, challenge and otherwise community.
+did you accidentally build the school 30 stories tall again?
+	a reference to the "Wayside School" books, especially the original 3.
+dyed clothing is my favorite shark-drop
+	a vague reference to The Blockheads by David Frampton.
+It's still Bill's fault!
+	A reference to Secret of Evermore's secret post-credits text: "IT'S BILL'S FAULT"
+lazy-day! (drops a garbage block on you.)
+	I know someone who always thought that Naval Piranha in Tetris Attack (SNES) says this.
+probably various cuils of abstraction away from normal.
+	a reference to cuils, a proposed unit of abstraction.
+seme!? ala kijetesantakalu!?
+	references the toki pona conlang, also that the game doesn't have raccoons.
+STEEEVOOOOOOOOOOOOO!!!
+	a reference to "carlsagan42" and "Stevo" (a mario maker troll-level creator.)
+Thanks Godot!
 'you ever splatted a (mo)'squiter with a femur bone?
 	A reference to "Secret of Evermore" (SNES).
