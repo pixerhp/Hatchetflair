@@ -420,10 +420,11 @@ func ensure_required_dirs() -> Error:
 func ensure_world():
 	pass
 
-func create_world(dir_name: String, configuration_data: Dictionary) -> Error:
-	if (configuration_data.has("meta_info") and configuration_data.has("generation_settings")):
+func create_world(dir_name: String, cfg_data: Dictionary) -> Error:
+	if not (cfg_data.has("meta_data") and cfg_data.has("generation_settings") and cfg_data.has("situation_data")
+	and cfg_data.has("players_data")):
 		push_error("Incorrect configuration data input. Configuration data should be a dictionary of dictionaries, ",
-		"in compatable format with the write_cfg function, and consist of required sections like meta_info and others.")
+		"in compatable format with the write_cfg function, consisting of all required sections. (meta_data, etc. See code.)")
 		return FAILED
 	
 	# Create the world's directory and subdirectories.
@@ -439,12 +440,25 @@ func create_world(dir_name: String, configuration_data: Dictionary) -> Error:
 		push_error("Failed to create directory: ", dir_path + "/chunks", " (Error val:) ", err)
 		return err
 	
-	if not configuration_data["meta_info"].has("name"):
-		configuration_data["meta_info"]["name"] = dir_name
+	if not cfg_data["meta_data"].has("name"):
+		cfg_data["meta_data"]["name"] = dir_name
+	if not cfg_data["meta_data"].has("favorited?"):
+		cfg_data["meta_data"]["favorited?"] = false
+	if not cfg_data["generation_settings"].has("seed"):
+		cfg_data["generation_settings"]["seed"] = str(GeneralGlobals.get_rand_int())
 	
+	cfg_data["meta_data"]["version"] = GeneralGlobals.V_ENTIRE
+	cfg_data["meta_data"]["creation_date_utc"] = Time.get_datetime_string_from_system(true, true)
+	cfg_data["meta_data"]["last_played_date_utc"] = "unplayed"
+	cfg_data["meta_data"]["launch_count"] = 0
+	#cfg_data["situation_data"]["ingame_date"] = thing
+	#cfg_data["situation_data"]["progression or other flags"] = []
+	cfg_data["players_data"] = {}
 	
-	
-	
+	err = write_cfg(dir_path + "/world_data.cfg", cfg_data)
+	if err != OK:
+		push_error("Failed to write cfg file: ", dir_path, " (Error val:) ", err)
+		return err
 	return OK
 func edit_world():
 	pass
