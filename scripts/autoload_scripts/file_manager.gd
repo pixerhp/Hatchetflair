@@ -16,7 +16,7 @@ const PATH_ASSETS: String = "res://assets"
 const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
 
 const PATH_STORAGE: String = "user://storage"
-const PATH_SERVERS: String = PATH_STORAGE + "/servers_list.cfg"
+const PATH_REMEMBERED_SERVERS: String = PATH_STORAGE + "/remembered_servers.cfg"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
 
@@ -176,6 +176,23 @@ func get_available_filepath(file_path: String, start_with_alt0: bool) -> String:
 	var path_opening: String = file_path.substr(0, sep_index + 1)
 	var file_name: String = file_path.substr(sep_index + 1)
 	return path_opening + get_available_filename(path_opening, file_name, start_with_alt0)
+
+func get_available_dict_key_string(dict: Dictionary, key: String, start_with_alt0: bool) -> String:
+	var keys_list: Array = dict.keys()
+	if start_with_alt0:
+		for index in keys_list.size():
+			if not keys_list.has(key + " alt" + str(index)):
+				return(key + " alt" + str(index))
+		return(key + " alt" + str(keys_list.size()))
+	else:
+		for index in keys_list.size():
+			if index == 0:
+				if not keys_list.has(key):
+					return key
+			else:
+				if not keys_list.has(key + " alt" + str(index)):
+					return(key + " alt" + str(index))
+		return(key + " alt" + str(keys_list.size()))
 
 
 #-=-=-=-# READING & WRITING:
@@ -403,10 +420,11 @@ func ensure_required_dirs() -> Error:
 	var err: Error
 	var directories_to_ensure_exist: Array[String] = [
 		PATH_STORAGE,
-		PATH_SERVERS,
+		PATH_REMEMBERED_SERVERS,
 		PATH_WORLDS,
 		PATH_SCREENSHOTS,
 	]
+	# !!! This could be made better by getting a list of dirs, and only trying to create ones that don't already exist.
 	for dir in directories_to_ensure_exist:
 		if not DirAccess.dir_exists_absolute(dir):
 			err = DirAccess.make_dir_recursive_absolute(dir)
@@ -415,8 +433,9 @@ func ensure_required_dirs() -> Error:
 				any_errors_encountered = true
 	if any_errors_encountered:
 		return FAILED
-	else:
-		return OK
+	return OK
+func ensure_required_files():
+	pass
 func ensure_world():
 	pass
 
@@ -455,30 +474,49 @@ func create_world(dir_name: String, cfg_data: Dictionary) -> Error:
 	#cfg_data["situation_data"]["progression or other flags"] = []
 	cfg_data["players_data"] = {}
 	
-	err = write_cfg(dir_path + "/world_data.cfg", cfg_data)
-	if err != OK:
-		push_error("Failed to write cfg file: ", dir_path, " (Error val:) ", err)
-		return err
+	if write_cfg(dir_path + "/world_data.cfg", cfg_data) != OK:
+		return FAILED
 	return OK
 func delete_world(dir_name: String) -> Error:
-	var err: Error
-	err = delete_dir(PATH_WORLDS + "/" + dir_name, true)
-	if err != OK:
+	if  delete_dir(PATH_WORLDS + "/" + dir_name, true) != OK:
 		return FAILED
 	return OK
 func duplicate_world(orig_dir_name: String) -> Error:
-	var err: Error
-	err = copy_dir_to_path(PATH_WORLDS + "/" + orig_dir_name, PATH_WORLDS + "/" + get_available_dirname(PATH_WORLDS, orig_dir_name, false), true)
-	if err != OK:
+	if copy_dir_to_path(PATH_WORLDS + "/" + orig_dir_name, PATH_WORLDS + "/" + get_available_dirname(PATH_WORLDS, orig_dir_name, false), true) != OK:
 		return FAILED
 	return OK
 
-func add_remembered_server():
-	pass
-func edit_remembered_server():
-	pass
-func remove_remembered_server():
-	pass
+func add_remembered_server(nickname: String, ip: String) -> Error:
+	var dict: Dictionary = read_cfg(PATH_REMEMBERED_SERVERS)
+	var section_name: String = get_available_dict_key_string(dict, nickname, false)
+	dict[section_name] = {
+		"nickname": nickname,
+		"ip": ip,
+		"join_count": 0,
+	}
+	if write_cfg(PATH_REMEMBERED_SERVERS, dict) != OK:
+		return FAILED
+	return OK
+func edit_remembered_server(section_name: String, nickname: String, ip: String) -> Error:
+	var section_data: Dictionary = read_cfg_section(PATH_REMEMBERED_SERVERS, section_name)
+	remove_remembered_server(section_name)
+	var dict: Dictionary = read_cfg(PATH_REMEMBERED_SERVERS) 
+	var replacement_section_name: String = get_available_dict_key_string(dict, nickname, false)
+	dict[replacement_section_name] = section_data
+	dict[replacement_section_name]["nickname"] = nickname
+	dict[replacement_section_name]["ip"] = ip
+	print("inputs: ", nickname, ", ", ip)
+	print(dict[replacement_section_name]["nickname"])
+	print(dict[replacement_section_name]["ip"])
+	if write_cfg(PATH_REMEMBERED_SERVERS, dict) != OK:
+		return FAILED
+	return OK
+func remove_remembered_server(section_name: String) -> Error:
+	var dict: Dictionary = read_cfg(PATH_REMEMBERED_SERVERS)
+	dict.erase(section_name)
+	if write_cfg(PATH_REMEMBERED_SERVERS, dict) != OK:
+		return FAILED
+	return OK
 
 
 func create_world_dirs_and_files(world_dir_path: String, world_name: String, world_seed: String) -> bool:
