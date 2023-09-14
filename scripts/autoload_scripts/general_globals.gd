@@ -15,19 +15,14 @@ const IS_INDEV: bool = true
 
 var globals_ready: bool = false
 
-# =-= =-= =-= =-= =-= =-= =-= <~
+# =-= =-= =-= =-= =-= =-= =-= # <~
 
 func _enter_tree() -> void:
 	randomize() # Randomizes global rng.
 	_initialize_title_entire()
 	_set_window_title()
-	
-#	if FileManager.ensure_essential_game_dirs_and_files_exist() == FAILED:
-#		push_error("GlobalStuff encountered error(s) while attempting to ensure some or all essential dirs/files.")
-#		get_tree().quit()
-#	if VersionManager.ensure_cv_essential_files():
-#		push_error("Ensuring that the game's essential files are (or transversioned to) the correct version failed, this may lead to crashes or other unintended behavior.
-#		If you decide to play anyways, you should create a personal backup of your worlds and any other files you care about first.")
+	FileManager.ensure_required_dirs()
+	FileManager.ensure_required_files()
 	
 	globals_ready = true
 	return

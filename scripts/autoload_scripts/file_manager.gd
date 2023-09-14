@@ -424,7 +424,6 @@ func ensure_required_dirs() -> Error:
 		PATH_WORLDS,
 		PATH_SCREENSHOTS,
 	]
-	# !!! This could be made better by getting a list of dirs, and only trying to create ones that don't already exist.
 	for dir in directories_to_ensure_exist:
 		if not DirAccess.dir_exists_absolute(dir):
 			err = DirAccess.make_dir_recursive_absolute(dir)
