@@ -131,11 +131,11 @@ func confirm_remove_server():
 
 
 func update_the_displayed_servers_list():
-	FileManager.sort_txtfile_contents_alphabetically(servers_list_txtfile_location, 1, 2)
+	FileManager.sort_file_line_groups_alphabetically(servers_list_txtfile_location, 2, 1)
 	$JoinScreenUI/SavedServersList.clear()
 	
 	# Add each server nickname from the text file to the displayed servers list text you see in the menu.
-	var servers_list_txtfile_lines: Array[String] = FileManager.read_file_lines(servers_list_txtfile_location)
+	var servers_list_txtfile_lines: PackedStringArray = FileManager.read_file_lines(servers_list_txtfile_location)
 	for index in range(1, servers_list_txtfile_lines.size()-1, 2):
 		$JoinScreenUI/SavedServersList.add_item(servers_list_txtfile_lines[index])
 	return

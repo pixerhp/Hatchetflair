@@ -195,7 +195,7 @@ func _on_duplicate_world_pressed():
 
 func update_displayed_worlds_list_text():
 	sync_worlds_list_txtfile_to_world_dirs()
-	FileManager.sort_txtfile_contents_alphabetically(worlds_list_txtfile_location, 1, 2)
+	FileManager.sort_file_line_groups_alphabetically(worlds_list_txtfile_location, 2, 1)
 	
 	var worlds_list_txtfile_lines = FileManager.read_file_lines(worlds_list_txtfile_location)
 	var displayed_worlds_itemlist: Node = $WorldsScreenUI/SavedWorldsList
@@ -214,7 +214,7 @@ func sync_worlds_list_txtfile_to_world_dirs():
 			return
 	
 	var existing_world_dir_names: PackedStringArray = DirAccess.open("user://storage/worlds").get_directories()
-	var worlds_list_txtfile_lines: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
+	var worlds_list_txtfile_lines: PackedStringArray = FileManager.read_file_lines(worlds_list_txtfile_location)
 	
 	# Remove listed worlds who's dirs don't exist (from what will become replacement worlds-list content lines.)
 	var indeces_for_removal: Array[int] = []
@@ -235,7 +235,7 @@ func sync_worlds_list_txtfile_to_world_dirs():
 			worlds_list_txtfile_lines.append(folder_name)
 	
 	# Replace the worlds-list text file contents with the newly synchronized ones.
-	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, worlds_list_txtfile_lines)
+	FileManager.write_file_from_lines(worlds_list_txtfile_location, worlds_list_txtfile_lines)
 
 
 func toggle_visibility_of_host_without_playing_toggle (button_value: bool) -> void:
