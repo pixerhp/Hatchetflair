@@ -223,39 +223,6 @@ func _on_duplicate_world_pressed():
 	return
 
 
-func sync_worlds_list_txtfile_to_world_dirs():
-	if not DirAccess.dir_exists_absolute("user://storage/worlds"):
-		push_warning("When syncing the worlds list to the existing directories, the \"worlds\" dir could not be found. (Creating it now.)")
-		DirAccess.make_dir_recursive_absolute("user://storage/worlds")
-		if not DirAccess.dir_exists_absolute("user://storage/worlds"):
-			push_error("When syncing the worlds list to the existing directories, the \"worlds\" dir could not be found, even after a creation attempt. (Aborting worlds list sync.)")
-			return
-	
-	var existing_world_dir_names: PackedStringArray = DirAccess.open("user://storage/worlds").get_directories()
-	var worlds_list_txtfile_lines: PackedStringArray = FileManager.read_file_lines(worlds_list_txtfile_location)
-	
-	# Remove listed worlds who's dirs don't exist (from what will become replacement worlds-list content lines.)
-	var indeces_for_removal: Array[int] = []
-	for index in range(worlds_list_txtfile_lines.size()-1, 0, -2): # (We want removal-indeces from last to first due to array resizing.)
-		if (existing_world_dir_names.count(worlds_list_txtfile_lines[index]) == 0):
-			indeces_for_removal.append(index - 1)
-	for index in indeces_for_removal:
-		worlds_list_txtfile_lines.remove_at(index + 1)
-		worlds_list_txtfile_lines.remove_at(index)
-	
-	# Add unaccounted-for world dirs (to what will become replacement worlds-list content lines.)
-	var already_known_folder_names: Array[String] = []
-	for index in range(2, worlds_list_txtfile_lines.size(), 2):
-		already_known_folder_names.append(worlds_list_txtfile_lines[index])
-	for folder_name in existing_world_dir_names:
-		if (already_known_folder_names.count(folder_name) == 0):
-			worlds_list_txtfile_lines.append(folder_name) # (We do this once for world name, twice for world folder name.)
-			worlds_list_txtfile_lines.append(folder_name)
-	
-	# Replace the worlds-list text file contents with the newly synchronized ones.
-	FileManager.write_file_from_lines(worlds_list_txtfile_location, worlds_list_txtfile_lines)
-
-
 func toggle_visibility_of_host_without_playing_toggle (button_value: bool) -> void:
 	$WorldsScreenUI/Toggles/HostWithoutPlay.disabled = not button_value
 	if not button_value:
