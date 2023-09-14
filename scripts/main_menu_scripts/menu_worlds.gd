@@ -1,5 +1,9 @@
 extends Control
 
+var world_dir_names: Array[String] = []
+
+
+# OLD, DELETE LATER:
 const worlds_list_txtfile_location: String = "user://storage/worlds_list.txt"
 
 

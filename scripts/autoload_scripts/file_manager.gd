@@ -178,7 +178,8 @@ func get_available_filepath(file_path: String, start_with_alt0: bool) -> String:
 	return path_opening + get_available_filename(path_opening, file_name, start_with_alt0)
 
 func get_available_dict_key_string(dict: Dictionary, key: String, start_with_alt0: bool) -> String:
-	var keys_list: Array = dict.keys()
+	var keys_list: Array[String] = []
+	keys_list.assign(dict.keys())
 	if start_with_alt0:
 		for index in keys_list.size():
 			if not keys_list.has(key + " alt" + str(index)):
@@ -343,13 +344,13 @@ func write_cfg_keyval(file_path: String, section: String, key: String, value: Va
 
 func sort_file_lines_alphabetically(file_path: String, skip: int = 0, ascending: bool = true) -> Error:
 	# Note: Would be a PackedStringArray, but as of typing it doesn't support direct custom sorts.
-	# Note2: Would also rather be Array[String] than Array, but I can't get PackedStringArray -> Array[Strings] to work.
-	var lines: Array = Array(read_file_lines(file_path))
+	var lines: Array[String] = []
+	lines.assign(read_file_lines(file_path))
 	if lines.is_empty():
 		push_warning("File contained no lines to sort.")
 		return OK # Returning OK because this could be a normal situation.
-	var skipped: Array = lines.slice(0, skip)
-	var to_sort: Array = lines.slice(skip)
+	var skipped: Array[String] = lines.slice(0, skip)
+	var to_sort: Array[String] = lines.slice(skip)
 	if ascending:
 		to_sort.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) < 0)
 	else:
@@ -365,8 +366,8 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 	if group_size == 1:
 		sort_file_lines_alphabetically(file_path, skip, ascending)
 	# Note: Would be a PackedStringArray, but as of typing it doesn't support direct custom sorts.
-	# Note2: Would also rather be Array[String] than Array, but I can't get PackedStringArray -> Array[Strings] to work.
-	var lines: Array = read_file_lines(file_path)
+	var lines: Array[String] = []
+	lines.assign(read_file_lines(file_path))
 	if lines.is_empty():
 		if (skip == 0):
 			push_warning("File ", file_path, " contained no lines to sort.")
@@ -382,12 +383,12 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 		" Expected ", str(group_size), "k+", str(skip), ", but found ", str(lines.size()), ".")
 		return FAILED
 	
-	var skipped_lines: Array = lines.slice(0, skip)
+	var skipped_lines: Array[String] = lines.slice(0, skip)
 	# Convert the array of lines to sort into an array (each element is a group) of arrays (the lines in each group.)
-	var lines_to_group: Array = lines.slice(skip)
+	var lines_to_group: Array[String] = lines.slice(skip)
 	var line_groups: Array[Array] = []
 	line_groups.resize(int(float(lines_to_group.size()) / float(group_size)))
-	var group_of_lines: Array = []
+	var group_of_lines: Array[String] = []
 	group_of_lines.resize(group_size)
 	for group_index in range(0, int(float(lines_to_group.size()) / float(group_size))):
 		for line_index in range(0, group_size):
@@ -397,10 +398,10 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 	# Sort the array of line groups by the value their first line.
 	if ascending:
 		print(line_groups)
-		line_groups.sort_custom(func(a: Array, b: Array) -> bool: return a[0].naturalnocasecmp_to(b[0]) < 0)
+		line_groups.sort_custom(func(a: Array[String], b: Array[String]) -> bool: return a[0].naturalnocasecmp_to(b[0]) < 0)
 		print(line_groups)
 	else:
-		line_groups.sort_custom(func(a: Array, b: Array) -> bool: return a[0].naturalnocasecmp_to(b[0]) > 0)
+		line_groups.sort_custom(func(a: Array[String], b: Array[String]) -> bool: return a[0].naturalnocasecmp_to(b[0]) > 0)
 	# Concatenate the groups of lines back into a single array of all of the lines.
 	for group_index in range(0, line_groups.size()):
 		for line_index in range(0, line_groups[group_index].size()):
