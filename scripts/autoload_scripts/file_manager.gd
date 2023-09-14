@@ -23,8 +23,8 @@ const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
 
 #-=-=-=-# DIR & FILE INTERACTIONS:
 
-func delete_dir(dir_path: String, move_to_os_trash: bool) -> Error:
-	if move_to_os_trash:
+func delete_dir(dir_path: String, to_recycle_bin: bool) -> Error:
+	if to_recycle_bin:
 		var err: Error = OS.move_to_trash(ProjectSettings.globalize_path(dir_path))
 		push_error("Failed to move dir into OS trash: ", dir_path, " (Error val:) ", err)
 		return err
@@ -35,19 +35,19 @@ func delete_dir(dir_path: String, move_to_os_trash: bool) -> Error:
 			push_error("Failed to remove dir at path: ", dir_path, " (Error val:) ", err)
 			return FAILED
 		return OK
-func delete_dirs(dir_paths: Array[String], move_to_os_trash: bool) -> Error:
+func delete_dirs(dir_paths: Array[String], to_recycle_bin: bool) -> Error:
 	var any_errors_occured: bool = false
 	for path in dir_paths:
-		if delete_dir(path, move_to_os_trash) != OK:
+		if delete_dir(path, to_recycle_bin) != OK:
 			any_errors_occured = true
 	if any_errors_occured:
 		return FAILED
 	else:
 		return OK
-func delete_dir_contents(dir_path: String, move_to_os_trash: bool) -> Error:
+func delete_dir_contents(dir_path: String, to_recycle_bin: bool) -> Error:
 	var err: Error
 	var any_errors_occured: bool = false
-	if move_to_os_trash:
+	if to_recycle_bin:
 		for nested_dir_name in DirAccess.get_directories_at(dir_path):
 			err = OS.move_to_trash(ProjectSettings.globalize_path(dir_path))
 			if err != OK:
@@ -75,27 +75,27 @@ func delete_dir_contents(dir_path: String, move_to_os_trash: bool) -> Error:
 			return FAILED
 		else:
 			return OK
-func delete_dirs_contents(dir_paths: Array[String], move_to_os_trash: bool) -> Error:
+func delete_dirs_contents(dir_paths: Array[String], to_recycle_bin: bool) -> Error:
 	var any_errors_occured: bool = false
 	for path in dir_paths:
-		if delete_dir_contents(path, move_to_os_trash) != OK:
+		if delete_dir_contents(path, to_recycle_bin) != OK:
 			any_errors_occured = true
 	if any_errors_occured:
 		return FAILED
 	else:
 		return OK
 
-func copy_dir_to_path(from_dir: String, target_dir: String, empty_target_dir_first_if_exists: bool) -> Error:
+func copy_dir_to_path(dir_path: String, target_path: String, empty_target_path_if_exists: bool) -> Error:
 	var err: Error
-	if DirAccess.dir_exists_absolute(target_dir):
-		if empty_target_dir_first_if_exists:
-			delete_dir_contents(target_dir, false)
+	if DirAccess.dir_exists_absolute(target_path):
+		if empty_target_path_if_exists:
+			delete_dir_contents(target_path, false)
 	else:
-		err = DirAccess.make_dir_recursive_absolute(target_dir)
+		err = DirAccess.make_dir_recursive_absolute(target_path)
 		if err != OK:
-			push_error("Failed to create dir at path: ", target_dir, " (Error val:) ", err)
+			push_error("Failed to create dir at path: ", target_path, " (Error val:) ", err)
 			return FAILED
-	if copy_dir_contents_into_dir(from_dir, target_dir, false) != OK:
+	if copy_dir_contents_into_dir(dir_path, target_path, false) != OK:
 		return FAILED
 	else:
 		return OK
@@ -460,12 +460,18 @@ func create_world(dir_name: String, cfg_data: Dictionary) -> Error:
 		push_error("Failed to write cfg file: ", dir_path, " (Error val:) ", err)
 		return err
 	return OK
-func edit_world():
-	pass
-func delete_world():
-	pass
-func duplicate_world():
-	pass
+func delete_world(dir_name: String) -> Error:
+	var err: Error
+	err = delete_dir(PATH_WORLDS + "/" + dir_name, true)
+	if err != OK:
+		return FAILED
+	return OK
+func duplicate_world(orig_dir_name: String) -> Error:
+	var err: Error
+	err = copy_dir_to_path(PATH_WORLDS + "/" + orig_dir_name, PATH_WORLDS + "/" + get_available_dirname(PATH_WORLDS, orig_dir_name, false), true)
+	if err != OK:
+		return FAILED
+	return OK
 
 func add_remembered_server():
 	pass
