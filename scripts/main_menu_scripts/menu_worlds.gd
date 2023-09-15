@@ -99,38 +99,15 @@ func open_edit_world_popup() -> Error:
 	popup.show()
 	popup.get_node("WorldNameInput").grab_focus()
 	return OK
-
 func confirm_edit_world():
-	var displayed_worlds_itemlist: Node = worlds_list_node
-	if displayed_worlds_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to finilize editing a saved world whilst none of the displayed worlds items were selected. (Did nothing.)")
+	if worlds_list_node.get_selected_items().is_empty():
+		push_warning("No world index is selected.")
 		return
-	var selected_server_index: int = displayed_worlds_itemlist.get_selected_items()[0]
-	var file_contents: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
-	
+	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
 	var popup: Node = $EditWorldPopup
 	var edited_name: String = popup.get_node("WorldNameInput").text
-	var edited_seed: String = ""
-	if popup.get_node("WorldSeedInput").text != "":
-		edited_seed = str(int(popup.get_node("WorldSeedInput").text))
-	else:
-		edited_seed = str(GeneralGlobals.random_worldgen_seed())
-	var original_world_dir: String = "user://storage/worlds/" + file_contents[(selected_server_index*2)+2]
-	var new_world_dir_name: String = FileManager.first_unused_dir_alt("user://storage/worlds/", edited_name)
-	var new_world_dir: String = "user://storage/worlds/" + new_world_dir_name
-	
-	# Determine what the contents of the worlds list text file should be after editing and replace its old contents.
-	file_contents[(selected_server_index*2)+1] = edited_name
-	file_contents[(selected_server_index*2)+2] = new_world_dir_name
-	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, file_contents)
-	
-	
-	# Update the world's world_info text file.
-	FileManager.write_txtfile_replace_end_of_line_starting_with(original_world_dir + "/world_info.txt", "world_name: ", edited_name)
-	FileManager.write_txtfile_replace_end_of_line_starting_with(original_world_dir + "/world_info.txt", "world_seed: ", edited_seed)
-	
-	if original_world_dir != new_world_dir:
-		DirAccess.rename_absolute(original_world_dir, new_world_dir)
+	var edited_seed: String = popup.get_node("WorldSeedInput").text
+	FileManager.edit_world(dir_name, edited_name, edited_seed)
 	
 	update_worlds_list()
 	popup.hide()

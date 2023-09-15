@@ -491,6 +491,16 @@ func create_world(world_name: String, world_seed: String) -> Error:
 	if write_cfg(dir_path + "/world.cfg", cfg_data) != OK:
 		return FAILED
 	return OK
+func edit_world(dir_name: String, new_name: String, new_seed: String) -> Error:
+	var dict: Dictionary = read_cfg(PATH_WORLDS + "/" + dir_name + "/world.cfg")
+	
+	
+	# Check for what's changed.
+	
+	
+	
+	
+	return OK
 func delete_world(dir_name: String) -> Error:
 	if  delete_dir(PATH_WORLDS + "/" + dir_name, true) != OK:
 		return FAILED
