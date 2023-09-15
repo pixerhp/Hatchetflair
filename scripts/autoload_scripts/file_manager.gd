@@ -26,8 +26,10 @@ const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
 func delete_dir(dir_path: String, to_recycle_bin: bool) -> Error:
 	if to_recycle_bin:
 		var err: Error = OS.move_to_trash(ProjectSettings.globalize_path(dir_path))
-		push_error("Failed to move dir into OS trash: ", dir_path, " (Error val:) ", err)
-		return err
+		if err != OK:
+			push_error("Failed to move dir into OS trash: ", dir_path, " (Error val:) ", err)
+			return err
+		return OK
 	else:
 		delete_dir_contents(dir_path, false)
 		var err: Error = DirAccess.remove_absolute(dir_path)
@@ -513,7 +515,7 @@ func edit_world(dir_name: String, new_name: String, new_seed: String) -> Error:
 	
 	return OK
 func delete_world(dir_name: String) -> Error:
-	if  delete_dir(PATH_WORLDS + "/" + dir_name, true) != OK:
+	if delete_dir(PATH_WORLDS + "/" + dir_name, true) != OK:
 		return FAILED
 	return OK
 func duplicate_world(dir_name: String) -> Error:

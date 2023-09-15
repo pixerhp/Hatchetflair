@@ -113,42 +113,33 @@ func confirm_edit_world():
 	popup.hide()
 	return
 
-func open_delete_world_popup():
+func open_delete_world_popup() -> Error:
 	hide_all_worlds_menu_popups()
-	
-	var displayed_worlds_itemlist: Node = worlds_list_node
-	if displayed_worlds_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to open the delete world popup despite no displayed world items being selected. (Did nothing.)")
-		return
-	var name_of_world_to_delete: String = FileManager.read_file_lines(worlds_list_txtfile_location)[(displayed_worlds_itemlist.get_selected_items()[0]*2)+1]
-	
-	$DeleteWorldPopup/PopupTitleText.text = "[center]Are you sure you want to delete world:\n\"" + name_of_world_to_delete +"\"?\n(This action cannot be undone.)[/center]"
-	$DeleteWorldPopup.show()
-	return
-
-func confirm_delete_world():
-	var displayed_worlds_itemlist: Node = worlds_list_node
-	if displayed_worlds_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to finilize deleting a world, but none of the displayed items were selected. (Aborted deletion.)")
-		return
-	var world_index: int = (displayed_worlds_itemlist.get_selected_items()[0]*2)+1
-	var worlds_list_lines: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
-	var dir_to_delete: String = "user://storage/worlds/" + worlds_list_lines[(displayed_worlds_itemlist.get_selected_items()[0]*2)+2]
-	if not DirAccess.dir_exists_absolute(dir_to_delete):
-		push_warning("Attempted to finilize deleting a world, but its directory could not be found: ", dir_to_delete, " (Aborting deletion.)")
-		return 
-	
-	# Delete the world's directory/folder and then edit the worlds list txtfile (second then first line due to array resizing.)
-	if FileManager.delete_dir(dir_to_delete, false):
-		push_warning("An error was encountered deleting a world's directory: ", dir_to_delete)
-	worlds_list_lines.remove_at(world_index+1)
-	worlds_list_lines.remove_at(world_index)
-	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, worlds_list_lines)
-	
+	if worlds_list_node.get_selected_items().is_empty():
+		push_warning("No world index is selected.")
+		return FAILED
+	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
+	# !!! Currently reading the file twice for code convenience, for a more perminant solution only read it once for all info.
+	var world_name: String = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_info", "world_name")
+	var popup: Node = $DeleteWorldPopup
+	popup.get_node("PopupTitleText").text = ("[center]Are you sure you want to delete world:\n" + world_name 
+	+ "\n(It will be deleted to your OS's recycling bin.)[/center]")
+	popup.show()
+	return OK
+func confirm_delete_world() -> Error:
+	hide_all_worlds_menu_popups()
+	if worlds_list_node.get_selected_items().is_empty():
+		push_warning("No world index is selected.")
+		return FAILED
+	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
+	var err: Error = FileManager.delete_world(dir_name)
 	$DeleteWorldPopup.hide()
 	disable_world_selected_requiring_buttons()
 	update_worlds_list()
-	return
+	if err != OK:
+		return FAILED
+	else:
+		return OK
 
 func _on_duplicate_world_pressed():
 	var displayed_worlds_itemlist: Node = worlds_list_node
