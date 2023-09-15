@@ -414,6 +414,17 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 #func sort_cfg ?
 
 
+#-=-=-=-# SAFE CHECKING:
+
+#func check_dict_key(dict_to_check: Dictionary, keys_to_check) -> bool:
+#
+#
+#
+#
+#
+#	return true
+
+
 #-=-=-=-# GAME-SPECIFIC:
 
 func ensure_required_dirs() -> Error:
