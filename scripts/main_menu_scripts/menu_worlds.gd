@@ -30,7 +30,7 @@ func sync_worlds() -> Error:
 	# Set up the dir names to world names dictionary:
 	dir_name_to_world_name.clear()
 	for dir_name in world_dir_names:
-		dir_name_to_world_name[dir_name] = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world_data.cfg", "meta_data", "world_name")
+		dir_name_to_world_name[dir_name] = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_data", "world_name")
 		if dir_name_to_world_name[dir_name] == null:
 			dir_name_to_world_name[dir_name] = "<error: reading cfg keyval returned null>"
 			any_errors_encountered = true

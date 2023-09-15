@@ -488,7 +488,7 @@ func create_world(world_name: String, world_seed: String) -> Error:
 	}
 	
 	# Write the world info cfg file and return.
-	if write_cfg(dir_path + "/world_data.cfg", cfg_data) != OK:
+	if write_cfg(dir_path + "/world.cfg", cfg_data) != OK:
 		return FAILED
 	return OK
 func delete_world(dir_name: String) -> Error:
