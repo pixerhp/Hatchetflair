@@ -468,7 +468,7 @@ func create_world(world_name: String, world_seed: String) -> Error:
 	
 	# Set up the dictionary that will be used to create the world info cfg file.
 	var cfg_data: Dictionary = {
-		"meta_data": {
+		"meta_info": {
 			"version": GeneralGlobals.V_ENTIRE,
 			"world_name": world_name,
 			"favorited": false,
@@ -476,7 +476,7 @@ func create_world(world_name: String, world_seed: String) -> Error:
 			"last_played_date_utc": "unplayed",
 			"launch_count": 0,
 		},
-		"generation_settings": {
+		"generation": {
 			"seed": world_seed,
 		},
 		"world_data": {

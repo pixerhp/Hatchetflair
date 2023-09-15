@@ -30,7 +30,7 @@ func sync_worlds() -> Error:
 	# Set up the dir names to world names dictionary:
 	dir_name_to_world_name.clear()
 	for dir_name in world_dir_names:
-		dir_name_to_world_name[dir_name] = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_data", "world_name")
+		dir_name_to_world_name[dir_name] = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_info", "world_name")
 		if dir_name_to_world_name[dir_name] == null:
 			dir_name_to_world_name[dir_name] = "<error: reading cfg keyval returned null>"
 			any_errors_encountered = true
@@ -83,26 +83,22 @@ func confirm_new_world() -> Error:
 	else:
 		return OK
 
-func open_edit_world_popup():
+func open_edit_world_popup() -> Error:
 	hide_all_worlds_menu_popups()
-	
-	var displayed_worlds_itemlist: Node = worlds_list_node
-	if displayed_worlds_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to open the edit world popup despite no displayed world items being selected. (Aborted popup.)")
-		return
-	var selected_world_index: int = displayed_worlds_itemlist.get_selected_items()[0]
-	var worlds_list_lines: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
-	var world_info_file_path: String = "user://storage/worlds/" + worlds_list_lines[(selected_world_index*2)+2] + "/world_info.txt"
+	if worlds_list_node.get_selected_items().is_empty():
+		push_warning("No world index is selected.")
+		return FAILED
+	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
+	# !!! Currently reading the file twice for code convenience, for a more perminant solution only read it once for all info.
+	var world_name: String = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_info", "world_name")
+	var world_seed: String = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "generation", "seed")
 	var popup: Node = $EditWorldPopup
-	var world_name: String = worlds_list_lines[(selected_world_index*2)+1]
-	var world_seed: String = FileManager.read_txtfile_remaining_of_line_starting_with(world_info_file_path, "world_seed: ")[1]
-	
 	popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + world_name + "\""
 	popup.get_node("WorldNameInput").text = world_name
 	popup.get_node("WorldSeedInput").text = world_seed
 	popup.show()
 	popup.get_node("WorldNameInput").grab_focus()
-	return
+	return OK
 
 func confirm_edit_world():
 	var displayed_worlds_itemlist: Node = worlds_list_node
