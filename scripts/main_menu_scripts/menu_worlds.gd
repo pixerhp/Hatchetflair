@@ -93,19 +93,21 @@ func open_edit_world_popup() -> Error:
 	popup.show()
 	popup.get_node("WorldNameInput").grab_focus()
 	return OK
-func confirm_edit_world():
+func confirm_edit_world() -> Error:
 	if worlds_list_node.get_selected_items().is_empty():
 		push_warning("No world index is selected.")
-		return
+		return FAILED
 	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
 	var popup: Node = $EditWorldPopup
 	var edited_name: String = popup.get_node("WorldNameInput").text
 	var edited_seed: String = popup.get_node("WorldSeedInput").text
-	FileManager.edit_world(dir_name, edited_name, edited_seed)
+	var err: Error = FileManager.edit_world(dir_name, edited_name, edited_seed)
 	
 	update_worlds_list()
 	popup.hide()
-	return
+	if err != OK:
+		return FAILED
+	return OK
 
 func open_delete_world_popup() -> Error:
 	hide_all_worlds_menu_popups()
