@@ -524,16 +524,16 @@ func edit_world(dir_name: String, new_name: String, new_seed: String) -> Error:
 	dict["meta_info"]["world_name"] = new_name
 	dict["generation"]["seed"] = new_seed
 	
-	var err: Error
-	err = write_cfg(PATH_WORLDS + "/" + dir_name + "/world.cfg", dict)
+	var any_errors_occured: bool = false
+	if write_cfg(PATH_WORLDS + "/" + dir_name + "/world.cfg", dict) != OK:
+		any_errors_occured = true
 	if dir_name.substr(0, new_name.length()) != new_name:
-		# Move the dir to an available location which is similar to (an alt of) the new world name.
-		pass
+		var new_dir_name: String = get_available_dirname(PATH_WORLDS, new_name, false)
+		if move_dir(PATH_WORLDS + "/" + dir_name, PATH_WORLDS + "/" + new_dir_name, true) != OK:
+			any_errors_occured = true
 	
-	
-	
-	
-	
+	if any_errors_occured:
+		return FAILED
 	return OK
 func delete_world(dir_name: String) -> Error:
 	if delete_dir(PATH_WORLDS + "/" + dir_name, true) != OK:
