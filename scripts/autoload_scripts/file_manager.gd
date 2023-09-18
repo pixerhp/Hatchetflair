@@ -505,10 +505,28 @@ func create_world(world_name: String, world_seed: String) -> Error:
 		return FAILED
 	return OK
 func edit_world(dir_name: String, new_name: String, new_seed: String) -> Error:
+	# Normalize the world name.
+	new_name = new_name.replace("\n", "")
+	new_name = new_name.replace("\r", "")
+	new_name = new_name.replace("\t", "")
+	if new_name == "":
+		new_name = "new world"
+	# Normalize the world seed.
+	if new_seed != "":
+		new_seed = str(int(new_seed))
+	else:
+		new_seed = str(GeneralGlobals.get_rand_int())
+	
 	var dict: Dictionary = read_cfg(PATH_WORLDS + "/" + dir_name + "/world.cfg")
+	dict["meta_info"]["world_name"] = new_name
+	dict["generation"]["seed"] = new_seed
 	
+	var err: Error
+	err = write_cfg(PATH_WORLDS + "/" + dir_name + "/world.cfg", dict)
+	if dir_name.substr(0, new_name.length()) != new_name:
+		# Move the dir to an available location which is similar to (an alt of) the new world name.
+		pass
 	
-	# Check for what's changed.
 	
 	
 	
