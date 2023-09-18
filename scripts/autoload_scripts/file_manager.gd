@@ -7,6 +7,7 @@ extends Node
 # ~ dir & file interactions
 # ~ reading & writing
 # ~ file organizing
+# ~ safe checking & convenience
 # ~ game-specific
 
 
@@ -17,6 +18,7 @@ const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
 
 const PATH_STORAGE: String = "user://storage"
 const PATH_SERVERS: String = PATH_STORAGE + "/remembered_servers.cfg"
+const PATH_USERS: String = PATH_STORAGE + "/users.cfg"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
 
@@ -419,30 +421,39 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 #func sort_cfg ?
 
 
-#-=-=-=-# SAFE CHECKING:
+#-=-=-=-# SAFE CHECKING & CONVENIENCE:
 
 #func dict_safe_get(specify a key, even recursively like a dict in a dict in a dict) -> bool:
-#
-#
-#
-#	return true
+
+func normalize_name(name_text: String, default: String) -> String:
+	name_text = name_text.replace("\n", "")
+	name_text = name_text.replace("\r", "")
+	name_text = name_text.replace("\t", "")
+	if name_text == "":
+		name_text = "default"
+	return name_text
+func normalize_seed(seed: String) -> String:
+	seed = seed.replace("\n", "")
+	seed = seed.replace("\r", "")
+	seed = seed.replace("\t", "")
+	if seed != "":
+		seed = str(int(seed))
+	else:
+		seed = str(GeneralGlobals.get_rand_int())
+	return seed
+func normalize_ip(ip: String) -> String:
+	ip = ip.replace("\n", "")
+	ip = ip.replace("\r", "")
+	ip = ip.replace("\t", "")
+	return ip
 
 
 #-=-=-=-# GAME-SPECIFIC:
 
 #for the future, probably something like: func create_world(cfg_data: Dictionary) -> Error:
 func create_world(world_name: String, world_seed: String) -> Error:
-	# Normalize the world name.
-	world_name = world_name.replace("\n", "")
-	world_name = world_name.replace("\r", "")
-	world_name = world_name.replace("\t", "")
-	if world_name == "":
-		world_name = "new world"
-	# Normalize the world seed.
-	if world_seed != "":
-		world_seed = str(int(world_seed))
-	else:
-		world_seed = str(GeneralGlobals.get_rand_int())
+	world_name = normalize_name(world_name, "new world")
+	world_seed = normalize_seed(world_seed)
 	
 	# Create the world's directory and subdirectories.
 	var dir_name: String = get_available_dirname(PATH_WORLDS, world_name, false)
@@ -483,17 +494,8 @@ func create_world(world_name: String, world_seed: String) -> Error:
 		return FAILED
 	return OK
 func edit_world(dir_name: String, new_name: String, new_seed: String) -> Error:
-	# Normalize the world name.
-	new_name = new_name.replace("\n", "")
-	new_name = new_name.replace("\r", "")
-	new_name = new_name.replace("\t", "")
-	if new_name == "":
-		new_name = "new world"
-	# Normalize the world seed.
-	if new_seed != "":
-		new_seed = str(int(new_seed))
-	else:
-		new_seed = str(GeneralGlobals.get_rand_int())
+	new_name = normalize_name(new_name, "new world")
+	new_seed = normalize_seed(new_seed)
 	
 	var dict: Dictionary = read_cfg(PATH_WORLDS + "/" + dir_name + "/world.cfg")
 	dict["meta_info"]["world_name"] = new_name
@@ -520,6 +522,9 @@ func duplicate_world(dir_name: String) -> Error:
 	return OK
 
 func add_remembered_server(nickname: String, ip: String) -> Error:
+	nickname = normalize_name(nickname, "new remembered server")
+	ip = normalize_ip(ip)
+	
 	var dict: Dictionary = read_cfg(PATH_SERVERS)
 	var section_name: String = get_available_dict_key_string(dict, nickname, false)
 	dict[section_name] = {
@@ -531,6 +536,9 @@ func add_remembered_server(nickname: String, ip: String) -> Error:
 		return FAILED
 	return OK
 func edit_remembered_server(section_name: String, nickname: String, ip: String) -> Error:
+	nickname = normalize_name(nickname, "new remembered server")
+	ip = normalize_ip(ip)
+	
 	var section_data: Dictionary = read_cfg_section(PATH_SERVERS, section_name)
 	remove_remembered_server(section_name)
 	var dict: Dictionary = read_cfg(PATH_SERVERS) 
@@ -558,6 +566,7 @@ func ensure_required_dirs() -> Error:
 	var directories_to_ensure_exist: Array[String] = [
 		PATH_STORAGE,
 		PATH_SERVERS,
+		PATH_USERS,
 		PATH_WORLDS,
 		PATH_SCREENSHOTS,
 	]

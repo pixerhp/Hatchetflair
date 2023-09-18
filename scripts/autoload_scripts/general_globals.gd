@@ -13,6 +13,7 @@ var TITLE_ENTIRE: String = ""
 const IS_MODDED: bool = false
 const IS_INDEV: bool = true
 
+# !!! replace with a signal/coroutine and places having the "await" keyword?
 var globals_ready: bool = false
 
 # =-= =-= =-= =-= =-= =-= =-= # <~
