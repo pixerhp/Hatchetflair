@@ -44,8 +44,7 @@ func delete_dirs(dir_paths: Array[String], to_recycle_bin: bool) -> Error:
 			any_errors_occured = true
 	if any_errors_occured:
 		return FAILED
-	else:
-		return OK
+	return OK
 func delete_dir_contents(dir_path: String, to_recycle_bin: bool) -> Error:
 	var err: Error
 	var any_errors_occured: bool = false
@@ -62,8 +61,7 @@ func delete_dir_contents(dir_path: String, to_recycle_bin: bool) -> Error:
 				any_errors_occured = true
 		if any_errors_occured:
 			return FAILED
-		else:
-			return OK
+		return OK
 	else:
 		for nested_dir_name in DirAccess.get_directories_at(dir_path):
 			if delete_dir(dir_path + "/" + nested_dir_name, false) != OK:
@@ -75,8 +73,7 @@ func delete_dir_contents(dir_path: String, to_recycle_bin: bool) -> Error:
 				any_errors_occured = true
 		if any_errors_occured:
 			return FAILED
-		else:
-			return OK
+		return OK
 func delete_dirs_contents(dir_paths: Array[String], to_recycle_bin: bool) -> Error:
 	var any_errors_occured: bool = false
 	for path in dir_paths:
@@ -84,8 +81,7 @@ func delete_dirs_contents(dir_paths: Array[String], to_recycle_bin: bool) -> Err
 			any_errors_occured = true
 	if any_errors_occured:
 		return FAILED
-	else:
-		return OK
+	return OK
 
 func copy_dir(from_path: String, to_path: String, empty_target: bool) -> Error:
 	# Ensure that the "to" file path directory exists.
@@ -193,8 +189,8 @@ func get_available_dict_key_string(dict: Dictionary, key: String, start_with_alt
 	if start_with_alt0:
 		for index in keys_list.size():
 			if not keys_list.has(key + " alt" + str(index)):
-				return(key + " alt" + str(index))
-		return(key + " alt" + str(keys_list.size()))
+				return (key + " alt" + str(index))
+		return (key + " alt" + str(keys_list.size()))
 	else:
 		for index in keys_list.size():
 			if index == 0:
@@ -203,7 +199,7 @@ func get_available_dict_key_string(dict: Dictionary, key: String, start_with_alt
 			else:
 				if not keys_list.has(key + " alt" + str(index)):
 					return(key + " alt" + str(index))
-		return(key + " alt" + str(keys_list.size()))
+		return (key + " alt" + str(keys_list.size()))
 
 
 #-=-=-=-# READING & WRITING:
@@ -334,8 +330,7 @@ func write_cfg(file_path: String, dict: Dictionary) -> Error:
 		any_errors_encountered = true
 	if any_errors_encountered:
 		return FAILED
-	else:
-		return OK
+	return OK
 func write_cfg_keyval(file_path: String, section: String, key: String, value: Variant) -> Error:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)

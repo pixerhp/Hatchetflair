@@ -2,12 +2,7 @@ extends Control
 
 var world_dir_names: Array[String] = []
 var dir_name_to_world_name: Dictionary = {}
-
 @onready var worlds_list_node: Node = $WorldsScreenUI/SavedWorldsList
-
-
-
-const worlds_list_txtfile_location = ""
 
 
 func _ready():
@@ -36,8 +31,7 @@ func sync_worlds() -> Error:
 			any_errors_encountered = true
 	if any_errors_encountered:
 		return FAILED
-	else:
-		return OK
+	return OK
 func update_worlds_list() -> void:
 	sync_worlds()
 	worlds_list_node.clear()
@@ -80,8 +74,7 @@ func confirm_new_world() -> Error:
 	popup.hide()
 	if err != OK:
 		return FAILED
-	else:
-		return OK
+	return OK
 
 func open_edit_world_popup() -> Error:
 	hide_all_worlds_menu_popups()
@@ -133,13 +126,13 @@ func confirm_delete_world() -> Error:
 		return FAILED
 	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
 	var err: Error = FileManager.delete_world(dir_name)
+	
 	$DeleteWorldPopup.hide()
 	disable_world_selected_requiring_buttons()
 	update_worlds_list()
 	if err != OK:
 		return FAILED
-	else:
-		return OK
+	return OK
 
 func _on_duplicate_world_pressed() -> Error:
 	if worlds_list_node.get_selected_items().is_empty():
@@ -151,14 +144,14 @@ func _on_duplicate_world_pressed() -> Error:
 	update_worlds_list()
 	if err != OK:
 		return FAILED
-	else:
-		return OK
+	return OK
 
 
-func toggle_visibility_of_host_without_playing_toggle (button_value: bool) -> void:
+func toggle_visibility_of_host_without_playing_toggle (button_value: bool):
 	$WorldsScreenUI/Toggles/HostWithoutPlaying.disabled = not button_value
 	if not button_value:
 		$WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed = false
+	return
 
 func _on_worlds_list_item_selected():
 	hide_all_worlds_menu_popups()
@@ -166,14 +159,17 @@ func _on_worlds_list_item_selected():
 	$WorldsScreenUI/WorldButtons/EditWorld.disabled = false
 	$WorldsScreenUI/WorldButtons/DuplicateWorld.disabled = false
 	$WorldsScreenUI/WorldButtons/PlayWorld.disabled = false
+	return
 
 func disable_world_selected_requiring_buttons():
 	$WorldsScreenUI/WorldButtons/DeleteWorld.disabled = true
 	$WorldsScreenUI/WorldButtons/EditWorld.disabled = true
 	$WorldsScreenUI/WorldButtons/DuplicateWorld.disabled = true
 	$WorldsScreenUI/WorldButtons/PlayWorld.disabled = true
+	return
 
 func hide_all_worlds_menu_popups():
 	$NewWorldPopup.hide()
 	$EditWorldPopup.hide()
 	$DeleteWorldPopup.hide()
+	return
