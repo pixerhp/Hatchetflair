@@ -1,7 +1,5 @@
 extends Control
 
-const servers_list_txtfile_location: String = "user://storage/servers_list.txt"
-
 
 func _ready():
 	# Connect popup buttons to their associated functions.
@@ -24,7 +22,7 @@ func join_server_by_index(servers_list_index: int = -1) -> void:
 		else:
 			push_error("No servers list index was specified for joining a server's world. (Aborting joining server.)")
 			return
-	var servers_list_lines: Array[String] = FileManager.read_file_lines(servers_list_txtfile_location)
+	var servers_list_lines: Array[String] = FileManager.read_file_lines(FileManager.PATH_SERVERS)
 	var server_ip: String = servers_list_lines[(servers_list_index * 2) + 2]
 	
 	join_server_by_ip(server_ip)
@@ -53,10 +51,10 @@ func confirm_add_server():
 	var server_ip: String = popup.get_node("ServerIPInput").text
 	
 	# Determine the updated servers-list txtfile contents and replace the old contents.
-	var file_contents: Array[String] = FileManager.read_file_lines(servers_list_txtfile_location)
+	var file_contents: Array[String] = FileManager.read_file_lines(FileManager.PATH_SERVERS)
 	file_contents.append(server_nickname)
 	file_contents.append(server_ip)
-	FileManager.write_txtfile_from_array_of_lines(servers_list_txtfile_location, file_contents)
+	FileManager.write_txtfile_from_array_of_lines(FileManager.PATH_SERVERS, file_contents)
 	
 	update_the_displayed_servers_list()
 	popup.hide()
@@ -70,7 +68,7 @@ func open_edit_server_popup():
 		push_warning("Attempted to open the EditServer popup despite no displayed server item being selected. (Did nothing.)")
 		return
 	
-	var txtfile_lines: Array[String] = FileManager.read_file_lines(servers_list_txtfile_location)
+	var txtfile_lines: Array[String] = FileManager.read_file_lines(FileManager.PATH_SERVERS)
 	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
 	var popup = $EditServerPopup
 	popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + txtfile_lines[(selected_server_index*2)+1] + "\""
@@ -86,12 +84,12 @@ func confirm_edit_server():
 		return
 	
 	# Determine what the contents of the servers list text file should be after editing and replace its old contents.
-	var file_contents: Array[String] = FileManager.read_file_lines(servers_list_txtfile_location)
+	var file_contents: Array[String] = FileManager.read_file_lines(FileManager.PATH_SERVERS)
 	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
 	var popup = $EditServerPopup
 	file_contents[(selected_server_index*2)+1] = popup.get_node("ServerNicknameInput").text
 	file_contents[(selected_server_index*2)+2] = popup.get_node("ServerIPInput").text
-	FileManager.write_txtfile_from_array_of_lines(servers_list_txtfile_location, file_contents)
+	FileManager.write_txtfile_from_array_of_lines(FileManager.PATH_SERVERS, file_contents)
 	
 	update_the_displayed_servers_list()
 	popup.hide()
@@ -106,7 +104,7 @@ func open_remove_server_popup():
 		return
 	
 	var popup = $RemoveServerPopup
-	var name_of_removable_server: String = FileManager.read_file_lines(servers_list_txtfile_location)[(displayed_servers_itemlist.get_selected_items()[0]*2)+1]
+	var name_of_removable_server: String = FileManager.read_file_lines(FileManager.PATH_SERVERS)[(displayed_servers_itemlist.get_selected_items()[0]*2)+1]
 	popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + name_of_removable_server +"\"?\n(This action cannot be undone.)[/center]"
 	popup.show()
 	return
@@ -118,11 +116,11 @@ func confirm_remove_server():
 		return
 	
 	# Determine what the contents of the servers list text file should be after the removal and replace the old contents.
-	var file_contents: Array[String] = FileManager.read_file_lines(servers_list_txtfile_location)
+	var file_contents: Array[String] = FileManager.read_file_lines(FileManager.PATH_SERVERS)
 	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
 	file_contents.remove_at((selected_server_index*2)+2)
 	file_contents.remove_at((selected_server_index*2)+1)
-	FileManager.write_txtfile_from_array_of_lines(servers_list_txtfile_location, file_contents)
+	FileManager.write_txtfile_from_array_of_lines(FileManager.PATH_SERVERS, file_contents)
 	
 	update_the_displayed_servers_list()
 	disable_server_selected_requiring_buttons()
@@ -131,11 +129,11 @@ func confirm_remove_server():
 
 
 func update_the_displayed_servers_list():
-	FileManager.sort_file_line_groups_alphabetically(servers_list_txtfile_location, 2, 1)
+	FileManager.sort_file_line_groups_alphabetically(FileManager.PATH_SERVERS, 2, 1)
 	$JoinScreenUI/SavedServersList.clear()
 	
 	# Add each server nickname from the text file to the displayed servers list text you see in the menu.
-	var servers_list_txtfile_lines: PackedStringArray = FileManager.read_file_lines(servers_list_txtfile_location)
+	var servers_list_txtfile_lines: PackedStringArray = FileManager.read_file_lines(FileManager.PATH_SERVERS)
 	for index in range(1, servers_list_txtfile_lines.size()-1, 2):
 		$JoinScreenUI/SavedServersList.add_item(servers_list_txtfile_lines[index])
 	return

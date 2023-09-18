@@ -16,7 +16,7 @@ const PATH_ASSETS: String = "res://assets"
 const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
 
 const PATH_STORAGE: String = "user://storage"
-const PATH_REMEMBERED_SERVERS: String = PATH_STORAGE + "/remembered_servers.cfg"
+const PATH_SERVERS: String = PATH_STORAGE + "/remembered_servers.cfg"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
 
@@ -421,9 +421,7 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 
 #-=-=-=-# SAFE CHECKING:
 
-#func check_dict_key(dict_to_check: Dictionary, keys_to_check) -> bool:
-#
-#
+#func dict_safe_get(specify a key, even recursively like a dict in a dict in a dict) -> bool:
 #
 #
 #
@@ -432,30 +430,7 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 
 #-=-=-=-# GAME-SPECIFIC:
 
-func ensure_required_dirs() -> Error:
-	var any_errors_encountered: bool = false
-	var err: Error
-	var directories_to_ensure_exist: Array[String] = [
-		PATH_STORAGE,
-		PATH_REMEMBERED_SERVERS,
-		PATH_WORLDS,
-		PATH_SCREENSHOTS,
-	]
-	for dir in directories_to_ensure_exist:
-		if not DirAccess.dir_exists_absolute(dir):
-			err = DirAccess.make_dir_recursive_absolute(dir)
-			if err != OK:
-				push_error("Failed to find or create directory: ", dir, " (Error val:) ", err)
-				any_errors_encountered = true
-	if any_errors_encountered:
-		return FAILED
-	return OK
-func ensure_required_files():
-	pass
-func ensure_world():
-	pass
-
-#func create_world(cfg_data: Dictionary) -> Error:
+#for the future, probably something like: func create_world(cfg_data: Dictionary) -> Error:
 func create_world(world_name: String, world_seed: String) -> Error:
 	# Normalize the world name.
 	world_name = world_name.replace("\n", "")
@@ -545,20 +520,20 @@ func duplicate_world(dir_name: String) -> Error:
 	return OK
 
 func add_remembered_server(nickname: String, ip: String) -> Error:
-	var dict: Dictionary = read_cfg(PATH_REMEMBERED_SERVERS)
+	var dict: Dictionary = read_cfg(PATH_SERVERS)
 	var section_name: String = get_available_dict_key_string(dict, nickname, false)
 	dict[section_name] = {
 		"nickname": nickname,
 		"ip": ip,
 		"join_count": 0,
 	}
-	if write_cfg(PATH_REMEMBERED_SERVERS, dict) != OK:
+	if write_cfg(PATH_SERVERS, dict) != OK:
 		return FAILED
 	return OK
 func edit_remembered_server(section_name: String, nickname: String, ip: String) -> Error:
-	var section_data: Dictionary = read_cfg_section(PATH_REMEMBERED_SERVERS, section_name)
+	var section_data: Dictionary = read_cfg_section(PATH_SERVERS, section_name)
 	remove_remembered_server(section_name)
-	var dict: Dictionary = read_cfg(PATH_REMEMBERED_SERVERS) 
+	var dict: Dictionary = read_cfg(PATH_SERVERS) 
 	var replacement_section_name: String = get_available_dict_key_string(dict, nickname, false)
 	dict[replacement_section_name] = section_data
 	dict[replacement_section_name]["nickname"] = nickname
@@ -566,15 +541,38 @@ func edit_remembered_server(section_name: String, nickname: String, ip: String) 
 	print("inputs: ", nickname, ", ", ip)
 	print(dict[replacement_section_name]["nickname"])
 	print(dict[replacement_section_name]["ip"])
-	if write_cfg(PATH_REMEMBERED_SERVERS, dict) != OK:
+	if write_cfg(PATH_SERVERS, dict) != OK:
 		return FAILED
 	return OK
 func remove_remembered_server(section_name: String) -> Error:
-	var dict: Dictionary = read_cfg(PATH_REMEMBERED_SERVERS)
+	var dict: Dictionary = read_cfg(PATH_SERVERS)
 	dict.erase(section_name)
-	if write_cfg(PATH_REMEMBERED_SERVERS, dict) != OK:
+	if write_cfg(PATH_SERVERS, dict) != OK:
 		return FAILED
 	return OK
 
+
+func ensure_required_dirs() -> Error:
+	var any_errors_encountered: bool = false
+	var err: Error
+	var directories_to_ensure_exist: Array[String] = [
+		PATH_STORAGE,
+		PATH_SERVERS,
+		PATH_WORLDS,
+		PATH_SCREENSHOTS,
+	]
+	for dir in directories_to_ensure_exist:
+		if not DirAccess.dir_exists_absolute(dir):
+			err = DirAccess.make_dir_recursive_absolute(dir)
+			if err != OK:
+				push_error("Failed to find or create directory: ", dir, " (Error val:) ", err)
+				any_errors_encountered = true
+	if any_errors_encountered:
+		return FAILED
+	return OK
+func ensure_required_files():
+	pass
+func ensure_world():
+	pass
 
 #-=-=-=-#
