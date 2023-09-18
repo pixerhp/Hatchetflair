@@ -841,7 +841,7 @@ text = "Back"
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/EditWorld" to="Menus/WorldsScreen" method="open_edit_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DuplicateWorld" to="Menus/WorldsScreen" method="_on_duplicate_world_pressed"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/PlayWorld" to="Menus/WorldsScreen" method="start_world_by_index"]
-[connection signal="visibility_changed" from="Menus/JoinScreen" to="Menus/JoinScreen" method="update_the_displayed_servers_list"]
+[connection signal="visibility_changed" from="Menus/JoinScreen" to="Menus/JoinScreen" method="update_servers_list"]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
 [connection signal="item_activated" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="join_server_by_index"]
 [connection signal="item_selected" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="_on_servers_list_item_selected" unbinds=1]

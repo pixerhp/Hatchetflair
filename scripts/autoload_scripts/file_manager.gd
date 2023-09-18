@@ -425,22 +425,22 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 
 #func dict_safe_get(specify a key, even recursively like a dict in a dict in a dict) -> bool:
 
-func normalize_name(name_text: String, default: String) -> String:
-	name_text = name_text.replace("\n", "")
-	name_text = name_text.replace("\r", "")
-	name_text = name_text.replace("\t", "")
-	if name_text == "":
-		name_text = "default"
-	return name_text
-func normalize_seed(seed: String) -> String:
-	seed = seed.replace("\n", "")
-	seed = seed.replace("\r", "")
-	seed = seed.replace("\t", "")
-	if seed != "":
-		seed = str(int(seed))
+func normalize_name(name_str: String, default: String) -> String:
+	name_str = name_str.replace("\n", "")
+	name_str = name_str.replace("\r", "")
+	name_str = name_str.replace("\t", "")
+	if name_str.is_empty():
+		name_str = default
+	return name_str
+func normalize_seed(seed_str: String) -> String:
+	seed_str = seed_str.replace("\n", "")
+	seed_str = seed_str.replace("\r", "")
+	seed_str = seed_str.replace("\t", "")
+	if seed_str.is_empty():
+		seed_str = str(GeneralGlobals.get_rand_int())
 	else:
-		seed = str(GeneralGlobals.get_rand_int())
-	return seed
+		seed_str = str(int(seed_str))
+	return seed_str
 func normalize_ip(ip: String) -> String:
 	ip = ip.replace("\n", "")
 	ip = ip.replace("\r", "")

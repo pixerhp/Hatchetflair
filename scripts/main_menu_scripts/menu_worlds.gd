@@ -22,7 +22,6 @@ func _ready():
 func sync_worlds() -> Error:
 	var any_errors_encountered: bool = false
 	world_dir_names.assign(DirAccess.get_directories_at(FileManager.PATH_WORLDS))
-	# Set up the dir names to world names dictionary:
 	dir_name_to_world_name.clear()
 	for dir_name in world_dir_names:
 		dir_name_to_world_name[dir_name] = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_info", "world_name")

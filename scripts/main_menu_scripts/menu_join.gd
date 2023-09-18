@@ -1,5 +1,9 @@
 extends Control
 
+var server_altnames: Array[String] = []
+var altname_to_nickname: Dictionary = {}
+@onready var servers_list_node: Node = $JoinScreenUI/SavedServersList
+
 
 func _ready():
 	# Connect popup buttons to their associated functions.
@@ -12,6 +16,21 @@ func _ready():
 	
 	disable_server_selected_requiring_buttons()
 	hide_all_servers_menu_popups()
+	return
+
+
+func sync_servers():
+	var servers_dict: Dictionary = FileManager.read_cfg(FileManager.PATH_SERVERS, ["meta_info"])
+	server_altnames.clear()
+	altname_to_nickname.clear()
+	for altname in servers_dict:
+		server_altnames.append(altname)
+		altname_to_nickname[altname] = servers_dict[altname]["nickname"]
+func update_servers_list():
+	sync_servers()
+	servers_list_node.clear()
+	for server_nickname in altname_to_nickname.values():
+		servers_list_node.add_item(server_nickname)
 	return
 
 
@@ -56,7 +75,7 @@ func confirm_add_server():
 	file_contents.append(server_ip)
 	FileManager.write_txtfile_from_array_of_lines(FileManager.PATH_SERVERS, file_contents)
 	
-	update_the_displayed_servers_list()
+	update_servers_list()
 	popup.hide()
 	return
 
@@ -91,7 +110,7 @@ func confirm_edit_server():
 	file_contents[(selected_server_index*2)+2] = popup.get_node("ServerIPInput").text
 	FileManager.write_txtfile_from_array_of_lines(FileManager.PATH_SERVERS, file_contents)
 	
-	update_the_displayed_servers_list()
+	update_servers_list()
 	popup.hide()
 	return
 
@@ -122,20 +141,9 @@ func confirm_remove_server():
 	file_contents.remove_at((selected_server_index*2)+1)
 	FileManager.write_txtfile_from_array_of_lines(FileManager.PATH_SERVERS, file_contents)
 	
-	update_the_displayed_servers_list()
+	update_servers_list()
 	disable_server_selected_requiring_buttons()
 	$RemoveServerPopup.hide()
-	return
-
-
-func update_the_displayed_servers_list():
-	FileManager.sort_file_line_groups_alphabetically(FileManager.PATH_SERVERS, 2, 1)
-	$JoinScreenUI/SavedServersList.clear()
-	
-	# Add each server nickname from the text file to the displayed servers list text you see in the menu.
-	var servers_list_txtfile_lines: PackedStringArray = FileManager.read_file_lines(FileManager.PATH_SERVERS)
-	for index in range(1, servers_list_txtfile_lines.size()-1, 2):
-		$JoinScreenUI/SavedServersList.add_item(servers_list_txtfile_lines[index])
 	return
 
 
