@@ -89,7 +89,8 @@ func open_edit_world_popup() -> Error:
 		push_warning("No world index is selected.")
 		return FAILED
 	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
-	# !!! Currently reading the file twice for code convenience, for a more perminant solution only read it once for all info.
+	# Note: In the future when you can edit much more than just name and seed, 
+	# get all world info at once rather than each piece individually to reduce file reads.
 	var world_name: String = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_info", "world_name")
 	var world_seed: String = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "generation", "seed")
 	var popup: Node = $EditWorldPopup
@@ -119,7 +120,6 @@ func open_delete_world_popup() -> Error:
 		push_warning("No world index is selected.")
 		return FAILED
 	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
-	# !!! Currently reading the file twice for code convenience, for a more perminant solution only read it once for all info.
 	var world_name: String = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_info", "world_name")
 	var popup: Node = $DeleteWorldPopup
 	popup.get_node("PopupTitleText").text = ("[center]Are you sure you want to delete world:\n" + world_name 
@@ -141,30 +141,18 @@ func confirm_delete_world() -> Error:
 	else:
 		return OK
 
-func _on_duplicate_world_pressed():
-	var displayed_worlds_itemlist: Node = worlds_list_node
-	if displayed_worlds_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to duplicate a world, but none of the displayed items were selected. (Did nothing.)")
-		return
-	var selected_world_index: int = displayed_worlds_itemlist.get_selected_items()[0]
-	var worlds_list_lines: Array[String] = FileManager.read_file_lines(worlds_list_txtfile_location)
-	var originals_world_name: String = worlds_list_lines[(selected_world_index*2)+1]
-	var originals_dir_path: String = "user://storage/worlds/" + worlds_list_lines[(selected_world_index*2)+2]
-	var copys_world_name: String = "Copy of " + originals_world_name
-	var copys_dir_name: String = FileManager.first_unused_dir_alt("user://storage/worlds/", copys_world_name)
-	var copys_dir_path: String = "user://storage/worlds/" + copys_dir_name
-	
-	# Update the worlds-list text-file contents.
-	worlds_list_lines.append(copys_world_name)
-	worlds_list_lines.append(copys_dir_name)
-	FileManager.write_txtfile_from_array_of_lines(worlds_list_txtfile_location, worlds_list_lines)
-	
-	# Create the copy's directory, and copy all of the contents of the original world's directory to it.
-	FileManager.copy_dir_to_path(originals_dir_path, copys_dir_path, false)
-	
+func _on_duplicate_world_pressed() -> Error:
+	if worlds_list_node.get_selected_items().is_empty():
+		push_warning("No world index is selected.")
+		return FAILED
+	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
+	var err: Error = FileManager.duplicate_world(dir_name)
 	disable_world_selected_requiring_buttons()
 	update_worlds_list()
-	return
+	if err != OK:
+		return FAILED
+	else:
+		return OK
 
 
 func toggle_visibility_of_host_without_playing_toggle (button_value: bool) -> void:
