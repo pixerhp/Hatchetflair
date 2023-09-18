@@ -87,39 +87,47 @@ func delete_dirs_contents(dir_paths: Array[String], to_recycle_bin: bool) -> Err
 	else:
 		return OK
 
-func copy_dir_to_path(dir_path: String, target_path: String, empty_target_path_if_exists: bool) -> Error:
-	var err: Error
-	if DirAccess.dir_exists_absolute(target_path):
-		if empty_target_path_if_exists:
-			delete_dir_contents(target_path, false)
+func copy_dir(from_path: String, to_path: String, empty_target: bool) -> Error:
+	# Ensure that the "to" file path directory exists.
+	if DirAccess.dir_exists_absolute(to_path):
+		if empty_target:
+			delete_dir_contents(to_path, false)
 	else:
-		err = DirAccess.make_dir_recursive_absolute(target_path)
+		var err: Error = DirAccess.make_dir_recursive_absolute(to_path)
 		if err != OK:
-			push_error("Failed to create dir at path: ", target_path, " (Error val:) ", err)
+			push_error("Failed to create dir at path: ", to_path, " (Error val:) ", err)
 			return FAILED
-	if copy_dir_contents_into_dir(dir_path, target_path, false) != OK:
+	if copy_dir_contents(from_path, to_path, false) != OK:
 		return FAILED
-	else:
-		return OK
-func copy_dir_contents_into_dir(from_dir_path: String, target_dir_path: String, empty_target_dir_first: bool) -> Error:
-	if empty_target_dir_first:
-		if delete_dir_contents(target_dir_path, false) != OK:
-			return FAILED
+	return OK
+func copy_dir_contents(from_path: String, into_path: String, empty_target: bool) -> Error:
+	if empty_target:
+		delete_dir_contents(into_path, false)
 	var err: Error
 	var any_errors_occured: bool = false
-	for file_name in DirAccess.get_files_at(from_dir_path):
-		err = DirAccess.copy_absolute(from_dir_path + "/" + file_name, target_dir_path + "/" + file_name)
+	for file_name in DirAccess.get_files_at(from_path):
+		err = DirAccess.copy_absolute(from_path + "/" + file_name, into_path + "/" + file_name)
 		if err != OK:
-			push_error("Failed to copy file: ", from_dir_path + "/" + file_name, 
-			" to: ", target_dir_path + "/" + file_name, " (Error val:) ", err)
+			push_error("Failed to copy file: ", from_path + "/" + file_name, 
+			" to: ", into_path + "/" + file_name, " (Error val:) ", err)
 			any_errors_occured = true
-	for nested_dir_name in DirAccess.get_directories_at(from_dir_path):
-		if copy_dir_to_path(from_dir_path + "/" + nested_dir_name, target_dir_path + "/" + nested_dir_name, false) != OK:
+	for subdir_name in DirAccess.get_directories_at(from_path):
+		if copy_dir(from_path + "/" + subdir_name, into_path + "/" + subdir_name, false) != OK:
 			any_errors_occured = true
 	if any_errors_occured:
 		return FAILED
-	else:
-		return OK
+	return OK
+
+func move_dir(from_path: String, to_path: String, empty_target: bool) -> Error:
+	# ! DirAccess.rename_absolute does exist and can move directories if certain conditions are met,
+	# so this function may be revised in the future using it. For now though, it doesn't use it because you
+	# have to worry about the stuff in the dir before the to_path a lot.
+	if copy_dir(from_path, to_path, empty_target) != OK:
+		# Abort deleting the original dir if any failures occured copying contents, to avoid permanently losing any data.
+		return FAILED
+	if delete_dir(from_path, false) != OK:
+		return FAILED
+	return OK
 
 func get_available_dirname(path_opening: String, dir_name: String, start_with_alt0: bool) -> String:
 	var list_of_dir_names: PackedStringArray = DirAccess.get_directories_at(path_opening)
@@ -537,7 +545,7 @@ func delete_world(dir_name: String) -> Error:
 		return FAILED
 	return OK
 func duplicate_world(dir_name: String) -> Error:
-	if copy_dir_to_path(PATH_WORLDS + "/" + dir_name, PATH_WORLDS + "/" + get_available_dirname(PATH_WORLDS, dir_name, false), true) != OK:
+	if copy_dir(PATH_WORLDS + "/" + dir_name, PATH_WORLDS + "/" + get_available_dirname(PATH_WORLDS, dir_name, false), true) != OK:
 		return FAILED
 	return OK
 
