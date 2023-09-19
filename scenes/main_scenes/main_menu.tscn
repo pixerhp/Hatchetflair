@@ -127,7 +127,7 @@ icon_alignment = 1
 [node name="Spacer3" type="Control" parent="Menus/TitleScreen/TitleScreenUI"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 2.0
+size_flags_stretch_ratio = 1.5
 
 [node name="WorldsScreen" type="Control" parent="Menus"]
 visible = false
