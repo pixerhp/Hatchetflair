@@ -99,37 +99,30 @@ func confirm_edit_server() -> Error:
 		return FAILED
 	return OK
 
-func open_remove_server_popup():
+func open_remove_server_popup() -> Error:
 	hide_join_menu_popups()
-	
-	var displayed_servers_itemlist = $JoinScreenUI/SavedServersList
-	if displayed_servers_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to open the RemoveServer popup despite no displayed server item being selected. (Did nothing.)")
-		return
-	
+	if servers_list_node.get_selected_items().is_empty():
+		push_warning("No world index is selected.")
+		return FAILED
+	var altname: String = server_altnames[servers_list_node.get_selected_items()[0]]
+	var nickname: String = altname_to_nickname[altname]
 	var popup = $RemoveServerPopup
-	var name_of_removable_server: String = FileManager.read_file_lines(FileManager.PATH_SERVERS)[(displayed_servers_itemlist.get_selected_items()[0]*2)+1]
-	popup.get_node("PopupTitleText").text = "[center]Are you sure you want to remove\n\"" + name_of_removable_server +"\"?\n(This action cannot be undone.)[/center]"
+	popup.get_node("PopupTitleText").text = ("[center]Are you sure you want to remove server:\n" + nickname +
+	"\n(This action is permanent and cannot be undone!)[/center]")
 	popup.show()
-	return
-
-func confirm_remove_server():
-	var displayed_servers_itemlist = $JoinScreenUI/SavedServersList
-	if displayed_servers_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to finilize removing a saved server, but none of the displayed items were selected. (Did nothing.)")
-		return
-	
-	# Determine what the contents of the servers list text file should be after the removal and replace the old contents.
-	var file_contents: Array[String] = FileManager.read_file_lines(FileManager.PATH_SERVERS)
-	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
-	file_contents.remove_at((selected_server_index*2)+2)
-	file_contents.remove_at((selected_server_index*2)+1)
-	FileManager.write_txtfile_from_array_of_lines(FileManager.PATH_SERVERS, file_contents)
-	
+	return OK
+func confirm_remove_server() -> Error:
+	if servers_list_node.get_selected_items().is_empty():
+		push_warning("No world index is selected.")
+		return FAILED
+	var altname: String = server_altnames[servers_list_node.get_selected_items()[0]]
+	var err: Error = FileManager.remove_remembered_server(altname)
 	update_servers_list()
 	disable_item_selected_buttons()
 	$RemoveServerPopup.hide()
-	return
+	if err != OK:
+		return FAILED
+	return OK
 
 
 func _on_servers_list_item_selected():
