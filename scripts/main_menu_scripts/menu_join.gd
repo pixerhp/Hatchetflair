@@ -33,26 +33,20 @@ func update_servers_list():
 		servers_list_node.add_item(server_nickname)
 	return
 
-
-func join_server_by_index(servers_list_index: int = -1) -> void:
-	if servers_list_index == -1:
+func join_server_by_index(index: int = -1) -> Error:
+	if index == -1:
 		if not $JoinScreenUI/SavedServersList.get_selected_items().is_empty():
-			servers_list_index = $JoinScreenUI/SavedServersList.get_selected_items()[0]
+			index = $JoinScreenUI/SavedServersList.get_selected_items()[0]
 		else:
-			push_error("No servers list index was specified for joining a server's world. (Aborting joining server.)")
-			return
-	var servers_list_lines: Array[String] = FileManager.read_file_lines(FileManager.PATH_SERVERS)
-	var server_ip: String = servers_list_lines[(servers_list_index * 2) + 2]
-	
-	join_server_by_ip(server_ip)
-	return
-
-func join_server_by_ip(server_ip: String):
-	if server_ip == "":
-		push_warning("Attempted to join server by ip, but the ip was a blank string.")
-		return
-	NetworkManager.start_game(true, false, true, server_ip)
-	return
+			push_warning("No list index was specified.")
+			return FAILED
+	var ip: String = FileManager.read_cfg_keyval(FileManager.PATH_SERVERS, server_altnames[index], "ip")
+	join_server_by_ip(ip)
+	return OK
+func join_server_by_ip(ip: String) -> Error:
+	if NetworkManager.start_game(true, false, true, ip) != OK:
+		return FAILED
+	return OK
 
 
 func open_add_server_popup():

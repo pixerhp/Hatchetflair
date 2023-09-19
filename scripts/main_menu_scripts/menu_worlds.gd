@@ -38,14 +38,16 @@ func update_worlds_list() -> void:
 		worlds_list_node.add_item(world_name)
 	return
 
-func start_world_by_index(list_index: int = -1) -> Error:
-	if list_index == -1:
+func start_world_by_index(index: int = -1) -> Error:
+	if index == -1:
 		if worlds_list_node.get_selected_items().is_empty():
 			push_warning("No list index was specified.")
 			return FAILED
 		else:
-			list_index = worlds_list_node.get_selected_items()[0]
-	start_world_by_specifics(FileManager.PATH_WORLDS + "/" + world_dir_names[list_index], $WorldsScreenUI/Toggles/AllowJoining.button_pressed, $WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed)
+			index = worlds_list_node.get_selected_items()[0]
+	start_world_by_specifics(FileManager.PATH_WORLDS + "/" + world_dir_names[index], 
+	$WorldsScreenUI/Toggles/AllowJoining.button_pressed, 
+	$WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed)
 	return OK
 func start_world_by_specifics(world_dir_path: String, 
 allow_multiplayer_joining: bool = $WorldsScreenUI/Toggles/AllowJoining.button_pressed, 
