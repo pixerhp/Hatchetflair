@@ -7,7 +7,6 @@ extends Node
 # ~ dir & file interactions
 # ~ reading & writing
 # ~ file organizing
-# ~ safe checking & convenience
 # ~ game-specific
 
 
@@ -424,39 +423,12 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 #func sort_cfg ?
 
 
-#-=-=-=-# SAFE CHECKING & CONVENIENCE:
-
-#func dict_safe_get(specify a key, even recursively like a dict in a dict in a dict) -> bool:
-
-func normalize_name(name_str: String, default: String) -> String:
-	name_str = name_str.replace("\n", "")
-	name_str = name_str.replace("\r", "")
-	name_str = name_str.replace("\t", "")
-	if name_str.is_empty():
-		name_str = default
-	return name_str
-func normalize_seed(seed_str: String) -> String:
-	seed_str = seed_str.replace("\n", "")
-	seed_str = seed_str.replace("\r", "")
-	seed_str = seed_str.replace("\t", "")
-	if seed_str.is_empty():
-		seed_str = str(GeneralGlobals.get_rand_int())
-	else:
-		seed_str = str(int(seed_str))
-	return seed_str
-func normalize_ip(ip: String) -> String:
-	ip = ip.replace("\n", "")
-	ip = ip.replace("\r", "")
-	ip = ip.replace("\t", "")
-	return ip
-
-
 #-=-=-=-# GAME-SPECIFIC:
 
 #for the future, probably something like: func create_world(cfg_data: Dictionary) -> Error:
 func create_world(world_name: String, world_seed: String) -> Error:
-	world_name = normalize_name(world_name, "new world")
-	world_seed = normalize_seed(world_seed)
+	world_name = Globals.normalize_name(world_name, "new world")
+	world_seed = Globals.normalize_seed(world_seed)
 	
 	# Create the world's directory and subdirectories.
 	var dir_name: String = get_available_dirname(PATH_WORLDS, world_name, false)
@@ -474,7 +446,7 @@ func create_world(world_name: String, world_seed: String) -> Error:
 	# Set up the dictionary that will be used to create the world info cfg file.
 	var cfg_data: Dictionary = {
 		"meta_info": {
-			"version": GeneralGlobals.V_ENTIRE,
+			"version": Globals.V_ENTIRE,
 			"world_name": world_name,
 			"favorited": false,
 			"creation_date_utc": Time.get_datetime_string_from_system(true, true),
@@ -497,8 +469,8 @@ func create_world(world_name: String, world_seed: String) -> Error:
 		return FAILED
 	return OK
 func edit_world(dir_name: String, new_name: String, new_seed: String) -> Error:
-	new_name = normalize_name(new_name, "new world")
-	new_seed = normalize_seed(new_seed)
+	new_name = Globals.normalize_name(new_name, "new world")
+	new_seed = Globals.normalize_seed(new_seed)
 	
 	var dict: Dictionary = read_cfg(PATH_WORLDS + "/" + dir_name + "/world.cfg")
 	dict["meta_info"]["world_name"] = new_name
@@ -525,8 +497,8 @@ func duplicate_world(dir_name: String) -> Error:
 	return OK
 
 func add_remembered_server(nickname: String, ip: String) -> Error:
-	nickname = normalize_name(nickname, "new remembered server")
-	ip = normalize_ip(ip)
+	nickname = Globals.normalize_name(nickname, "new remembered server")
+	ip = Globals.normalize_ip(ip)
 	
 	var dict: Dictionary = read_cfg(PATH_SERVERS)
 	var section_name: String = get_available_dict_key_string(dict, nickname, false)
@@ -539,8 +511,8 @@ func add_remembered_server(nickname: String, ip: String) -> Error:
 		return FAILED
 	return OK
 func edit_remembered_server(section_name: String, nickname: String, ip: String) -> Error:
-	nickname = normalize_name(nickname, "new remembered server")
-	ip = normalize_ip(ip)
+	nickname = Globals.normalize_name(nickname, "new remembered server")
+	ip = Globals.normalize_ip(ip)
 	
 	var section_data: Dictionary = read_cfg_section(PATH_SERVERS, section_name)
 	remove_remembered_server(section_name)
@@ -584,4 +556,5 @@ func ensure_required_files():
 func ensure_world():
 	pass
 
-#-=-=-=-#
+
+#-=-=-=-# <~

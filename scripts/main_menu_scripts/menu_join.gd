@@ -31,7 +31,7 @@ func sync_servers():
 		server_altnames.append(altname)
 		altname_to_nickname[altname] = servers_dict[altname]["nickname"]
 func sort_servers():
-	GeneralGlobals.sort_alphabetically(server_altnames, true)
+	Globals.sort_alphabetically(server_altnames, true)
 	return
 func update_servers_list():
 	sync_servers()

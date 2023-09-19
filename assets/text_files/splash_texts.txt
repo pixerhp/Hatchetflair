@@ -105,8 +105,9 @@ draw what you see, not what you think you see.
 #-=-=-=-#   REFERENCES:
 
 a world-class scrabble player and a digital armadillo enter a laboratory...
-	references an obscure indie game jam which i had nothing to do with
+	References an obscure indie game jam which i had nothing to do with:
 	https://daring-owl-studios.itch.io/you-lose-good-day-sir-final
+	Also vaguely references the setup of the "an x and a y enter a bar" joke.
 but to answer that, we need to talk about parallel universes.
 	references pannenkoek2012's "SM64 - Watch for Rolling Rocks - 0.5x A Presses (Commentated)" video.
 	acknowledges the entire sm64 speedrunning, challenge and otherwise community.

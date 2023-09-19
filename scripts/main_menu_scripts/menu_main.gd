@@ -9,7 +9,7 @@ func switch_to_menu(menu_name: String) -> void:
 	return
 
 func _on_quit_button_pressed() -> void:
-	GeneralGlobals.quit_game()
+	Globals.quit_game()
 	return
 
 func _on_network_info_overlay_back_button_pressed(message: String, should_display: bool, show_back_button: bool) -> void:

@@ -1,5 +1,17 @@
 extends Node
 
+#-=-=-=-# TABLE OF CONTENTS:
+
+# [contents]:
+# ~ global constants
+# ~ initialization
+# ~ basic functionality
+# ~ hotkeys
+# ~ convenience functions
+
+
+#-=-=-=-# GLOBAL CONSTANTS:
+
 const GAME_NAME: String = "Hatchetflair"
 const GAME_PHASE: String = "pre-game"
 const V_MODEL: String = "1"
@@ -9,14 +21,13 @@ const V_PATCH: String = "0"
 const V_ENTIRE: String = V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH
 var TITLE_ENTIRE: String = ""
 
-# Alter the game's title.
 const IS_MODDED: bool = false
 const IS_INDEV: bool = true
 
 # !!! replace with a signal/coroutine and places having the "await" keyword?
 var globals_ready: bool = false
 
-# =-= =-= =-= =-= =-= =-= =-= # <~
+#-=-=-=-# INITIALIZATION:
 
 func _enter_tree() -> void:
 	randomize() # Randomizes global rng.
@@ -27,7 +38,6 @@ func _enter_tree() -> void:
 	
 	globals_ready = true
 	return
-
 
 func _initialize_title_entire() -> void:
 	var name_exts: String = ""
@@ -75,6 +85,16 @@ func _set_window_title(include_splash: bool = true) -> Error:
 		DisplayServer.window_set_title(TITLE_ENTIRE + "   ~   " + usable_splashes.pick_random())
 		return OK
 
+
+#-=-=-=-# BASIC FUNCTIONALITY:
+
+# Closes the game's program & window.
+func quit_game() -> void:
+	get_tree().quit()  
+
+
+#-=-=-=-# HOTKEYS:
+
 func _process(_delta):
 	# Global hotkeys.
 	if Input.is_action_just_pressed("Fullscreen Toggle"):
@@ -85,20 +105,45 @@ func _process(_delta):
 	if Input.is_action_just_pressed("Screenshot"):
 		pass
 
-# Closes the game's program & window.
-func quit_game() -> void:
-	get_tree().quit()  
 
+#-=-=-=-# CONVENIENCE FUNCTIONS:
 
-func get_rand_int() -> int:
+func rand_int() -> int:
 	var random: RandomNumberGenerator = RandomNumberGenerator.new()
 	random.randomize()
 	return(random.randi() - 4294967296 + random.randi())
 
-# Because arrays are passed in by reference, we're just directly sorting the original array.
+func normalize_name(name_str: String, default: String) -> String:
+	name_str = name_str.replace("\n", "")
+	name_str = name_str.replace("\r", "")
+	name_str = name_str.replace("\t", "")
+	if name_str.is_empty():
+		name_str = default
+	return name_str
+func normalize_seed(seed_str: String) -> String:
+	seed_str = seed_str.replace("\n", "")
+	seed_str = seed_str.replace("\r", "")
+	seed_str = seed_str.replace("\t", "")
+	if seed_str.is_empty():
+		seed_str = str(rand_int())
+	else:
+		seed_str = str(int(seed_str))
+	return seed_str
+func normalize_ip(ip: String) -> String:
+	ip = ip.replace("\n", "")
+	ip = ip.replace("\r", "")
+	ip = ip.replace("\t", "")
+	return ip
+
+#func dict_safeget(specify a key, even recursively like a dict in a dict in a dict) -> bool:
+
+# Because arrays are passed in by reference, it directly sorts the original array, no return required.
 func sort_alphabetically(arr: Array, ascending: bool = true) -> void:
 	if ascending:
 		arr.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) < 0)
 	else:
 		arr.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) > 0)
 	return
+
+
+#-=-=-=-# <~

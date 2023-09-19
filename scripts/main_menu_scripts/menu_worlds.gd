@@ -32,7 +32,7 @@ func sync_worlds() -> Error:
 		return FAILED
 	return OK
 func sort_worlds():
-	GeneralGlobals.sort_alphabetically(world_dir_names, true)
+	Globals.sort_alphabetically(world_dir_names, true)
 	return
 func update_worlds_list():
 	sync_worlds()
