@@ -546,9 +546,6 @@ func edit_remembered_server(section_name: String, nickname: String, ip: String) 
 	dict[replacement_section_name] = section_data
 	dict[replacement_section_name]["nickname"] = nickname
 	dict[replacement_section_name]["ip"] = ip
-	print("inputs: ", nickname, ", ", ip)
-	print(dict[replacement_section_name]["nickname"])
-	print(dict[replacement_section_name]["ip"])
 	if write_cfg(PATH_SERVERS, dict) != OK:
 		return FAILED
 	return OK
