@@ -49,29 +49,22 @@ func join_server_by_ip(ip: String) -> Error:
 	return OK
 
 
-func open_add_server_popup():
+func open_add_server_popup() -> void:
 	hide_all_servers_menu_popups()
 	$AddServerPopup/ServerIPInput.clear()
 	$AddServerPopup/ServerNicknameInput.clear()
 	$AddServerPopup.show()
 	return
-
-func confirm_add_server():
+func confirm_add_server() -> Error:
 	var popup: Node = $AddServerPopup
-	var server_nickname: String = popup.get_node("ServerNicknameInput").text
-	if server_nickname == "":
-		server_nickname = "new remembered server"
-	var server_ip: String = popup.get_node("ServerIPInput").text
-	
-	# Determine the updated servers-list txtfile contents and replace the old contents.
-	var file_contents: Array[String] = FileManager.read_file_lines(FileManager.PATH_SERVERS)
-	file_contents.append(server_nickname)
-	file_contents.append(server_ip)
-	FileManager.write_txtfile_from_array_of_lines(FileManager.PATH_SERVERS, file_contents)
-	
+	var nickname: String = popup.get_node("ServerNicknameInput").text
+	var ip: String = popup.get_node("ServerIPInput").text
+	var err: Error = FileManager.add_remembered_server(nickname, ip)
 	update_servers_list()
 	popup.hide()
-	return
+	if err != OK:
+		return FAILED
+	return OK
 
 func open_edit_server_popup():
 	hide_all_servers_menu_popups()
