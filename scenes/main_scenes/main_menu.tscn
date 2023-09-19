@@ -64,14 +64,15 @@ size_flags_vertical = 3
 
 [node name="MenuTitle" type="RichTextLabel" parent="Menus/TitleScreen/TitleScreenUI"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 6
 theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 50
+theme_override_font_sizes/normal_font_size = 64
 bbcode_enabled = true
-text = "[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=-2 amp=50]Hatchetflair[/wave][/rainbow][/center]"
+text = "[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=-2 amp=60]Hatchetflair[/wave][/rainbow][/center]"
 fit_content = true
 autowrap_mode = 0
 
@@ -79,35 +80,49 @@ autowrap_mode = 0
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="StartWorld" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
-custom_minimum_size = Vector2(110, 0)
+[node name="TitleScreenButtons" type="VBoxContainer" parent="Menus/TitleScreen/TitleScreenUI"]
 layout_mode = 2
 size_flags_horizontal = 4
+
+[node name="StartWorld" type="Button" parent="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
 text = "Start world"
+icon_alignment = 1
 
-[node name="JoinWorld" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
-custom_minimum_size = Vector2(110, 0)
+[node name="JoinWorld" type="Button" parent="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
 text = "Join world"
+icon_alignment = 1
 
-[node name="Settings" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
-custom_minimum_size = Vector2(110, 0)
+[node name="Settings" type="Button" parent="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
 text = "Settings"
+icon_alignment = 1
 
-[node name="Credits" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
-custom_minimum_size = Vector2(110, 0)
+[node name="Credits" type="Button" parent="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
 text = "Credits"
+icon_alignment = 1
 
-[node name="Quit" type="Button" parent="Menus/TitleScreen/TitleScreenUI"]
-custom_minimum_size = Vector2(110, 0)
+[node name="Quit" type="Button" parent="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons"]
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
 text = "Quit"
+icon_alignment = 1
 
 [node name="Spacer3" type="Control" parent="Menus/TitleScreen/TitleScreenUI"]
 layout_mode = 2
@@ -704,12 +719,12 @@ size_flags_vertical = 3
 
 [node name="ListText" type="RichTextLabel" parent="Menus/SettingsScreen/SettingsScreenUI"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 20
 bbcode_enabled = true
-text = "[center]fullscreen toggle:   F11
+text = "fullscreen toggle:   F11
 take a screenshot (NOT YET FUNCTIONAL:)   F12
-[/center]
 "
 fit_content = true
 autowrap_mode = 0
@@ -761,7 +776,7 @@ theme_override_constants/shadow_offset_y = 4
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 35
 bbcode_enabled = true
-text = "[center]Hatchetflair is made possible by these lovely people:[/center]"
+text = "[center]Hatchetflair is made possible by these lovely people![/center]"
 fit_content = true
 autowrap_mode = 0
 
@@ -859,11 +874,11 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Back"
 
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/StartWorld" to="." method="switch_to_menu" binds= ["WorldsScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/JoinWorld" to="." method="switch_to_menu" binds= ["JoinScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Settings" to="." method="switch_to_menu" binds= ["SettingsScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Credits" to="." method="switch_to_menu" binds= ["CreditsScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/Quit" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons/StartWorld" to="." method="switch_to_menu" binds= ["WorldsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons/JoinWorld" to="." method="switch_to_menu" binds= ["JoinScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons/Settings" to="." method="switch_to_menu" binds= ["SettingsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons/Credits" to="." method="switch_to_menu" binds= ["CreditsScreen"]]
+[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons/Quit" to="." method="_on_quit_button_pressed"]
 [connection signal="visibility_changed" from="Menus/WorldsScreen" to="Menus/WorldsScreen" method="update_worlds_list"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
 [connection signal="item_activated" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="start_world_by_index"]
