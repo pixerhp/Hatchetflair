@@ -18,8 +18,8 @@ func _ready():
 	$RemoveServerPopup/Confirm.pressed.connect(self.confirm_remove_server)
 	$RemoveServerPopup/Cancel.pressed.connect($RemoveServerPopup.hide)
 	
-	disable_server_selected_requiring_buttons()
-	hide_all_servers_menu_popups()
+	disable_item_selected_buttons()
+	hide_join_menu_popups()
 	return
 
 
@@ -54,7 +54,7 @@ func join_server_by_ip(ip: String) -> Error:
 
 
 func open_add_server_popup() -> void:
-	hide_all_servers_menu_popups()
+	hide_join_menu_popups()
 	$AddServerPopup/ServerIPInput.clear()
 	$AddServerPopup/ServerNicknameInput.clear()
 	$AddServerPopup.show()
@@ -71,7 +71,7 @@ func confirm_add_server() -> Error:
 	return OK
 
 func open_edit_server_popup() -> Error:
-	hide_all_servers_menu_popups()
+	hide_join_menu_popups()
 	if servers_list_node.get_selected_items().is_empty():
 		push_warning("No world index is selected.")
 		return FAILED
@@ -100,7 +100,7 @@ func confirm_edit_server() -> Error:
 	return OK
 
 func open_remove_server_popup():
-	hide_all_servers_menu_popups()
+	hide_join_menu_popups()
 	
 	var displayed_servers_itemlist = $JoinScreenUI/SavedServersList
 	if displayed_servers_itemlist.get_selected_items().is_empty():
@@ -127,23 +127,23 @@ func confirm_remove_server():
 	FileManager.write_txtfile_from_array_of_lines(FileManager.PATH_SERVERS, file_contents)
 	
 	update_servers_list()
-	disable_server_selected_requiring_buttons()
+	disable_item_selected_buttons()
 	$RemoveServerPopup.hide()
 	return
 
 
 func _on_servers_list_item_selected():
-	hide_all_servers_menu_popups()
+	hide_join_menu_popups()
 	$JoinScreenUI/ServerButtons/RemoveServer.disabled = false
 	$JoinScreenUI/ServerButtons/EditServer.disabled = false
 	$JoinScreenUI/ServerButtons/JoinServer.disabled = false
 
-func disable_server_selected_requiring_buttons():
+func disable_item_selected_buttons():
 	$JoinScreenUI/ServerButtons/RemoveServer.disabled = true
 	$JoinScreenUI/ServerButtons/EditServer.disabled = true
 	$JoinScreenUI/ServerButtons/JoinServer.disabled = true
 
-func hide_all_servers_menu_popups():
+func hide_join_menu_popups():
 	$AddServerPopup.hide()
 	$EditServerPopup.hide()
 	$RemoveServerPopup.hide()

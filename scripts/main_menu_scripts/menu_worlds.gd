@@ -14,8 +14,8 @@ func _ready():
 	$DeleteWorldPopup/Confirm.pressed.connect(self.confirm_delete_world)
 	$DeleteWorldPopup/Cancel.pressed.connect($DeleteWorldPopup.hide)
 	
-	disable_world_selected_requiring_buttons()
-	hide_all_worlds_menu_popups()
+	disable_item_selected_buttons()
+	hide_worlds_menu_popups()
 	return
 
 
@@ -60,7 +60,7 @@ host_without_playing: bool = $WorldsScreenUI/Toggles/HostWithoutPlaying.button_p
 
 
 func open_new_world_popup() -> void:
-	hide_all_worlds_menu_popups()
+	hide_worlds_menu_popups()
 	$NewWorldPopup/WorldNameInput.clear()
 	$NewWorldPopup/WorldSeedInput.clear()
 	$NewWorldPopup.show()
@@ -78,7 +78,7 @@ func confirm_new_world() -> Error:
 	return OK
 
 func open_edit_world_popup() -> Error:
-	hide_all_worlds_menu_popups()
+	hide_worlds_menu_popups()
 	if worlds_list_node.get_selected_items().is_empty():
 		push_warning("No world index is selected.")
 		return FAILED
@@ -111,7 +111,7 @@ func confirm_edit_world() -> Error:
 	return OK
 
 func open_delete_world_popup() -> Error:
-	hide_all_worlds_menu_popups()
+	hide_worlds_menu_popups()
 	if worlds_list_node.get_selected_items().is_empty():
 		push_warning("No world index is selected.")
 		return FAILED
@@ -123,7 +123,7 @@ func open_delete_world_popup() -> Error:
 	popup.show()
 	return OK
 func confirm_delete_world() -> Error:
-	hide_all_worlds_menu_popups()
+	hide_worlds_menu_popups()
 	if worlds_list_node.get_selected_items().is_empty():
 		push_warning("No world index is selected.")
 		return FAILED
@@ -131,7 +131,7 @@ func confirm_delete_world() -> Error:
 	var err: Error = FileManager.delete_world(dir_name)
 	
 	$DeleteWorldPopup.hide()
-	disable_world_selected_requiring_buttons()
+	disable_item_selected_buttons()
 	update_worlds_list()
 	if err != OK:
 		return FAILED
@@ -143,36 +143,32 @@ func _on_duplicate_world_pressed() -> Error:
 		return FAILED
 	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
 	var err: Error = FileManager.duplicate_world(dir_name)
-	disable_world_selected_requiring_buttons()
+	disable_item_selected_buttons()
 	update_worlds_list()
 	if err != OK:
 		return FAILED
 	return OK
 
 
-func toggle_visibility_of_host_without_playing_toggle (button_value: bool):
+func toggle_host_without_playing_visibility (button_value: bool):
 	$WorldsScreenUI/Toggles/HostWithoutPlaying.disabled = not button_value
-	if not button_value:
+	if button_value == false:
 		$WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed = false
-	return
 
 func _on_worlds_list_item_selected():
-	hide_all_worlds_menu_popups()
+	hide_worlds_menu_popups()
 	$WorldsScreenUI/WorldButtons/DeleteWorld.disabled = false
 	$WorldsScreenUI/WorldButtons/EditWorld.disabled = false
 	$WorldsScreenUI/WorldButtons/DuplicateWorld.disabled = false
 	$WorldsScreenUI/WorldButtons/PlayWorld.disabled = false
-	return
 
-func disable_world_selected_requiring_buttons():
+func disable_item_selected_buttons():
 	$WorldsScreenUI/WorldButtons/DeleteWorld.disabled = true
 	$WorldsScreenUI/WorldButtons/EditWorld.disabled = true
 	$WorldsScreenUI/WorldButtons/DuplicateWorld.disabled = true
 	$WorldsScreenUI/WorldButtons/PlayWorld.disabled = true
-	return
 
-func hide_all_worlds_menu_popups():
+func hide_worlds_menu_popups():
 	$NewWorldPopup.hide()
 	$EditWorldPopup.hide()
 	$DeleteWorldPopup.hide()
-	return

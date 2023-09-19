@@ -835,7 +835,7 @@ text = "Back"
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
 [connection signal="item_activated" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="start_world_by_index"]
 [connection signal="item_selected" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="_on_worlds_list_item_selected" unbinds=1]
-[connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_visibility_of_host_without_playing_toggle"]
+[connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_host_without_playing_visibility"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/NewWorld" to="Menus/WorldsScreen" method="open_new_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="open_delete_world_popup"]
 [connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/EditWorld" to="Menus/WorldsScreen" method="open_edit_world_popup"]
