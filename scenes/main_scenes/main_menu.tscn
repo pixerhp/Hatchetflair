@@ -43,7 +43,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleScreen" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -651,6 +650,7 @@ grow_vertical = 0
 text = "Cancel"
 
 [node name="SettingsScreen" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -740,75 +740,75 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleText" type="RichTextLabel" parent="Menus/CreditsScreen"]
+[node name="CreditsUI" type="VBoxContainer" parent="Menus/CreditsScreen"]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -402.0
-offset_top = 69.0
-offset_right = 402.0
-offset_bottom = 120.0
-grow_horizontal = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 6
-theme_override_constants/shadow_offset_y = 6
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 30
-bbcode_enabled = true
-text = "Hatchetflare is made possible by these lovely people:"
-fit_content = true
-autowrap_mode = 0
-
-[node name="Credits" type="RichTextLabel" parent="Menus/CreditsScreen"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -122.0
-offset_top = -138.0
-offset_right = 122.0
-offset_bottom = 138.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Spacer1" type="Control" parent="Menus/CreditsScreen/CreditsUI"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TitleText" type="RichTextLabel" parent="Menus/CreditsScreen/CreditsUI"]
+layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 5
-theme_override_constants/shadow_offset_y = 5
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
 theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 35
 bbcode_enabled = true
-text = "Lead creative designer:
-	[rainbow freq=0.1][wave]Pixer Pinecone[/wave][/rainbow]
-Developers:
-	[color=orange][wave]Jcodefox[/wave][/color]
-	[wave]SteveMC[/wave]
-Playtesters:
-	[wave]Blitceed[/wave]
-	[wave]LandOcto950[/wave]
-	[wave]Redstone[/wave]
-Other contributions:
-	[wave]Stranded Software Developer[/wave]
-	[wave]Blue[/wave]"
+text = "[center]Hatchetflair is made possible by these lovely people:[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="Back" type="Button" parent="Menus/CreditsScreen"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -22.0
-offset_top = -119.0
-offset_right = 23.0
-offset_bottom = -88.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="Spacer2" type="Control" parent="Menus/CreditsScreen/CreditsUI"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Credits" type="RichTextLabel" parent="Menus/CreditsScreen/CreditsUI"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
+bbcode_enabled = true
+text = "Designer & Lead Developer:
+[center][rainbow freq=0.02][wave]Pixer Pinecone[/wave][/rainbow][/center]
+Contributing Developers:
+	[wave]~ [color=orange]Jcodefox[/color][/wave]
+	[wave]~ SteveMC[/wave]
+Available Playtesters:
+	[wave]~ Blitceed[/wave]
+	[wave]~ LandOcto950[/wave]
+	[wave]Redstone[/wave]
+Special Thanks:
+	[wave]~ Blue[/wave]
+	[wave]~ S. S. Developer[/wave]
+	[wave]~ Lots of others![/wave]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Spacer3" type="Control" parent="Menus/CreditsScreen/CreditsUI"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Back" type="Button" parent="Menus/CreditsScreen/CreditsUI"]
+layout_mode = 2
+size_flags_horizontal = 4
 text = "Back"
+
+[node name="Spacer4" type="Control" parent="Menus/CreditsScreen/CreditsUI"]
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="NetworkInfoOverlay" type="Control" parent="Menus"]
 visible = false
@@ -883,5 +883,5 @@ text = "Back"
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/EditServer" to="Menus/JoinScreen" method="open_edit_server_popup"]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/JoinServer" to="Menus/JoinScreen" method="join_server_by_index"]
 [connection signal="pressed" from="Menus/SettingsScreen/SettingsScreenUI/SettingsButtons/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
-[connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
+[connection signal="pressed" from="Menus/CreditsScreen/CreditsUI/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/NetworkInfoOverlay/BackButton" to="." method="_on_network_info_overlay_back_button_pressed" binds= ["Pressed back button", false, false]]
