@@ -13,14 +13,17 @@ extends Node
 
 #-=-=-=-# GLOBAL CONSTANTS:
 
+# res://
 const PATH_ASSETS: String = "res://assets"
 const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
-
+# user://
 const PATH_STORAGE: String = "user://storage"
 const PATH_SERVERS: String = PATH_STORAGE + "/remembered_servers.cfg"
 const PATH_USERS: String = PATH_STORAGE + "/users.cfg"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
+
+const ERRMSG_CFG_READ: String = "<cfg read error>"
 
 
 #-=-=-=-# DIR & FILE INTERACTIONS:

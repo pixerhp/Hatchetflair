@@ -30,11 +30,15 @@ func sync_servers():
 	for altname in servers_dict:
 		server_altnames.append(altname)
 		altname_to_nickname[altname] = servers_dict[altname]["nickname"]
+func sort_servers():
+	GeneralGlobals.sort_alphabetically(server_altnames, true)
+	return
 func update_servers_list():
 	sync_servers()
+	sort_servers()
 	servers_list_node.clear()
-	for server_nickname in altname_to_nickname.values():
-		servers_list_node.add_item(server_nickname)
+	for altname in server_altnames:
+		servers_list_node.add_item(altname_to_nickname[altname])
 	return
 
 func join_server_by_index(index: int = -1) -> Error:

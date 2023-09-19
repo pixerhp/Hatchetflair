@@ -94,3 +94,11 @@ func get_rand_int() -> int:
 	var random: RandomNumberGenerator = RandomNumberGenerator.new()
 	random.randomize()
 	return(random.randi() - 4294967296 + random.randi())
+
+# Because arrays are passed in by reference, we're just directly sorting the original array.
+func sort_alphabetically(arr: Array, ascending: bool = true) -> void:
+	if ascending:
+		arr.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) < 0)
+	else:
+		arr.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) > 0)
+	return

@@ -31,11 +31,15 @@ func sync_worlds() -> Error:
 	if any_errors_encountered:
 		return FAILED
 	return OK
-func update_worlds_list() -> void:
+func sort_worlds():
+	GeneralGlobals.sort_alphabetically(world_dir_names, true)
+	return
+func update_worlds_list():
 	sync_worlds()
+	sort_worlds()
 	worlds_list_node.clear()
-	for world_name in dir_name_to_world_name.values():
-		worlds_list_node.add_item(world_name)
+	for dir_name in world_dir_names:
+		worlds_list_node.add_item(dir_name_to_world_name[dir_name])
 	return
 
 func start_world_by_index(index: int = -1) -> Error:
