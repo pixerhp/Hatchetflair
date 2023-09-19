@@ -1,5 +1,9 @@
 extends Control
 
+# The servers list is stored in a cfg file, where each section (except for meta_info) is for a different server.
+# The section title texts are for a server's altname, and under it are the keys and values for its nickname, ip (etc.)
+# Altnames need to be unique, so for 3 servers nicknamed "a", their altnames would be "a", "a alt1", and "a alt2".
+
 var server_altnames: Array[String] = []
 var altname_to_nickname: Dictionary = {}
 @onready var servers_list_node: Node = $JoinScreenUI/SavedServersList
@@ -66,40 +70,34 @@ func confirm_add_server() -> Error:
 		return FAILED
 	return OK
 
-func open_edit_server_popup():
+func open_edit_server_popup() -> Error:
 	hide_all_servers_menu_popups()
-	
-	var displayed_servers_itemlist = $JoinScreenUI/SavedServersList
-	if displayed_servers_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to open the EditServer popup despite no displayed server item being selected. (Did nothing.)")
-		return
-	
-	var txtfile_lines: Array[String] = FileManager.read_file_lines(FileManager.PATH_SERVERS)
-	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
-	var popup = $EditServerPopup
-	popup.get_node("PopupTitleText").text = "[center]Edit server: \"" + txtfile_lines[(selected_server_index*2)+1] + "\""
-	popup.get_node("ServerIPInput").text = txtfile_lines[(selected_server_index*2)+2]
-	popup.get_node("ServerNicknameInput").text = txtfile_lines[(selected_server_index*2)+1]
+	if servers_list_node.get_selected_items().is_empty():
+		push_warning("No world index is selected.")
+		return FAILED
+	var altname: String = server_altnames[servers_list_node.get_selected_items()[0]]
+	var nickname: String = altname_to_nickname[altname]
+	var ip: String = FileManager.read_cfg_keyval(FileManager.PATH_SERVERS, altname, "ip")
+	var popup: Node = $EditServerPopup
+	popup.get_node("PopupTitleText").text = "[center]Edit remembered server: \"" + nickname + "\""
+	popup.get_node("ServerIPInput").text = ip
+	popup.get_node("ServerNicknameInput").text = nickname
 	popup.show()
-	return
-
-func confirm_edit_server():
-	var displayed_servers_itemlist = $JoinScreenUI/SavedServersList
-	if displayed_servers_itemlist.get_selected_items().is_empty():
-		push_warning("Attempted to finilize editing a saved server whilst none of the displayed servers items were selected. (Did nothing.)")
-		return
-	
-	# Determine what the contents of the servers list text file should be after editing and replace its old contents.
-	var file_contents: Array[String] = FileManager.read_file_lines(FileManager.PATH_SERVERS)
-	var selected_server_index: int = displayed_servers_itemlist.get_selected_items()[0]
+	return OK
+func confirm_edit_server() -> Error:
+	if servers_list_node.get_selected_items().is_empty():
+		push_warning("No world index is selected.")
+		return FAILED
+	var altname: String = server_altnames[servers_list_node.get_selected_items()[0]]
 	var popup = $EditServerPopup
-	file_contents[(selected_server_index*2)+1] = popup.get_node("ServerNicknameInput").text
-	file_contents[(selected_server_index*2)+2] = popup.get_node("ServerIPInput").text
-	FileManager.write_txtfile_from_array_of_lines(FileManager.PATH_SERVERS, file_contents)
-	
+	var new_nickname: String = popup.get_node("ServerNicknameInput").text
+	var new_ip: String = popup.get_node("ServerIPInput").text
+	var err: Error = FileManager.edit_remembered_server(altname, new_nickname, new_ip)
 	update_servers_list()
 	popup.hide()
-	return
+	if err != OK:
+		return FAILED
+	return OK
 
 func open_remove_server_popup():
 	hide_all_servers_menu_popups()
