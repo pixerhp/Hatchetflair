@@ -43,6 +43,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleScreen" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -417,7 +418,7 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
-text = "[center]Saved Servers/Connections[/center]"
+text = "[center]Saved Servers[/center]"
 fit_content = true
 autowrap_mode = 0
 
@@ -650,7 +651,6 @@ grow_vertical = 0
 text = "Cancel"
 
 [node name="SettingsScreen" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -658,16 +658,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleText" type="RichTextLabel" parent="Menus/SettingsScreen"]
+[node name="SettingsScreenUI" type="VBoxContainer" parent="Menus/SettingsScreen"]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -157.0
-offset_top = 69.0
-offset_right = 157.0
-offset_bottom = 138.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spacer1" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="SettingsTitle" type="RichTextLabel" parent="Menus/SettingsScreen/SettingsScreenUI"]
+layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 6
@@ -675,28 +680,56 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
-text = "[center]Adjustable settings and hotkeys
-are not supported yet.[/center]"
+text = "[center]Settings & Hotkeys[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="SettingsButtons" type="VBoxContainer" parent="Menus/SettingsScreen"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -22.5
-offset_top = -15.5
-offset_right = 22.5
-offset_bottom = 15.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="SettingsSubtitle" type="RichTextLabel" parent="Menus/SettingsScreen/SettingsScreenUI"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 30
+theme_override_font_sizes/bold_font_size = 30
+theme_override_font_sizes/italics_font_size = 30
+theme_override_font_sizes/bold_italics_font_size = 30
+theme_override_font_sizes/mono_font_size = 30
+bbcode_enabled = true
+text = "[center](Customizeable hotkeys are not yet supported.)[/center]
+"
+fit_content = true
+autowrap_mode = 0
 
-[node name="Back" type="Button" parent="Menus/SettingsScreen/SettingsButtons"]
+[node name="Spacer2" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ListText" type="RichTextLabel" parent="Menus/SettingsScreen/SettingsScreenUI"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[center]fullscreen toggle:   F11
+take a screenshot (NOT YET FUNCTIONAL:)   F12
+[/center]
+"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Spacer3" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SettingsButtons" type="VBoxContainer" parent="Menus/SettingsScreen/SettingsScreenUI"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Back" type="Button" parent="Menus/SettingsScreen/SettingsScreenUI/SettingsButtons"]
 layout_mode = 2
 text = "Back"
+
+[node name="Spacer4" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="CreditsScreen" type="Control" parent="Menus"]
 visible = false
@@ -849,6 +882,6 @@ text = "Back"
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/RemoveServer" to="Menus/JoinScreen" method="open_remove_server_popup"]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/EditServer" to="Menus/JoinScreen" method="open_edit_server_popup"]
 [connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/JoinServer" to="Menus/JoinScreen" method="join_server_by_index"]
-[connection signal="pressed" from="Menus/SettingsScreen/SettingsButtons/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
+[connection signal="pressed" from="Menus/SettingsScreen/SettingsScreenUI/SettingsButtons/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/CreditsScreen/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
 [connection signal="pressed" from="Menus/NetworkInfoOverlay/BackButton" to="." method="_on_network_info_overlay_back_button_pressed" binds= ["Pressed back button", false, false]]
