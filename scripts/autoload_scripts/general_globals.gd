@@ -36,10 +36,6 @@ func _enter_tree() -> void:
 	FileManager.ensure_required_dirs()
 	FileManager.ensure_required_files()
 	
-	
-	print(FileManager.read_cfg_keyval(FileManager.PATH_SERVERS, "localhost 127.0.0.1", "ip", FileManager.ERRMSG_CFG))
-	
-	
 	globals_ready = true
 	return
 

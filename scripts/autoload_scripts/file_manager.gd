@@ -537,7 +537,6 @@ func ensure_required_dirs() -> Error:
 	var err: Error
 	var directories_to_ensure_exist: Array[String] = [
 		PATH_STORAGE,
-		PATH_SERVERS,
 		PATH_USERS,
 		PATH_WORLDS,
 		PATH_SCREENSHOTS,
