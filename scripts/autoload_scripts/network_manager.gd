@@ -15,20 +15,6 @@ func _ready() -> void:
 	
 	multiplayer.auth_callback = authenticate
 
-# Called from the menu to start a server or join a server.
-func start_game(is_player: bool, is_server: bool, allow_others: bool, ip_address: String = "") -> Error:
-	if is_server:
-		start_server()
-		network_status_update("Server started.", true, false)
-		if is_player:
-			# Spawn a player for the host.
-			player_connected(multiplayer.get_unique_id())
-			network_status_update("Playing world as host.", true, false)
-		multiplayer.multiplayer_peer.refuse_new_connections = not allow_others
-	else:
-		start_client(ip_address)
-	return OK
-
 # Updates/displays the current connecting status using the NetworkInfoOverlay menu.
 func network_status_update(message: String, should_display: bool, show_back_button: bool):
 	var network_info_overlay_node: Node = get_tree().current_scene.get_node("Menus/NetworkInfoOverlay")
@@ -36,9 +22,22 @@ func network_status_update(message: String, should_display: bool, show_back_butt
 	network_info_overlay_node.get_node("RichTextLabel").text = message
 	network_info_overlay_node.get_node("BackButton").visible = show_back_button
 
-###########################
-# Client code
-###########################
+
+func host_game(allow_multiplayer_joining: bool, host_without_playing: bool) -> Error:
+	# (Singleplayer, rather than being a server with only one person, should use 0 networking:)
+	if allow_multiplayer_joining:
+		start_server()
+		if not host_without_playing:
+			# Spawn a player for the host.
+			player_connected(multiplayer.get_unique_id())
+			network_status_update("Starting server as host...", true, false)
+	multiplayer.multiplayer_peer.refuse_new_connections = !allow_multiplayer_joining
+	return OK
+
+
+############################
+#-=-=-=-# CLIENT CODE:
+############################
 
 # Called when the client is starting.
 func start_client(ip: String) -> void:
@@ -64,9 +63,10 @@ func connection_failed():
 	print("Connection to server failed.")
 	network_status_update("Connection to server failed.", true, true)
 
-###########################
-# Server code
-###########################
+
+############################
+#-=-=-=-# SERVER CODE:
+############################
 
 # Called when the server is starting.
 func start_server() -> void:
@@ -91,9 +91,10 @@ func player_disconnected(id: int) -> void:
 		return
 	print("Player (" + str(id) + ") disconnected")
 
-###########################
-# Authentication code
-###########################
+
+############################
+#-=-=-=-# AUTHENTIFICATION CODE:
+############################
 
 # Called on server and client when client tries to authenticate.
 func peer_authenticating(sender_id: int) -> void:
@@ -124,3 +125,5 @@ func authenticate(sender_id: int, data: PackedByteArray) -> void:
 		if data[0] == 13:
 			multiplayer.complete_auth(sender_id)
 			print("Player %d passed authentication"%sender_id)
+
+#-=-=-=-# <~

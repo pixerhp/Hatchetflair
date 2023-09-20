@@ -52,7 +52,7 @@ func start_world_by_specifics(world_dir_path: String,
 allow_multiplayer_joining: bool = $WorldsScreenUI/Toggles/AllowJoining.button_pressed, 
 host_without_playing: bool = $WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed) -> Error:
 	print("Although technically not using it yet, use world files when loading a world later. ", world_dir_path)
-	if NetworkManager.start_game(not host_without_playing, true, allow_multiplayer_joining) != OK:
+	if NetworkManager.host_game(allow_multiplayer_joining, host_without_playing) != OK:
 		return FAILED
 	else:
 		return OK

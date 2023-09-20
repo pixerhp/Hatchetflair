@@ -150,11 +150,6 @@ func dict_safeget(dict: Dictionary, keys: Array, default: Variant) -> Variant:
 			return default
 	return subdict
 
-
-
-
-
-
 # Because arrays are passed in by reference, it directly sorts the original array, no return required.
 func sort_alphabetically(arr: Array, ascending: bool = true) -> void:
 	if ascending:

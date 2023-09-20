@@ -52,10 +52,9 @@ func join_server_by_index(index: int = -1) -> Error:
 	var ip: String = FileManager.read_cfg_keyval(FileManager.PATH_SERVERS, server_altnames[index], "ip", FileManager.ERRMSG_CFG)
 	join_server_by_ip(ip)
 	return OK
-func join_server_by_ip(ip: String) -> Error:
-	if NetworkManager.start_game(true, false, true, ip) != OK:
-		return FAILED
-	return OK
+func join_server_by_ip(ip: String) -> void:
+	NetworkManager.start_client(ip)
+	return
 
 
 func open_add_server_popup() -> void:
