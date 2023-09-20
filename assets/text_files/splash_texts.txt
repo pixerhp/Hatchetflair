@@ -1,14 +1,5 @@
 # Note, lines which are blank *or* start with a '#', '\t' or ' ' (spacebar) aren't used as splashes.
-# Please generally keep all sections in alphabetical order.
-
-
-#-=-=-=-#   CODING & OTHER DEVELOPERS:
-
-bojler eladó
-	“boiler for sale” in hungarian, a popular hungarian meme phrase. (SteveMC32 is Hungarian.)
-declaring and initializing a punch to the face!
-	humorous code-themed sentence.
-SOUND TEST: MONO OR STEREO?
+# Please generally keep all sections contents in (ascending) alphabetical order.
 
 
 #-=-=-=-#   HATCHETFLAIR AND OTHER PERSONAL:
@@ -50,7 +41,7 @@ sands, deserts and beaches?
 	although they aren't in the game yet, stuff like that would be lovely to have if executed well.
 :sparkles:
 	I commonly react to things with a sparkle emoji. (what, it's fun!)
-sticks and strawberries?
+sticks and strawberries
 	A classic splash from my first coding attempt at this game. 
 	The question mark, similar to other splashes, is because that content isn't currently in the game.
 that lovely azure color between blue and purple?
@@ -63,6 +54,15 @@ to combat or not to combat, that is the question...
 unincorporated!
 	corporations built to have making money as their main goal. I would like to avoid that for this game.
 wood-ash cement?
+
+
+#-=-=-=-#   CODING & OTHER DEVELOPERS:
+
+bojler eladó
+	“boiler for sale” in hungarian, a popular hungarian meme phrase. (SteveMC32 is Hungarian.)
+declaring and initializing a punch to the face!
+	humorous code-themed sentence.
+SOUND TEST: MONO OR STEREO?
 
 
 #-=-=-=-#   LIMINAL / ASREMIC / DREAM-LIKE / STRANGE:
@@ -100,6 +100,7 @@ Weaire–Phelan structure?
 
 draw what you see, not what you think you see.
 	fairly good art advice.
+go do your homework!
 
 
 #-=-=-=-#   REFERENCES:
