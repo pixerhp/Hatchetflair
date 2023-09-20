@@ -29,7 +29,8 @@ func sync_servers():
 	altname_to_nickname.clear()
 	for altname in servers_dict:
 		server_altnames.append(altname)
-		altname_to_nickname[altname] = servers_dict[altname]["nickname"]
+		altname_to_nickname[altname] = Globals.dict_safeget(servers_dict, [altname, "nickname"], 
+		FileManager.ERRMSG_CFG + "   (altname: " + altname + ")")
 func sort_servers():
 	Globals.sort_alphabetically(server_altnames, true)
 	return
@@ -48,7 +49,7 @@ func join_server_by_index(index: int = -1) -> Error:
 		else:
 			push_warning("No list index was specified.")
 			return FAILED
-	var ip: String = FileManager.read_cfg_keyval(FileManager.PATH_SERVERS, server_altnames[index], "ip")
+	var ip: String = FileManager.read_cfg_keyval(FileManager.PATH_SERVERS, server_altnames[index], "ip", FileManager.ERRMSG_CFG)
 	join_server_by_ip(ip)
 	return OK
 func join_server_by_ip(ip: String) -> Error:
@@ -81,7 +82,7 @@ func open_edit_server_popup() -> Error:
 		return FAILED
 	var altname: String = server_altnames[servers_list_node.get_selected_items()[0]]
 	var nickname: String = altname_to_nickname[altname]
-	var ip: String = FileManager.read_cfg_keyval(FileManager.PATH_SERVERS, altname, "ip")
+	var ip: String = FileManager.read_cfg_keyval(FileManager.PATH_SERVERS, altname, "ip", FileManager.ERRMSG_CFG)
 	var popup: Node = $EditServerPopup
 	popup.get_node("PopupTitleText").text = "[center]Edit remembered server: \"" + nickname + "\""
 	popup.get_node("ServerIPInput").text = ip

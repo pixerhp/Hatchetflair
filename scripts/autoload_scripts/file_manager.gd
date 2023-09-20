@@ -22,7 +22,7 @@ const PATH_USERS: String = PATH_STORAGE + "/users.cfg"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
 
-const ERRMSG_CFG_READ: String = "<cfg read error>"
+const ERRMSG_CFG: String = "<cfg read error>"
 
 
 #-=-=-=-# DIR & FILE INTERACTIONS:
@@ -255,13 +255,13 @@ func read_cfg(file_path: String, skip_sections: PackedStringArray = []) -> Dicti
 				section_data[key] = cfg.get_value(section, key)
 			dictionary[section] = section_data
 	return dictionary
-func read_cfg_keyval(file_path: String, section: String, key: String) -> Variant:
+func read_cfg_keyval(file_path: String, section: String, key: String, default: Variant = null) -> Variant:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)
 	if err != OK:
 		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
-		return null
-	return cfg.get_value(section, key)
+		return default
+	return cfg.get_value(section, key, default)
 func read_cfg_section(file_path: String, section: String) -> Dictionary:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)

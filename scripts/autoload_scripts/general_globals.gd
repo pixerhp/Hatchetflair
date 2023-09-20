@@ -36,6 +36,10 @@ func _enter_tree() -> void:
 	FileManager.ensure_required_dirs()
 	FileManager.ensure_required_files()
 	
+	
+	print(FileManager.read_cfg_keyval(FileManager.PATH_SERVERS, "localhost 127.0.0.1", "ip", FileManager.ERRMSG_CFG))
+	
+	
 	globals_ready = true
 	return
 
@@ -137,8 +141,8 @@ func normalize_ip(ip: String) -> String:
 
 # Allows you to get a value from a dictionary even if you're not sure its key exists,
 # including easily getting something like dict[key1][key2][key3] without having to manually use .has() repeatedly.
-# If the value is not found, it returns null.
-func dict_safeget(dict: Dictionary, keys: Array) -> Variant:
+# If the value is not found, it returns the default value.
+func dict_safeget(dict: Dictionary, keys: Array, default: Variant) -> Variant:
 	var subdict: Dictionary = dict
 	for key in keys:
 		if subdict.has(key):
@@ -147,7 +151,7 @@ func dict_safeget(dict: Dictionary, keys: Array) -> Variant:
 			else:
 				return subdict[key]
 		else:
-			return null
+			return default
 	return subdict
 
 

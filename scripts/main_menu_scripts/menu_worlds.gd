@@ -19,18 +19,13 @@ func _ready():
 	return
 
 
-func sync_worlds() -> Error:
-	var any_errors_encountered: bool = false
+func sync_worlds():
 	world_dir_names.assign(DirAccess.get_directories_at(FileManager.PATH_WORLDS))
 	dir_name_to_world_name.clear()
 	for dir_name in world_dir_names:
-		dir_name_to_world_name[dir_name] = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_info", "world_name")
-		if dir_name_to_world_name[dir_name] == null:
-			dir_name_to_world_name[dir_name] = "<error: reading cfg keyval returned null>"
-			any_errors_encountered = true
-	if any_errors_encountered:
-		return FAILED
-	return OK
+		dir_name_to_world_name[dir_name] = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + 
+		dir_name + "/world.cfg", "meta_info", "world_name", FileManager.ERRMSG_CFG + "   (dirname: " + dir_name + ")")
+	return
 func sort_worlds():
 	Globals.sort_alphabetically(world_dir_names, true)
 	return
@@ -87,10 +82,9 @@ func open_edit_world_popup() -> Error:
 		push_warning("No world index is selected.")
 		return FAILED
 	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
-	# Note: In the future when you can edit much more than just name and seed, 
-	# get all world info at once rather than each piece individually to reduce file reads.
-	var world_name: String = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_info", "world_name")
-	var world_seed: String = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "generation", "seed")
+	var dict: Dictionary = FileManager.read_cfg(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg")
+	var world_name: String = Globals.dict_safeget(dict, ["meta_info", "world_name"], FileManager.ERRMSG_CFG)
+	var world_seed: String = Globals.dict_safeget(dict, ["generation", "seed"], FileManager.ERRMSG_CFG)
 	var popup: Node = $EditWorldPopup
 	popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + world_name + "\""
 	popup.get_node("WorldNameInput").text = world_name
@@ -120,7 +114,7 @@ func open_delete_world_popup() -> Error:
 		push_warning("No world index is selected.")
 		return FAILED
 	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
-	var world_name: String = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_info", "world_name")
+	var world_name: String = FileManager.read_cfg_keyval(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg", "meta_info", "world_name", FileManager.ERRMSG_CFG)
 	var popup: Node = $DeleteWorldPopup
 	popup.get_node("PopupTitleText").text = ("[center]Are you sure you want to delete world:\n" + world_name 
 	+ "\n(It will be deleted to your OS's recycling bin.)[/center]")
