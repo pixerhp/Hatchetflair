@@ -559,11 +559,24 @@ func ensure_required_files():
 		dict = read_cfg(path)
 		if not dict.has("meta_info"):
 			dict["meta_info"] = {"version": Globals.V_ENTIRE}
-			print("writing: ", dict)
-			print("to: ", path)
 			write_cfg(path, dict)
-func ensure_world():
-	pass
-
+# Makeshift version of the function, revise this to go much more in depth in the future, like checking various cfg sections.
+func ensure_world(dirname: String) -> Error:
+	var any_errors_encountered: bool = false
+	var err: Error
+	if not DirAccess.dir_exists_absolute(PATH_WORLDS + "/" + dirname + "/chunks/"):
+		err = DirAccess.make_dir_recursive_absolute(PATH_WORLDS + "/" + dirname + "/chunks/")
+		if err != OK:
+			push_error("Failed to find or create directory: ", PATH_WORLDS + "/" + dirname + "/chunks/", " (Error val:) ", err)
+			any_errors_encountered = true
+	
+	var dict: Dictionary = read_cfg(PATH_WORLDS + "/" + dirname + "/world.cfg")
+	if not dict.has("meta_info"):
+			dict["meta_info"] = {"version": Globals.V_ENTIRE}
+			write_cfg(PATH_WORLDS + "/" + dirname + "/world.cfg", dict)
+	
+	if any_errors_encountered:
+		return FAILED
+	return OK
 
 #-=-=-=-# <~
