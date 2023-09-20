@@ -10,11 +10,17 @@
 	An integer I like, and (as 3:14) an interesting time of decision.
 =^)
 	A smiley I occassionally use. (I like having a nose.)
+<~
+	It looks pretty and sorta flowerish.
+bamboo is a very versatile resource
 'B' staircase
 	A reference to a game jam game named "you, the game" I contributed to.
 	(One of the levels had a prominent staircase made out of tiles which were literally the letter "B".)
 Catholic Christian!
 	i am designing the game with avoiding-tempting-players-into-sin in mind.
+caution: a band of wowzas is velocitating towards your location rapidly.
+	A similar humorous splash was in one of my old documents for splash ideas,
+	a wowza is a very old enemy/entity concept for the game.
 creature-friends?
 	The game is likely to have a large variety of creaturish-sapients.
 Cubic chunks!
@@ -123,6 +129,8 @@ lazy-day! (drops a garbage block on you.)
 my house dot what?
 	A reference to the Doom map "MyHouse.wad", as suggested by Blitceed.
 	Somewhat also references me and my family's various forgotten attempts to make our house in games (like Minecraft.)
+please tell the whale that fell into the library to be more quiet next time.
+	References OFF by Mortis Ghost.
 probably various cuils of abstraction away from normal.
 	a reference to cuils, a proposed unit of abstraction.
 seme!? ala kijetesantakalu!?
