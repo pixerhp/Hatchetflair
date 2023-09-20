@@ -244,7 +244,7 @@ func read_cfg(file_path: String, skip_sections: PackedStringArray = []) -> Dicti
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)
 	if err != OK:
-		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
+		push_warning("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
 		return {}
 	var dictionary: Dictionary = {}
 	var section_data: Dictionary = {}
@@ -537,7 +537,6 @@ func ensure_required_dirs() -> Error:
 	var err: Error
 	var directories_to_ensure_exist: Array[String] = [
 		PATH_STORAGE,
-		PATH_USERS,
 		PATH_WORLDS,
 		PATH_SCREENSHOTS,
 	]
@@ -551,7 +550,18 @@ func ensure_required_dirs() -> Error:
 		return FAILED
 	return OK
 func ensure_required_files():
-	pass
+	var cfgs_to_ensure: Array[String] = [
+		PATH_SERVERS,
+		PATH_USERS,
+	]
+	var dict: Dictionary = {}
+	for path in cfgs_to_ensure:
+		dict = read_cfg(path)
+		if not dict.has("meta_info"):
+			dict["meta_info"] = {"version": Globals.V_ENTIRE}
+			print("writing: ", dict)
+			print("to: ", path)
+			write_cfg(path, dict)
 func ensure_world():
 	pass
 
