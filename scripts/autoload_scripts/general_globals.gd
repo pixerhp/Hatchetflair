@@ -135,7 +135,25 @@ func normalize_ip(ip: String) -> String:
 	ip = ip.replace("\t", "")
 	return ip
 
-#func dict_safeget(specify a key, even recursively like a dict in a dict in a dict) -> bool:
+# Allows you to get a value from a dictionary even if you're not sure its key exists,
+# including easily getting something like dict[key1][key2][key3] without having to manually use .has() repeatedly.
+# If the value is not found, it returns null.
+func dict_safeget(dict: Dictionary, keys: Array) -> Variant:
+	var subdict: Dictionary = dict
+	for key in keys:
+		if subdict.has(key):
+			if typeof(subdict[key]) == TYPE_DICTIONARY:
+				subdict = subdict[key]
+			else:
+				return subdict[key]
+		else:
+			return null
+	return subdict
+
+
+
+
+
 
 # Because arrays are passed in by reference, it directly sorts the original array, no return required.
 func sort_alphabetically(arr: Array, ascending: bool = true) -> void:
