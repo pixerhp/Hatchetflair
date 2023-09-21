@@ -22,35 +22,39 @@ func compare_v_to_cv(version: String) -> int:
 	return compare_v_to_v(version, Globals.V_ENTIRE)
 
 func transversion_file(path: String, target_v: String = Globals.V_ENTIRE) -> Error:
-	var any_errors_occured: bool = false
 	match path:
 		FileManager.PATH_SERVERS:
 			match compare_v_to_v(FileManager.read_cfg_keyval(path, "meta", "version"), target_v):
 				-2:
 					return FAILED
 				-1:
-					pass
+					if upversion_servers(target_v) != OK:
+						return FAILED
+					return OK
 				0:
 					return OK
 				1:
-					pass
+					if downversion_servers(target_v) != OK:
+						return FAILED
+					return OK
 		FileManager.PATH_USERS:
 			match compare_v_to_v(FileManager.read_file_first_line(path), target_v):
 				-2:
 					return FAILED
 				-1:
-					pass
+					if upversion_users(target_v) != OK:
+						return FAILED
+					return OK
 				0:
 					return OK
 				1:
-					pass
+					if downversion_users(target_v) != OK:
+						return FAILED
+					return OK
 		var unrecognized_path:
-			any_errors_occured = true
 			push_error("Did not have code to transversion file at path: ", path)
-	
-	if any_errors_occured:
-		return FAILED
-	return OK
+			return FAILED
+	return FAILED
 func transversion_files(paths: Array[String], target_v: String = Globals.V_ENTIRE) -> Error:
 	var any_errors_occured: bool = false
 	for path in paths:
@@ -59,6 +63,17 @@ func transversion_files(paths: Array[String], target_v: String = Globals.V_ENTIR
 	if any_errors_occured:
 		return FAILED
 	return OK
+
+func upversion_servers(target_v: String) -> Error:
+	return OK
+func downversion_servers(target_v: String) -> Error:
+	return OK
+
+func upversion_users(target_v: String) -> Error:
+	return OK
+func downversion_users(target_v: String) -> Error:
+	return OK
+
 
 func transversion_chunk():
 	pass
