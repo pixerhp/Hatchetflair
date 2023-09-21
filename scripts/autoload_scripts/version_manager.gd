@@ -3,43 +3,23 @@ extends Node
 # cv stands for "current version"/similar. (It is also sometimes used like "current version of/for".)
 # to separate a v_entire into it's components, use `v_entire.split('.')`.
 
-# Compares whether the input version_entire comes before (-1), is the same as (0) or probably comes after (1) the cv.
-func compare_v_to_cv(in_v_entire: String) -> int:
-	if in_v_entire == "":
-		push_warning()
-		return(127)
-	# If the input version is obviously the same as the current one then we don't need to do any special comparing.
-	if in_v_entire == Globals.game_version_entire:
-		return(0)
+# Returns -1 if v1 < v2, 0 if v1 == v2, and 1 if v1 > v2.
+func compare_v_to_v(v1: String, v2: String) -> int:
+	var v1_components: PackedStringArray = v1.split('.')
+	var v2_components: PackedStringArray = v2.split('.')
+	if v1_components.size() > v2_components.size():
+		v2_components.resize(v1_components.size())
+	if v2_components.size() > v1_components.size():
+		v1_components.resize(v2_components.size())
 	
-	var in_v_components: PackedStringArray = in_v_entire.split('.')
-	
-	if (in_v_components[0] != "pre-game"):
-		# NOTE: in the future (specifically when the phase changes for the first time,)
-		# phase comparisons will need to be manually defined here.
-		return(1)
-	else:
-		# If the phases are equal, compare the engine versions.
-		if (int(in_v_components[1]) < int(Globals.game_version_engine)):
-			return(-1)
-		elif (int(in_v_components[1]) > int(Globals.game_version_engine)):
-			return(1)
-		else:
-			# If the engine versions are equal, compare the major versions.
-			if (int(in_v_components[2]) < int(Globals.game_version_major)):
-				return(-1)
-			elif (int(in_v_components[2]) > int(Globals.game_version_major)):
-				return(1)
-			else:
-				# If the major versions are equal, compare the minor versions.
-				if (int(in_v_components[3]) < int(Globals.game_version_minor)):
-					return(-1)
-				elif (int(in_v_components[3]) > int(Globals.game_version_minor)):
-					return(1)
-				else:
-					# Despite the two version strings not being strictly equal, 
-					# the two versions are similar enough to be considered fully compatable.
-					return(0)
+	for i in v1_components.size():
+		if int(v1_components[i]) < int(v2_components[i]):
+			return -1
+		if int(v1_components[i]) > int(v2_components[i]):
+			return 1
+	return 0
+func compare_v_to_cv(version: String) -> int:
+	return compare_v_to_v(version, Globals.V_ENTIRE)
 
 # Returns true only if one or more essential files failed to be (or be transversioned to) the correct version.
 func ensure_cv_essential_files() -> bool: 
