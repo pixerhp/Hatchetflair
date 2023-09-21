@@ -1,48 +1,7 @@
 extends Node
-# NOTE: cv stands for "correct/current version". It is also sometimes used to mean "correct/current version of/for".
-
-
-# Takes a version_entire string (ex: "pre-game v1.9.0") and outputs its components as Array[String].
-func deconcat_v_entire(v_entire: String) -> Array[String]:
-	if v_entire == "":
-		# If the input string is blank, then there's nothing to deconcatenate.
-		push_warning("When deconcatenating a version_entire string, the string was blank (was equal to \"\".) 
-		This is likely unintented operation. (Returning [])")
-		return([])
-	
-	var v_components: Array[String] = []
-	var remaining_str: String = v_entire
-	
-	var index_of_first_space: int = remaining_str.find(" ")
-	# If the string doesn't contain a space char, then the string must only contain the game's phase or be a strange format.
-	if index_of_first_space == -1:
-		push_warning("When deconcatenating a version_entire string, no 'space' char was found. 
-		This is likely unintented operation or an unsupported situation. (Returning [v_entire])")
-		return([v_entire])
-	
-	# Extract the phase string, and then remove it from the remaining.
-	v_components.append(remaining_str.substr(0, index_of_first_space))
-	remaining_str = remaining_str.erase(0, index_of_first_space + 1)
-	
-	# If a 'v' char is found immediately after the space, remove it.
-	if remaining_str.substr(0, 1) == 'v':
-		remaining_str = remaining_str.erase(0, 1)
-	
-	# If no periods are found in the remaining string, then simply add the remaining to components and return.
-	if remaining_str.find(".") == -1:
-		push_warning("When deconcatenating a version_entire string, no '.' char was found after the space. 
-		This is likely unintented operation or an unsupported situation. (Returning [phase, remaining])")
-		v_components.append(remaining_str)
-		return(v_components)
-	
-	# Extract every substring preceeded by a '.', and then add the remaining if content exists after the last '.'.
-	while remaining_str.find(".") != -1:
-		v_components.append(remaining_str.substr(0, remaining_str.find(".")))
-		remaining_str = remaining_str.erase(0, remaining_str.find(".") + 1)
-	if remaining_str != "":
-		v_components.append(remaining_str)
-	
-	return(v_components)
+# v stands for version.
+# cv stands for "current version"/similar. (It is also sometimes used like "current version of/for".)
+# to separate a v_entire into it's components, use `v_entire.split('.')`.
 
 # Compares whether the input version_entire comes before (-1), is the same as (0) or probably comes after (1) the cv.
 func compare_v_to_cv(in_v_entire: String) -> int:
@@ -53,7 +12,7 @@ func compare_v_to_cv(in_v_entire: String) -> int:
 	if in_v_entire == Globals.game_version_entire:
 		return(0)
 	
-	var in_v_components: Array[String] = deconcat_v_entire(in_v_entire)
+	var in_v_components: PackedStringArray = in_v_entire.split('.')
 	
 	if (in_v_components[0] != "pre-game"):
 		# NOTE: in the future (specifically when the phase changes for the first time,)
