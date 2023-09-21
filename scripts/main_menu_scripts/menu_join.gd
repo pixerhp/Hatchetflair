@@ -24,7 +24,7 @@ func _ready():
 
 
 func sync_servers():
-	var servers_dict: Dictionary = FileManager.read_cfg(FileManager.PATH_SERVERS, ["meta_info"])
+	var servers_dict: Dictionary = FileManager.read_cfg(FileManager.PATH_SERVERS, ["meta"])
 	server_altnames.clear()
 	altname_to_nickname.clear()
 	for altname in servers_dict:

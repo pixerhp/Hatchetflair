@@ -445,7 +445,7 @@ func create_world(world_name: String, world_seed: String) -> Error:
 	
 	# Set up the dictionary that will be used to create the world info cfg file.
 	var cfg_data: Dictionary = {
-		"meta_info": {
+		"meta": {
 			"version": Globals.V_ENTIRE,
 			"world_name": world_name,
 			"favorited": false,
@@ -473,7 +473,7 @@ func edit_world(dir_name: String, new_name: String, new_seed: String) -> Error:
 	new_seed = Globals.normalize_seed(new_seed)
 	
 	var dict: Dictionary = read_cfg(PATH_WORLDS + "/" + dir_name + "/world.cfg")
-	dict["meta_info"]["world_name"] = new_name
+	dict["meta"]["world_name"] = new_name
 	dict["generation"]["seed"] = new_seed
 	
 	var any_errors_occured: bool = false
@@ -557,8 +557,8 @@ func ensure_required_files():
 	var dict: Dictionary = {}
 	for path in cfgs_to_ensure:
 		dict = read_cfg(path)
-		if not dict.has("meta_info"):
-			dict["meta_info"] = {"version": Globals.V_ENTIRE}
+		if not dict.has("meta"):
+			dict["meta"] = {"version": Globals.V_ENTIRE}
 			write_cfg(path, dict)
 # Makeshift version of the function, revise this to go much more in depth in the future, like checking various cfg sections.
 func ensure_world(dirname: String) -> Error:
@@ -571,8 +571,8 @@ func ensure_world(dirname: String) -> Error:
 			any_errors_encountered = true
 	
 	var dict: Dictionary = read_cfg(PATH_WORLDS + "/" + dirname + "/world.cfg")
-	if not dict.has("meta_info"):
-			dict["meta_info"] = {"version": Globals.V_ENTIRE}
+	if not dict.has("meta"):
+			dict["meta"] = {"version": Globals.V_ENTIRE}
 			write_cfg(PATH_WORLDS + "/" + dirname + "/world.cfg", dict)
 	
 	if any_errors_encountered:

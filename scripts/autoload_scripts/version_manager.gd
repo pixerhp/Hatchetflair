@@ -25,7 +25,7 @@ func transversion_file(path: String, target_v: String = Globals.V_ENTIRE) -> Err
 	var any_errors_occured: bool = false
 	match path:
 		FileManager.PATH_SERVERS:
-			match compare_v_to_v(FileManager.read_cfg_keyval(path, "meta_info", "version"), target_v):
+			match compare_v_to_v(FileManager.read_cfg_keyval(path, "meta", "version"), target_v):
 				-2:
 					return FAILED
 				-1:
