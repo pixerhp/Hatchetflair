@@ -36,6 +36,8 @@ func _enter_tree() -> void:
 	FileManager.ensure_required_dirs()
 	FileManager.ensure_required_files()
 	
+	VManager.transversion_file(FileManager.PATH_SERVERS)
+	
 	globals_ready = true
 	return
 
