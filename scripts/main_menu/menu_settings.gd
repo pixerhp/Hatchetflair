@@ -5,10 +5,12 @@ extends Control
 
 func _ready():
 	settings_list_node.clear()
-	var item_text: String
+	var events_text: String
 	for action in InputMap.get_actions():
 		if not action.substr(0, 3) == "ui_":
-			item_text = action + "   <-->   "
+			events_text = ""
 			for event in InputMap.action_get_events(action):
-				item_text += event.as_text() + ", "
-			settings_list_node.add_item(item_text)
+				events_text += event.as_text() + ";  "
+			if not events_text.is_empty():
+				events_text = events_text.erase(events_text.length() - 3, 2)
+			settings_list_node.add_item(action + "   <-->   " + events_text)
