@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://bbwhtlk15abxa"]
 
-[ext_resource type="Script" path="res://scripts/main_menu_scripts/menu_main.gd" id="1_k7bq2"]
-[ext_resource type="Script" path="res://scripts/main_menu_scripts/menu_worlds.gd" id="2_pfjxw"]
-[ext_resource type="Script" path="res://scripts/main_menu_scripts/menu_join.gd" id="3_6hjdh"]
+[ext_resource type="Script" path="res://scripts/main_menu/menu_main.gd" id="1_5ax8f"]
+[ext_resource type="Script" path="res://scripts/main_menu/menu_worlds.gd" id="2_11j2w"]
+[ext_resource type="Script" path="res://scripts/main_menu/menu_join.gd" id="3_b440v"]
 
 [sub_resource type="Gradient" id="Gradient_skhgw"]
 interpolation_mode = 2
@@ -23,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_k7bq2")
+script = ExtResource("1_5ax8f")
 
 [node name="BackgroundTexture" type="TextureRect" parent="."]
 layout_mode = 1
@@ -42,7 +42,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleScreen" type="Control" parent="Menus"]
+[node name="TitleMenu" type="Control" parent="Menus"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -50,7 +50,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TitleScreenUI" type="VBoxContainer" parent="Menus/TitleScreen"]
+[node name="TitleUI" type="VBoxContainer" parent="Menus/TitleMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -58,11 +58,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Spacer1" type="Control" parent="Menus/TitleScreen/TitleScreenUI"]
+[node name="Spacer1" type="Control" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MenuTitle" type="RichTextLabel" parent="Menus/TitleScreen/TitleScreenUI"]
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
@@ -76,15 +76,15 @@ text = "[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=-2 amp=60]Hatc
 fit_content = true
 autowrap_mode = 0
 
-[node name="Spacer2" type="Control" parent="Menus/TitleScreen/TitleScreenUI"]
+[node name="Spacer2" type="Control" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TitleScreenButtons" type="VBoxContainer" parent="Menus/TitleScreen/TitleScreenUI"]
+[node name="TitleScreenButtons" type="VBoxContainer" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="StartWorld" type="Button" parent="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons"]
+[node name="StartWorld" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -92,7 +92,7 @@ theme_override_font_sizes/font_size = 20
 text = "Start world"
 icon_alignment = 1
 
-[node name="JoinWorld" type="Button" parent="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons"]
+[node name="JoinWorld" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -100,7 +100,7 @@ theme_override_font_sizes/font_size = 20
 text = "Join world"
 icon_alignment = 1
 
-[node name="Settings" type="Button" parent="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons"]
+[node name="Settings" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -108,7 +108,7 @@ theme_override_font_sizes/font_size = 20
 text = "Settings"
 icon_alignment = 1
 
-[node name="Credits" type="Button" parent="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons"]
+[node name="Credits" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -116,7 +116,7 @@ theme_override_font_sizes/font_size = 20
 text = "Credits"
 icon_alignment = 1
 
-[node name="Quit" type="Button" parent="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons"]
+[node name="Quit" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -124,12 +124,12 @@ theme_override_font_sizes/font_size = 20
 text = "Quit"
 icon_alignment = 1
 
-[node name="Spacer3" type="Control" parent="Menus/TitleScreen/TitleScreenUI"]
+[node name="Spacer3" type="Control" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 1.5
 
-[node name="WorldsScreen" type="Control" parent="Menus"]
+[node name="WorldsMenu" type="Control" parent="Menus"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -137,9 +137,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_pfjxw")
+script = ExtResource("2_11j2w")
 
-[node name="WorldsScreenUI" type="VBoxContainer" parent="Menus/WorldsScreen"]
+[node name="WorldsUI" type="VBoxContainer" parent="Menus/WorldsMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -147,7 +147,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MenuTitle" type="RichTextLabel" parent="Menus/WorldsScreen/WorldsScreenUI"]
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/WorldsMenu/WorldsUI"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -160,59 +160,59 @@ text = "[center]Worlds List[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="BackButton" type="HBoxContainer" parent="Menus/WorldsScreen/WorldsScreenUI"]
+[node name="BackButton" type="HBoxContainer" parent="Menus/WorldsMenu/WorldsUI"]
 layout_mode = 2
 
-[node name="Back" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/BackButton"]
+[node name="Back" type="Button" parent="Menus/WorldsMenu/WorldsUI/BackButton"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Back"
 
-[node name="SavedWorldsList" type="ItemList" parent="Menus/WorldsScreen/WorldsScreenUI"]
+[node name="SavedWorldsList" type="ItemList" parent="Menus/WorldsMenu/WorldsUI"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Toggles" type="HBoxContainer" parent="Menus/WorldsScreen/WorldsScreenUI"]
+[node name="Toggles" type="HBoxContainer" parent="Menus/WorldsMenu/WorldsUI"]
 layout_mode = 2
 
-[node name="AllowJoining" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
+[node name="AllowJoining" type="CheckButton" parent="Menus/WorldsMenu/WorldsUI/Toggles"]
 layout_mode = 2
 text = "Host Multiplayer"
 
-[node name="HostWithoutPlaying" type="CheckButton" parent="Menus/WorldsScreen/WorldsScreenUI/Toggles"]
+[node name="HostWithoutPlaying" type="CheckButton" parent="Menus/WorldsMenu/WorldsUI/Toggles"]
 layout_mode = 2
 disabled = true
 text = "Host without playing"
 
-[node name="WorldButtons" type="HBoxContainer" parent="Menus/WorldsScreen/WorldsScreenUI"]
+[node name="WorldButtons" type="HBoxContainer" parent="Menus/WorldsMenu/WorldsUI"]
 layout_mode = 2
 
-[node name="NewWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+[node name="NewWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 text = "New World"
 
-[node name="DeleteWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+[node name="DeleteWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 disabled = true
 text = "Delete World"
 
-[node name="EditWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+[node name="EditWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 disabled = true
 text = "Edit World"
 
-[node name="DuplicateWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+[node name="DuplicateWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 disabled = true
 text = "Duplicate World"
 
-[node name="PlayWorld" type="Button" parent="Menus/WorldsScreen/WorldsScreenUI/WorldButtons"]
+[node name="PlayWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 disabled = true
 text = "Play"
 
-[node name="NewWorldPopup" type="Panel" parent="Menus/WorldsScreen"]
+[node name="NewWorldPopup" type="Panel" parent="Menus/WorldsMenu"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -227,7 +227,7 @@ offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsMenu/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -237,7 +237,7 @@ bbcode_enabled = true
 text = "[center]Create a new world:[/center]"
 fit_content = true
 
-[node name="WorldNameInput" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="WorldNameInput" type="TextEdit" parent="Menus/WorldsMenu/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -249,7 +249,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[world name]"
 
-[node name="WorldSeedInput" type="TextEdit" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="WorldSeedInput" type="TextEdit" parent="Menus/WorldsMenu/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -261,7 +261,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[integer world seed, leave blank for random]"
 
-[node name="Confirm" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="Confirm" type="Button" parent="Menus/WorldsMenu/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -274,7 +274,7 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Okay"
 
-[node name="Cancel" type="Button" parent="Menus/WorldsScreen/NewWorldPopup"]
+[node name="Cancel" type="Button" parent="Menus/WorldsMenu/NewWorldPopup"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -284,7 +284,7 @@ offset_right = 60.0
 grow_vertical = 0
 text = "Cancel"
 
-[node name="EditWorldPopup" type="Panel" parent="Menus/WorldsScreen"]
+[node name="EditWorldPopup" type="Panel" parent="Menus/WorldsMenu"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -299,7 +299,7 @@ offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsScreen/EditWorldPopup"]
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsMenu/EditWorldPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -309,7 +309,7 @@ bbcode_enabled = true
 text = "[center]Edit world:[/center]"
 fit_content = true
 
-[node name="WorldNameInput" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
+[node name="WorldNameInput" type="TextEdit" parent="Menus/WorldsMenu/EditWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -321,7 +321,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[new world name]"
 
-[node name="WorldSeedInput" type="TextEdit" parent="Menus/WorldsScreen/EditWorldPopup"]
+[node name="WorldSeedInput" type="TextEdit" parent="Menus/WorldsMenu/EditWorldPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -333,7 +333,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[new world generation seed]"
 
-[node name="Confirm" type="Button" parent="Menus/WorldsScreen/EditWorldPopup"]
+[node name="Confirm" type="Button" parent="Menus/WorldsMenu/EditWorldPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -346,7 +346,7 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Okay"
 
-[node name="Cancel" type="Button" parent="Menus/WorldsScreen/EditWorldPopup"]
+[node name="Cancel" type="Button" parent="Menus/WorldsMenu/EditWorldPopup"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -356,7 +356,7 @@ offset_right = 60.0
 grow_vertical = 0
 text = "Cancel"
 
-[node name="DeleteWorldPopup" type="Panel" parent="Menus/WorldsScreen"]
+[node name="DeleteWorldPopup" type="Panel" parent="Menus/WorldsMenu"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -371,7 +371,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsScreen/DeleteWorldPopup"]
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/WorldsMenu/DeleteWorldPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -382,7 +382,7 @@ text = "[center]Are you sure you want to delete that world?
 (This action cannot be undone.)[/center]"
 fit_content = true
 
-[node name="Confirm" type="Button" parent="Menus/WorldsScreen/DeleteWorldPopup"]
+[node name="Confirm" type="Button" parent="Menus/WorldsMenu/DeleteWorldPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -395,7 +395,7 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Yes"
 
-[node name="Cancel" type="Button" parent="Menus/WorldsScreen/DeleteWorldPopup"]
+[node name="Cancel" type="Button" parent="Menus/WorldsMenu/DeleteWorldPopup"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -405,7 +405,7 @@ offset_right = 60.0
 grow_vertical = 0
 text = "Cancel"
 
-[node name="JoinScreen" type="Control" parent="Menus"]
+[node name="JoinMenu" type="Control" parent="Menus"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -413,9 +413,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_6hjdh")
+script = ExtResource("3_b440v")
 
-[node name="JoinScreenUI" type="VBoxContainer" parent="Menus/JoinScreen"]
+[node name="JoinUI" type="VBoxContainer" parent="Menus/JoinMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -423,7 +423,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MenuTitle" type="RichTextLabel" parent="Menus/JoinScreen/JoinScreenUI"]
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/JoinMenu/JoinUI"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -436,42 +436,39 @@ text = "[center]Saved Servers[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="BackButton" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
-layout_mode = 2
-
-[node name="Back" type="Button" parent="Menus/JoinScreen/JoinScreenUI/BackButton"]
+[node name="Back" type="Button" parent="Menus/JoinMenu/JoinUI"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Back"
 
-[node name="SavedServersList" type="ItemList" parent="Menus/JoinScreen/JoinScreenUI"]
+[node name="SavedServersList" type="ItemList" parent="Menus/JoinMenu/JoinUI"]
 custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ServerButtons" type="HBoxContainer" parent="Menus/JoinScreen/JoinScreenUI"]
+[node name="ServerButtons" type="HBoxContainer" parent="Menus/JoinMenu/JoinUI"]
 layout_mode = 2
 
-[node name="AddServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
+[node name="AddServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
 layout_mode = 2
 text = "Add Server"
 
-[node name="RemoveServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
+[node name="RemoveServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
 layout_mode = 2
 disabled = true
 text = "Remove Server"
 
-[node name="EditServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
+[node name="EditServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
 layout_mode = 2
 disabled = true
 text = "Edit Server"
 
-[node name="JoinServer" type="Button" parent="Menus/JoinScreen/JoinScreenUI/ServerButtons"]
+[node name="JoinServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
 layout_mode = 2
 disabled = true
 text = "Join World"
 
-[node name="AddServerPopup" type="Panel" parent="Menus/JoinScreen"]
+[node name="AddServerPopup" type="Panel" parent="Menus/JoinMenu"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -486,7 +483,7 @@ offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/AddServerPopup"]
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinMenu/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -496,7 +493,7 @@ bbcode_enabled = true
 text = "[center]New server:[/center]"
 fit_content = true
 
-[node name="ServerIPInput" type="TextEdit" parent="Menus/JoinScreen/AddServerPopup"]
+[node name="ServerIPInput" type="TextEdit" parent="Menus/JoinMenu/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -508,7 +505,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[ipv4 or ipv6 address]"
 
-[node name="ServerNicknameInput" type="TextEdit" parent="Menus/JoinScreen/AddServerPopup"]
+[node name="ServerNicknameInput" type="TextEdit" parent="Menus/JoinMenu/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -520,7 +517,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[personal nickname for this server]"
 
-[node name="Confirm" type="Button" parent="Menus/JoinScreen/AddServerPopup"]
+[node name="Confirm" type="Button" parent="Menus/JoinMenu/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -533,7 +530,7 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Okay"
 
-[node name="Cancel" type="Button" parent="Menus/JoinScreen/AddServerPopup"]
+[node name="Cancel" type="Button" parent="Menus/JoinMenu/AddServerPopup"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -543,7 +540,7 @@ offset_right = 60.0
 grow_vertical = 0
 text = "Cancel"
 
-[node name="EditServerPopup" type="Panel" parent="Menus/JoinScreen"]
+[node name="EditServerPopup" type="Panel" parent="Menus/JoinMenu"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -558,7 +555,7 @@ offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/EditServerPopup"]
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinMenu/EditServerPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -568,7 +565,7 @@ bbcode_enabled = true
 text = "[center]Edit server IP and nickname:[/center]"
 fit_content = true
 
-[node name="ServerIPInput" type="TextEdit" parent="Menus/JoinScreen/EditServerPopup"]
+[node name="ServerIPInput" type="TextEdit" parent="Menus/JoinMenu/EditServerPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -580,7 +577,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[server ipv4 or ipv6 address]"
 
-[node name="ServerNicknameInput" type="TextEdit" parent="Menus/JoinScreen/EditServerPopup"]
+[node name="ServerNicknameInput" type="TextEdit" parent="Menus/JoinMenu/EditServerPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -592,7 +589,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[personal nickname for this server]"
 
-[node name="Confirm" type="Button" parent="Menus/JoinScreen/EditServerPopup"]
+[node name="Confirm" type="Button" parent="Menus/JoinMenu/EditServerPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -605,7 +602,7 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Okay"
 
-[node name="Cancel" type="Button" parent="Menus/JoinScreen/EditServerPopup"]
+[node name="Cancel" type="Button" parent="Menus/JoinMenu/EditServerPopup"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -615,7 +612,7 @@ offset_right = 60.0
 grow_vertical = 0
 text = "Cancel"
 
-[node name="RemoveServerPopup" type="Panel" parent="Menus/JoinScreen"]
+[node name="RemoveServerPopup" type="Panel" parent="Menus/JoinMenu"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -630,7 +627,7 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinScreen/RemoveServerPopup"]
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/JoinMenu/RemoveServerPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -641,7 +638,7 @@ text = "[center]Are you sure you want to remove that server?
 (This action cannot be undone.)[/center]"
 fit_content = true
 
-[node name="Confirm" type="Button" parent="Menus/JoinScreen/RemoveServerPopup"]
+[node name="Confirm" type="Button" parent="Menus/JoinMenu/RemoveServerPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -654,7 +651,7 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Yes"
 
-[node name="Cancel" type="Button" parent="Menus/JoinScreen/RemoveServerPopup"]
+[node name="Cancel" type="Button" parent="Menus/JoinMenu/RemoveServerPopup"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -664,7 +661,7 @@ offset_right = 60.0
 grow_vertical = 0
 text = "Cancel"
 
-[node name="SettingsScreen" type="Control" parent="Menus"]
+[node name="SettingsMenu" type="Control" parent="Menus"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -673,7 +670,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SettingsScreenUI" type="VBoxContainer" parent="Menus/SettingsScreen"]
+[node name="SettingsUI" type="VBoxContainer" parent="Menus/SettingsMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -681,12 +678,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Spacer1" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
+[node name="Spacer1" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="SettingsTitle" type="RichTextLabel" parent="Menus/SettingsScreen/SettingsScreenUI"]
+[node name="SettingsTitle" type="RichTextLabel" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -699,7 +696,7 @@ text = "[center]Settings & Hotkeys[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="SettingsSubtitle" type="RichTextLabel" parent="Menus/SettingsScreen/SettingsScreenUI"]
+[node name="SettingsSubtitle" type="RichTextLabel" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 30
@@ -713,11 +710,11 @@ text = "[center](Customizeable hotkeys are not yet supported.)[/center]
 fit_content = true
 autowrap_mode = 0
 
-[node name="Spacer2" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
+[node name="Spacer2" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ListText" type="RichTextLabel" parent="Menus/SettingsScreen/SettingsScreenUI"]
+[node name="ListText" type="RichTextLabel" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
@@ -729,24 +726,24 @@ take a screenshot (NOT YET FUNCTIONAL:)   F12
 fit_content = true
 autowrap_mode = 0
 
-[node name="Spacer3" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
+[node name="Spacer3" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SettingsButtons" type="VBoxContainer" parent="Menus/SettingsScreen/SettingsScreenUI"]
+[node name="SettingsButtons" type="VBoxContainer" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Back" type="Button" parent="Menus/SettingsScreen/SettingsScreenUI/SettingsButtons"]
+[node name="Back" type="Button" parent="Menus/SettingsMenu/SettingsUI/SettingsButtons"]
 layout_mode = 2
 text = "Back"
 
-[node name="Spacer4" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
+[node name="Spacer4" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="CreditsScreen" type="Control" parent="Menus"]
+[node name="CreditsMenu" type="Control" parent="Menus"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -755,7 +752,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CreditsUI" type="VBoxContainer" parent="Menus/CreditsScreen"]
+[node name="CreditsUI" type="VBoxContainer" parent="Menus/CreditsMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -763,11 +760,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Spacer1" type="Control" parent="Menus/CreditsScreen/CreditsUI"]
+[node name="Spacer1" type="Control" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TitleText" type="RichTextLabel" parent="Menus/CreditsScreen/CreditsUI"]
+[node name="TitleText" type="RichTextLabel" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -780,11 +777,11 @@ text = "[center]Hatchetflair is made possible by these lovely people![/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="Spacer2" type="Control" parent="Menus/CreditsScreen/CreditsUI"]
+[node name="Spacer2" type="Control" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Credits" type="RichTextLabel" parent="Menus/CreditsScreen/CreditsUI"]
+[node name="Credits" type="RichTextLabel" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
@@ -812,20 +809,20 @@ Special Thanks:
 fit_content = true
 autowrap_mode = 0
 
-[node name="Spacer3" type="Control" parent="Menus/CreditsScreen/CreditsUI"]
+[node name="Spacer3" type="Control" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Back" type="Button" parent="Menus/CreditsScreen/CreditsUI"]
+[node name="Back" type="Button" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Back"
 
-[node name="Spacer4" type="Control" parent="Menus/CreditsScreen/CreditsUI"]
+[node name="Spacer4" type="Control" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="NetworkInfoOverlay" type="Control" parent="Menus"]
+[node name="NetworkStatusOverlay" type="Control" parent="Menus"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -834,7 +831,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="Menus/NetworkInfoOverlay"]
+[node name="ColorRect" type="ColorRect" parent="Menus/NetworkStatusOverlay"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -843,7 +840,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.309804, 0.309804, 0.309804, 0.901961)
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Menus/NetworkInfoOverlay"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/NetworkStatusOverlay"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -859,7 +856,7 @@ grow_vertical = 2
 fit_content = true
 autowrap_mode = 0
 
-[node name="BackButton" type="Button" parent="Menus/NetworkInfoOverlay"]
+[node name="Back" type="Button" parent="Menus/NetworkStatusOverlay"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -874,29 +871,29 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Back"
 
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons/StartWorld" to="." method="switch_to_menu" binds= ["WorldsScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons/JoinWorld" to="." method="switch_to_menu" binds= ["JoinScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons/Settings" to="." method="switch_to_menu" binds= ["SettingsScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons/Credits" to="." method="switch_to_menu" binds= ["CreditsScreen"]]
-[connection signal="pressed" from="Menus/TitleScreen/TitleScreenUI/TitleScreenButtons/Quit" to="." method="_on_quit_button_pressed"]
-[connection signal="visibility_changed" from="Menus/WorldsScreen" to="Menus/WorldsScreen" method="update_worlds_list"]
-[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/BackButton/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
-[connection signal="item_activated" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="start_world_by_index"]
-[connection signal="item_selected" from="Menus/WorldsScreen/WorldsScreenUI/SavedWorldsList" to="Menus/WorldsScreen" method="_on_worlds_list_item_selected" unbinds=1]
-[connection signal="toggled" from="Menus/WorldsScreen/WorldsScreenUI/Toggles/AllowJoining" to="Menus/WorldsScreen" method="toggle_host_without_playing_visibility"]
-[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/NewWorld" to="Menus/WorldsScreen" method="open_new_world_popup"]
-[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DeleteWorld" to="Menus/WorldsScreen" method="open_delete_world_popup"]
-[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/EditWorld" to="Menus/WorldsScreen" method="open_edit_world_popup"]
-[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/DuplicateWorld" to="Menus/WorldsScreen" method="_on_duplicate_world_pressed"]
-[connection signal="pressed" from="Menus/WorldsScreen/WorldsScreenUI/WorldButtons/PlayWorld" to="Menus/WorldsScreen" method="start_world_by_index"]
-[connection signal="visibility_changed" from="Menus/JoinScreen" to="Menus/JoinScreen" method="update_servers_list"]
-[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/BackButton/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
-[connection signal="item_activated" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="join_server_by_index"]
-[connection signal="item_selected" from="Menus/JoinScreen/JoinScreenUI/SavedServersList" to="Menus/JoinScreen" method="_on_servers_list_item_selected" unbinds=1]
-[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/AddServer" to="Menus/JoinScreen" method="open_add_server_popup"]
-[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/RemoveServer" to="Menus/JoinScreen" method="open_remove_server_popup"]
-[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/EditServer" to="Menus/JoinScreen" method="open_edit_server_popup"]
-[connection signal="pressed" from="Menus/JoinScreen/JoinScreenUI/ServerButtons/JoinServer" to="Menus/JoinScreen" method="join_server_by_index"]
-[connection signal="pressed" from="Menus/SettingsScreen/SettingsScreenUI/SettingsButtons/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
-[connection signal="pressed" from="Menus/CreditsScreen/CreditsUI/Back" to="." method="switch_to_menu" binds= ["TitleScreen"]]
-[connection signal="pressed" from="Menus/NetworkInfoOverlay/BackButton" to="." method="_on_network_info_overlay_back_button_pressed" binds= ["Pressed back button", false, false]]
+[connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/StartWorld" to="." method="switch_to_menu" binds= ["WorldsMenu"]]
+[connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/JoinWorld" to="." method="switch_to_menu" binds= ["JoinMenu"]]
+[connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Settings" to="." method="switch_to_menu" binds= ["SettingsMenu"]]
+[connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Credits" to="." method="switch_to_menu" binds= ["CreditsMenu"]]
+[connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Quit" to="." method="_on_quit_button_pressed"]
+[connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]
+[connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/BackButton/Back" to="." method="switch_to_menu" binds= ["TitleMenu"]]
+[connection signal="item_activated" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="start_world_by_index"]
+[connection signal="item_selected" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="_on_worlds_list_item_selected" unbinds=1]
+[connection signal="toggled" from="Menus/WorldsMenu/WorldsUI/Toggles/AllowJoining" to="Menus/WorldsMenu" method="toggle_host_without_playing_visibility"]
+[connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/NewWorld" to="Menus/WorldsMenu" method="open_new_world_popup"]
+[connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/DeleteWorld" to="Menus/WorldsMenu" method="open_delete_world_popup"]
+[connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/EditWorld" to="Menus/WorldsMenu" method="open_edit_world_popup"]
+[connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/DuplicateWorld" to="Menus/WorldsMenu" method="_on_duplicate_world_pressed"]
+[connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/PlayWorld" to="Menus/WorldsMenu" method="start_world_by_index"]
+[connection signal="visibility_changed" from="Menus/JoinMenu" to="Menus/JoinMenu" method="update_servers_list"]
+[connection signal="pressed" from="Menus/JoinMenu/JoinUI/Back" to="." method="switch_to_menu" binds= ["TitleMenu"]]
+[connection signal="item_activated" from="Menus/JoinMenu/JoinUI/SavedServersList" to="Menus/JoinMenu" method="join_server_by_index"]
+[connection signal="item_selected" from="Menus/JoinMenu/JoinUI/SavedServersList" to="Menus/JoinMenu" method="_on_servers_list_item_selected" unbinds=1]
+[connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/AddServer" to="Menus/JoinMenu" method="open_add_server_popup"]
+[connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/RemoveServer" to="Menus/JoinMenu" method="open_remove_server_popup"]
+[connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/EditServer" to="Menus/JoinMenu" method="open_edit_server_popup"]
+[connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/JoinServer" to="Menus/JoinMenu" method="join_server_by_index"]
+[connection signal="pressed" from="Menus/SettingsMenu/SettingsUI/SettingsButtons/Back" to="." method="switch_to_menu" binds= ["TitleMenu"]]
+[connection signal="pressed" from="Menus/CreditsMenu/CreditsUI/Back" to="." method="switch_to_menu" binds= ["TitleMenu"]]
+[connection signal="pressed" from="Menus/NetworkStatusOverlay/Back" to="." method="_on_network_info_overlay_back_button_pressed" binds= ["Pressed back button", false, false]]

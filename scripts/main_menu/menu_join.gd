@@ -6,7 +6,7 @@ extends Control
 
 var server_altnames: Array[String] = []
 var altname_to_nickname: Dictionary = {}
-@onready var servers_list_node: Node = $JoinScreenUI/SavedServersList
+@onready var servers_list_node: Node = $JoinUI/SavedServersList
 
 
 func _ready():
@@ -44,8 +44,8 @@ func update_servers_list():
 
 func join_server_by_index(index: int = -1) -> Error:
 	if index == -1:
-		if not $JoinScreenUI/SavedServersList.get_selected_items().is_empty():
-			index = $JoinScreenUI/SavedServersList.get_selected_items()[0]
+		if not $JoinUI/SavedServersList.get_selected_items().is_empty():
+			index = $JoinUI/SavedServersList.get_selected_items()[0]
 		else:
 			push_warning("No list index was specified.")
 			return FAILED
@@ -131,14 +131,14 @@ func confirm_remove_server() -> Error:
 
 func _on_servers_list_item_selected():
 	hide_join_menu_popups()
-	$JoinScreenUI/ServerButtons/RemoveServer.disabled = false
-	$JoinScreenUI/ServerButtons/EditServer.disabled = false
-	$JoinScreenUI/ServerButtons/JoinServer.disabled = false
+	$JoinUI/ServerButtons/RemoveServer.disabled = false
+	$JoinUI/ServerButtons/EditServer.disabled = false
+	$JoinUI/ServerButtons/JoinServer.disabled = false
 
 func disable_item_selected_buttons():
-	$JoinScreenUI/ServerButtons/RemoveServer.disabled = true
-	$JoinScreenUI/ServerButtons/EditServer.disabled = true
-	$JoinScreenUI/ServerButtons/JoinServer.disabled = true
+	$JoinUI/ServerButtons/RemoveServer.disabled = true
+	$JoinUI/ServerButtons/EditServer.disabled = true
+	$JoinUI/ServerButtons/JoinServer.disabled = true
 
 func hide_join_menu_popups():
 	$AddServerPopup.hide()

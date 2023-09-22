@@ -21,10 +21,10 @@ config/icon="res://assets/icons/hf_icon.png"
 
 [autoload]
 
-NetworkManager="*res://scripts/autoload_scripts/network_manager.gd"
-Globals="*res://scripts/autoload_scripts/general_globals.gd"
-FileManager="*res://scripts/autoload_scripts/file_manager.gd"
-VManager="*res://scripts/autoload_scripts/version_manager.gd"
+NetworkManager="*res://scripts/autoloaded/network_manager.gd"
+Globals="*res://scripts/autoloaded/general_globals.gd"
+FileManager="*res://scripts/autoloaded/file_manager.gd"
+VManager="*res://scripts/autoloaded/version_manager.gd"
 
 [input]
 

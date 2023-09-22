@@ -2,7 +2,7 @@ extends Control
 
 var world_dir_names: Array[String] = []
 var dir_name_to_world_name: Dictionary = {}
-@onready var worlds_list_node: Node = $WorldsScreenUI/SavedWorldsList
+@onready var worlds_list_node: Node = $WorldsUI/SavedWorldsList
 
 
 func _ready():
@@ -45,12 +45,12 @@ func start_world_by_index(index: int = -1) -> Error:
 		else:
 			index = worlds_list_node.get_selected_items()[0]
 	start_world_by_specifics(FileManager.PATH_WORLDS + "/" + world_dir_names[index], 
-	$WorldsScreenUI/Toggles/AllowJoining.button_pressed, 
-	$WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed)
+	$WorldsUI/Toggles/AllowJoining.button_pressed, 
+	$WorldsUI/Toggles/HostWithoutPlaying.button_pressed)
 	return OK
 func start_world_by_specifics(world_dir_path: String, 
-allow_multiplayer_joining: bool = $WorldsScreenUI/Toggles/AllowJoining.button_pressed, 
-host_without_playing: bool = $WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed) -> Error:
+allow_multiplayer_joining: bool = $WorldsUI/Toggles/AllowJoining.button_pressed, 
+host_without_playing: bool = $WorldsUI/Toggles/HostWithoutPlaying.button_pressed) -> Error:
 	print("Although technically not using it yet, use world files when loading a world later. ", world_dir_path)
 	if NetworkManager.host_game(allow_multiplayer_joining, host_without_playing) != OK:
 		return FAILED
@@ -149,22 +149,22 @@ func _on_duplicate_world_pressed() -> Error:
 
 
 func toggle_host_without_playing_visibility (button_value: bool):
-	$WorldsScreenUI/Toggles/HostWithoutPlaying.disabled = not button_value
+	$WorldsUI/Toggles/HostWithoutPlaying.disabled = not button_value
 	if button_value == false:
-		$WorldsScreenUI/Toggles/HostWithoutPlaying.button_pressed = false
+		$WorldsUI/Toggles/HostWithoutPlaying.button_pressed = false
 
 func _on_worlds_list_item_selected():
 	hide_worlds_menu_popups()
-	$WorldsScreenUI/WorldButtons/DeleteWorld.disabled = false
-	$WorldsScreenUI/WorldButtons/EditWorld.disabled = false
-	$WorldsScreenUI/WorldButtons/DuplicateWorld.disabled = false
-	$WorldsScreenUI/WorldButtons/PlayWorld.disabled = false
+	$WorldsUI/WorldButtons/DeleteWorld.disabled = false
+	$WorldsUI/WorldButtons/EditWorld.disabled = false
+	$WorldsUI/WorldButtons/DuplicateWorld.disabled = false
+	$WorldsUI/WorldButtons/PlayWorld.disabled = false
 
 func disable_item_selected_buttons():
-	$WorldsScreenUI/WorldButtons/DeleteWorld.disabled = true
-	$WorldsScreenUI/WorldButtons/EditWorld.disabled = true
-	$WorldsScreenUI/WorldButtons/DuplicateWorld.disabled = true
-	$WorldsScreenUI/WorldButtons/PlayWorld.disabled = true
+	$WorldsUI/WorldButtons/DeleteWorld.disabled = true
+	$WorldsUI/WorldButtons/EditWorld.disabled = true
+	$WorldsUI/WorldButtons/DuplicateWorld.disabled = true
+	$WorldsUI/WorldButtons/PlayWorld.disabled = true
 
 func hide_worlds_menu_popups():
 	$NewWorldPopup.hide()
