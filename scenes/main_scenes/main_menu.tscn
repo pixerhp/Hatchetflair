@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bbwhtlk15abxa"]
+[gd_scene load_steps=8 format=3 uid="uid://bbwhtlk15abxa"]
 
 [ext_resource type="Script" path="res://scripts/main_menu/menu_main.gd" id="1_5ax8f"]
 [ext_resource type="Script" path="res://scripts/main_menu/menu_worlds.gd" id="2_11j2w"]
 [ext_resource type="Script" path="res://scripts/main_menu/menu_join.gd" id="3_b440v"]
+[ext_resource type="Script" path="res://scripts/main_menu/menu_settings.gd" id="4_lux71"]
 
 [sub_resource type="Gradient" id="Gradient_skhgw"]
 interpolation_mode = 2
@@ -669,6 +670,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("4_lux71")
 
 [node name="SettingsUI" type="VBoxContainer" parent="Menus/SettingsMenu"]
 layout_mode = 1
@@ -745,8 +747,8 @@ size_flags_vertical = 3
 
 [node name="CreditsMenu" type="Control" parent="Menus"]
 visible = false
-layout_mode = 1
-anchors_preset = 15
+layout_mode = 2
+anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
