@@ -44,6 +44,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleMenu" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -663,7 +664,6 @@ grow_vertical = 0
 text = "Cancel"
 
 [node name="SettingsMenu" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -683,7 +683,7 @@ grow_vertical = 2
 [node name="Spacer1" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
+size_flags_stretch_ratio = 0.13
 
 [node name="SettingsTitle" type="RichTextLabel" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
@@ -707,7 +707,8 @@ theme_override_font_sizes/italics_font_size = 30
 theme_override_font_sizes/bold_italics_font_size = 30
 theme_override_font_sizes/mono_font_size = 30
 bbcode_enabled = true
-text = "[center](Customizeable hotkeys are not yet supported.)[/center]
+text = "[center](Customizeable hotkeys are not yet supported.)
+(For now, here are a list of HF-specific actions used by Godot's InputMap:)[/center]
 "
 fit_content = true
 autowrap_mode = 0
@@ -715,22 +716,20 @@ autowrap_mode = 0
 [node name="Spacer2" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.25
 
-[node name="ListText" type="RichTextLabel" parent="Menus/SettingsMenu/SettingsUI"]
+[node name="SettingsList" type="ItemList" parent="Menus/SettingsMenu/SettingsUI"]
+custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 20
-bbcode_enabled = true
-text = "fullscreen toggle:   F11
-take a screenshot (NOT YET FUNCTIONAL:)   F12
-"
-fit_content = true
-autowrap_mode = 0
+size_flags_vertical = 3
+same_column_width = true
+fixed_column_width = 100
 
 [node name="Spacer3" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.25
 
 [node name="SettingsButtons" type="VBoxContainer" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
@@ -739,11 +738,13 @@ size_flags_vertical = 4
 
 [node name="Back" type="Button" parent="Menus/SettingsMenu/SettingsUI/SettingsButtons"]
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Back"
 
 [node name="Spacer4" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.25
 
 [node name="CreditsMenu" type="Control" parent="Menus"]
 visible = false
