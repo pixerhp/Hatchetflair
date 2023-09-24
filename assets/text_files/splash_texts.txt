@@ -16,6 +16,7 @@ bamboo is a very versatile resource
 'B' staircase
 	A reference to a game jam game named "you, the game" I contributed to.
 	(One of the levels had a prominent staircase made out of tiles which were literally the letter "B".)
+bats!
 Catholic Christian!
 	i am designing the game with avoiding-tempting-players-into-sin in mind.
 caution: a band of wowzas is velocitating towards your location rapidly.
