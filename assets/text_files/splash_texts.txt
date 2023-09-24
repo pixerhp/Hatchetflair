@@ -24,9 +24,9 @@ caution: a band of wowzas is velocitating towards your location rapidly.
 creature-friends?
 	The game is likely to have a large variety of creaturish-sapients.
 Cubic chunks!
-	the game will have cubic chunks, meaning one can be above/below another.
+	Cubic chunks allow for extremely deep/tall worlds.
 dragons?
-	eventually there will probably be dragons and dragonoids.
+	there will probably eventually be dragons/dragonoids in the game.
 flerovian and noct!
 	words i generally like and use to describe certain flavors of my fantasy themed ideas.
 	also references provious game/other ideas, like "Lands of Fleradove".
@@ -85,21 +85,21 @@ when you open a closet but it's actually a new room which is a weird dusty furni
 But is air resistance really negligible?
 	Air resistance is almost always considered negligable in physics questions.
 everyone always forgets about nickel, beryllium, and other elements, BUT I DIDN'T
-	elements are very cool.
+have you seen my tesseracts?
+	Tesseracts are the 4D analogue to cubes, and I think they're neat.
+	A pun on potentially losing where a tesseract might be if you only see a 3D slice of a 4D world.
 hexagons are the bestagons!
-	hexagons are a cool tileable shape.
+	incidental reference to CGP Grey, who I don't know much about.
+	originally added just because I'd randomly heard the phrase and I generally like hexagons.
 i^2 = -1
-	(complex numbers)
 icosahedrons are so pretty!
-rhombic dodecahedrons?
-	An interesting 3D shape.
+rhombic dodecahedrons!
+	I may use a "marching rhombic dodecahedrons" algorithm for terrain.
 tau > pi
-	I believe that tau is the circle constant.
-	Also a pun on 6.28... > 3.14... being a mathematically true statement.
-titanic tesseracts!
-	(Tesseracts are the 4-dimensional analogue of cubes.)
+	Tau should be seen as the circle constant and pi as the semicircle constant. Happy tau day!
+	Also a pun on 6.28... > 3.14... literally being a true statement mathematically.
 Weaire–Phelan structure?
-	like a 3D analogue to hexagons in having the most volume but least surface area when tesselated.
+	A tileable 3D shape which has the most volume-per-surface area when tesselated.
 
 
 #-=-=-=-#   MISCELLANEOUS:
@@ -111,6 +111,8 @@ go do your homework!
 
 #-=-=-=-#   REFERENCES:
 
+Also see carloacutis.com and miracolieucaristici.org!
+	In respect to blessed Saint Carlo Acutis.
 a world-class scrabble player and a digital armadillo enter a laboratory...
 	References an obscure indie game jam which i had nothing to do with:
 	https://daring-owl-studios.itch.io/you-lose-good-day-sir-final
@@ -121,9 +123,10 @@ but to answer that, we need to talk about parallel universes.
 did you accidentally build the school 30 stories tall again?
 	a reference to the "Wayside School" books, especially the original 3.
 dyed clothing is my favorite shark-drop
-	a vague reference to The Blockheads by David Frampton.
+	an admittedly cryptic reference to the game "The Blockheads" by David Frampton.
 It's still Bill's fault!
-	A reference to Secret of Evermore's secret post-credits text: "IT'S BILL'S FAULT"
+	A reference to Secret of Evermore's secret post-credits text: "IT'S BILL'S FAULT".
+	thus also a reference to Brian Fehdrau (@ItsBillsFault) and Bill Kristiansen, both SoE devs.
 lazy-day! (drops a garbage block on you.)
 	I know someone who always thought that Naval Piranha in Tetris Attack (SNES) says this.
 my house dot what?
@@ -135,8 +138,9 @@ probably various cuils of abstraction away from normal.
 	a reference to cuils, a proposed unit of abstraction.
 seme!? ala kijetesantakalu!?
 	references the toki pona conlang, also that the game doesn't have raccoons.
+Splatting mosquitoes with a femur bone since 1995.
+	References "Secret of Evermore" (SNES)
+	Secret of evermore released in North America on October 1, 1995.
 STEEEVOOOOOOOOOOOOO!!!
 	a reference to "carlsagan42" and "Stevo" (a mario maker troll-level creator.)
 Thanks Godot!
-'you ever splatted a (mo)'squiter with a femur bone?
-	A reference to "Secret of Evermore" (SNES).
