@@ -22,7 +22,7 @@ const V_ENTIRE: String = V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH
 var TITLE_ENTIRE: String = ""
 
 const IS_MODDED: bool = false
-const IS_INDEV: bool = true
+const IS_INDEV: bool = false
 
 # !!! replace with a signal/coroutine and places having the "await" keyword?
 var globals_ready: bool = false
