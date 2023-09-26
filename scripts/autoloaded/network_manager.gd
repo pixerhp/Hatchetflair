@@ -17,10 +17,10 @@ func _ready() -> void:
 
 # Updates/displays the current connecting status using the NetworkInfoOverlay menu.
 func network_status_update(message: String, should_display: bool, show_back_button: bool):
-	var network_info_overlay_node: Node = get_tree().current_scene.get_node("Menus/NetworkInfoOverlay")
+	var network_info_overlay_node: Node = get_tree().current_scene.get_node("Menus/NetworkStatusOverlay")
 	network_info_overlay_node.visible = should_display
 	network_info_overlay_node.get_node("RichTextLabel").text = message
-	network_info_overlay_node.get_node("BackButton").visible = show_back_button
+	network_info_overlay_node.get_node("Back").visible = show_back_button
 
 
 func host_game(allow_multiplayer_joining: bool, host_without_playing: bool) -> Error:
@@ -30,7 +30,7 @@ func host_game(allow_multiplayer_joining: bool, host_without_playing: bool) -> E
 		if not host_without_playing:
 			# Spawn a player for the host.
 			player_connected(multiplayer.get_unique_id())
-			network_status_update("Starting server as host...", true, false)
+		network_status_update("Starting server as host...", true, false)
 	multiplayer.multiplayer_peer.refuse_new_connections = !allow_multiplayer_joining
 	return OK
 
