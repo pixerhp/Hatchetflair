@@ -63,6 +63,7 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 	indices_table.resize(2 ** vertices.size())
 	var vertex_states_bits: PackedByteArray = []
 	vertex_states_bits.resize(vertices.size())
+	var mids_used_in_face: PackedByteArray = []
 	var midpoint_connections: Array[PackedByteArray] = []
 	var midpoint_bands: Array[PackedByteArray] = []
 	var midpoint_triangles: Array[PackedByteArray] = []
@@ -73,7 +74,8 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 			vertex_states_bits[vert_index] = (vertex_combination >> vert_index) & 1
 		
 		# (u) Determine midpoint connections by checking each trianglular face.
-		var mids_used_in_face: PackedByteArray = []
+		mids_used_in_face.clear()
+		midpoint_connections.clear()
 		for face in faces:
 			for edge_index in face:
 				if vertex_states_bits[edges[edge_index][0]] != vertex_states_bits[edges[edge_index][1]]:
@@ -83,13 +85,6 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 				if not midpoint_connections.has(mids_used_in_face):
 					midpoint_connections.append(mids_used_in_face.duplicate())
 			mids_used_in_face.clear()
-		
-		if vertex_combination == 1:
-			print(midpoint_connections)
-			print(edges[0])
-			print(edges[1])
-			print(edges[2])
-			print(edges[3])
 		
 		# (u) Collect midpoint connections into midpoint bands.
 		
