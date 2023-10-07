@@ -113,27 +113,25 @@ func rand_int() -> int:
 	random.randomize()
 	return(random.randi() - 4294967296 + random.randi())
 
+func remove_escape_chars(string: String) -> String:
+	return string.replace("\n", "").replace("\r", "").replace("\t", "")
+	
 func normalize_name(name_str: String, default: String) -> String:
-	name_str = name_str.replace("\n", "")
-	name_str = name_str.replace("\r", "")
-	name_str = name_str.replace("\t", "")
+	name_str = remove_escape_chars(name_str)
 	if name_str.is_empty():
 		name_str = default
 	return name_str
+	
 func normalize_seed(seed_str: String) -> String:
-	seed_str = seed_str.replace("\n", "")
-	seed_str = seed_str.replace("\r", "")
-	seed_str = seed_str.replace("\t", "")
+	seed_str = remove_escape_chars(seed_str)
 	if seed_str.is_empty():
 		seed_str = str(rand_int())
 	else:
 		seed_str = str(int(seed_str))
 	return seed_str
-func normalize_ip(ip: String) -> String:
-	ip = ip.replace("\n", "")
-	ip = ip.replace("\r", "")
-	ip = ip.replace("\t", "")
-	return ip
+	
+func normalize_ip(ip: String) -> String:# this function may not be necessary
+	return remove_escape_chars(ip)      # I am keeping it as is for the time being in case it needs to be used
 
 # Allows you to get a value from a dictionary even if you're not sure its key exists,
 # including easily getting something like dict[key1][key2][key3] without having to manually use .has() repeatedly.

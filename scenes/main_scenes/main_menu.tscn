@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bbwhtlk15abxa"]
+[gd_scene load_steps=8 format=3 uid="uid://bbwhtlk15abxa"]
 
 [ext_resource type="Script" path="res://scripts/main_menu_scripts/menu_main.gd" id="1_k7bq2"]
 [ext_resource type="Script" path="res://scripts/main_menu_scripts/menu_worlds.gd" id="2_pfjxw"]
 [ext_resource type="Script" path="res://scripts/main_menu_scripts/menu_join.gd" id="3_6hjdh"]
+[ext_resource type="Script" path="res://scripts/main_menu_scripts/menu_settings.gd" id="4_cxq3w"]
 
 [sub_resource type="Gradient" id="Gradient_skhgw"]
 interpolation_mode = 2
@@ -672,6 +673,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("4_cxq3w")
 
 [node name="SettingsScreenUI" type="VBoxContainer" parent="Menus/SettingsScreen"]
 layout_mode = 1
@@ -708,7 +710,7 @@ theme_override_font_sizes/italics_font_size = 30
 theme_override_font_sizes/bold_italics_font_size = 30
 theme_override_font_sizes/mono_font_size = 30
 bbcode_enabled = true
-text = "[center](Customizeable hotkeys are not yet supported.)[/center]
+text = "[center](Customizeable hotkeys are now supported.)[/center]
 "
 fit_content = true
 autowrap_mode = 0
@@ -717,21 +719,57 @@ autowrap_mode = 0
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ListText" type="RichTextLabel" parent="Menus/SettingsScreen/SettingsScreenUI"]
+[node name="Hotkeys" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 20
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/SettingsScreen/SettingsScreenUI/Hotkeys"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -305.0
+offset_right = 306.0
+offset_bottom = 94.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="KeyContainer1" type="HSplitContainer" parent="Menus/SettingsScreen/SettingsScreenUI/Hotkeys/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+split_offset = 300
+dragger_visibility = 2
+
+[node name="Text" type="RichTextLabel" parent="Menus/SettingsScreen/SettingsScreenUI/Hotkeys/VBoxContainer/KeyContainer1"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.01
 bbcode_enabled = true
-text = "fullscreen toggle:   F11
-take a screenshot (NOT YET FUNCTIONAL:)   F12
-"
-fit_content = true
-autowrap_mode = 0
+text = "[center]Fullscreen toggle[center]"
+
+[node name="Fullscreen Toggle" type="Button" parent="Menus/SettingsScreen/SettingsScreenUI/Hotkeys/VBoxContainer/KeyContainer1"]
+layout_mode = 2
+
+[node name="KeyContainer2" type="HSplitContainer" parent="Menus/SettingsScreen/SettingsScreenUI/Hotkeys/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+split_offset = 300
+dragger_visibility = 2
+
+[node name="Text" type="RichTextLabel" parent="Menus/SettingsScreen/SettingsScreenUI/Hotkeys/VBoxContainer/KeyContainer2"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]Take a screenshot (NOT FUNCTIONAL)[center]"
+
+[node name="Screenshot" type="Button" parent="Menus/SettingsScreen/SettingsScreenUI/Hotkeys/VBoxContainer/KeyContainer2"]
+layout_mode = 2
 
 [node name="Spacer3" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 
 [node name="SettingsButtons" type="VBoxContainer" parent="Menus/SettingsScreen/SettingsScreenUI"]
 layout_mode = 2
@@ -745,6 +783,31 @@ text = "Back"
 [node name="Spacer4" type="Control" parent="Menus/SettingsScreen/SettingsScreenUI"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="InfoPanel" type="Panel" parent="Menus/SettingsScreen"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/SettingsScreen/InfoPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -17.0
+offset_right = 576.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[center]Press any key or mouse button[center]"
 
 [node name="CreditsScreen" type="Control" parent="Menus"]
 visible = false
