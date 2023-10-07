@@ -67,6 +67,7 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 	var midpoint_connections: Array[PackedByteArray] = []
 	var mid_tris_awk: Array[PackedByteArray] = []
 	var midpoint_triangles: Array[PackedByteArray] = []
+	var triangles_average_xyz: Array[Vector3]
 	
 	for vertex_combination in range(0, indices_table.size()):
 		# Get the on/off state of each vertex from the current combination number.
@@ -96,8 +97,29 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 				if not midpoint_triangles[awkward_tri_index].has(midpoint_connections[mid_tris_awk[awkward_tri_index][midpoint_conn_index]][1]):
 					midpoint_triangles[awkward_tri_index].append(midpoint_connections[mid_tris_awk[awkward_tri_index][midpoint_conn_index]][1])
 		
+		# (u) Reorder triangle indices such that the triangle is facing the correct direction.
+		triangles_average_xyz.clear()
+		for triangle in midpoint_triangles:
+			# Get the average position of the midpoints that make up the triangle.
+			# (The midpoints themselves are the average positions of the two vertices in the edge that defines them.)
+			triangles_average_xyz.append(Vector3(
+				(
+					((vertices[edges[triangle[0]][0]].x + vertices[edges[triangle[0]][1]].x) / 2) +
+					((vertices[edges[triangle[1]][0]].x + vertices[edges[triangle[1]][1]].x) / 2) +
+					((vertices[edges[triangle[2]][0]].x + vertices[edges[triangle[2]][1]].x) / 2)
+				) / 3,
+				(
+					((vertices[edges[triangle[0]][0]].y + vertices[edges[triangle[0]][1]].y) / 2) +
+					((vertices[edges[triangle[1]][0]].y + vertices[edges[triangle[1]][1]].y) / 2) +
+					((vertices[edges[triangle[2]][0]].y + vertices[edges[triangle[2]][1]].y) / 2)
+				) / 3,
+				(
+					((vertices[edges[triangle[0]][0]].z + vertices[edges[triangle[0]][1]].z) / 2) +
+					((vertices[edges[triangle[1]][0]].z + vertices[edges[triangle[1]][1]].z) / 2) +
+					((vertices[edges[triangle[2]][0]].z + vertices[edges[triangle[2]][1]].z) / 2)
+				) / 3,
+			))
 		
-		# (u) Reorder triangle indices such that the tri is drawn facing the correct direction.
 		# !!! right now we're skipping that step!!!
 		for triangle in midpoint_triangles:
 			indices_table[vertex_combination].append_array(triangle)
@@ -138,6 +160,11 @@ func tris_formed_by_edges(edges: Array[PackedByteArray]) -> Array[PackedByteArra
 					break
 	
 	return known_tris
+
+func is_triangle_clockwise():
+	pass
+func is_3d_triangle_clockwise():
+	pass
 
 func midpoint_indices_used(vertex_states_bits: PackedByteArray, edges: Array[PackedByteArray]) -> PackedByteArray:
 	var midpoints_used: PackedByteArray = []
