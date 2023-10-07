@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://buneopjw84ltv"]
+
+[node name="PlayerCharacter" type="CharacterBody3D"]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+
+[node name="PlayerCam" type="Camera3D" parent="."]
+
+[node name="(needs model)CameraModel" type="MeshInstance3D" parent="PlayerCam"]
+visible = false
+
+[node name="Nametag" type="Label3D" parent="."]
