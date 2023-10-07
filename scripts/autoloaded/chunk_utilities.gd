@@ -76,15 +76,20 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 		var mids_used_in_face: PackedByteArray = []
 		for face in faces:
 			for edge_index in face:
-				if edges[edge_index][0] != edges[edge_index][1]:
+				if vertex_states_bits[edges[edge_index][0]] != vertex_states_bits[edges[edge_index][1]]:
 					mids_used_in_face.append(edge_index)
-			if mids_used_in_face.size() == 1:
-				pass
-				continue
 			if mids_used_in_face.size() == 2:
-				pass
-				continue
+				mids_used_in_face.sort()
+				if not midpoint_connections.has(mids_used_in_face):
+					midpoint_connections.append(mids_used_in_face.duplicate())
 			mids_used_in_face.clear()
+		
+		if vertex_combination == 1:
+			print(midpoint_connections)
+			print(edges[0])
+			print(edges[1])
+			print(edges[2])
+			print(edges[3])
 		
 		# (u) Collect midpoint connections into midpoint bands.
 		
