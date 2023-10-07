@@ -65,7 +65,7 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 	vertex_states_bits.resize(vertices.size())
 	var mids_used_in_face: PackedByteArray = []
 	var midpoint_connections: Array[PackedByteArray] = []
-	var midpoint_bands: Array[PackedByteArray] = []
+	var mid_tris_awk: Array[PackedByteArray] = []
 	var midpoint_triangles: Array[PackedByteArray] = []
 	
 	for vertex_combination in range(0, indices_table.size()):
@@ -74,7 +74,6 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 			vertex_states_bits[vert_index] = (vertex_combination >> vert_index) & 1
 		
 		# Determine midpoint connections by checking each trianglular face.
-		mids_used_in_face.clear()
 		midpoint_connections.clear()
 		for face in faces:
 			for edge_index in face:
@@ -84,12 +83,24 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 				mids_used_in_face.sort()
 				if not midpoint_connections.has(mids_used_in_face):
 					midpoint_connections.append(mids_used_in_face.duplicate())
+			mids_used_in_face.clear()
 		
-		# (u) Collect midpoint connections into midpoint bands.
+		# Find all triangles created by midpoint connections, and convert them to a more usable form.
+		mid_tris_awk = tris_formed_by_edges(midpoint_connections)
+		midpoint_triangles.clear()
+		midpoint_triangles.resize(mid_tris_awk.size())
+		for awkward_tri_index in range(mid_tris_awk.size()):
+			for midpoint_conn_index in range(3):
+				if not midpoint_triangles[awkward_tri_index].has(midpoint_connections[mid_tris_awk[awkward_tri_index][midpoint_conn_index]][0]):
+					midpoint_triangles[awkward_tri_index].append(midpoint_connections[mid_tris_awk[awkward_tri_index][midpoint_conn_index]][0])
+				if not midpoint_triangles[awkward_tri_index].has(midpoint_connections[mid_tris_awk[awkward_tri_index][midpoint_conn_index]][1]):
+					midpoint_triangles[awkward_tri_index].append(midpoint_connections[mid_tris_awk[awkward_tri_index][midpoint_conn_index]][1])
 		
-		# (u) Triangulate midpoint bands.
 		
 		# (u) Reorder triangle indices such that the tri is drawn facing the correct direction.
+		# !!! right now we're skipping that step!!!
+		for triangle in midpoint_triangles:
+			indices_table[vertex_combination].append_array(triangle)
 	
 	return indices_table
 
