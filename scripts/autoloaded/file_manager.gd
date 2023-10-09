@@ -15,7 +15,7 @@ extends Node
 # res://
 const PATH_ASSETS: String = "res://assets"
 const PATH_DATA_FILES: String = PATH_ASSETS + "/data"
-const PATH_TETRA_RHOMBDO_TABLE: String = PATH_DATA_FILES + "/rhombdo_table.dat"
+const PATH_TETRA_RHOMBDO_TABLE: String = PATH_DATA_FILES + "/rhombdo_ind_table.apba"
 const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
 # user://
 const PATH_STORAGE: String = "user://storage"
