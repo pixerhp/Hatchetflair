@@ -40,12 +40,13 @@ func _enter_tree() -> void:
 	
 	
 	# TEMPORARY CODE FOR TESTING OUTPUT
-	var indices_to_convert_to_text := ChunkUtilities.gen_unit_rhombdo_indices_table()
+	var rhombdo_table_indices: Array[PackedByteArray] = ChunkUtilities.gen_unit_rhombdo_indices_table()
+	FileManager.write_file_apba("user://rhombdo_apba_test.apba", rhombdo_table_indices, true)
+	FileManager.write_file_from_var("user://rhombdo_store_var_test.data", rhombdo_table_indices, true)
 	var text_lines: PackedStringArray = []
-	for indices in indices_to_convert_to_text:
+	for indices in rhombdo_table_indices:
 		text_lines.append(str(indices))
-	FileManager.write_file_from_lines("user://rhombdo_indices_table.txt", text_lines)
-	FileManager.write_file_from_var("user://rhombdo_indices_table.compressedfile", indices_to_convert_to_text, true)
+	FileManager.write_file_from_lines("user://rhombdo_text_text.txt", text_lines)
 	
 	
 	

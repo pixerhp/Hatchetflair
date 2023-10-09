@@ -1,5 +1,9 @@
 extends Node
 
+#var tetra_rhombdo_tri_ind_table: Array[PackedByteArray] = (
+#	FileManager.read_file_var(FileManager.PATH_TETRA_RHOMBDO_TABLE, true)
+#)
+
 const UNIT_RHOMBDO_VERTS: Array[Vector3] = [
 	Vector3(0, -0.5, 0),
 	
@@ -35,6 +39,11 @@ var UNIT_RHOMBDO_EDGES: Array[PackedByteArray] = [
 	# standard edges:
 	[9, 13], [10, 13], [11, 13], [12, 13], 
 	]
+
+
+func _ready():
+#	print(tetra_rhombdo_tri_ind_table)
+	pass
 
 
 func gen_unit_rhombdo_indices_table() -> Array[PackedByteArray]:

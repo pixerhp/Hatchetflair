@@ -14,6 +14,8 @@ extends Node
 
 # res://
 const PATH_ASSETS: String = "res://assets"
+const PATH_DATA_FILES: String = PATH_ASSETS + "/data"
+const PATH_TETRA_RHOMBDO_TABLE: String = PATH_DATA_FILES + "/rhombdo_table.dat"
 const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
 # user://
 const PATH_STORAGE: String = "user://storage"
@@ -247,7 +249,7 @@ func read_file_vars(file_path: String, is_compressed: bool, allow_full_objects: 
 	for thing in file.get_var(allow_full_objects):
 		arr.append(thing)
 	return arr
-func read_file_ArrPackedBytes(file_path: String, is_compressed: bool) -> Array[PackedByteArray]:
+func read_file_apba(file_path: String, is_compressed: bool) -> Array[PackedByteArray]:
 	var file: FileAccess
 	if is_compressed:
 		file = FileAccess.open_compressed(file_path, FileAccess.READ)
@@ -257,10 +259,15 @@ func read_file_ArrPackedBytes(file_path: String, is_compressed: bool) -> Array[P
 	if err != OK:
 		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
 		return []
-	var arr: Array[PackedByteArray] = []
-	for packed_bytes in file.get_var():
-		arr.append(packed_bytes)
-	return arr
+	
+	var apba: Array[PackedByteArray] = []
+	apba.resize(file.get_32())
+	for apba_index in range(apba.size()):
+		apba[apba_index].resize(file.get_8())
+		for pba_index in range(apba[apba_index].size()):
+			apba[apba_index][pba_index] = file.get_8()
+	
+	return apba
 
 func write_file_from_lines(file_path: String, lines: PackedStringArray) -> Error:
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
@@ -302,6 +309,24 @@ func write_file_from_vars(file_path: String, vars_to_store: Array[Variant], use_
 		return err
 	for variant in vars_to_store:
 		file.store_var(variant, full_objects)
+	return OK
+func write_file_apba(file_path: String, apba: Array[PackedByteArray], use_compression: bool) -> Error:
+	var file: FileAccess
+	if use_compression:
+		file = FileAccess.open_compressed(file_path, FileAccess.WRITE)
+	else:
+		file = FileAccess.open(file_path, FileAccess.WRITE)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return err
+	
+	file.store_32(apba.size())
+	for pba in apba:
+		file.store_8(pba.size())
+		for byte in pba:
+			file.store_8(byte)
+	
 	return OK
 
 func read_cfg(file_path: String, skip_sections: PackedStringArray = []) -> Dictionary:
