@@ -210,6 +210,14 @@ func get_available_dict_key_string(dict: Dictionary, key: String, start_with_alt
 
 #-=-=-=-# READING & WRITING:
 
+func write_file_lines(file_path: String, lines: PackedStringArray) -> Error:
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return err
+	file.store_string("\n".join(lines))
+	return OK
 func read_file_lines(file_path: String) -> PackedStringArray:
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
 	var err: Error = FileAccess.get_open_error()
@@ -224,6 +232,32 @@ func read_file_first_line(file_path: String) -> String:
 		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
 		return ""
 	return(file.get_line())
+
+func write_file_var(file_path: String, var_to_store: Variant, use_compression: bool, full_objects: bool = false) -> Error:
+	var file: FileAccess
+	if use_compression:
+		file = FileAccess.open_compressed(file_path, FileAccess.WRITE)
+	else:
+		file = FileAccess.open(file_path, FileAccess.WRITE)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return err
+	file.store_var(var_to_store, full_objects)
+	return OK
+func write_file_vars(file_path: String, vars_to_store: Array[Variant], use_compression: bool, full_objects: bool = false) -> Error:
+	var file: FileAccess
+	if use_compression:
+		file = FileAccess.open_compressed(file_path, FileAccess.WRITE)
+	else:
+		file = FileAccess.open(file_path, FileAccess.WRITE)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return err
+	for variant in vars_to_store:
+		file.store_var(variant, full_objects)
+	return OK
 func read_file_var(file_path: String, is_compressed: bool, allow_full_objects: bool = false) -> Variant:
 	var file: FileAccess
 	if is_compressed:
@@ -249,6 +283,49 @@ func read_file_vars(file_path: String, is_compressed: bool, allow_full_objects: 
 	for thing in file.get_var(allow_full_objects):
 		arr.append(thing)
 	return arr
+
+func write_file_string(file_path: String, text: String, use_compression: bool) -> Error:
+	var file: FileAccess
+	if use_compression:
+		file = FileAccess.open_compressed(file_path, FileAccess.WRITE)
+	else:
+		file = FileAccess.open(file_path, FileAccess.WRITE)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return err
+	file.store_string(text)
+	return OK
+func read_file_string(file_path: String, is_compressed: bool) -> String:
+	var file: FileAccess
+	if is_compressed:
+		file = FileAccess.open_compressed(file_path, FileAccess.READ)
+	else:
+		file = FileAccess.open(file_path, FileAccess.READ)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return ""
+	return file.get_as_text()
+
+func write_file_apba(file_path: String, apba: Array[PackedByteArray], use_compression: bool) -> Error:
+	var file: FileAccess
+	if use_compression:
+		file = FileAccess.open_compressed(file_path, FileAccess.WRITE)
+	else:
+		file = FileAccess.open(file_path, FileAccess.WRITE)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return err
+	
+	file.store_32(apba.size())
+	for pba in apba:
+		file.store_8(pba.size())
+		for byte in pba:
+			file.store_8(byte)
+	
+	return OK
 func read_file_apba(file_path: String, is_compressed: bool) -> Array[PackedByteArray]:
 	var file: FileAccess
 	if is_compressed:
@@ -269,66 +346,37 @@ func read_file_apba(file_path: String, is_compressed: bool) -> Array[PackedByteA
 	
 	return apba
 
-func write_file_from_lines(file_path: String, lines: PackedStringArray) -> Error:
-	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
-	var err: Error = FileAccess.get_open_error()
-	if err != OK:
-		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
-		return err
-	file.store_string("\n".join(lines))
-	return OK
-func write_file_from_string(file_path: String, text: String) -> Error:
-	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
-	var err: Error = FileAccess.get_open_error()
-	if err != OK:
-		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
-		return err
-	file.store_string(text)
-	return OK
-func write_file_from_var(file_path: String, var_to_store: Variant, use_compression: bool, full_objects: bool = false) -> Error:
-	var file: FileAccess
-	if use_compression:
-		file = FileAccess.open_compressed(file_path, FileAccess.WRITE)
-	else:
-		file = FileAccess.open(file_path, FileAccess.WRITE)
-	var err: Error = FileAccess.get_open_error()
-	if err != OK:
-		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
-		return err
-	file.store_var(var_to_store, full_objects)
-	return OK
-func write_file_from_vars(file_path: String, vars_to_store: Array[Variant], use_compression: bool, full_objects: bool = false) -> Error:
-	var file: FileAccess
-	if use_compression:
-		file = FileAccess.open_compressed(file_path, FileAccess.WRITE)
-	else:
-		file = FileAccess.open(file_path, FileAccess.WRITE)
-	var err: Error = FileAccess.get_open_error()
-	if err != OK:
-		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
-		return err
-	for variant in vars_to_store:
-		file.store_var(variant, full_objects)
-	return OK
-func write_file_apba(file_path: String, apba: Array[PackedByteArray], use_compression: bool) -> Error:
-	var file: FileAccess
-	if use_compression:
-		file = FileAccess.open_compressed(file_path, FileAccess.WRITE)
-	else:
-		file = FileAccess.open(file_path, FileAccess.WRITE)
-	var err: Error = FileAccess.get_open_error()
-	if err != OK:
-		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
-		return err
+func write_cfg(file_path: String, dict: Dictionary) -> Error:
+	var cfg: ConfigFile = ConfigFile.new()
+	var any_errors_encountered: bool = false
 	
-	file.store_32(apba.size())
-	for pba in apba:
-		file.store_8(pba.size())
-		for byte in pba:
-			file.store_8(byte)
+	for section in dict.keys():
+		if typeof(dict[section]) == TYPE_DICTIONARY:
+			for key in dict[section].keys():
+				cfg.set_value(section, key, dict[section][key])
+		else:
+			push_error("Dictionary key ", section, " did not have a dictionary as its value.")
+			any_errors_encountered = true
 	
+	var err: Error = cfg.save(file_path)
+	if err != OK:
+		push_error("Failed to save cfgfile to ", file_path, " (Error val:) ", err)
+		any_errors_encountered = true
+	if any_errors_encountered:
+		return FAILED
 	return OK
-
+func write_cfg_keyval(file_path: String, section: String, key: String, value: Variant) -> Error:
+	var cfg: ConfigFile = ConfigFile.new()
+	var err: Error = cfg.load(file_path)
+	if err != OK:
+		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
+		return err
+	cfg.set_value(section, key, value)
+	err = cfg.save(file_path)
+	if err != OK:
+		push_error("Failed to save cfgfile to ", file_path, " (Error val:) ", err)
+		return(err)
+	return OK
 func read_cfg(file_path: String, skip_sections: PackedStringArray = []) -> Dictionary:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: Error = cfg.load(file_path)
@@ -405,38 +453,6 @@ func read_cfg_keyval_to_keyval(file_path: String, key1: String, key2: String) ->
 			dictionary[cfg.get_value(section, key1)] = cfg.get_value(section, key2)
 	return dictionary
 
-func write_cfg(file_path: String, dict: Dictionary) -> Error:
-	var cfg: ConfigFile = ConfigFile.new()
-	var any_errors_encountered: bool = false
-	
-	for section in dict.keys():
-		if typeof(dict[section]) == TYPE_DICTIONARY:
-			for key in dict[section].keys():
-				cfg.set_value(section, key, dict[section][key])
-		else:
-			push_error("Dictionary key ", section, " did not have a dictionary as its value.")
-			any_errors_encountered = true
-	
-	var err: Error = cfg.save(file_path)
-	if err != OK:
-		push_error("Failed to save cfgfile to ", file_path, " (Error val:) ", err)
-		any_errors_encountered = true
-	if any_errors_encountered:
-		return FAILED
-	return OK
-func write_cfg_keyval(file_path: String, section: String, key: String, value: Variant) -> Error:
-	var cfg: ConfigFile = ConfigFile.new()
-	var err: Error = cfg.load(file_path)
-	if err != OK:
-		push_error("Failed to open cfgfile at: ", file_path, " (Error val:) ", err)
-		return err
-	cfg.set_value(section, key, value)
-	err = cfg.save(file_path)
-	if err != OK:
-		push_error("Failed to save cfgfile to ", file_path, " (Error val:) ", err)
-		return(err)
-	return OK
-
 
 #-=-=-=-# FILE ORGANIZING:
 
@@ -453,7 +469,7 @@ func sort_file_lines_alphabetically(file_path: String, skip: int = 0, ascending:
 		to_sort.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) < 0)
 	else:
 		to_sort.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) > 0)
-	if write_file_from_lines(file_path, skipped + to_sort) != OK:
+	if write_file_lines(file_path, skipped + to_sort) != OK:
 		return FAILED
 	return OK
 # Possible future/alt stuff: 2 bools/funcs, one for whether groups should be sorted against eachother using first item,
@@ -503,7 +519,7 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 		for line_index in range(0, line_groups[group_index].size()):
 			lines_to_group[(group_index * group_size) + line_index] = line_groups[group_index][line_index]
 	# Overwrite the file with the new sorted lines.
-	if write_file_from_lines(file_path, skipped_lines + lines_to_group) != OK:
+	if write_file_lines(file_path, skipped_lines + lines_to_group) != OK:
 		return FAILED
 	return OK
 #func sort_file_lines_and_comments_alphabetically (Think of something like sorting the splash texts file.)
