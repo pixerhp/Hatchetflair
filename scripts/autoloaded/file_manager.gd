@@ -5,7 +5,7 @@ extends Node
 # [contents]:
 # ~ global constants
 # ~ dir & file interactions
-# ~ reading & writing
+# ~ file reading & writing
 # ~ file organizing
 # ~ game-specific
 
@@ -19,8 +19,8 @@ const PATH_TETRA_RHOMBDO_TABLE: String = PATH_DATA_FILES + "/rhombdo_ind_table.a
 const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
 # user://
 const PATH_STORAGE: String = "user://storage"
-const PATH_SERVERS: String = PATH_STORAGE + "/remembered_servers.cfg"
 const PATH_USERS: String = PATH_STORAGE + "/users.cfg"
+const PATH_SERVERS: String = PATH_STORAGE + "/remembered_servers.cfg"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
 
@@ -208,7 +208,7 @@ func get_available_dict_key_string(dict: Dictionary, key: String, start_with_alt
 		return (key + " alt" + str(keys_list.size()))
 
 
-#-=-=-=-# READING & WRITING:
+#-=-=-=-# FILE READING & WRITING:
 
 func write_file_lines(file_path: String, lines: PackedStringArray) -> Error:
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.WRITE)
@@ -654,8 +654,8 @@ func ensure_required_dirs() -> Error:
 	return OK
 func ensure_required_files():
 	var cfgs_to_ensure: Array[String] = [
-		PATH_SERVERS,
 		PATH_USERS,
+		PATH_SERVERS,
 	]
 	var dict: Dictionary = {}
 	for path in cfgs_to_ensure:
