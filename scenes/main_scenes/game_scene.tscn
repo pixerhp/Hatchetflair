@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://o3dnyoj5ql3m"]
+[gd_scene load_steps=5 format=3 uid="uid://o3dnyoj5ql3m"]
+
+[ext_resource type="Script" path="res://scripts/game_scene/chunks_manager.gd" id="1_v78cx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
 sky_top_color = Color(0.454902, 0.537255, 0.65098, 1)
@@ -22,6 +24,7 @@ environment = SubResource("Environment_5ke80")
 transform = Transform3D(1, 0, 0, 0, 0.925871, 0.377841, 0, -0.377841, 0.925871, 0, 0, 0)
 
 [node name="ChunksManager" type="Node3D" parent="."]
+script = ExtResource("1_v78cx")
 
 [node name="DefaultCam" type="Camera3D" parent="."]
 transform = Transform3D(-0.941098, -0.309562, -0.136034, -0.3256, 0.721124, 0.611527, -0.0912082, 0.6198, -0.779442, 0, 210, -156)

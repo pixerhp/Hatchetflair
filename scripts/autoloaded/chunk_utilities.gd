@@ -70,7 +70,7 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 	var midpoint_connections: Array[PackedByteArray] = []
 	var mid_tris_awk: Array[PackedByteArray] = []
 	var midpoint_triangles: Array[PackedByteArray] = []
-	var triangles_average_xyz: Array[Vector3]
+	var triangles_average_xyz: Array[Vector3] = []
 	
 	for vertex_combination in range(0, indices_table.size()):
 		# Get the on/off state of each vertex from the current combination number.

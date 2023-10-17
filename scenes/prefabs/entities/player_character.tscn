@@ -1,6 +1,9 @@
-[gd_scene format=3 uid="uid://buneopjw84ltv"]
+[gd_scene load_steps=2 format=3 uid="uid://buneopjw84ltv"]
+
+[ext_resource type="Script" path="res://scripts/game_scene/player_character.gd" id="1_pw6be"]
 
 [node name="PlayerCharacter" type="CharacterBody3D"]
+script = ExtResource("1_pw6be")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 
