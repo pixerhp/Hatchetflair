@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://buneopjw84ltv"]
+[gd_scene load_steps=3 format=3 uid="uid://buneopjw84ltv"]
 
 [ext_resource type="Script" path="res://scripts/game_scene/player_character.gd" id="1_yxakm"]
+[ext_resource type="PackedScene" uid="uid://dttsd3l1ib5lb" path="res://assets/models/cam_head_model.tscn" id="2_jmsxm"]
 
 [node name="PlayerCharacter" type="CharacterBody3D"]
 script = ExtResource("1_yxakm")
@@ -11,7 +12,6 @@ script = ExtResource("1_yxakm")
 
 [node name="PlayerCam" type="Camera3D" parent="."]
 
-[node name="(needs model)CameraModel" type="MeshInstance3D" parent="PlayerCam"]
-visible = false
+[node name="CamHeadModel" parent="PlayerCam" instance=ExtResource("2_jmsxm")]
 
 [node name="Nametag" type="Label3D" parent="."]
