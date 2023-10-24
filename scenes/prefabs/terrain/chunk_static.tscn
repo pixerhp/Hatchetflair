@@ -1,11 +1,80 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqel5u2mt3uov"]
+[gd_scene load_steps=12 format=3 uid="uid://cqel5u2mt3uov"]
 
 [ext_resource type="Script" path="res://scripts/game_scene/chunk_static.gd" id="1_sslab"]
+[ext_resource type="Texture2D" uid="uid://xu571uosd32e" path="res://assets/textures/animated/loading_wheel.png" id="3_4wjlj"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_egxxh"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_a45j2"]
+atlas = ExtResource("3_4wjlj")
+region = Rect2(0, 0, 32, 32)
 
-[node name="chunk_static" type="StaticBody3D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_gchu3"]
+atlas = ExtResource("3_4wjlj")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_agse2"]
+atlas = ExtResource("3_4wjlj")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n4n4b"]
+atlas = ExtResource("3_4wjlj")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j8uew"]
+atlas = ExtResource("3_4wjlj")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2yrdj"]
+atlas = ExtResource("3_4wjlj")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lnndt"]
+atlas = ExtResource("3_4wjlj")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bhpda"]
+atlas = ExtResource("3_4wjlj")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sdxsx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a45j2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gchu3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_agse2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n4n4b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j8uew")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2yrdj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lnndt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bhpda")
+}],
+"loop": true,
+"name": &"loading_wheel",
+"speed": 12.0
+}]
+
+[node name="ChunkStatic" type="StaticBody3D"]
 script = ExtResource("1_sslab")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_egxxh")
+[node name="LoadingWheel" type="AnimatedSprite3D" parent="."]
+pixel_size = 0.05
+billboard = 1
+texture_filter = 2
+sprite_frames = SubResource("SpriteFrames_sdxsx")
+animation = &"loading_wheel"
+autoplay = "loading_wheel"
+frame_progress = 0.323143

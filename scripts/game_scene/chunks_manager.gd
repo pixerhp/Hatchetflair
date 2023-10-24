@@ -7,16 +7,29 @@ var new_chunks: Array[StaticBody3D] = [] # Used for giving other threads referen
 var static_chunk_prefab: PackedScene = preload("res://scenes/prefabs/terrain/chunk_static.tscn")
 @onready var chunk_gen_thread: Thread = Thread.new()
 
+var frame_num: int = 0
+
 
 func _ready():
-	for h in range(-4, 8):
-		for x1 in range(-4, 8):
-			for x2 in range(-4, 8):
+	for h in range(-3, 4):
+		for x1 in range(-3, 4):
+			for x2 in range(-3, 4):
 				new_static_chunks_queue.append(Vector3i(h, x1, x2))
+	new_static_chunks_queue.append(Vector3i(4, 0, 0))
+	new_static_chunks_queue.append(Vector3i(5, 0, 0))
+	new_static_chunks_queue.append(Vector3i(6, 0, 0))
+	new_static_chunks_queue.append(Vector3i(7, 0, 0))
+	new_static_chunks_queue.append(Vector3i(8, 0, 0))
+	new_static_chunks_queue.append(Vector3i(8, 1, 0))
+	new_static_chunks_queue.append(Vector3i(8, 2, 0))
+	new_static_chunks_queue.append(Vector3i(8, 0, 1))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	frame_num += 1
+	if frame_num < 30:
+		print("frame: ", frame_num)
 	if not do_chunk_generating:
 		return
 	if chunk_gen_thread.is_started() and not chunk_gen_thread.is_alive():
@@ -47,7 +60,7 @@ func add_static_chunks(chunk_coords_hxx_queue: Array[Vector3i]):
 		new_chunks[i].name = str(chunk_coords_hxx_queue[i])
 		new_chunks[i].chunk_coords_hxx = chunk_coords_hxx_queue[i]
 		new_chunks[i].chunk_length = 16
-		new_chunks[i].position = new_chunks[i].chunk_coords_hxx * new_chunks[i].chunk_length
+		new_chunks[i].position = Globals.swap_xyz_hxx_i(new_chunks[i].chunk_coords_hxx) * new_chunks[i].chunk_length
 		self.add_child(new_chunks[i])
 	chunk_gen_thread.start(add_static_chunks_threadwork)
 	return
