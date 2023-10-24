@@ -1,3 +1,11 @@
-[gd_scene format=3 uid="uid://cqel5u2mt3uov"]
+[gd_scene load_steps=3 format=3 uid="uid://cqel5u2mt3uov"]
+
+[ext_resource type="Script" path="res://scripts/game_scene/chunk_static.gd" id="1_sslab"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_egxxh"]
 
 [node name="chunk_static" type="StaticBody3D"]
+script = ExtResource("1_sslab")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_egxxh")
