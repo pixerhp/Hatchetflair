@@ -15,3 +15,8 @@ func _on_quit_button_pressed() -> void:
 func _on_network_info_overlay_back_button_pressed(message: String, should_display: bool, show_back_button: bool) -> void:
 	NetworkManager.network_status_update(message, should_display, show_back_button)
 	return
+
+
+func swap_to_game_main_scene():
+	print("successfully ran function")
+	get_tree().change_scene_to_file("res://scenes/main_scenes/game_scene.tscn")
