@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://o3dnyoj5ql3m"]
+[gd_scene load_steps=6 format=3 uid="uid://o3dnyoj5ql3m"]
 
+[ext_resource type="Script" path="res://scripts/game_scene/game_scene.gd" id="1_upv1h"]
 [ext_resource type="Script" path="res://scripts/game_scene/chunks_manager.gd" id="1_v78cx"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
@@ -16,6 +17,7 @@ sky = SubResource("Sky_76n8d")
 tonemap_mode = 1
 
 [node name="GameScene" type="Node3D"]
+script = ExtResource("1_upv1h")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_5ke80")
