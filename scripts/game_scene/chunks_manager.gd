@@ -59,13 +59,13 @@ func add_static_chunks(chunk_coords_hxx_queue: Array[Vector3i]):
 		new_chunks[i] = static_chunk_prefab.instantiate()
 		new_chunks[i].name = str(chunk_coords_hxx_queue[i])
 		new_chunks[i].chunk_coords_hxx = chunk_coords_hxx_queue[i]
-		new_chunks[i].chunk_length = 16
-		new_chunks[i].position = Globals.swap_xyz_hxx_i(new_chunks[i].chunk_coords_hxx) * new_chunks[i].chunk_length
+		new_chunks[i].position = Globals.swap_xyz_hxx_i(new_chunks[i].chunk_coords_hxx) * ChunkUtilities.STATIC_CHUNK_SIZE
 		self.add_child(new_chunks[i])
 	chunk_gen_thread.start(add_static_chunks_threadwork)
 	return
 func add_static_chunks_threadwork():
-	pass
+	for chunk in new_chunks:
+		chunk.generate()
 
 func determine_chunks_to_remove():
 	pass
