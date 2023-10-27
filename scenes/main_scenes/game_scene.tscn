@@ -79,12 +79,23 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
+[node name="TogglePlaying" type="Button" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Toggle Playing"
+
+[node name="Spacer2" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.05
+
 [node name="Settings" type="Button" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Settings"
 
-[node name="Spacer2" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="Spacer3" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -95,7 +106,7 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Save & Quit"
 
-[node name="Spacer3" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="Spacer4" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
