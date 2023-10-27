@@ -6,79 +6,79 @@
 
 238
 314
-	Peculiar-feeling integers, and 3:14 is an interesting time.
+	A peculiar feeling integer I sometimes use.
 3D chunks!
-	Cubic chunks allow for extremely deep and tall worlds.
 =^)
-	A smiley I occassionally use. (I like having a nose.)
+	A smiley face emoticon with a nose. (Noses are neat.)
 <~
-	It looks pretty and sorta flowerish.
-bamboo is a very versatile resource
+	Aesthetics.
+bamboo?
 'B' staircase
-	A reference to a game jam game named "you, the game" I contributed to.
-	(One of the levels had a prominent staircase made out of tiles which were literally the letter "B".)
+	A reference to a game jam game named "you, the game" which I contributed art to.
+	(One level had a prominent staircase made out of letter 'B' tiles.)
 bats?
-	Going back a fair ways, I sometimes tend to like bats and vaguely-bat-ish characters.
+	I tend to like vaguely bat-ish characters, so I'm likely to add some later.
 Catholic Christian!
-	i am designing the game with avoiding-tempting-players-into-sin in mind.
+	I am designing the game with avoiding-tempting-players-into-sin in mind.
 caution: a band of wowzas is velocitating towards your location rapidly.
-	A similar humorous splash was in one of my old documents for splash ideas,
-	a wowza is a very old enemy/entity concept for the game.
+	I found a similar humorous splash in one of my old gdocs, inspiring this.
+	(A "wowza" is an early enemy/entity concept for HF.)
 creature-friends?
-	The game is likely to have a large variety of creaturish-sapients.
+	The game is likely to have a variety of creaturish-sapients.
 dragons?
-	there will probably eventually be dragons/dragonoids in the game.
+	I will very likely add dragons in some way.
 flerovian and noct!
-	words i generally like and use to describe certain flavors of my fantasy themed ideas.
-	also references provious game/other ideas, like "Lands of Fleradove".
+	Words originating from previous ideas, I have my own personal definitions.
 fluffy-things?
 grass ropes?
-Hatchetflash, Hatchetflare, Hatchetflair or other?
-	I've felt uncertain about the game's name on multiple occasions.
-hello! have a lovely day! ~PHP
-	PHP stands for Pixer H Pinecone.
+	I wonder how much of the game will be inspired by those random survival YouTubers...
+Hatchetflash, Flerovash, Hatchetflare, Hatchetflair??
+	Inspired by how many times I've felt uncertain about the game's name.
+have a wonderful day!
 Ka-jackelmonoque, Quatuuvix.
 	fun sounding words i thought of a while ago.
 	bastardized segments of trying to pronounce the alphabet as one word.
+oh- hello!~♪
 picks are great for breaking up hard ground.
 	A break from the more stereotypical use of picks, mining through solid stone.
 (probably) not a horror game. =)
-	It would be easy. =)
-sands, deserts and beaches?
+	=)
+sands, deserts, beaches?
 	although they aren't in the game yet, stuff like that would be lovely to have if executed well.
 :sparkles:
-	I commonly react to things with a sparkle emoji. (what, it's fun!)
+	A discord emote I commonly use in message reactions.
 sticks and strawberries
-	A classic splash from my first coding attempt at this game. 
-	The question mark, similar to other splashes, is because that content isn't currently in the game.
+	A splash from my first coding attempt at an older concept of HF. 
 that lovely azure color between blue and purple?
 	A color I tend to like.
 that lovely rose color slightly-magenta-shifted from red?
 	A color I tend to like.
-to combat or not to combat, that is the question...
-	Design-wise, I have been struggling with how significant the combat in this game should be for a long time.
-	Also a reference to Shakespeare's Hamlet, specifically: "to be, or not to be"
+to combat or not to combat...
+	I have been struggling significantly with how much the game should have combat and how so.
+	References Shakespeare's Hamlet, "to be, or not to be".
 unincorporated!
-	corporations built to have making money as their main goal. I would like to avoid that for this game.
+	Unrelatedly, I want development for this game to stay away from anything which by-design puts money first.
 wood-ash cement?
 
 
 #-=-=-=-#   CODING & OTHER DEVELOPERS:
 
 bojler eladó
-	“boiler for sale” in hungarian, a popular hungarian meme phrase. (SteveMC32 is Hungarian.)
+	“boiler for sale” in hungarian, a popular hungarian meme phrase. (SteveMC32)
 declaring and initializing a punch to the face!
 	humorous code-themed sentence.
+Hello, World!
 SOUND TEST: MONO OR STEREO?
+	Inspired by some old SNES games giving you stated audio options.
+	References how some games have a "sound test" area which lets you listen to various game audio.
 
 
 #-=-=-=-#   LIMINAL / ASREMIC / DREAM-LIKE / STRANGE:
 
 accidentally went down too many stairs and ended up in "second-basement"...
-Get out of bounds.
-what is an area you see every day but which you haven't properly looked at in years?
-when you open a closet but it's actually a new room which is a weird dusty furnitureless reflection of the other room...
-Why are you here?
+get out of bounds.
+remember an area you see every day but which you haven't properly looked at in years.
+you open a closet but it's actually a new room which is a weird dusty furnitureless reflection of the other room...
 
 
 #-=-=-=-#   MATHEMATICS / GEOMETRY / PHYSICS / CHEMISTRY:
@@ -94,11 +94,13 @@ hexagons are the bestagons!
 	originally added just because I'd randomly heard the phrase and I generally like hexagons.
 i^2 = -1
 icosahedrons are so pretty!
+please use the word "quantum" correctly.
 rhombic dodecahedrons!
 	I may use a "marching rhombic dodecahedrons" algorithm for terrain.
 tau > pi
-	Tau should be seen as the circle constant and pi as the semicircle constant. Happy tau day!
-	Also a pun on 6.28... > 3.14... literally being a true statement mathematically.
+	I recognize tau as the circle constant and pi as the semicircle constant, despite pi's reputation.
+	A pun on 6.28... being literally greater than the number 3.14...
+	(Happy tau day!)
 Weaire–Phelan structure?
 	A tileable 3D shape which has the most volume-per-surface area when tesselated.
 
@@ -108,6 +110,7 @@ Weaire–Phelan structure?
 draw what you see, not what you think you see.
 	fairly good art advice.
 go do your homework!
+go take care of yourself: drink water, eat if you should.
 
 
 #-=-=-=-#   REFERENCES:
@@ -115,28 +118,24 @@ go do your homework!
 Also see carloacutis.com and miracolieucaristici.org!
 	In respect to blessed Saint Carlo Acutis.
 a world-class scrabble player and a digital armadillo enter a laboratory...
-	References an obscure indie game jam which i had nothing to do with:
-	https://daring-owl-studios.itch.io/you-lose-good-day-sir-final
-	Also vaguely references the setup of the "an x and a y enter a bar" joke.
-but to answer that, we need to talk about parallel universes.
+	References an obscure game jam i had nothing to do with by "Daring Owl Studios".
+	(https://daring-owl-studios.itch.io/you-lose-good-day-sir-final)
+	References the "an x and a y enter a bar" joke.
+-but to answer that, we need to talk about parallel universes.
 	references pannenkoek2012's "SM64 - Watch for Rolling Rocks - 0.5x A Presses (Commentated)" video.
-	acknowledges the entire sm64 speedrunning, challenge and otherwise community.
+	nods to the sm64 speedrunning, challenge and otherwise community who really know their stuff about the N64.
 did you accidentally build the school 30 stories tall again?
-	a reference to the "Wayside School" books, especially the original 3.
+	references the (original 3) "Wayside School" books.
+*drops a garbage block on you*
+	References various action puzzle games with a vs mode of some sort.
 dyed clothing is my favorite shark-drop
-	an admittedly cryptic reference to the game "The Blockheads" by David Frampton.
+	An admittedly cryptic reference to the game "The Blockheads" by David Frampton.
+	(Shark enemies sometimes drop dyed clothing when killed.)
 It's still Bill's fault!
 	A reference to Secret of Evermore's secret post-credits text: "IT'S BILL'S FAULT".
 	thus also a reference to Brian Fehdrau (@ItsBillsFault) and Bill Kristiansen, both SoE devs.
-lazy-day! (drops a garbage block on you.)
-	I know someone who always thought that Naval Piranha in Tetris Attack (SNES) says this.
-my house dot what?
-	A reference to the Doom map "MyHouse.wad", as suggested by Blitceed.
-	Somewhat also references me and my family's various forgotten attempts to make our house in games (like Minecraft.)
 please tell the whale that fell into the library to be more quiet next time.
 	References OFF by Mortis Ghost.
-probably various cuils of abstraction away from normal.
-	a reference to cuils, a proposed unit of abstraction.
 seme!? ala kijetesantakalu!?
 	references the toki pona conlang, also that the game doesn't have raccoons.
 Splatting mosquitoes with a femur bone since 1995.
