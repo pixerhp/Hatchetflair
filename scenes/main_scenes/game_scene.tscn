@@ -82,6 +82,7 @@ size_flags_stretch_ratio = 0.05
 [node name="TogglePlaying" type="Button" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_vertical = 3
+disabled = true
 text = "Toggle Playing"
 
 [node name="Spacer2" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
@@ -93,6 +94,7 @@ size_flags_stretch_ratio = 0.05
 [node name="Settings" type="Button" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_vertical = 3
+disabled = true
 text = "Settings"
 
 [node name="Spacer3" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
@@ -144,3 +146,8 @@ spawn_path = NodePath(".")
 
 [node name="SharedObjectsMS" type="MultiplayerSpawner" parent="."]
 spawn_path = NodePath(".")
+
+[connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/ResumeGameplay" to="." method="_on_pausemenu_resumegameplay_pressed"]
+[connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/TogglePlaying" to="." method="_on_pausemenu_toggleplaying_pressed"]
+[connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/Settings" to="." method="_on_pausemenu_settings_pressed"]
+[connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/SaveAndQuit" to="." method="_on_pausemenu_saveandquit_pressed"]

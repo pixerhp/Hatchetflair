@@ -57,7 +57,7 @@ host_without_playing: bool = $WorldsUI/Toggles/HostWithoutPlaying.button_pressed
 #		return FAILED
 #	else:
 #		return OK
-	get_node("../../").swap_to_game_main_scene()
+	get_node("../../").switch_to_game_scene()
 	return OK
 
 
