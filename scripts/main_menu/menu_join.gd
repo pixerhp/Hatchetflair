@@ -50,9 +50,10 @@ func join_server_by_index(index: int = -1) -> Error:
 			push_warning("No list index was specified.")
 			return FAILED
 	var ip: String = FileManager.read_cfg_keyval(FileManager.PATH_SERVERS, server_altnames[index], "ip", FileManager.ERRMSG_CFG)
-	join_server_by_ip(ip)
+	join_server_by_specifics(ip, $JoinUI/Toggles/JoinWithoutPlaying.button_pressed)
 	return OK
-func join_server_by_ip(ip: String) -> void:
+func join_server_by_specifics(ip: String, join_without_playing: bool) -> void:
+	# !!! remember to use the join_without_playing? bool later.
 	NetworkManager.start_client(ip)
 	return
 

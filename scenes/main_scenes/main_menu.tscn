@@ -446,6 +446,13 @@ custom_minimum_size = Vector2(500, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="Toggles" type="HBoxContainer" parent="Menus/JoinMenu/JoinUI"]
+layout_mode = 2
+
+[node name="JoinWithoutPlaying" type="CheckButton" parent="Menus/JoinMenu/JoinUI/Toggles"]
+layout_mode = 2
+text = "Join *without* playing?:"
+
 [node name="ServerButtons" type="HBoxContainer" parent="Menus/JoinMenu/JoinUI"]
 layout_mode = 2
 
