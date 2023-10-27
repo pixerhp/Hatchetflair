@@ -179,12 +179,11 @@ layout_mode = 2
 
 [node name="AllowJoining" type="CheckButton" parent="Menus/WorldsMenu/WorldsUI/Toggles"]
 layout_mode = 2
-text = "Host Multiplayer"
+text = "Multiplayer?:"
 
 [node name="HostWithoutPlaying" type="CheckButton" parent="Menus/WorldsMenu/WorldsUI/Toggles"]
 layout_mode = 2
-disabled = true
-text = "Host without playing"
+text = "Host *without* playing?:"
 
 [node name="WorldButtons" type="HBoxContainer" parent="Menus/WorldsMenu/WorldsUI"]
 layout_mode = 2
@@ -883,7 +882,6 @@ text = "Back"
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/BackButton/Back" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_activated" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="start_world_by_index"]
 [connection signal="item_selected" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="_on_worlds_list_item_selected" unbinds=1]
-[connection signal="toggled" from="Menus/WorldsMenu/WorldsUI/Toggles/AllowJoining" to="Menus/WorldsMenu" method="toggle_host_without_playing_visibility"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/NewWorld" to="Menus/WorldsMenu" method="open_new_world_popup"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/DeleteWorld" to="Menus/WorldsMenu" method="open_delete_world_popup"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/EditWorld" to="Menus/WorldsMenu" method="open_edit_world_popup"]

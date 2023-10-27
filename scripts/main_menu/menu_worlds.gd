@@ -151,11 +151,6 @@ func _on_duplicate_world_pressed() -> Error:
 	return OK
 
 
-func toggle_host_without_playing_visibility (button_value: bool):
-	$WorldsUI/Toggles/HostWithoutPlaying.disabled = not button_value
-	if button_value == false:
-		$WorldsUI/Toggles/HostWithoutPlaying.button_pressed = false
-
 func _on_worlds_list_item_selected():
 	hide_worlds_menu_popups()
 	$WorldsUI/WorldButtons/DeleteWorld.disabled = false
