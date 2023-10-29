@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/main_menu/menu_main.gd" id="1_5ax8f"]
 [ext_resource type="Script" path="res://scripts/main_menu/menu_worlds.gd" id="2_11j2w"]
 [ext_resource type="Script" path="res://scripts/main_menu/menu_join.gd" id="3_b440v"]
-[ext_resource type="Script" path="res://scripts/main_menu/menu_settings.gd" id="4_lux71"]
+[ext_resource type="PackedScene" uid="uid://cxms8gsjqw6ry" path="res://scenes/universal/menu_settings.tscn" id="4_j121s"]
 
 [sub_resource type="Gradient" id="Gradient_skhgw"]
 interpolation_mode = 2
@@ -701,89 +701,9 @@ offset_right = 60.0
 grow_vertical = 0
 text = "Cancel"
 
-[node name="SettingsMenu" type="Control" parent="Menus"]
+[node name="SettingsMenu" parent="Menus" instance=ExtResource("4_j121s")]
 visible = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("4_lux71")
-
-[node name="SettingsUI" type="VBoxContainer" parent="Menus/SettingsMenu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Spacer1" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.13
-
-[node name="SettingsTitle" type="RichTextLabel" parent="Menus/SettingsMenu/SettingsUI"]
-layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 6
-theme_override_constants/shadow_offset_y = 6
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/normal_font_size = 50
-bbcode_enabled = true
-text = "[center]Settings & Hotkeys[/center]"
-fit_content = true
-autowrap_mode = 0
-
-[node name="SettingsSubtitle" type="RichTextLabel" parent="Menus/SettingsMenu/SettingsUI"]
-layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 30
-theme_override_font_sizes/bold_font_size = 30
-theme_override_font_sizes/italics_font_size = 30
-theme_override_font_sizes/bold_italics_font_size = 30
-theme_override_font_sizes/mono_font_size = 30
-bbcode_enabled = true
-text = "[center](Customizeable hotkeys are not yet supported.)
-(For now, here are a list of HF-specific actions used by Godot's InputMap:)[/center]
-"
-fit_content = true
-autowrap_mode = 0
-
-[node name="Spacer2" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.25
-
-[node name="SettingsList" type="ItemList" parent="Menus/SettingsMenu/SettingsUI"]
-custom_minimum_size = Vector2(500, 0)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
-same_column_width = true
-fixed_column_width = 100
-
-[node name="Spacer3" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.25
-
-[node name="SettingsButtons" type="VBoxContainer" parent="Menus/SettingsMenu/SettingsUI"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="Back" type="Button" parent="Menus/SettingsMenu/SettingsUI/SettingsButtons"]
-layout_mode = 2
-size_flags_horizontal = 4
-text = "Back"
-
-[node name="Spacer4" type="Control" parent="Menus/SettingsMenu/SettingsUI"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.25
 
 [node name="CreditsMenu" type="Control" parent="Menus"]
 visible = false
@@ -935,6 +855,6 @@ text = "Back"
 [connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/RemoveServer" to="Menus/JoinMenu" method="open_remove_server_popup"]
 [connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/EditServer" to="Menus/JoinMenu" method="open_edit_server_popup"]
 [connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/JoinServer" to="Menus/JoinMenu" method="join_server_by_index"]
-[connection signal="pressed" from="Menus/SettingsMenu/SettingsUI/SettingsButtons/Back" to="." method="switch_to_menu" binds= ["TitleMenu"]]
+[connection signal="back_to_menu" from="Menus/SettingsMenu" to="." method="_on_settings_menu_back_to_menu"]
 [connection signal="pressed" from="Menus/CreditsMenu/CreditsUI/Back" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="pressed" from="Menus/NetworkStatusOverlay/Back" to="." method="_on_network_info_overlay_back_button_pressed" binds= ["Pressed back button", false, false]]

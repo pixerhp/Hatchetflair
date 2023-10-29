@@ -1,0 +1,141 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxms8gsjqw6ry"]
+
+[ext_resource type="Script" path="res://scripts/universal/menu_settings.gd" id="1_5155x"]
+
+[node name="settings_menu_tscn" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5155x")
+
+[node name="SettingsUI" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 4.0
+offset_right = 2.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spacer1" type="Control" parent="SettingsUI"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.13
+
+[node name="SettingsTitle" type="RichTextLabel" parent="SettingsUI"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 50
+bbcode_enabled = true
+text = "[center]Settings & Hotkeys[/center]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="SettingsSubtitle" type="RichTextLabel" parent="SettingsUI"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 30
+theme_override_font_sizes/bold_font_size = 30
+theme_override_font_sizes/italics_font_size = 30
+theme_override_font_sizes/bold_italics_font_size = 30
+theme_override_font_sizes/mono_font_size = 30
+bbcode_enabled = true
+text = "[center](Customizeable hotkeys are now supported.)[/center]
+"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Spacer2" type="Control" parent="SettingsUI"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="SettingsList" type="ScrollContainer" parent="SettingsUI"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsUI/SettingsList"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="KeyMap" type="Control" parent="SettingsUI/SettingsList/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HSplitContainer" type="HSplitContainer" parent="SettingsUI/SettingsList/VBoxContainer/KeyMap"]
+layout_mode = 2
+offset_top = 4.0
+offset_right = 500.0
+offset_bottom = 57.0
+split_offset = 250
+dragger_visibility = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="SettingsUI/SettingsList/VBoxContainer/KeyMap/HSplitContainer"]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+size_flags_vertical = 4
+bbcode_enabled = true
+text = "[center]test[center]"
+
+[node name="Button" type="Button" parent="SettingsUI/SettingsList/VBoxContainer/KeyMap/HSplitContainer"]
+layout_mode = 2
+
+[node name="Spacer3" type="Control" parent="SettingsUI"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="SettingsButtons" type="VBoxContainer" parent="SettingsUI"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Back" type="Button" parent="SettingsUI/SettingsButtons"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back"
+
+[node name="Spacer4" type="Control" parent="SettingsUI"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="InfoPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="InfoPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.5
+offset_top = -20.0
+offset_right = 70.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[center]Press any key[center]"
+
+[connection signal="pressed" from="SettingsUI/SettingsButtons/Back" to="." method="_on_back_pressed"]

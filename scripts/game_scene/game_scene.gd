@@ -18,7 +18,15 @@ func _on_pausemenu_resumegameplay_pressed():
 func _on_pausemenu_toggleplaying_pressed():
 	pass
 func _on_pausemenu_settings_pressed():
+	$PauseMenu.visible = false
+	$SettingsMenu.visible = true
 	pass
 func _on_pausemenu_saveandquit_pressed():
 	# !!! Remember to SAVE and quit later.
 	switch_to_main_menu()
+
+
+func _on_settings_menu_back_to_menu():
+	$SettingsMenu.visible = false
+	$PauseMenu.visible = true
+	pass # Replace with function body.

@@ -19,3 +19,8 @@ func _on_quit_button_pressed() -> void:
 func _on_network_info_overlay_back_button_pressed(message: String, should_display: bool, show_back_button: bool) -> void:
 	NetworkManager.network_status_update(message, should_display, show_back_button)
 	return
+
+
+func _on_settings_menu_back_to_menu():
+	switch_to_menu("TitleMenu")
+	pass # Replace with function body.
