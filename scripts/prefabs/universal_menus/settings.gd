@@ -35,25 +35,6 @@ func _ready():
 		hotkey_remap_button.pressed.connect(_on_hotkey_remap_button_pressed.bind(hotkey_remap_button))
 	return
 
-func _on_hotkey_remap_button_pressed(hotkey_remap_button: Button) -> void:
-	active_hotkey_remap_button = hotkey_remap_button
-	input_listener_screen.show()
-	return
-
-# _input is called every time the player makes an input, including mouse and keyboard.
-func _input(event: InputEvent) -> void:
-	if active_hotkey_remap_button == null:
-		return
-	if not ((event is InputEventKey) or (event is InputEventMouseButton)):
-		return
-	
-	InputMap.action_erase_events(active_hotkey_remap_button.get_parent().name)
-	InputMap.action_add_event(active_hotkey_remap_button.get_parent().name, event)
-	active_hotkey_remap_button = null
-	input_listener_screen.hide()
-	_update_hotkey_remap_buttons_text()
-	return
-
 func _update_hotkey_remap_buttons_text() -> void:
 	var hotkey_remap_button: Button
 	var button_events: Array[InputEvent] = []
@@ -76,6 +57,34 @@ func _update_hotkey_remap_buttons_text() -> void:
 			hotkey_remap_button.remove_theme_color_override("font_color")
 			continue
 	return
+
+func _on_hotkey_remap_button_pressed(hotkey_remap_button: Button) -> void:
+	active_hotkey_remap_button = hotkey_remap_button
+	input_listener_screen.show()
+	return
+
+# _input is called every time the player makes an input, including mouse and keyboard.
+func _input(event: InputEvent) -> void:
+	if active_hotkey_remap_button == null:
+		return
+	if not ((event is InputEventKey) or (event is InputEventMouseButton)):
+		return
+	
+	InputMap.action_erase_events(active_hotkey_remap_button.get_parent().name)
+	InputMap.action_add_event(active_hotkey_remap_button.get_parent().name, event)
+	active_hotkey_remap_button = null
+	input_listener_screen.hide()
+	_update_hotkey_remap_buttons_text()
+	return
+
+func _on_reset_hotkeys_pressed():
+	for action in Globals.INPUTMAP_DEFAULTS:
+		InputMap.action_erase_events(action)
+		for event in Globals.INPUTMAP_DEFAULTS[action]:
+			InputMap.action_add_event(action, event)
+	_update_hotkey_remap_buttons_text()
+	return
+
 
 func _on_close_settings_pressed():
 	close_settings_menu.emit()

@@ -20,9 +20,10 @@ const V_MINOR: String = "0"
 const V_PATCH: String = "0"
 const V_ENTIRE: String = V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH
 var TITLE_ENTIRE: String = ""
-
 const IS_MODDED: bool = false
 const IS_INDEV: bool = true
+
+var INPUTMAP_DEFAULTS: Dictionary = {}
 
 # !!! replace with a signal/coroutine and places having the "await" keyword?
 var globals_ready: bool = false
@@ -31,10 +32,11 @@ var globals_ready: bool = false
 
 func _enter_tree() -> void:
 	randomize() # Randomizes global rng.
-	_initialize_title_entire()
-	_set_window_title()
 	FileManager.ensure_required_dirs()
 	FileManager.ensure_required_files()
+	_initialize_title_entire()
+	_set_window_title()
+	_initialize_inputmap_defaults()
 	
 	
 	
@@ -71,7 +73,6 @@ func _initialize_title_entire() -> void:
 			GAME_NAME + name_exts + " v" + V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
 		)
 	return
-
 func _set_window_title(include_splash: bool = true) -> Error:
 	if not include_splash:
 		DisplayServer.window_set_title(TITLE_ENTIRE)
@@ -100,6 +101,11 @@ func _set_window_title(include_splash: bool = true) -> Error:
 		DisplayServer.window_set_title(TITLE_ENTIRE + "   ~   " + usable_splashes.pick_random())
 		return OK
 
+func _initialize_inputmap_defaults():
+	INPUTMAP_DEFAULTS.clear()
+	for action in InputMap.get_actions():
+		INPUTMAP_DEFAULTS[action] = InputMap.action_get_events(action)
+	return
 
 #-=-=-=-# BASIC FUNCTIONALITY:
 

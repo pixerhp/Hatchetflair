@@ -96,7 +96,6 @@ size_flags_stretch_ratio = 0.02
 [node name="ResetHotkeysButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-disabled = true
 text = "Reset Hotkeys"
 
 [node name="HotkeysList" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
@@ -171,4 +170,5 @@ bbcode_enabled = true
 text = "[center]( listening for input... )[center]"
 fit_content = true
 
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/ResetHotkeysButton" to="." method="_on_reset_hotkeys_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/CloseSettings" to="." method="_on_close_settings_pressed"]
