@@ -10,24 +10,17 @@ var active_hotkey_remap_button: Button
 
 
 func _ready():
-	# This block gets a list of HF-specific input-map actions, and adds them all to the hotkeys list.
+	# This block creates KeyMapItem nodes for each HF-specific action.
 	var input_map_actions := InputMap.get_actions()
 	var action_title_text: String = ""
-	var remap_button_text: String = ""
 	var new_keymap_item_node: Node
 	for action in input_map_actions:
 		if action.substr(0, 3) == "ui_":
 			continue
 		action_title_text = "[center]" + action + "[/center]"
-		remap_button_text = ""
-		for event in InputMap.action_get_events(action):
-			remap_button_text += event.as_text() + ";  "
-		if not remap_button_text.is_empty():
-			remap_button_text = remap_button_text.erase(remap_button_text.length() - 3, 2) # !!! should this be (...- 3, 3) ?
 		new_keymap_item_node = keymap_item_node.duplicate(DUPLICATE_USE_INSTANTIATION)
 		new_keymap_item_node.set_name(action)
 		new_keymap_item_node.get_node("ActionTitle").set_text(action_title_text)
-		new_keymap_item_node.get_node("RemapButton").set_text(remap_button_text)
 		hotkeys_list_vbox_node.add_child(new_keymap_item_node)
 	_update_hotkey_remap_buttons_text()
 	
