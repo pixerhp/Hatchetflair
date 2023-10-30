@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://buneopjw84ltv"]
 
-[ext_resource type="Script" path="res://scripts/game_scene/player_character.gd" id="1_yxakm"]
+[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/player_character.gd" id="1_8d8wy"]
 [ext_resource type="PackedScene" uid="uid://dttsd3l1ib5lb" path="res://assets/models/cam_head_model.tscn" id="2_jmsxm"]
 
 [node name="PlayerCharacter" type="CharacterBody3D"]
-script = ExtResource("1_yxakm")
+script = ExtResource("1_8d8wy")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 

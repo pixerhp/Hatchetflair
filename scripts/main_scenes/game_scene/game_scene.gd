@@ -26,7 +26,7 @@ func _on_pausemenu_saveandquit_pressed():
 	switch_to_main_menu()
 
 
-func _on_settings_menu_back_to_menu():
+func _on_close_settings_menu():
 	$SettingsMenu.visible = false
 	$PauseMenu.visible = true
 	pass # Replace with function body.

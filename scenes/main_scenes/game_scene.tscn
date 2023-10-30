@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://o3dnyoj5ql3m"]
 
-[ext_resource type="Script" path="res://scripts/game_scene/game_scene.gd" id="1_upv1h"]
-[ext_resource type="Script" path="res://scripts/game_scene/chunks_manager.gd" id="1_v78cx"]
-[ext_resource type="PackedScene" uid="uid://cxms8gsjqw6ry" path="res://scenes/universal/menu_settings.tscn" id="2_gr5ms"]
+[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
+[ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="2_gr5ms"]
+[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunks_manager.gd" id="3_5gspe"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
 sky_top_color = Color(0.454902, 0.537255, 0.65098, 1)
@@ -18,7 +18,7 @@ sky = SubResource("Sky_76n8d")
 tonemap_mode = 1
 
 [node name="GameScene" type="Node3D"]
-script = ExtResource("1_upv1h")
+script = ExtResource("1_h6q16")
 
 [node name="PauseMenu" type="HBoxContainer" parent="."]
 visible = false
@@ -135,9 +135,9 @@ environment = SubResource("Environment_5ke80")
 transform = Transform3D(1, 0, 0, 0, 0.925871, 0.377841, 0, -0.377841, 0.925871, 0, 0, 0)
 
 [node name="ChunksManager" type="Node3D" parent="."]
-script = ExtResource("1_v78cx")
+script = ExtResource("3_5gspe")
 
-[node name="TEMPCAM" type="Camera3D" parent="."]
+[node name="REMOVE_LATER_cam" type="Camera3D" parent="."]
 transform = Transform3D(-0.595339, -0.223828, 0.771669, -0.0318996, 0.966242, 0.255655, -0.802841, 0.127586, -0.582381, 17.4965, 9.41445, -14.4152)
 
 [node name="DefaultCam" type="Camera3D" parent="."]
@@ -154,4 +154,4 @@ spawn_path = NodePath(".")
 [connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/TogglePlaying" to="." method="_on_pausemenu_toggleplaying_pressed"]
 [connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/Settings" to="." method="_on_pausemenu_settings_pressed"]
 [connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/SaveAndQuit" to="." method="_on_pausemenu_saveandquit_pressed"]
-[connection signal="back_to_menu" from="SettingsMenu" to="." method="_on_settings_menu_back_to_menu"]
+[connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_close_settings_menu"]

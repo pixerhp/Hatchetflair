@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://bbwhtlk15abxa"]
 
-[ext_resource type="Script" path="res://scripts/main_menu/menu_main.gd" id="1_5ax8f"]
-[ext_resource type="Script" path="res://scripts/main_menu/menu_worlds.gd" id="2_11j2w"]
-[ext_resource type="Script" path="res://scripts/main_menu/menu_join.gd" id="3_b440v"]
-[ext_resource type="PackedScene" uid="uid://cxms8gsjqw6ry" path="res://scenes/universal/menu_settings.tscn" id="4_j121s"]
+[ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_main.gd" id="1_jsr8e"]
+[ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_worlds.gd" id="2_68qhj"]
+[ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_join.gd" id="3_r4aqp"]
+[ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="4_j121s"]
 
 [sub_resource type="Gradient" id="Gradient_skhgw"]
 interpolation_mode = 2
@@ -24,7 +24,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_5ax8f")
+script = ExtResource("1_jsr8e")
 
 [node name="BackgroundTexture" type="TextureRect" parent="."]
 layout_mode = 1
@@ -138,7 +138,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_11j2w")
+script = ExtResource("2_68qhj")
 
 [node name="WorldsUI" type="VBoxContainer" parent="Menus/WorldsMenu"]
 layout_mode = 1
@@ -428,7 +428,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_b440v")
+script = ExtResource("3_r4aqp")
 
 [node name="JoinUI" type="VBoxContainer" parent="Menus/JoinMenu"]
 layout_mode = 1
@@ -855,6 +855,6 @@ text = "Back"
 [connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/RemoveServer" to="Menus/JoinMenu" method="open_remove_server_popup"]
 [connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/EditServer" to="Menus/JoinMenu" method="open_edit_server_popup"]
 [connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/JoinServer" to="Menus/JoinMenu" method="join_server_by_index"]
-[connection signal="back_to_menu" from="Menus/SettingsMenu" to="." method="_on_settings_menu_back_to_menu"]
+[connection signal="close_settings_menu" from="Menus/SettingsMenu" to="." method="_on_close_settings_menu"]
 [connection signal="pressed" from="Menus/CreditsMenu/CreditsUI/Back" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="pressed" from="Menus/NetworkStatusOverlay/Back" to="." method="_on_network_info_overlay_back_button_pressed" binds= ["Pressed back button", false, false]]
