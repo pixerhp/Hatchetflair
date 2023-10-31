@@ -96,7 +96,7 @@ size_flags_stretch_ratio = 0.02
 [node name="ResetHotkeysButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Reset Hotkeys"
+text = "Reset to Default"
 
 [node name="HotkeysList" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
 layout_mode = 2
