@@ -4,6 +4,7 @@ signal close_settings_menu
 
 @onready var hotkeys_list_vbox_node: Node = $HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer
 @onready var keymap_item_node: Node = $HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem
+@onready var keymap_item_spacer_node: Node = $HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/Spacer
 @onready var input_listener_screen: Node = $InputListenerScreen
 
 var active_hotkey_remap_button: Button
@@ -14,6 +15,7 @@ func _ready():
 	var input_map_actions := InputMap.get_actions()
 	var action_title_text: String = ""
 	var new_keymap_item_node: Node
+	var new_spacer_node: Control
 	for action in input_map_actions:
 		if action.substr(0, 3) == "ui_":
 			continue
@@ -22,6 +24,8 @@ func _ready():
 		new_keymap_item_node.set_name(action)
 		new_keymap_item_node.get_node("ActionTitle").set_text(action_title_text)
 		hotkeys_list_vbox_node.add_child(new_keymap_item_node)
+		new_spacer_node = keymap_item_spacer_node.duplicate(DUPLICATE_USE_INSTANTIATION)
+		hotkeys_list_vbox_node.add_child(new_spacer_node)
 	_update_hotkey_remap_buttons_text()
 	
 	# Removes the dummy KeyMapItem which was used to create the others.
@@ -31,7 +35,10 @@ func _ready():
 	# Connects the hotkey buttons with signals to give them function.
 	var hotkey_remap_button: Button
 	for keymap_item in hotkeys_list_vbox_node.get_children():
-		hotkey_remap_button = keymap_item.get_node("RemapButton")
+		# (Skip the spacer nodes:)
+		if not keymap_item is HSplitContainer:
+			continue
+		hotkey_remap_button = keymap_item.get_node("VBoxContainer").get_node("RemapButton")
 		hotkey_remap_button.pressed.connect(_on_hotkey_remap_button_pressed.bind(hotkey_remap_button))
 	return
 
@@ -41,20 +48,25 @@ func _update_hotkey_remap_buttons_text() -> void:
 	var remap_button_text: String = ""
 	# !!! Add functionality where a button's text is yellow if it's hotkey is used for multiple buttons.
 	for keymap_item in hotkeys_list_vbox_node.get_children():
-		hotkey_remap_button = keymap_item.get_node("RemapButton")
-		button_events = InputMap.action_get_events(hotkey_remap_button.get_parent().name)
-		if button_events.is_empty():
-			hotkey_remap_button.set_text("unbound")
-			hotkey_remap_button.add_theme_color_override("font_color", Color(1, 0.25, 0))
+		# Skip the spacer nodes:
+		if not keymap_item is HSplitContainer:
 			continue
-		else:
+		
+		hotkey_remap_button = keymap_item.get_node("VBoxContainer").get_node("RemapButton")
+		button_events = InputMap.action_get_events(keymap_item.name)
+		
+		if not button_events.is_empty():
 			remap_button_text = ""
 			for event in button_events:
-				remap_button_text += event.as_text() + ";  "
+				remap_button_text += event.as_text() + ";   "
 			if not remap_button_text.is_empty():
-				remap_button_text = remap_button_text.erase(remap_button_text.length() - 3, 3)
+				remap_button_text = remap_button_text.erase(remap_button_text.length() - 4, 4)
 			hotkey_remap_button.set_text(remap_button_text)
 			hotkey_remap_button.remove_theme_color_override("font_color")
+			continue
+		else:
+			hotkey_remap_button.set_text("unbound")
+			hotkey_remap_button.add_theme_color_override("font_color", Color(1, 0.25, 0))
 			continue
 	return
 
@@ -73,8 +85,8 @@ func _input(event: InputEvent) -> void:
 	or (event is InputEventJoypadButton) or (event is InputEventJoypadMotion)):
 		return
 	
-	InputMap.action_erase_events(active_hotkey_remap_button.get_parent().name)
-	InputMap.action_add_event(active_hotkey_remap_button.get_parent().name, event)
+	InputMap.action_erase_events(active_hotkey_remap_button.get_parent().get_parent().name)
+	InputMap.action_add_event(active_hotkey_remap_button.get_parent().get_parent().name, event)
 	active_hotkey_remap_button = null
 	input_listener_screen.hide()
 	_update_hotkey_remap_buttons_text()
