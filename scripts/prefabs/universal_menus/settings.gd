@@ -64,10 +64,13 @@ func _on_hotkey_remap_button_pressed(hotkey_remap_button: Button) -> void:
 	return
 
 # _input is called every time the player makes an input, including mouse and keyboard.
+# This specific instance is used for input listening after you click a remap button.
 func _input(event: InputEvent) -> void:
 	if active_hotkey_remap_button == null:
 		return
-	if not ((event is InputEventKey) or (event is InputEventMouseButton)):
+	# Makes it so that only keyboard keys, mouse buttons, and controller stuff can be used for hotkeys.
+	if not ((event is InputEventKey) or (event is InputEventMouseButton) 
+	or (event is InputEventJoypadButton) or (event is InputEventJoypadMotion)):
 		return
 	
 	InputMap.action_erase_events(active_hotkey_remap_button.get_parent().name)
