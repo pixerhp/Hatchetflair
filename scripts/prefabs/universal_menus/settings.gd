@@ -2,12 +2,14 @@ extends Control
 
 signal close_settings_menu
 
-@onready var hotkeys_list_vbox_node: Node = $HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer
-@onready var keymap_item_node: Node = $HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem
-@onready var keymap_item_spacer_node: Node = $HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/Spacer
+@onready var hotkeys_list_vbox_node: Node = $HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer
+@onready var keymap_item_node: Node = $HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem
+@onready var keymap_item_spacer_node: Node = $HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/Spacer
 @onready var input_listener_screen: Node = $InputListenerScreen
 
 var active_hotkey_remap_button: Button
+
+# !!! Rememeber that when adding an event usign the add button not to add the input if it's already attached to that action.
 
 
 func _ready():
@@ -26,57 +28,72 @@ func _ready():
 		hotkeys_list_vbox_node.add_child(new_keymap_item_node)
 		new_spacer_node = keymap_item_spacer_node.duplicate(DUPLICATE_USE_INSTANTIATION)
 		hotkeys_list_vbox_node.add_child(new_spacer_node)
-	_update_hotkey_remap_buttons_text()
+	_update_hotkey_events_texts()
 	
 	# Removes the dummy KeyMapItem which was used to create the others.
 	#hotkeys_list_vbox_node.get_child(1).queue_free()
 	keymap_item_node.queue_free()
 	
 	# Connects the hotkey buttons with signals to give them function.
-	var hotkey_remap_button: Button
+	var hotkey_set_button: Button
 	for keymap_item in hotkeys_list_vbox_node.get_children():
 		# (Skip the spacer nodes:)
 		if not keymap_item is HSplitContainer:
 			continue
-		hotkey_remap_button = keymap_item.get_node("VBoxContainer").get_node("RemapButton")
-		hotkey_remap_button.pressed.connect(_on_hotkey_remap_button_pressed.bind(hotkey_remap_button))
+		hotkey_set_button = keymap_item.get_node("VBoxContainer").get_node("PanelContainer").get_node("SetButton")
+		hotkey_set_button.pressed.connect(_on_hotkey_remap_button_pressed.bind(hotkey_set_button))
 	return
 
-func _update_hotkey_remap_buttons_text() -> void:
-	var hotkey_remap_button: Button
+func _update_hotkey_events_texts() -> void:
+	# Count how many times each event (input) is used for actions.
+	# (This can be used for things like making text yellow if an event is used multiple times.)
+	var event_counts: Dictionary = {}
+	for action in InputMap.get_actions():
+		if action.substr(0, 3) == "ui_":
+			continue
+		for event in InputMap.action_get_events(action):
+			if event_counts.has(event.as_text()):
+				event_counts[event.as_text()] += 1
+			else:
+				event_counts[event.as_text()] = 1
+	
+	var event_title_node: RichTextLabel
 	var button_events: Array[InputEvent] = []
-	var remap_button_text: String = ""
-	# !!! Add functionality where a button's text is yellow if it's hotkey is used for multiple buttons.
+	var events_text: String = ""
 	for keymap_item in hotkeys_list_vbox_node.get_children():
 		# Skip the spacer nodes:
 		if not keymap_item is HSplitContainer:
 			continue
 		
-		hotkey_remap_button = keymap_item.get_node("VBoxContainer").get_node("RemapButton")
+		event_title_node = keymap_item.get_node("VBoxContainer").get_node("PanelContainer").get_node("EventTitle")
 		button_events = InputMap.action_get_events(keymap_item.name)
 		
-		if not button_events.is_empty():
-			remap_button_text = ""
-			for event in button_events:
-				remap_button_text += event.as_text() + ";   "
-			if not remap_button_text.is_empty():
-				remap_button_text = remap_button_text.erase(remap_button_text.length() - 4, 4)
-			hotkey_remap_button.set_text(remap_button_text)
-			hotkey_remap_button.remove_theme_color_override("font_color")
+		if button_events.is_empty():
+			event_title_node.set_text("[center][color=orangered]unbound[/color][/center]")
 			continue
 		else:
-			hotkey_remap_button.set_text("unbound")
-			hotkey_remap_button.add_theme_color_override("font_color", Color(1, 0.25, 0))
+			events_text = ""
+			for event in button_events:
+				print("event: ", event, " : ", event_counts[event.as_text()])
+				if event_counts[event.as_text()] > 1:
+					events_text += "[color=yellow]" +  event.as_text() + "[/color];   "
+				else:
+					events_text += event.as_text() + ";   "
+			if not events_text.is_empty():
+				events_text = events_text.erase(events_text.length() - 4, 4)
+			events_text = "[center]" + events_text + "[/center]"
+			event_title_node.set_text(events_text)
 			continue
+	print()
 	return
 
-func _on_hotkey_remap_button_pressed(hotkey_remap_button: Button) -> void:
-	active_hotkey_remap_button = hotkey_remap_button
+func _on_hotkey_remap_button_pressed(hotkey_set_button: Button) -> void:
+	active_hotkey_remap_button = hotkey_set_button
 	input_listener_screen.show()
 	return
 
 # _input is called every time the player makes an input, including mouse and keyboard.
-# This specific instance is used for input listening after you click a remap button.
+# This specific instance is used for input listening after you click the set button.
 func _input(event: InputEvent) -> void:
 	if active_hotkey_remap_button == null:
 		return
@@ -85,11 +102,11 @@ func _input(event: InputEvent) -> void:
 	or (event is InputEventJoypadButton) or (event is InputEventJoypadMotion)):
 		return
 	
-	InputMap.action_erase_events(active_hotkey_remap_button.get_parent().get_parent().name)
-	InputMap.action_add_event(active_hotkey_remap_button.get_parent().get_parent().name, event)
+	InputMap.action_erase_events(active_hotkey_remap_button.get_parent().get_parent().get_parent().name)
+	InputMap.action_add_event(active_hotkey_remap_button.get_parent().get_parent().get_parent().name, event)
 	active_hotkey_remap_button = null
 	input_listener_screen.hide()
-	_update_hotkey_remap_buttons_text()
+	_update_hotkey_events_texts()
 	return
 
 func _on_reset_hotkeys_pressed():
@@ -97,7 +114,7 @@ func _on_reset_hotkeys_pressed():
 		InputMap.action_erase_events(action)
 		for event in Globals.INPUTMAP_DEFAULTS[action]:
 			InputMap.action_add_event(action, event)
-	_update_hotkey_remap_buttons_text()
+	_update_hotkey_events_texts()
 	return
 
 

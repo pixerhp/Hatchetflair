@@ -34,25 +34,19 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="SettingsUI" type="Panel" parent="HBoxContainer/VBoxContainer"]
-clip_contents = true
+[node name="SettingsPanel" type="PanelContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsUI"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel"]
+layout_mode = 2
 
-[node name="SpacerTop" type="Control" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
+[node name="SpacerTop" type="Control" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.02
 
-[node name="SettingsTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
+[node name="SettingsTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -69,12 +63,12 @@ text = "[center]Settings[/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="Spacer1" type="Control" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
+[node name="Spacer1" type="Control" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="HotkeysTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
+[node name="HotkeysTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 24
@@ -88,82 +82,98 @@ text = "[center]Hotkeys:[/center]
 fit_content = true
 autowrap_mode = 0
 
-[node name="Spacer2" type="Control" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
+[node name="Spacer2" type="Control" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.02
 
-[node name="ResetHotkeysButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
+[node name="ResetHotkeysButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = " Reset to Default "
 
-[node name="HotkeysList" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
+[node name="HotkeysList" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="KeyMapItem" type="HSplitContainer" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
+[node name="KeyMapItem" type="HSplitContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer"]
 layout_mode = 2
 split_offset = 250
 dragger_visibility = 2
 
-[node name="ActionTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem"]
+[node name="ActionTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem"]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_vertical = 4
 bbcode_enabled = true
 text = "[center](action titles look like this)[center]"
+fit_content = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem"]
 layout_mode = 2
 
-[node name="RemapButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer"]
+layout_mode = 2
+
+[node name="EventTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/PanelContainer"]
+layout_mode = 2
+mouse_filter = 1
+bbcode_enabled = true
+text = "[center](event titles look like this)[/center]"
+fit_content = true
+
+[node name="SetButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+flat = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "(remap buttons look like this)"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ResetButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
+[node name="ResetButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "reset"
 
-[node name="ClearButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
+[node name="ClearButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "clear
 "
 
-[node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
+[node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "remove
+"
+
+[node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "add
 "
 
-[node name="Spacer" type="Control" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/HotkeysList/VBoxContainer"]
+[node name="Spacer" type="Control" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer"]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="Spacer3" type="Control" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
+[node name="Spacer3" type="Control" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="CloseSettings" type="Button" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
+[node name="CloseSettings" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Close Settings"
 
-[node name="SpacerBottom" type="Control" parent="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer"]
+[node name="SpacerBottom" type="Control" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.02
@@ -199,5 +209,5 @@ bbcode_enabled = true
 text = "[center]( listening for input... )[center]"
 fit_content = true
 
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/ResetHotkeysButton" to="." method="_on_reset_hotkeys_pressed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/SettingsUI/VBoxContainer/CloseSettings" to="." method="_on_close_settings_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/ResetHotkeysButton" to="." method="_on_reset_hotkeys_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/CloseSettings" to="." method="_on_close_settings_pressed"]
