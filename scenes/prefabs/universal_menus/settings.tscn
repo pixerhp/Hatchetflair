@@ -90,7 +90,7 @@ size_flags_stretch_ratio = 0.02
 [node name="ResetHotkeysButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = " Reset to Default "
+text = "reset all to default"
 
 [node name="HotkeysList" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer"]
 layout_mode = 2
@@ -101,12 +101,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="KeyMapItem" type="HSplitContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer"]
+[node name="HotkeyItem" type="HSplitContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer"]
 layout_mode = 2
 split_offset = 250
 dragger_visibility = 2
 
-[node name="ActionTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem"]
+[node name="ActionTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/HotkeyItem"]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 size_flags_vertical = 4
@@ -114,49 +114,48 @@ bbcode_enabled = true
 text = "[center](action titles look like this)[center]"
 fit_content = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/HotkeyItem"]
 layout_mode = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/HotkeyItem/VBoxContainer"]
 layout_mode = 2
 
-[node name="EventTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/PanelContainer"]
+[node name="EventTitle" type="RichTextLabel" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/HotkeyItem/VBoxContainer/PanelContainer"]
 layout_mode = 2
 mouse_filter = 1
 bbcode_enabled = true
 text = "[center](event titles look like this)[/center]"
 fit_content = true
 
-[node name="SetButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/PanelContainer"]
+[node name="SetButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/HotkeyItem/VBoxContainer/PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 flat = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/HotkeyItem/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ResetButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
+[node name="ResetButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/HotkeyItem/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "reset"
 
-[node name="ClearButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
+[node name="ClearButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/HotkeyItem/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "clear
 "
 
-[node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
+[node name="RemoveButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/HotkeyItem/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "remove
-"
+text = "- last"
 
-[node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/KeyMapItem/VBoxContainer/HBoxContainer"]
+[node name="AddButton" type="Button" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer/HotkeyItem/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "add
+text = "+ add
 "
 
 [node name="Spacer" type="Control" parent="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/HotkeysList/VBoxContainer"]
@@ -209,5 +208,5 @@ bbcode_enabled = true
 text = "[center]( listening for input... )[center]"
 fit_content = true
 
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/ResetHotkeysButton" to="." method="_on_reset_hotkeys_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/ResetHotkeysButton" to="." method="_reset_all_hotkeys"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/SettingsPanel/VBoxContainer/CloseSettings" to="." method="_on_close_settings_pressed"]
