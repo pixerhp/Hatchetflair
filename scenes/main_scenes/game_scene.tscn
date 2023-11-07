@@ -20,34 +20,42 @@ tonemap_mode = 1
 [node name="GameScene" type="Node3D"]
 script = ExtResource("1_h6q16")
 
-[node name="PauseMenu" type="HBoxContainer" parent="."]
-visible = false
+[node name="PauseMenu" type="Control" parent="."]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SpacerLeft" type="Control" parent="PauseMenu"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpacerLeft" type="Control" parent="PauseMenu/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.75
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SpacerTop" type="Control" parent="PauseMenu/VBoxContainer"]
+[node name="SpacerTop" type="Control" parent="PauseMenu/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.25
 
-[node name="PauseMenuBox" type="Panel" parent="PauseMenu/VBoxContainer"]
+[node name="PauseMenuBox" type="Panel" parent="PauseMenu/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="PauseMenuElements" type="VBoxContainer" parent="PauseMenu/VBoxContainer/PauseMenuBox"]
+[node name="PauseMenuElements" type="VBoxContainer" parent="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,7 +65,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TitleText" type="RichTextLabel" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="TitleText" type="RichTextLabel" parent="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
@@ -69,58 +77,59 @@ theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
 text = "[center]PAUSE MENU[/center]"
 
-[node name="ResumeGameplay" type="Button" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="ResumeGameplay" type="Button" parent="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Resume Gameplay"
 
-[node name="Spacer1" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="Spacer1" type="Control" parent="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="TogglePlaying" type="Button" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="TogglePlaying" type="Button" parent="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 disabled = true
-text = "Toggle Playing"
+text = "Toggle Player Character"
 
-[node name="Spacer2" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="Spacer2" type="Control" parent="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="Settings" type="Button" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="Settings" type="Button" parent="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Settings"
 
-[node name="Spacer3" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="Spacer3" type="Control" parent="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="SaveAndQuit" type="Button" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="SaveAndQuit" type="Button" parent="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Save & Quit"
 
-[node name="Spacer4" type="Control" parent="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements"]
+[node name="Spacer4" type="Control" parent="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.2
 
-[node name="SpacerBottom" type="Control" parent="PauseMenu/VBoxContainer"]
+[node name="SpacerBottom" type="Control" parent="PauseMenu/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.25
 
-[node name="SpacerRight" type="Control" parent="PauseMenu"]
+[node name="SpacerRight" type="Control" parent="PauseMenu/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.75
@@ -150,8 +159,8 @@ spawn_path = NodePath(".")
 [node name="SharedObjectsMS" type="MultiplayerSpawner" parent="."]
 spawn_path = NodePath(".")
 
-[connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/ResumeGameplay" to="." method="_on_pausemenu_resumegameplay_pressed"]
-[connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/TogglePlaying" to="." method="_on_pausemenu_toggleplaying_pressed"]
-[connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/Settings" to="." method="_on_pausemenu_settings_pressed"]
-[connection signal="pressed" from="PauseMenu/VBoxContainer/PauseMenuBox/PauseMenuElements/SaveAndQuit" to="." method="_on_pausemenu_saveandquit_pressed"]
+[connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ResumeGameplay" to="." method="_on_pausemenu_resumegameplay_pressed"]
+[connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/TogglePlaying" to="." method="_on_pausemenu_toggleplaying_pressed"]
+[connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/Settings" to="." method="_on_pausemenu_settings_pressed"]
+[connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/SaveAndQuit" to="." method="_on_pausemenu_saveandquit_pressed"]
 [connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_close_settings_menu"]
