@@ -743,6 +743,7 @@ grow_vertical = 2
 [node name="Spacer1" type="Control" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
 
 [node name="TitleText" type="RichTextLabel" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
@@ -753,17 +754,39 @@ theme_override_constants/shadow_offset_y = 4
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/normal_font_size = 35
 bbcode_enabled = true
-text = "[center]Hatchetflair is made possible by these lovely people![/center]"
+text = "[center]Hatchetflair is made possible
+by these lovely people![/center]"
 fit_content = true
 autowrap_mode = 0
 
 [node name="Spacer2" type="Control" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
 
-[node name="Credits" type="RichTextLabel" parent="Menus/CreditsMenu/CreditsUI"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+horizontal_scroll_mode = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="SpacerLeft" type="Control" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="Credits" type="RichTextLabel" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
@@ -789,9 +812,17 @@ Special Thanks:
 fit_content = true
 autowrap_mode = 0
 
+[node name="SpacerRight" type="Control" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+
 [node name="Spacer3" type="Control" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
 
 [node name="Back" type="Button" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
@@ -801,6 +832,7 @@ text = "Back"
 [node name="Spacer4" type="Control" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
 
 [node name="NetworkStatusOverlay" type="Control" parent="Menus"]
 visible = false

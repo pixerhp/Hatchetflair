@@ -21,6 +21,7 @@ tonemap_mode = 1
 script = ExtResource("1_h6q16")
 
 [node name="PauseMenu" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
