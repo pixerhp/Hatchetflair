@@ -101,6 +101,24 @@ theme_override_font_sizes/font_size = 20
 text = "Join world"
 icon_alignment = 1
 
+[node name="Characters" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+disabled = true
+text = "Characters"
+icon_alignment = 1
+
+[node name="Users" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+disabled = true
+text = "Users"
+icon_alignment = 1
+
 [node name="Settings" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
