@@ -762,7 +762,7 @@ autowrap_mode = 0
 [node name="Spacer2" type="Control" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.2
+size_flags_stretch_ratio = 0.1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
@@ -771,19 +771,24 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
 horizontal_scroll_mode = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/PanelContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="SpacerLeft" type="Control" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/HBoxContainer"]
+[node name="SpacerLeft" type="Control" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.2
+size_flags_stretch_ratio = 0.1
 
-[node name="Credits" type="RichTextLabel" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/HBoxContainer"]
+[node name="Credits" type="RichTextLabel" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
@@ -796,34 +801,39 @@ theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
-text = "Designer & Lead Developer:
-[center][rainbow freq=0.02][wave]Pixer H. Pinecone[/wave][/rainbow][/center]
-Contributing Developers:
-	[wave]~ [color=orange]Jcodefox[/color][/wave]
-	[wave]~ SteveMC[/wave]
-Available Playtesters:
-	[wave]~ Blitceed[/wave]
-	[wave]~ LandOcto950[/wave]
-	[wave]~ Redstone[/wave]
-Special Thanks:
-	[wave]~ Matt Bowlby (Blue)[/wave]
-	[wave]~ S. S. Developer[/wave]
-	[wave]~ (Many others)[/wave]
-	[wave]~ You![/wave]"
+text = "
+[center]Designer & Lead Developer
+[wave][color=yellow]Pixer H. Pinecone[/color][/wave]
+
+Contributing Developers
+[wave][color=orange]Jcodefox[/color][/wave]
+[wave][color=Lightsteelblue]SteveMC[/color][/wave]
+
+Available Playtesters
+[color=Lightsteelblue][wave]Blitceed
+LandOcto950
+Redstone[/wave][/color]
+
+Special Thanks
+[color=Lightsteelblue][wave]Matt Bowlby (Blue)
+S. S. Developer
+Various others, inspirations, and you![/wave][/color][/center]
+
+"
 fit_content = true
 autowrap_mode = 0
 
-[node name="SpacerRight" type="Control" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/HBoxContainer"]
+[node name="SpacerRight" type="Control" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.2
+size_flags_stretch_ratio = 0.1
 
 [node name="Spacer3" type="Control" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 0.2
+size_flags_stretch_ratio = 0.1
 
 [node name="Back" type="Button" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
