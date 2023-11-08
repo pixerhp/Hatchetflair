@@ -5,7 +5,7 @@ func switch_to_game_scene():
 	get_tree().change_scene_to_file("res://scenes/main_scenes/game_scene.tscn")
 
 
-# Opens one of the titlescreen menus after hiding all of the others.
+# Makes visible one main menu screen after hiding all others.
 func switch_to_menu(menu_name: String) -> void:
 	for child_menu in $Menus.get_children():
 		child_menu.visible = false
