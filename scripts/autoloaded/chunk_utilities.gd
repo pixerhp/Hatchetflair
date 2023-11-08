@@ -72,7 +72,7 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 	var midpoint_connections: Array[PackedByteArray] = []
 	var mid_tris_awk: Array[PackedByteArray] = []
 	var midpoint_triangles: Array[PackedByteArray] = []
-	var triangles_average_xyz: Array[Vector3] = []
+	var triangles_average_zyx: Array[Vector3] = []
 	
 	for vertex_combination in range(0, indices_table.size()):
 		# Get the on/off state of each vertex from the current combination number.
@@ -103,11 +103,11 @@ func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) 
 					midpoint_triangles[awkward_tri_index].append(midpoint_connections[mid_tris_awk[awkward_tri_index][midpoint_conn_index]][1])
 		
 		# (u) Reorder triangle indices such that the triangle is facing the correct direction.
-		triangles_average_xyz.clear()
+		triangles_average_zyx.clear()
 		for triangle in midpoint_triangles:
 			# Get the average position of the midpoints that make up the triangle.
 			# (The midpoints themselves are the average positions of the two vertices in the edge that defines them.)
-			triangles_average_xyz.append(Vector3(
+			triangles_average_zyx.append(Vector3(
 				(
 					((vertices[edges[triangle[0]][0]].x + vertices[edges[triangle[0]][1]].x) / 2) +
 					((vertices[edges[triangle[1]][0]].x + vertices[edges[triangle[1]][1]].x) / 2) +
@@ -180,4 +180,4 @@ func midpoint_indices_used(vertex_states_bits: PackedByteArray, edges: Array[Pac
 
 
 # Write this function later, either here or in a math script.
-#func midpoint_xyz(vertex1: [Vector3], vertex2: [Vector3]) -> Vector3:
+#func midpoint_zyx(vertex1: [Vector3], vertex2: [Vector3]) -> Vector3:

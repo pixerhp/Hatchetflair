@@ -154,10 +154,10 @@ func normalize_ip(ip: String) -> String:
 	ip = ip.replace("\t", "")
 	return ip
 
-# Used to swap between the xyz and hx1x2 coordinate systems.
-func swap_xyz_hxx_i(coords: Vector3i) -> Vector3i:
+# Used to swap between the zyx and hz1z2 coordinate systems.
+func swap_zyx_hzz_i(coords: Vector3i) -> Vector3i:
 	return Vector3i(coords[1], coords[0], coords[2])
-func swap_xyz_hxx_f(coords: Vector3) -> Vector3:
+func swap_zyx_hzz_f(coords: Vector3) -> Vector3:
 	return Vector3(coords[1], coords[0], coords[2])
 
 # Allows you to get a value from a dictionary even if you're not sure its key exists,

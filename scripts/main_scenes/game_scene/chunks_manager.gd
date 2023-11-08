@@ -51,15 +51,15 @@ func _process(_delta):
 
 func determine_new_static_chunks():
 	pass
-func add_static_chunks(chunk_coords_hxx_queue: Array[Vector3i]):
-	if chunk_coords_hxx_queue.is_empty():
+func add_static_chunks(chunk_coords_hzz_queue: Array[Vector3i]):
+	if chunk_coords_hzz_queue.is_empty():
 		return
-	new_chunks.resize(chunk_coords_hxx_queue.size())
-	for i in chunk_coords_hxx_queue.size():
+	new_chunks.resize(chunk_coords_hzz_queue.size())
+	for i in chunk_coords_hzz_queue.size():
 		new_chunks[i] = static_chunk_prefab.instantiate()
-		new_chunks[i].name = str(chunk_coords_hxx_queue[i])
-		new_chunks[i].chunk_coords_hxx = chunk_coords_hxx_queue[i]
-		new_chunks[i].position = Globals.swap_xyz_hxx_i(new_chunks[i].chunk_coords_hxx) * ChunkUtilities.STATIC_CHUNK_SIZE
+		new_chunks[i].name = str(chunk_coords_hzz_queue[i])
+		new_chunks[i].chunk_coords_hzz = chunk_coords_hzz_queue[i]
+		new_chunks[i].position = Globals.swap_zyx_hzz_i(new_chunks[i].chunk_coords_hzz) * ChunkUtilities.STATIC_CHUNK_SIZE
 		self.add_child(new_chunks[i])
 	chunk_gen_thread.start(add_static_chunks_threadwork)
 	return
