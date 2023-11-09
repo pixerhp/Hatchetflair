@@ -30,16 +30,17 @@ dragons?
 Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death.
 	I don't know if my game could even be considered worthy of having this as a splash,
 	but I would rather remind people of Mary and asking her to pray for us than not.
-fluffy-things?
+fluffiness?
 grass ropes?
 	I wonder how much of the game will be inspired by those random survival YouTubers...
 Hatchetflash, Flerovash, Hatchetflare, Hatchetflair??
 	Inspired by how many times I've felt uncertain about the game's name.
 have a wonderful day!
+have lotsa fun!
 Ka-jackelmonoque, Quatuuvix.
 	fun sounding words i thought of a while ago.
 	bastardized segments of trying to pronounce the alphabet as one word.
-lab capsules, artificial environments, researchers?
+lab capsules, researchers, artificial environments?
 oh- hello!~♪
 picks are great for breaking up hard ground.
 	A break from the more stereotypical use of picks, mining through solid stone.
@@ -72,7 +73,7 @@ bojler eladó
 	“boiler for sale” in hungarian, a popular hungarian meme phrase. (SteveMC32)
 declaring and initializing a punch to the face!
 	humorous code-themed sentence.
-Hello, World!
+HELLO, WORLD.
 SOUND TEST: MONO OR STEREO?
 	Inspired by some old SNES games giving you stated audio options.
 	References how some games have a "sound test" area which lets you listen to various game audio.
@@ -81,13 +82,13 @@ SOUND TEST: MONO OR STEREO?
 #-=-=-=-#   LIMINAL / ASREMIC / DREAM-LIKE / STRANGE:
 
 accidentally went down too many stairs and ended up in "second-basement"...
-do you hear the birds?
+do you hear those birds?
 do you hear the water beyond the wall of trees?
 get out of bounds.
 remember an area you see every day but which you haven't properly looked at in years.
 the pool under the hotel pool?
 the room above your attic?
-windows which are blank white until you start to think about seeing what's on the other side.
+windows which are blank-white until you start to think about seeing what's on the other side?
 you open a closet, but it's actually just a dusty emptier mirrored-version of the room behind you...
 
 
@@ -97,9 +98,9 @@ you open a closet, but it's actually just a dusty emptier mirrored-version of th
 But is air resistance really negligible?
 	Air resistance is almost always considered negligable in physics questions.
 everyone always forgets about nickel, beryllium... but i didn't!
-has anyone seen my tesseracts?
-	A pun on potentially losing where a tesseract might be if you only see a 3D slice of a 4D world.
-	Also a reference to the phrase: "has anyone seen my car keys?"
+Has anyone seen my tesseracts?
+	References the phrase "has anyone seen my car keys?".
+	(It'd also be pretty easy to lose a tesseract if you can only see a 3D slice of a 4D world.)
 hexagons are the bestagons!
 	incidental reference to CGP Grey, who I don't know much about.
 	originally added just because I'd randomly heard the phrase and I generally like hexagons.
@@ -112,7 +113,7 @@ tau > pi
 tell the audience to please use the word "quantum" correctly.
 Weaire–Phelan structure?
 	A tileable 3D shape which has the most volume-per-surface area when tesselated.
-why is my room filled with rhombic dodecahedrons?
+Why is my room filled with rhombic dodecahedrons?
 
 
 #-=-=-=-#   MISCELLANEOUS:
@@ -149,7 +150,7 @@ dyed clothing is my favorite shark-drop
 It's still Bill's fault!
 	A reference to Secret of Evermore's secret post-credits text: "IT'S BILL'S FAULT".
 	thus also a reference to Brian Fehdrau (@ItsBillsFault) and Bill Kristiansen, both SoE devs.
-please tell the whale that fell into the library to be more quiet next time.
+Please tell the whale that fell into the library to be more quiet next time.
 	References the game "OFF" by Mortis Ghost.
 seme!? ala kijetesantakalu!?
 	references the toki pona conlang, the phrase related to HF not currently having raccoons/similar.
@@ -157,5 +158,4 @@ Splatting mosquitoes with a femur bone since 1995!
 	References "Secret of Evermore" (SNES), which released in North America on October 1, 1995.
 STEEEVOOOOOOOOOOOOO!!!
 	References "CarlSagan42" and "Stevo" (the latter is a well-known super mario maker troll-level creator.)
-supercalifragilisticexpialidocious
 Thanks Godot!
