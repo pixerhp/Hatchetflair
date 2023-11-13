@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bbwhtlk15abxa"]
+[gd_scene load_steps=9 format=3 uid="uid://bbwhtlk15abxa"]
 
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_main.gd" id="1_jsr8e"]
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_worlds.gd" id="2_68qhj"]
+[ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_accounts.gd" id="2_ykccs"]
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_join.gd" id="3_r4aqp"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="4_j121s"]
 
@@ -86,7 +87,7 @@ theme_override_font_sizes/italics_font_size = 32
 theme_override_font_sizes/bold_italics_font_size = 32
 theme_override_font_sizes/mono_font_size = 32
 bbcode_enabled = true
-text = "[center]Welcome, [account's displayname]![/center]"
+text = "[center]Welcome, [account displayname]![/center]"
 fit_content = true
 
 [node name="Spacer2" type="Control" parent="Menus/TitleMenu/TitleUI"]
@@ -168,6 +169,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_ykccs")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu"]
 layout_mode = 1
@@ -226,7 +228,7 @@ theme_override_font_sizes/italics_font_size = 32
 theme_override_font_sizes/bold_italics_font_size = 32
 theme_override_font_sizes/mono_font_size = 32
 bbcode_enabled = true
-text = "[center]Account/Username: [account's username][/center]"
+text = "[center]Account Username:[/center]"
 fit_content = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer"]
@@ -291,7 +293,7 @@ theme_override_font_sizes/italics_font_size = 32
 theme_override_font_sizes/bold_italics_font_size = 32
 theme_override_font_sizes/mono_font_size = 32
 bbcode_enabled = true
-text = "[center]Account's Displayname: [account's displayname][/center]"
+text = "[center]Account Displayname: [account's displayname][/center]"
 fit_content = true
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer"]
@@ -327,9 +329,9 @@ theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
-text = "[center]* Account usernames may be used for world save data, character metadata, commands, (etc.)
-* Multiplayer world hosts may use your username for storing save data, so be careful to use a username which is unique from other players'. 
-* Note that renaming a username is very difficult because everything which uses it needs to be updated, but renaming a displayname is much more effortless.[/center]"
+text = "[center]* Accounts may be used for world save data, character metadata, commands, (etc.)
+* Multiplayer world hosts may use your username for storing save data, so try to pick a username which other players are unlikely to have when playing multiplayer. 
+* Renaming an account username is very difficult because all of its uses need to be updated (including separate world hosts manually,) but renaming a displayname is very easy.[/center]"
 fit_content = true
 
 [node name="Spacer5" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
