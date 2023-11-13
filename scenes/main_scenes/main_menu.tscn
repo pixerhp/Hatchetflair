@@ -79,7 +79,7 @@ text = "[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=-2 amp=60]Hatc
 fit_content = true
 autowrap_mode = 0
 
-[node name="Button" type="Button" parent="Menus/TitleMenu/TitleUI/GameNameTitle"]
+[node name="RefreshWindowTitle" type="Button" parent="Menus/TitleMenu/TitleUI/GameNameTitle"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1094,7 +1094,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Back"
 
-[connection signal="pressed" from="Menus/TitleMenu/TitleUI/GameNameTitle/Button" to="." method="_on_game_title_clicked"]
+[connection signal="pressed" from="Menus/TitleMenu/TitleUI/GameNameTitle/RefreshWindowTitle" to="." method="_on_game_title_clicked"]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/StartWorld" to="." method="switch_to_menu" binds= ["WorldsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/JoinWorld" to="." method="switch_to_menu" binds= ["JoinMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Accounts" to="." method="switch_to_menu" binds= ["AccountsMenu"]]
