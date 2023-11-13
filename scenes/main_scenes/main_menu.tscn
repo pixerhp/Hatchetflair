@@ -62,6 +62,7 @@ grow_vertical = 2
 [node name="Spacer1" type="Control" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
 
 [node name="GameNameTitle" type="RichTextLabel" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
@@ -77,9 +78,21 @@ text = "[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=-2 amp=60]Hatc
 fit_content = true
 autowrap_mode = 0
 
+[node name="WelcomeMessage" type="RichTextLabel" parent="Menus/TitleMenu/TitleUI"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
+bbcode_enabled = true
+text = "[center]Welcome, [account's displayname]![/center]"
+fit_content = true
+
 [node name="Spacer2" type="Control" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
 
 [node name="TitleScreenButtons" type="VBoxContainer" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
@@ -110,12 +123,12 @@ disabled = true
 text = "Characters"
 icon_alignment = 1
 
-[node name="Users" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
+[node name="Accounts" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
-text = "Users/Accounts"
+text = "User Accounts"
 icon_alignment = 1
 
 [node name="Settings" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
@@ -145,7 +158,7 @@ icon_alignment = 1
 [node name="Spacer3" type="Control" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 1.5
+size_flags_stretch_ratio = 0.2
 
 [node name="AccountsMenu" type="Control" parent="Menus"]
 visible = false
@@ -164,7 +177,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SpacerTop" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
+[node name="Spacer1" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
@@ -200,10 +213,129 @@ autowrap_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
+[node name="Spacer2" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="UsernameText" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
+bbcode_enabled = true
+text = "[center]Account/Username: [account's username][/center]"
+fit_content = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
+
+[node name="OptionButton" type="OptionButton" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 1
+selected = 0
+popup/item_0/text = "GUEST"
+popup/item_0/id = 0
+
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="AddAccount" type="Button" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+disabled = true
+text = "Add Account"
+
+[node name="EditAccount" type="Button" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+disabled = true
+text = "Edit Account"
+
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Spacer3" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.05
+
+[node name="DisplaynameText" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
+bbcode_enabled = true
+text = "[center]Account's Displayname: [account's displayname][/center]"
+fit_content = true
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer"]
+layout_mode = 2
+
+[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="EditDisplayname" type="Button" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+disabled = true
+text = "Edit Account's Displayname"
+
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="Spacer4" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="AccountsDescription" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 24
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/bold_italics_font_size = 24
+theme_override_font_sizes/mono_font_size = 24
+bbcode_enabled = true
+text = "[center]* Account usernames may be used for world save data, character metadata, commands, (etc.)
+* Multiplayer world hosts may use your username for storing save data, so be careful to use a username which is unique from other players'. 
+* Note that renaming a username is very difficult because everything which uses it needs to be updated, but renaming a displayname is much more effortless.[/center]"
+fit_content = true
+
+[node name="Spacer5" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
 
 [node name="WorldsMenu" type="Control" parent="Menus"]
 visible = false
@@ -953,7 +1085,7 @@ text = "Back"
 
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/StartWorld" to="." method="switch_to_menu" binds= ["WorldsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/JoinWorld" to="." method="switch_to_menu" binds= ["JoinMenu"]]
-[connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Users" to="." method="switch_to_menu" binds= ["AccountsMenu"]]
+[connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Accounts" to="." method="switch_to_menu" binds= ["AccountsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Settings" to="." method="switch_to_menu" binds= ["SettingsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Credits" to="." method="switch_to_menu" binds= ["CreditsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Quit" to="." method="_on_quit_button_pressed"]
