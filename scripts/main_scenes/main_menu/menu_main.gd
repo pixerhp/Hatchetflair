@@ -9,7 +9,11 @@ func switch_to_game_scene():
 func switch_to_menu(menu_name: String) -> void:
 	for child_menu in $Menus.get_children():
 		child_menu.visible = false
-	get_node("Menus/" + menu_name).visible = true
+	var menu_to_make_visible = get_node("Menus/" + menu_name)
+	if not menu_to_make_visible == null: # (Crash prevention.)
+		menu_to_make_visible.visible = true
+	else:
+		push_error("Attempted to make visible a screen/menu child node which couldn't be found.")
 	return
 
 func _on_quit_button_pressed() -> void:
