@@ -19,8 +19,9 @@ const PATH_TETRA_RHOMBDO_TABLE: String = PATH_DATA_FILES + "/rhombdo_ind_table.a
 const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
 # user://
 const PATH_STORAGE: String = "user://storage"
-const PATH_USERS: String = PATH_STORAGE + "/users.cfg"
-const PATH_SERVERS: String = PATH_STORAGE + "/remembered_servers.cfg"
+const PATH_PROGRAM_META: String = PATH_STORAGE + "/program_meta.cfg"
+const PATH_USERS: String = PATH_STORAGE + "/user_accounts.cfg"
+const PATH_SERVERS: String = PATH_STORAGE + "/saved_hosts.cfg"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
 
@@ -654,6 +655,7 @@ func ensure_required_dirs() -> Error:
 	return OK
 func ensure_required_files():
 	var cfgs_to_ensure: Array[String] = [
+		PATH_PROGRAM_META,
 		PATH_USERS,
 		PATH_SERVERS,
 	]

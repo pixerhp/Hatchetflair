@@ -1,5 +1,8 @@
 extends Node
 
+# !!! the game menu appearing to the player before global preparations may be a problem in the future,
+# consider preventing that later with singals or the await keyword.
+
 #-=-=-=-# TABLE OF CONTENTS:
 
 # [contents]:
@@ -25,8 +28,9 @@ const IS_INDEV: bool = true
 
 var INPUTMAP_DEFAULTS: Dictionary = {}
 
-# !!! replace with a signal/coroutine and places having the "await" keyword?
-var globals_ready: bool = false
+var player_username: String = "GUEST"
+var player_displayname: String = "GUEST"
+
 
 #-=-=-=-# INITIALIZATION:
 
@@ -52,7 +56,6 @@ func _enter_tree() -> void:
 	
 	
 	
-	globals_ready = true
 	return
 
 

@@ -20,10 +20,6 @@ func _on_quit_button_pressed() -> void:
 	Globals.quit_game()
 	return
 
-func _on_game_title_clicked() -> void:
-	Globals._set_window_title(true)
-	return
-
 func _on_network_info_overlay_back_button_pressed(message: String, should_display: bool, show_back_button: bool) -> void:
 	NetworkManager.network_status_update(message, should_display, show_back_button)
 	return

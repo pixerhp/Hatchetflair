@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://bbwhtlk15abxa"]
+[gd_scene load_steps=10 format=3 uid="uid://bbwhtlk15abxa"]
 
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_main.gd" id="1_jsr8e"]
+[ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_title.gd" id="2_1jmm2"]
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_worlds.gd" id="2_68qhj"]
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_accounts.gd" id="2_ykccs"]
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_join.gd" id="3_r4aqp"]
@@ -51,6 +52,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_1jmm2")
 
 [node name="TitleUI" type="VBoxContainer" parent="Menus/TitleMenu"]
 layout_mode = 1
@@ -90,11 +92,11 @@ flat = true
 
 [node name="WelcomeMessage" type="RichTextLabel" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 32
-theme_override_font_sizes/bold_font_size = 32
-theme_override_font_sizes/italics_font_size = 32
-theme_override_font_sizes/bold_italics_font_size = 32
-theme_override_font_sizes/mono_font_size = 32
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/bold_font_size = 28
+theme_override_font_sizes/italics_font_size = 28
+theme_override_font_sizes/bold_italics_font_size = 28
+theme_override_font_sizes/mono_font_size = 28
 bbcode_enabled = true
 text = "[center]Welcome, [account displayname]![/center]"
 fit_content = true
@@ -1129,7 +1131,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Back"
 
-[connection signal="pressed" from="Menus/TitleMenu/TitleUI/GameNameTitle/RefreshWindowTitle" to="." method="_on_game_title_clicked"]
+[connection signal="pressed" from="Menus/TitleMenu/TitleUI/GameNameTitle/RefreshWindowTitle" to="Menus/TitleMenu" method="_on_game_title_clicked"]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/StartWorld" to="." method="switch_to_menu" binds= ["WorldsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/JoinWorld" to="." method="switch_to_menu" binds= ["JoinMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Accounts" to="." method="switch_to_menu" binds= ["AccountsMenu"]]
@@ -1138,6 +1140,9 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Quit" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_selected" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer/OptionButton" to="Menus/AccountsMenu" method="_on_account_option_button_item_selected"]
+[connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer2/AddAccount" to="Menus/AccountsMenu" method="_on_add_account_pressed"]
+[connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer2/EditAccount" to="Menus/AccountsMenu" method="_on_edit_account_pressed"]
+[connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer3/EditDisplayname" to="Menus/AccountsMenu" method="_on_edit_displayname_pressed"]
 [connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_activated" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="start_world_by_index"]
