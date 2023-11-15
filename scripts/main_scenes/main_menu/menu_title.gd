@@ -1,8 +1,10 @@
 extends Control
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
+	_refresh_texts()
+	return
+func _refresh_texts():
 	_update_corner_version_text()
 	_update_welcome_message()
 	return
@@ -33,6 +35,7 @@ func _update_welcome_message():
 			"\n(you are playing as a GUEST account.)" +
 			"[/wave][/center]" )
 	return
+
 
 func _on_game_title_clicked() -> void:
 	Globals._set_window_title(true)
