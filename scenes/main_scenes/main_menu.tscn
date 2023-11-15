@@ -1018,7 +1018,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="Credits" type="RichTextLabel" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/PanelContainer/HBoxContainer"]
+[node name="CreditsText" type="RichTextLabel" parent="Menus/CreditsMenu/CreditsUI/ScrollContainer/PanelContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
@@ -1032,22 +1032,27 @@ theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
 text = "
-[center]Designer & Lead Developer
+[center]Creator & Lead Developer
 [wave][color=yellow]Pixer H. Pinecone[/color][/wave]
 
-Contributing Developers
+Assistant Developers
 [wave][color=orange]Jcodefox[/color][/wave]
-[wave][color=Lightsteelblue]SteveMC[/color][/wave]
+[wave][color=Lightsteelblue]Stevemc32[/color][/wave]
 
-Available Playtesters
+Available Assistant
+Playtesters & Debuggers
 [color=Lightsteelblue][wave]Blitceed
 LandOcto950
 Redstone[/wave][/color]
 
+Programs Used:[color=Lightsteelblue][wave]
+Godot Game Engine
+Blender (Modelling)[/wave][/color]
+
 Special Thanks
 [color=Lightsteelblue][wave]Matt Bowlby (Blue)
 S. S. Developer
-Various others, inspirations, and you![/wave][/color][/center]
+(various others, inspirations, and you!)[/wave][/color][/center]
 
 "
 fit_content = true
