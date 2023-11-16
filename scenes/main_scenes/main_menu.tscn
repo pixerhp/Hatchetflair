@@ -90,6 +90,11 @@ grow_horizontal = 2
 grow_vertical = 2
 flat = true
 
+[node name="Spacer2" type="Control" parent="Menus/TitleMenu/TitleUI"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.01
+
 [node name="WelcomeMessage" type="RichTextLabel" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 28
@@ -101,7 +106,7 @@ bbcode_enabled = true
 text = "[center]Welcome, [account displayname]![/center]"
 fit_content = true
 
-[node name="Spacer2" type="Control" parent="Menus/TitleMenu/TitleUI"]
+[node name="Spacer3" type="Control" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
@@ -167,7 +172,7 @@ theme_override_font_sizes/font_size = 20
 text = "Quit"
 icon_alignment = 1
 
-[node name="Spacer3" type="Control" parent="Menus/TitleMenu/TitleUI"]
+[node name="Spacer4" type="Control" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -438,48 +443,48 @@ autowrap_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SavedWorldsList" type="ItemList" parent="Menus/WorldsMenu/WorldsUI"]
-custom_minimum_size = Vector2(500, 100)
-layout_mode = 2
-size_flags_vertical = 3
-
 [node name="Toggles" type="HBoxContainer" parent="Menus/WorldsMenu/WorldsUI"]
 layout_mode = 2
 
 [node name="AllowJoining" type="CheckButton" parent="Menus/WorldsMenu/WorldsUI/Toggles"]
 layout_mode = 2
-text = "Multiplayer?:"
+text = "Multiplayer?"
 
 [node name="HostWithoutPlaying" type="CheckButton" parent="Menus/WorldsMenu/WorldsUI/Toggles"]
 layout_mode = 2
-text = "Host *without* playing?:"
+text = "Start *without* playing?"
+
+[node name="SavedWorldsList" type="ItemList" parent="Menus/WorldsMenu/WorldsUI"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+size_flags_vertical = 3
 
 [node name="WorldButtons" type="HBoxContainer" parent="Menus/WorldsMenu/WorldsUI"]
 layout_mode = 2
 
+[node name="PlayWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
+layout_mode = 2
+disabled = true
+text = "PLAY"
+
 [node name="NewWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
-text = "New World"
+text = "CREATE new world"
 
 [node name="DeleteWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 disabled = true
-text = "Delete World"
+text = "(del' -> man')"
 
 [node name="EditWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 disabled = true
-text = "Edit World"
+text = "MANAGE world"
 
 [node name="DuplicateWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 disabled = true
-text = "Duplicate World"
-
-[node name="PlayWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
-layout_mode = 2
-disabled = true
-text = "Play"
+text = "(dupe -> man')"
 
 [node name="NewWorldPopup" type="Panel" parent="Menus/WorldsMenu"]
 visible = false
@@ -728,11 +733,6 @@ autowrap_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SavedServersList" type="ItemList" parent="Menus/JoinMenu/JoinUI"]
-custom_minimum_size = Vector2(500, 100)
-layout_mode = 2
-size_flags_vertical = 3
-
 [node name="Toggles" type="HBoxContainer" parent="Menus/JoinMenu/JoinUI"]
 layout_mode = 2
 
@@ -740,27 +740,32 @@ layout_mode = 2
 layout_mode = 2
 text = "Join *without* playing?:"
 
+[node name="SavedServersList" type="ItemList" parent="Menus/JoinMenu/JoinUI"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="ServerButtons" type="HBoxContainer" parent="Menus/JoinMenu/JoinUI"]
 layout_mode = 2
-
-[node name="AddServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
-layout_mode = 2
-text = "Add Server"
-
-[node name="RemoveServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
-layout_mode = 2
-disabled = true
-text = "Remove Server"
-
-[node name="EditServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
-layout_mode = 2
-disabled = true
-text = "Edit Server"
 
 [node name="JoinServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
 layout_mode = 2
 disabled = true
-text = "Join World"
+text = "JOIN"
+
+[node name="AddServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
+layout_mode = 2
+text = "ADD new server"
+
+[node name="EditServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
+layout_mode = 2
+disabled = true
+text = "EDIT"
+
+[node name="RemoveServer" type="Button" parent="Menus/JoinMenu/JoinUI/ServerButtons"]
+layout_mode = 2
+disabled = true
+text = "REMOVE"
 
 [node name="AddServerPopup" type="Panel" parent="Menus/JoinMenu"]
 visible = false
@@ -1152,19 +1157,19 @@ text = "Back"
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_activated" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="start_world_by_index"]
 [connection signal="item_selected" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="_on_worlds_list_item_selected" unbinds=1]
+[connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/PlayWorld" to="Menus/WorldsMenu" method="start_world_by_index"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/NewWorld" to="Menus/WorldsMenu" method="open_new_world_popup"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/DeleteWorld" to="Menus/WorldsMenu" method="open_delete_world_popup"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/EditWorld" to="Menus/WorldsMenu" method="open_edit_world_popup"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/DuplicateWorld" to="Menus/WorldsMenu" method="_on_duplicate_world_pressed"]
-[connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/WorldButtons/PlayWorld" to="Menus/WorldsMenu" method="start_world_by_index"]
 [connection signal="visibility_changed" from="Menus/JoinMenu" to="Menus/JoinMenu" method="update_servers_list"]
 [connection signal="pressed" from="Menus/JoinMenu/JoinUI/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_activated" from="Menus/JoinMenu/JoinUI/SavedServersList" to="Menus/JoinMenu" method="join_server_by_index"]
 [connection signal="item_selected" from="Menus/JoinMenu/JoinUI/SavedServersList" to="Menus/JoinMenu" method="_on_servers_list_item_selected" unbinds=1]
-[connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/AddServer" to="Menus/JoinMenu" method="open_add_server_popup"]
-[connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/RemoveServer" to="Menus/JoinMenu" method="open_remove_server_popup"]
-[connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/EditServer" to="Menus/JoinMenu" method="open_edit_server_popup"]
 [connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/JoinServer" to="Menus/JoinMenu" method="join_server_by_index"]
+[connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/AddServer" to="Menus/JoinMenu" method="open_add_server_popup"]
+[connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/EditServer" to="Menus/JoinMenu" method="open_edit_server_popup"]
+[connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/RemoveServer" to="Menus/JoinMenu" method="open_remove_server_popup"]
 [connection signal="close_settings_menu" from="Menus/SettingsMenu" to="." method="_on_close_settings_menu"]
 [connection signal="pressed" from="Menus/CreditsMenu/CreditsUI/Back" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="pressed" from="Menus/NetworkStatusOverlay/Back" to="." method="_on_network_info_overlay_back_button_pressed" binds= ["Pressed back button", false, false]]
