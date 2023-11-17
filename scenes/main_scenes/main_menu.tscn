@@ -318,11 +318,11 @@ size_flags_stretch_ratio = 0.5
 
 [node name="AddAccount" type="Button" parent="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer"]
 layout_mode = 2
-text = "Add Account"
+text = "ADD New Account"
 
 [node name="EditAccount" type="Button" parent="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer"]
 layout_mode = 2
-text = "Edit Account"
+text = "EDIT Selected Account"
 
 [node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer"]
 layout_mode = 2
@@ -347,25 +347,6 @@ text = "[center]Account username: [account's username]
 Account displayname: [account's displayname][/center]"
 fit_content = true
 
-[node name="EditDisplaynameContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer"]
-layout_mode = 2
-
-[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/VBoxContainer/EditDisplaynameContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
-
-[node name="EditDisplayname" type="Button" parent="Menus/AccountsMenu/VBoxContainer/EditDisplaynameContainer"]
-layout_mode = 2
-text = "Change displayname"
-
-[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/VBoxContainer/EditDisplaynameContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
-
 [node name="Spacer4" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -388,6 +369,87 @@ fit_content = true
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
+
+[node name="PopupBackground" type="Panel" parent="Menus/AccountsMenu"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AccountPopup" type="Panel" parent="Menus/AccountsMenu/PopupBackground"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+bbcode_enabled = true
+text = "[center][account-related action goes here][/center]"
+fit_content = true
+
+[node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[username, cannot contain spaces]"
+
+[node name="DisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 2.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "[displayname]"
+
+[node name="Confirm" type="Button" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Confirm"
+
+[node name="Cancel" type="Button" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 60.0
+grow_vertical = 0
+text = "Cancel"
 
 [node name="WorldsMenu" type="Control" parent="Menus"]
 visible = false
@@ -1152,7 +1214,6 @@ text = "Back"
 [connection signal="item_selected" from="Menus/AccountsMenu/VBoxContainer/AccountSelectContainer/AccountSelect" to="Menus/AccountsMenu" method="_on_account_option_button_item_selected"]
 [connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer/AddAccount" to="Menus/AccountsMenu" method="_on_add_account_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer/EditAccount" to="Menus/AccountsMenu" method="_on_edit_account_pressed"]
-[connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/EditDisplaynameContainer/EditDisplayname" to="Menus/AccountsMenu" method="_on_edit_displayname_pressed"]
 [connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_activated" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="start_world_by_index"]

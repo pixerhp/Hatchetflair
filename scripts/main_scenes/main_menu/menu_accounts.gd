@@ -1,9 +1,14 @@
 extends Control
 
+@onready var popup_background_node: Control = $PopupBackground
+@onready var account_popup_node: Control = $PopupBackground/AccountPopup
+
 
 func _ready():
 	_update_account_names_text()
 	_update_edit_account_button_disabledness()
+	popup_background_node.visible = false
+	account_popup_node.visible = false
 	return
 
 func _update_account_names_text():
@@ -46,9 +51,11 @@ func _on_account_option_button_item_selected(index_of_selected: int):
 	return
 
 func _on_add_account_pressed():
-	pass
+	popup_background_node.visible = true
+	account_popup_node.visible = true
 func _on_edit_account_pressed():
-	pass
+	popup_background_node.visible = true
+	account_popup_node.visible = true
 
 func _on_edit_displayname_pressed():
 	pass
