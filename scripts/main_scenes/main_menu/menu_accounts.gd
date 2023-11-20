@@ -44,7 +44,7 @@ func _on_account_option_button_item_selected(index_of_selected: int):
 		return
 	Globals.player_username = account_select_node.get_item_text(index_of_selected)
 	if not Globals.player_username == "GUEST":
-		Globals.player_displayname = Globals.player_username + "'s displayname"
+		Globals.player_displayname = "[" + Globals.player_username + "'s displayname]"
 	else:
 		Globals.player_displayname = "GUEST"
 	_update_account_names_text()

@@ -25,13 +25,13 @@ func _update_welcome_message():
 		welcome_message_node.text = (
 			"[center][wave]" +
 			"Welcome, " + 
-			Globals.player_displayname + 
+			Globals.player_displayname + " (@" + Globals.player_username + ")" +
 			"[/wave][/center]" )
 	else:
 		welcome_message_node.text = (
 			"[center][wave]" +
 			"Welcome, " + 
-			Globals.player_displayname + 
+			Globals.player_displayname + " (@" + Globals.player_username + ")" +
 			"\n(you are playing as a GUEST account.)" +
 			"[/wave][/center]" )
 	return
