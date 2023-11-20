@@ -414,7 +414,7 @@ offset_top = -40.0
 offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
-placeholder_text = "[username, cannot contain spaces]"
+placeholder_text = "[username, all-lowercase & no spaces/specials]"
 
 [node name="DisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
 layout_mode = 1
@@ -426,7 +426,7 @@ offset_top = 2.0
 offset_bottom = 38.0
 grow_horizontal = 2
 grow_vertical = 2
-placeholder_text = "[displayname]"
+placeholder_text = "[displayname, may contain anything]"
 
 [node name="Confirm" type="Button" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
 layout_mode = 1

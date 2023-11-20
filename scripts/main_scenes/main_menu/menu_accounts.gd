@@ -51,11 +51,12 @@ func _on_account_option_button_item_selected(index_of_selected: int):
 	return
 
 func _on_add_account_pressed():
+	account_popup_node.get_node("PopupTitleText").text = "[center]Enter new account username and displayname.[/center]"
+	
 	popup_background_node.visible = true
 	account_popup_node.visible = true
 func _on_edit_account_pressed():
+	account_popup_node.get_node("PopupTitleText").text = "[center]Edit account username and displayname.[/center]"
+	
 	popup_background_node.visible = true
 	account_popup_node.visible = true
-
-func _on_edit_displayname_pressed():
-	pass
