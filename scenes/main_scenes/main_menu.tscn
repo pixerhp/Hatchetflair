@@ -370,16 +370,7 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="PopupBackground" type="Panel" parent="Menus/AccountsMenu"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="AccountPopup" type="Panel" parent="Menus/AccountsMenu/PopupBackground"]
+[node name="AccountPopup" type="Panel" parent="Menus/AccountsMenu"]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -394,7 +385,7 @@ offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PopupTitleText" type="RichTextLabel" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
+[node name="PopupTitleText" type="RichTextLabel" parent="Menus/AccountsMenu/AccountPopup"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -404,7 +395,7 @@ bbcode_enabled = true
 text = "[center][account-related action goes here][/center]"
 fit_content = true
 
-[node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
+[node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/AccountPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -416,7 +407,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[username, all-lowercase & no spaces/specials]"
 
-[node name="DisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
+[node name="DisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/AccountPopup"]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -428,7 +419,7 @@ grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[displayname, may contain anything]"
 
-[node name="Confirm" type="Button" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
+[node name="Confirm" type="Button" parent="Menus/AccountsMenu/AccountPopup"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -441,7 +432,7 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Confirm"
 
-[node name="Cancel" type="Button" parent="Menus/AccountsMenu/PopupBackground/AccountPopup"]
+[node name="Cancel" type="Button" parent="Menus/AccountsMenu/AccountPopup"]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

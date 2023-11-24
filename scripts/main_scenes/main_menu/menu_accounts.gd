@@ -1,13 +1,13 @@
 extends Control
 
-@onready var popup_background_node: Control = $PopupBackground
-@onready var account_popup_node: Control = $PopupBackground/AccountPopup
+@onready var general_menu_nodes_container: Control = $VBoxContainer
+@onready var account_popup_node: Control = $AccountPopup
 
 
 func _ready():
 	_update_account_names_text()
 	_update_edit_account_button_disabledness()
-	popup_background_node.visible = false
+	general_menu_nodes_container.visible = true
 	account_popup_node.visible = false
 	return
 
@@ -46,17 +46,17 @@ func _on_account_option_button_item_selected(index_of_selected: int):
 	if not Globals.player_username == "GUEST":
 		Globals.player_displayname = "[" + Globals.player_username + "'s displayname]"
 	else:
-		Globals.player_displayname = "GUEST"
+		Globals.player_displayname = "Guest"
 	_update_account_names_text()
 	return
 
 func _on_add_account_pressed():
 	account_popup_node.get_node("PopupTitleText").text = "[center]Enter new account username and displayname.[/center]"
 	
-	popup_background_node.visible = true
 	account_popup_node.visible = true
+	general_menu_nodes_container.visible = false
 func _on_edit_account_pressed():
 	account_popup_node.get_node("PopupTitleText").text = "[center]Edit account username and displayname.[/center]"
 	
-	popup_background_node.visible = true
 	account_popup_node.visible = true
+	general_menu_nodes_container.visible = false

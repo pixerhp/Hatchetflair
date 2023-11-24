@@ -29,7 +29,7 @@ const IS_INDEV: bool = true
 var INPUTMAP_DEFAULTS: Dictionary = {}
 
 var player_username: String = "GUEST"
-var player_displayname: String = "GUEST"
+var player_displayname: String = "Guest"
 
 
 #-=-=-=-# INITIALIZATION:
