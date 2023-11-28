@@ -1,7 +1,10 @@
 extends Control
 
+# Add/Edit account popup nodes:
 @onready var general_menu_nodes_container: Control = $VBoxContainer
 @onready var account_popup_node: Control = $AccountPopup
+@onready var account_popup_titletext_node: Control = $AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/PopupTitleText
+@onready var account_popup_usernameinput_node: Control = $AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/UsernameInput
 
 
 func _ready():
@@ -51,12 +54,12 @@ func _on_account_option_button_item_selected(index_of_selected: int):
 	return
 
 func _on_add_account_pressed():
-	account_popup_node.get_node("PopupTitleText").text = "[center]Enter new account username and displayname.[/center]"
+	account_popup_titletext_node.text = "[center]Enter new account username and displayname.[/center]"
 	
 	account_popup_node.visible = true
 	general_menu_nodes_container.visible = false
 func _on_edit_account_pressed():
-	account_popup_node.get_node("PopupTitleText").text = "[center]Edit account username and displayname.[/center]"
+	account_popup_titletext_node.text = "[center]Edit account username and displayname.[/center]"
 	
 	account_popup_node.visible = true
 	general_menu_nodes_container.visible = false
