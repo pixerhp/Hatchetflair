@@ -3,11 +3,18 @@ extends Control
 # Add/Edit account popup nodes:
 @onready var general_menu_nodes_container: Control = $VBoxContainer
 @onready var account_popup_node: Control = $AccountPopup
-@onready var account_popup_titletext_node: Control = $AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/PopupTitleText
-@onready var account_popup_usernameinput_node: Control = $AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/UsernameInput
+@onready var account_popup_contents: Control = $AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer
+@onready var account_popup_titletext_node: Control = account_popup_contents.get_node("PopupTitleText")
+@onready var account_popup_usernameinput_node: Control = account_popup_contents.get_node("UsernameInput")
+@onready var account_popup_cancelbutton_node: Control = account_popup_contents.get_node("Buttons/Cancel")
+@onready var account_popup_confirmbutton_node: Control = account_popup_contents.get_node("Buttons/Confirm")
 
 
 func _ready():
+	# Connect popup buttons to their associated functions.
+	account_popup_cancelbutton_node.pressed.connect(self.on_account_popup_cancel_button)
+	account_popup_confirmbutton_node.pressed.connect(self.on_account_popup_confirm_button)
+	
 	_update_account_names_text()
 	_update_edit_account_button_disabledness()
 	general_menu_nodes_container.visible = true
@@ -63,3 +70,12 @@ func _on_edit_account_pressed():
 	
 	account_popup_node.visible = true
 	general_menu_nodes_container.visible = false
+
+func on_account_popup_cancel_button():
+	account_popup_node.visible = false
+	general_menu_nodes_container.visible = true
+	return
+func on_account_popup_confirm_button():
+	# !!! Add functionality
+	print("confirm button pressed")
+	return

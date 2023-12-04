@@ -462,18 +462,18 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.25
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 size_flags_stretch_ratio = 0.75
 
-[node name="Cancel" type="Button" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Cancel" type="Button" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
 text = "Cancel"
 
-[node name="Confirm" type="Button" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Confirm" type="Button" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 3
