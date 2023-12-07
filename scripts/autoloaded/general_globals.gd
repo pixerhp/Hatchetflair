@@ -121,7 +121,7 @@ func quit_game() -> void:
 
 func _process(_delta):
 	# Global hotkeys.
-	if Input.is_action_just_pressed("Fullscreen Toggle"):
+	if Input.is_action_just_pressed("game_special_fullscreen_toggle"):
 		if (DisplayServer.window_get_mode() == 0):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		else:

@@ -9,7 +9,7 @@ func switch_to_main_menu():
 func _process(_delta):
 	# Toggle the pause menu if its associated key is pressed.
 	# !!! [in the future, esc should also be able to close out of other things WITHOUT opening this menu.]
-	if Input.is_action_just_pressed("Pause Menu"):
+	if Input.is_action_just_pressed("game_special_pause_menu"):
 		$PauseMenu.visible = not $PauseMenu.visible
 
 func _on_pausemenu_resumegameplay_pressed():
