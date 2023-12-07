@@ -11,10 +11,6 @@ extends Control
 
 
 func _ready():
-	# Connect popup buttons to their associated functions.
-	account_popup_cancelbutton_node.pressed.connect(self.on_account_popup_cancel_button)
-	account_popup_confirmbutton_node.pressed.connect(self.on_account_popup_confirm_button)
-	
 	_update_account_names_text()
 	_update_edit_account_button_disabledness()
 	general_menu_nodes_container.visible = true
@@ -77,11 +73,18 @@ func _on_edit_account_pressed():
 	account_popup_node.visible = true
 	general_menu_nodes_container.visible = false
 
-func on_account_popup_cancel_button():
+func _on_account_popup_usernameinput_text_changed():
+	var formatted_username: String = Globals.normalize_username_str(
+		account_popup_contents.get_node("UsernameInput").text)
+	account_popup_contents.get_node("UsernameInput").text = formatted_username
+	account_popup_contents.get_node("UsernameInput").set_caret_column(formatted_username.length())
+	return
+func _on_account_popup_cancel_button():
 	account_popup_node.visible = false
 	general_menu_nodes_container.visible = true
 	return
-func on_account_popup_confirm_button():
-	# !!! Add functionality
-	print("confirm button pressed")
+# !!! IMPORTANT: in the future, if username is different make everything local using it be updated.
+func _on_account_popup_confirm_button():
+	var formatted_username: String = Globals.normalize_username_str(
+		account_popup_contents.get_node("UsernameInput").text)
 	return

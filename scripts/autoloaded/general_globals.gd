@@ -157,6 +157,17 @@ func normalize_ip(ip: String) -> String:
 	ip = ip.replace("\t", "")
 	return ip
 
+func normalize_username_str(str: String) -> String:
+	var semi_formatted_str: String = str.to_lower().replace(" ", "_")
+	var regex = RegEx.new() # RegEx is used for the removal of all unwanted characters.
+	if regex.compile("[\\w\\d]+") != OK:
+		push_error("RegEx invalid pattern.")
+		return ""
+	var formatted_str = ""
+	for acceptable_segment in regex.search_all(semi_formatted_str):
+		formatted_str += acceptable_segment.get_string()
+	return formatted_str
+
 # Used to swap between the zyx and hz1z2 coordinate systems.
 func swap_zyx_hzz_i(coords: Vector3i) -> Vector3i:
 	return Vector3i(coords[1], coords[0], coords[2])
