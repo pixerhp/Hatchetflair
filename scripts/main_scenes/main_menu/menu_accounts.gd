@@ -55,7 +55,9 @@ func _on_account_option_button_item_selected(index_of_selected: int):
 
 func _on_add_account_pressed():
 	account_popup_titletext_node.text = "[center]Enter new account username and displayname.[/center]"
-	
+	account_popup_contents.get_node("UsernameInput").text = ""
+	account_popup_contents.get_node("DisplaynameInput").text = ""
+	account_popup_contents.get_node("UsernameInput").visible = true
 	account_popup_node.visible = true
 	general_menu_nodes_container.visible = false
 func _on_edit_account_pressed():
@@ -63,6 +65,8 @@ func _on_edit_account_pressed():
 	if account_select_node == null:
 		push_error("Account select option-button node not found.")
 		return
+	account_popup_contents.get_node("UsernameInput").text = ""
+	account_popup_contents.get_node("DisplaynameInput").text = ""
 	if account_select_node.selected == 0:
 		account_popup_titletext_node.text = "[center]Edit current guest displayname.[/center]"
 		account_popup_contents.get_node("UsernameInput").visible = false
