@@ -157,8 +157,8 @@ func normalize_ip(ip: String) -> String:
 	ip = ip.replace("\t", "")
 	return ip
 
-func normalize_username_str(str: String) -> String:
-	var semi_formatted_str: String = str.to_lower().replace(" ", "_")
+func normalize_username_str(string: String) -> String:
+	var semi_formatted_str: String = string.to_lower().replace(" ", "_")
 	var regex = RegEx.new() # RegEx is used for the removal of all unwanted characters.
 	if regex.compile("[\\w\\d]+") != OK:
 		push_error("RegEx invalid pattern.")
