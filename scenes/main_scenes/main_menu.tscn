@@ -46,6 +46,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleMenu" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -206,7 +207,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="AccountsMenu" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -251,7 +251,7 @@ theme_override_font_sizes/italics_font_size = 48
 theme_override_font_sizes/bold_italics_font_size = 48
 theme_override_font_sizes/mono_font_size = 48
 bbcode_enabled = true
-text = "[center][wave freq=4 amp=10]User Accounts:[/wave][/center]"
+text = "[center][wave freq=4 amp=10]User Accounts Menu[/wave][/center]"
 fit_content = true
 autowrap_mode = 0
 
@@ -264,7 +264,20 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="CurrentAccount" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="VBoxContainermore" type="VBoxContainer" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AccountSelectTitle" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore"]
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 32
 theme_override_font_sizes/bold_font_size = 32
@@ -272,20 +285,24 @@ theme_override_font_sizes/italics_font_size = 32
 theme_override_font_sizes/bold_italics_font_size = 32
 theme_override_font_sizes/mono_font_size = 32
 bbcode_enabled = true
-text = "[center]Current Account:[/center]"
+text = "[center]Select or Manage Account:[/center]"
 fit_content = true
 
-[node name="AccountSelectContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer"]
+[node name="AccountSelectContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
-[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/VBoxContainer/AccountSelectContainer"]
+[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="AccountSelect" type="OptionButton" parent="Menus/AccountsMenu/VBoxContainer/AccountSelectContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AccountSelect" type="OptionButton" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 item_count = 4
@@ -301,82 +318,97 @@ popup/item_2/id = 2
 popup/item_3/text = "ted"
 popup/item_3/id = 3
 
-[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/VBoxContainer/AccountSelectContainer"]
+[node name="AccountButtonsContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="CreateAccount" type="Button" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "New Account"
+
+[node name="ManageAccount" type="Button" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Manage Selected"
+
+[node name="PopupMenu" type="PopupMenu" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount"]
+title = "Title"
+position = Vector2i(50, 50)
+size = Vector2i(171, 62)
+item_count = 2
+item_0/text = "rename username"
+item_0/id = 0
+item_1/text = "delete account"
+item_1/id = 1
+
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="AccountButtonsContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer"]
+[node name="Spacer3" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore"]
 layout_mode = 2
-
-[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="AddAccount" type="Button" parent="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer"]
-layout_mode = 2
-text = "ADD New Account"
-
-[node name="EditAccount" type="Button" parent="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer"]
-layout_mode = 2
-text = "EDIT Selected Account"
-
-[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
-
-[node name="Spacer3" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.1
-
-[node name="AccountNamesText" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/normal_font_size = 32
-theme_override_font_sizes/bold_font_size = 32
-theme_override_font_sizes/italics_font_size = 32
-theme_override_font_sizes/bold_italics_font_size = 32
-theme_override_font_sizes/mono_font_size = 32
-bbcode_enabled = true
-text = "[center]Account username: [account's username]
-Account displayname: [account's displayname][/center]"
-fit_content = true
-
-[node name="Spacer4" type="Control" parent="Menus/AccountsMenu/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Control" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.1
-
-[node name="AccountsDescription" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+vertical_scroll_mode = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/HBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/bold_font_size = 28
+theme_override_font_sizes/italics_font_size = 28
+theme_override_font_sizes/bold_italics_font_size = 28
+theme_override_font_sizes/mono_font_size = 28
+bbcode_enabled = true
+text = "current @username: [account's username]
+current displayname: [account's displayname]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Button" type="Button" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/HBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.25
+text = "(change displayname)"
+
+[node name="Spacer4" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="AccountsDescription" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_font_sizes/normal_font_size = 20
 theme_override_font_sizes/bold_font_size = 24
 theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
-text = "* Accounts may be used for world save data, character metadata, commands, (etc.)
+text = "[color=lightgray]* Accounts may be used for world save data, character metadata, commands, (etc.)
 
 * Multiplayer world hosts may use your username for storing save data, so try to pick a username which other players are unlikely to have when playing multiplayer. 
 
-* Renaming an account username is very difficult because all of its uses need to be updated (including separate world hosts manually,) but renaming a displayname is very easy."
-fit_content = true
+* Renaming an account username is very difficult because all of its uses need to be updated (including separate world hosts manually,) but renaming a displayname is very easy.[/color]"
 
 [node name="Control2" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -1249,9 +1281,9 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Credits" to="." method="switch_to_menu" binds= ["CreditsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Quit" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
-[connection signal="item_selected" from="Menus/AccountsMenu/VBoxContainer/AccountSelectContainer/AccountSelect" to="Menus/AccountsMenu" method="_on_account_option_button_item_selected"]
-[connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer/AddAccount" to="Menus/AccountsMenu" method="_on_add_account_pressed"]
-[connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/AccountButtonsContainer/EditAccount" to="Menus/AccountsMenu" method="_on_edit_account_pressed"]
+[connection signal="item_selected" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountSelect" to="Menus/AccountsMenu" method="_on_account_option_button_item_selected"]
+[connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/CreateAccount" to="Menus/AccountsMenu" method="_on_add_account_pressed"]
+[connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount" to="Menus/AccountsMenu" method="_on_edit_account_pressed"]
 [connection signal="text_changed" from="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/UsernameInput" to="Menus/AccountsMenu" method="_on_account_popup_usernameinput_text_changed"]
 [connection signal="pressed" from="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons/Cancel" to="Menus/AccountsMenu" method="_on_account_popup_cancel_button"]
 [connection signal="pressed" from="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons/Confirm" to="Menus/AccountsMenu" method="_on_account_popup_confirm_button"]
