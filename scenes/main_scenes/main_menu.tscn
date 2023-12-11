@@ -46,7 +46,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleMenu" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -146,7 +145,7 @@ custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
-text = "User Accounts"
+text = "Accounts"
 icon_alignment = 1
 
 [node name="Settings" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
@@ -207,6 +206,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="AccountsMenu" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
