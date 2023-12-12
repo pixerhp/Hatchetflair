@@ -324,12 +324,12 @@ layout_mode = 2
 [node name="CreateAccount" type="Button" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "New Account"
+text = "(new account)"
 
 [node name="ManageAccount" type="Button" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Manage Selected"
+text = "(manage selected)"
 
 [node name="PopupMenu" type="PopupMenu" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount"]
 title = "Title"
@@ -354,34 +354,33 @@ size_flags_stretch_ratio = 0.5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore"]
 layout_mode = 2
+size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/HBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 0
 size_flags_vertical = 4
-vertical_scroll_mode = 0
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/HBoxContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
 theme_override_font_sizes/normal_font_size = 28
 theme_override_font_sizes/bold_font_size = 28
 theme_override_font_sizes/italics_font_size = 28
 theme_override_font_sizes/bold_italics_font_size = 28
 theme_override_font_sizes/mono_font_size = 28
 bbcode_enabled = true
-text = "current @username: [account's username]
-current displayname: [account's displayname]"
+text = "@username: [account's username]
+displayname: [account's displayname]"
 fit_content = true
 autowrap_mode = 0
+
+[node name="Control" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/HBoxContainer"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
 
 [node name="Button" type="Button" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/HBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
-size_flags_stretch_ratio = 0.25
 text = "(change displayname)"
 
 [node name="Spacer4" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore"]
@@ -392,7 +391,7 @@ size_flags_stretch_ratio = 0.5
 [node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore"]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 2.0
+size_flags_stretch_ratio = 4.0
 
 [node name="AccountsDescription" type="RichTextLabel" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/PanelContainer"]
 layout_mode = 2
@@ -404,11 +403,11 @@ theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
-text = "[color=lightgray]* Accounts may be used for world save data, character metadata, commands, (etc.)
+text = "[color=lightgray]Accounts are used for some world save data, character metadata, used in game commands, etc. 
 
-* Multiplayer world hosts may use your username for storing save data, so try to pick a username which other players are unlikely to have when playing multiplayer. 
+Unlike your displayname which can be changed on a whim, your username should be something that you won't regret or otherwise want to change later (as when changed, various files and all multiplayer worlds need to be updated on the change, some manually, which is a massive hassle.)
 
-* Renaming an account username is very difficult because all of its uses need to be updated (including separate world hosts manually,) but renaming a displayname is very easy.[/color]"
+Your username should also be unique enough to avoid multiplayer conflicts, as there's currently no system in place to enforce username uniqueness. (It's possible for two people to play on the same world with the same username, which can lead to issues and unexpected behavior.)[/color]"
 
 [node name="Control2" type="Control" parent="Menus/AccountsMenu/VBoxContainer/HBoxContainer"]
 layout_mode = 2
