@@ -45,19 +45,25 @@ func _on_add_account_pressed():
 	account_popup_contents.get_node("UsernameInput").visible = true
 	account_popup_node.visible = true
 	general_menu_nodes_container.visible = false
-func _on_edit_account_pressed():
-	account_popup_mode_is_edit = true
-	account_popup_contents.get_node("UsernameInput").text = ""
-	account_popup_contents.get_node("DisplaynameInput").text = ""
-	if account_select_node.selected == 0:
-		account_popup_titletext_node.text = "[center]Edit current guest displayname.[/center]"
-		account_popup_contents.get_node("UsernameInput").visible = false
-	else:
-		account_popup_titletext_node.text = "[center]Edit account username and displayname.[/center]"
-		account_popup_contents.get_node("UsernameInput").visible = true
-	
-	account_popup_node.visible = true
-	general_menu_nodes_container.visible = false
+
+func _on_manage_account_button_pressed():
+	# Find the popup for choosing which way you want to manage your account.
+	var popup: PopupMenu = $VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount/PopupMenu
+	if popup == null:
+		push_error("Could not find manage-account managing-type-selection popup.")
+		return
+	popup.position = popup.get_parent().global_position
+	popup.visible = true
+	return
+
+func _on_change_displayname_button_pressed():
+	var thing: HBoxContainer = $VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer2
+	if thing == null:
+		push_error("Could not find the container node of new displayname entry nodes.")
+		return
+	thing.visible = !thing.visible
+	return
+
 
 func _on_account_popup_usernameinput_text_changed():
 	var formatted_username: String = Globals.normalize_username_str(
