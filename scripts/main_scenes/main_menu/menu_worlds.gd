@@ -32,6 +32,9 @@ func sort_worlds():
 func update_worlds_list():
 	sync_worlds()
 	sort_worlds()
+	if worlds_list_node == null:
+		push_error("Reference to worlds list node was null.")
+		return
 	worlds_list_node.clear()
 	for dir_name in world_dir_names:
 		worlds_list_node.add_item(dir_name_to_world_name[dir_name])

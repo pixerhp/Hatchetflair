@@ -37,6 +37,9 @@ func sort_servers():
 func update_servers_list():
 	sync_servers()
 	sort_servers()
+	if servers_list_node == null:
+		push_error("Reference to remembered hosts list node was null.")
+		return
 	servers_list_node.clear()
 	for altname in server_altnames:
 		servers_list_node.add_item(altname_to_nickname[altname])
