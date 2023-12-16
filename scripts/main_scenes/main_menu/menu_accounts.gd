@@ -1,5 +1,7 @@
 extends Control
 
+# !!! Add serveral failsafes to prevent errors/attemtps to modify/delete the GUEST account.
+
 # Add/Edit account popup nodes:
 @onready var general_menu_nodes_container: Control = $VBoxContainer
 @onready var account_popup_node: Control = $AccountPopup
@@ -14,9 +16,20 @@ var account_popup_mode_is_edit: bool = true
 
 func _ready():
 	_update_account_names_text()
+	
 	general_menu_nodes_container.visible = true
 	account_popup_node.visible = false
 	return
+
+func _on_visibility_changed():
+	if general_menu_nodes_container == null:
+		push_error("References to child nodes are currently null, abandoning function contents.")
+		return
+	if self.visible == false:
+		return
+	# !!! Reset all nodes to how they should be when you open the accounts menu.
+	return
+
 
 func _update_account_names_text():
 	var account_names_text_node: RichTextLabel = $VBoxContainer/AccountNamesText
@@ -61,7 +74,7 @@ func _on_change_displayname_button_pressed():
 	if thing == null:
 		push_error("Could not find the container node of new displayname entry nodes.")
 		return
-	thing.visible = !thing.visible
+	thing.visible = not thing.visible
 	return
 
 

@@ -207,7 +207,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="AccountsMenu" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -446,7 +445,7 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="AccountPopup" type="Control" parent="Menus/AccountsMenu"]
+[node name="RenameUsernameScreen" type="Control" parent="Menus/AccountsMenu"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -455,7 +454,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/AccountPopup"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/RenameUsernameScreen"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -463,89 +462,68 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.8
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer"]
+[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SpacerTop" type="Control" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SpacerTop" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Spacer1" type="Control" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.25
 
-[node name="PopupTitleText" type="RichTextLabel" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="TitleText" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_font_sizes/normal_font_size = 20
 theme_override_font_sizes/bold_font_size = 20
 theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
-text = "[center][account-related action goes here][/center]"
+text = "[center]Rename the account's username.[/center]"
 fit_content = true
 
-[node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 24)
+[node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
-size_flags_vertical = 3
-placeholder_text = "[username, all-lowercase & no spaces or specials]"
-wrap_mode = 1
+theme_override_font_sizes/font_size = 16
+placeholder_text = "Enter new username for the account...
+"
 
-[node name="DisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-size_flags_vertical = 3
-placeholder_text = "[displayname, may contain anything]"
-wrap_mode = 1
-
-[node name="Spacer2" type="Control" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.25
-
-[node name="Buttons" type="HBoxContainer" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 size_flags_stretch_ratio = 0.75
 
-[node name="Cancel" type="Button" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+[node name="Cancel" type="Button" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
 text = "Cancel"
 
-[node name="Confirm" type="Button" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+[node name="Confirm" type="Button" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 3
 text = "Confirm"
 
-[node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer"]
+[node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/AccountPopup/HBoxContainer"]
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.8
 
 [node name="WorldsMenu" type="Control" parent="Menus"]
 visible = false
@@ -611,7 +589,7 @@ text = "Multiplayer enabled?:"
 
 [node name="HostWithoutPlaying" type="CheckButton" parent="Menus/WorldsMenu/WorldsUI/Toggles"]
 layout_mode = 2
-tooltip_text = "Situationally useful, such as hosting a world for others to play whilst doing other things yourself."
+tooltip_text = "Situationally useful, such as hosting a world for others to play on whilst doing other things yourself."
 text = "Start world *without* playing?:"
 
 [node name="SavedWorldsList" type="ItemList" parent="Menus/WorldsMenu/WorldsUI"]
@@ -842,6 +820,7 @@ grow_vertical = 0
 text = "Cancel"
 
 [node name="JoinMenu" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1313,14 +1292,14 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Settings" to="." method="switch_to_menu" binds= ["SettingsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Credits" to="." method="switch_to_menu" binds= ["CreditsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Quit" to="." method="_on_quit_button_pressed"]
+[connection signal="visibility_changed" from="Menus/AccountsMenu" to="Menus/AccountsMenu" method="_on_visibility_changed"]
 [connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_selected" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountSelect" to="Menus/AccountsMenu" method="_on_account_option_button_item_selected"]
 [connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/CreateAccount" to="Menus/AccountsMenu" method="_on_add_account_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount" to="Menus/AccountsMenu" method="_on_manage_account_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer/Button" to="Menus/AccountsMenu" method="_on_change_displayname_button_pressed"]
-[connection signal="text_changed" from="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/UsernameInput" to="Menus/AccountsMenu" method="_on_account_popup_usernameinput_text_changed"]
-[connection signal="pressed" from="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons/Cancel" to="Menus/AccountsMenu" method="_on_account_popup_cancel_button"]
-[connection signal="pressed" from="Menus/AccountsMenu/AccountPopup/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons/Confirm" to="Menus/AccountsMenu" method="_on_account_popup_confirm_button"]
+[connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons/Cancel" to="Menus/AccountsMenu" method="_on_account_popup_cancel_button"]
+[connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons/Confirm" to="Menus/AccountsMenu" method="_on_account_popup_confirm_button"]
 [connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_activated" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="start_world_by_index"]
