@@ -239,7 +239,13 @@ size_flags_stretch_ratio = 0.05
 [node name="TopNodes" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer"]
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodes"]
+[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodes"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 8
+theme_override_constants/margin_left = 8
+
+[node name="BackButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodes/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 8
@@ -462,6 +468,127 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.75
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SpacerTop" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TitleText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
+bbcode_enabled = true
+text = "[center]ACCOUNT CREATION[/center]"
+fit_content = true
+
+[node name="HSeparator" type="HSeparator" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="TitleText2" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 16
+theme_override_font_sizes/italics_font_size = 16
+theme_override_font_sizes/bold_italics_font_size = 16
+theme_override_font_sizes/mono_font_size = 16
+bbcode_enabled = true
+text = "	Note: Account usernames may only contain lowercase letters + numbers. (Displaynames may contain anything.)"
+fit_content = true
+scroll_active = false
+
+[node name="HSeparator2" type="HSeparator" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextEdit2" type="TextEdit" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "username"
+
+[node name="TextEdit" type="TextEdit" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "displayname"
+
+[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=yellow](username entry warning message)[/color]"
+fit_content = true
+
+[node name="Spacer" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+size_flags_stretch_ratio = 0.75
+
+[node name="Cancel" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "cancel"
+
+[node name="Confirm" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 3
+disabled = true
+text = "create
+"
+
+[node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.75
+
 [node name="RenameUsernameScreen" type="Control" parent="Menus/AccountsMenu"]
 visible = false
 layout_mode = 1
@@ -521,7 +648,7 @@ layout_mode = 2
 [node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 8
+theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 0
 
@@ -530,13 +657,13 @@ layout_mode = 2
 
 [node name="TitleText" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 20
 theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
-text = "[center]RENAME ACCOUNT USERNAME[/center]"
+text = "[center]ACCOUNT RENAMING[/center]"
 fit_content = true
 
 [node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
@@ -579,6 +706,7 @@ custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 3
+disabled = true
 text = "Confirm"
 
 [node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
@@ -1478,7 +1606,7 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Credits" to="." method="switch_to_menu" binds= ["CreditsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Quit" to="." method="_on_quit_button_pressed"]
 [connection signal="visibility_changed" from="Menus/AccountsMenu" to="Menus/AccountsMenu" method="_on_visibility_changed"]
-[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
+[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodes/MarginContainer/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_selected" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountSelect" to="Menus/AccountsMenu" method="_on_account_option_button_item_selected"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/CreateAccount" to="Menus/AccountsMenu" method="_on_add_account_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount" to="Menus/AccountsMenu" method="_on_manage_account_button_pressed"]
