@@ -46,6 +46,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleMenu" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -454,7 +455,6 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
 [node name="RenameUsernameScreen" type="Control" parent="Menus/AccountsMenu"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -483,6 +483,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "NOTE: All joined worlds that this account has played on will need to have their files  updated regarding the username change individually."
+fit_content = true
+
+[node name="SpacerMiddle" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -497,15 +507,26 @@ theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
-text = "[center]Rename the account's username.[/center]"
+text = "[center]Rename Account Username[/center]"
 fit_content = true
 
 [node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-placeholder_text = "Enter new username for the account...
+placeholder_text = "(enter a new username for the account.)
 "
+
+[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=yellow](warning message)[/color]"
+fit_content = true
 
 [node name="Buttons" type="HBoxContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -625,13 +646,13 @@ size_flags_stretch_ratio = 0.75
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
-text = "Cancel"
+text = "cancel"
 
 [node name="Confirm" type="Button" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 3
-text = "Confirm"
+text = "DELETE ACCOUNT"
 
 [node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer"]
 layout_mode = 2
