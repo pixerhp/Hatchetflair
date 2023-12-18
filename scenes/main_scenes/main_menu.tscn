@@ -216,7 +216,6 @@ grow_vertical = 2
 script = ExtResource("2_ykccs")
 
 [node name="GeneralScreen" type="Control" parent="Menus/AccountsMenu"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -454,7 +453,17 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
+[node name="CreateNewAccountScreen" type="Control" parent="Menus/AccountsMenu"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="RenameUsernameScreen" type="Control" parent="Menus/AccountsMenu"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -483,23 +492,43 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
+[node name="PanelContainer2" type="PanelContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer2/MarginContainer"]
 layout_mode = 2
 text = "NOTE: All joined worlds that this account has played on will need to have their files  updated regarding the username change individually."
 fit_content = true
 
 [node name="SpacerMiddle" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer"]
 layout_mode = 2
 
-[node name="TitleText" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer"]
+layout_mode = 2
+
+[node name="TitleText" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 20
 theme_override_font_sizes/bold_font_size = 20
@@ -507,39 +536,46 @@ theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
-text = "[center]Rename Account Username[/center]"
+text = "[center]RENAME ACCOUNT USERNAME[/center]"
 fit_content = true
 
-[node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 placeholder_text = "(enter a new username for the account.)
 "
 
-[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
-text = "[color=yellow](warning message)[/color]"
+text = "[color=yellow](username entry warning message)[/color]"
 fit_content = true
 
-[node name="Buttons" type="HBoxContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="Spacer" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2"]
 layout_mode = 2
 size_flags_vertical = 8
 size_flags_stretch_ratio = 0.75
 
-[node name="Cancel" type="Button" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+[node name="Cancel" type="Button" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/Buttons"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
 text = "Cancel"
 
-[node name="Confirm" type="Button" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+[node name="Confirm" type="Button" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/Buttons"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 3
@@ -603,7 +639,15 @@ text = "[center]ACCOUNT DELETION[/center]"
 fit_content = true
 scroll_active = false
 
-[node name="TitleText2" type="RichTextLabel" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="TitleText2" type="RichTextLabel" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 16
 theme_override_font_sizes/bold_font_size = 16
@@ -611,12 +655,13 @@ theme_override_font_sizes/italics_font_size = 16
 theme_override_font_sizes/bold_italics_font_size = 16
 theme_override_font_sizes/mono_font_size = 16
 bbcode_enabled = true
-text = "Deleting an account is a permanent action and cannot be undone. Be completely sure that you want to do this before proceeding."
+text = "	Deleting an account is a permanent action and cannot be undone. Be completely sure that you want to do this before proceeding.
+
+	(Note that saved data using this account's username for characters and worlds will NOT be deleted.)"
 fit_content = true
 scroll_active = false
 
-[node name="Control" type="Control" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
+[node name="HSeparator2" type="HSeparator" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="TitleText3" type="RichTextLabel" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
@@ -652,7 +697,8 @@ text = "cancel"
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 3
-text = "DELETE ACCOUNT"
+disabled = true
+text = "delete account"
 
 [node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -1437,8 +1483,8 @@ text = "Back"
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/CreateAccount" to="Menus/AccountsMenu" method="_on_add_account_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount" to="Menus/AccountsMenu" method="_on_manage_account_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer/Button" to="Menus/AccountsMenu" method="_on_change_displayname_button_pressed"]
-[connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons/Cancel" to="Menus/AccountsMenu" method="_on_account_popup_cancel_button"]
-[connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons/Confirm" to="Menus/AccountsMenu" method="_on_account_popup_confirm_button"]
+[connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/Buttons/Cancel" to="Menus/AccountsMenu" method="_on_account_popup_cancel_button"]
+[connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/Buttons/Confirm" to="Menus/AccountsMenu" method="_on_account_popup_confirm_button"]
 [connection signal="pressed" from="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons/Cancel" to="Menus/AccountsMenu" method="_on_account_popup_cancel_button"]
 [connection signal="pressed" from="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons/Confirm" to="Menus/AccountsMenu" method="_on_account_popup_confirm_button"]
 [connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]
