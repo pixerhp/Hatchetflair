@@ -231,27 +231,27 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Spacer1" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer"]
+[node name="SpacerTop" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.05
 
-[node name="TopNodes" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer"]
+[node name="TopNodesContainer" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodes"]
+[node name="BackButtonMargin" type="MarginContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodesContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 8
 theme_override_constants/margin_left = 8
 
-[node name="BackButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodes/MarginContainer"]
+[node name="BackButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodesContainer/BackButtonMargin"]
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 0
 size_flags_vertical = 8
 text = "Back"
 
-[node name="MenuTitle" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodes"]
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodesContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
@@ -269,11 +269,11 @@ text = "[center][wave freq=4 amp=10]User Accounts Menu[/wave][/center]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="Spacer" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodes"]
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodesContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Spacer2" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer"]
+[node name="SpacerMiddle" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
@@ -282,16 +282,16 @@ size_flags_stretch_ratio = 0.1
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Control" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer"]
+[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="VBoxContainermore" type="VBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer"]
+[node name="MajorityVContainer" type="VBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AccountSelectTitle" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore"]
+[node name="SelectOrManageText" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer"]
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 32
 theme_override_font_sizes/bold_font_size = 32
@@ -302,21 +302,21 @@ bbcode_enabled = true
 text = "[center]Select or Manage Account:[/center]"
 fit_content = true
 
-[node name="AccountSelectContainer" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore"]
+[node name="SelectButtonsHContainer" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
-[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer"]
+[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="AccountSelect" type="OptionButton" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer"]
+[node name="AccountSelector" type="OptionButton" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -333,21 +333,21 @@ popup/item_2/id = 2
 popup/item_3/text = "ted"
 popup/item_3/id = 3
 
-[node name="AccountButtonsContainer" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer"]
+[node name="ButtonsHContainer" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="CreateAccount" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer"]
+[node name="CreateAccountButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "create new account"
 
-[node name="ManageAccount" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer"]
+[node name="ManageAccountButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
 text = "manage selected"
 
-[node name="PopupMenu" type="PopupMenu" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount"]
+[node name="ManageAccountPopup" type="PopupMenu" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/ManageAccountButton"]
 title = "Title"
 position = Vector2i(650, 250)
 size = Vector2i(200, 62)
@@ -357,28 +357,28 @@ item_0/id = 0
 item_1/text = "Delete Account"
 item_1/id = 1
 
-[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer"]
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="Spacer3" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore"]
+[node name="SpacerMiddle1" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer"]
+[node name="TextAndButtonHContainer" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer"]
+[node name="AccountText" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
@@ -390,57 +390,57 @@ theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
 text = "@username: [account's username]
 displayname: [account's displayname]
-joined on: [date-time utc]"
+account created (UTC): [date-time utc]"
 fit_content = true
 autowrap_mode = 0
 
-[node name="Control" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer"]
+[node name="SpacerMiddle" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 
-[node name="Button" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer"]
+[node name="ChangeDisplaynameButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
-text = "(change displayname)"
+text = "change displayname"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer"]
+[node name="ChangeDisplaynameNodes" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 
-[node name="CancelButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer2"]
+[node name="CancelButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Cancel"
 
-[node name="NewDisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer2"]
+[node name="DisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes"]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Enter new displayname..."
 
-[node name="ConfirmButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer2"]
+[node name="ConfirmButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes"]
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Confirm"
 
-[node name="Spacer4" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore"]
+[node name="SpacerMiddle2" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.5
 
-[node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore"]
+[node name="AboutAccountsPanel" type="PanelContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 4.0
 
-[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/AboutAccountsPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_right = 8
 
-[node name="AccountsDescription" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/PanelContainer/MarginContainer"]
+[node name="AboutAccountsText" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/AboutAccountsPanel/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -458,12 +458,12 @@ Unlike your displayname which can be changed on a whim, your username should be 
 
 Your username should also be unique enough to avoid multiplayer conflicts, as there's currently no system in place to enforce username uniqueness. (It's possible for two people to play on the same world with the same username, which can lead to issues and unexpected behavior.)[/color]"
 
-[node name="Control2" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer"]
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="Spacer5" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer"]
+[node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
@@ -1631,11 +1631,11 @@ text = "Back"
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Credits" to="." method="switch_to_menu" binds= ["CreditsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Quit" to="." method="_on_quit_button_pressed"]
 [connection signal="visibility_changed" from="Menus/AccountsMenu" to="Menus/AccountsMenu" method="_on_visibility_changed"]
-[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodes/MarginContainer/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
-[connection signal="item_selected" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountSelect" to="Menus/AccountsMenu" method="_on_account_option_button_item_selected"]
-[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/CreateAccount" to="Menus/AccountsMenu" method="_on_add_account_pressed"]
-[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount" to="Menus/AccountsMenu" method="_on_manage_account_button_pressed"]
-[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer/Button" to="Menus/AccountsMenu" method="_on_change_displayname_button_pressed"]
+[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodesContainer/BackButtonMargin/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
+[connection signal="item_selected" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/AccountSelector" to="Menus/AccountsMenu" method="_on_account_option_button_item_selected"]
+[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/CreateAccountButton" to="Menus/AccountsMenu" method="_on_add_account_pressed"]
+[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/ManageAccountButton" to="Menus/AccountsMenu" method="_on_manage_account_button_pressed"]
+[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/ChangeDisplaynameButton" to="Menus/AccountsMenu" method="_on_change_displayname_button_pressed"]
 [connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_activated" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="start_world_by_index"]
