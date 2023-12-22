@@ -517,15 +517,15 @@ bbcode_enabled = true
 text = "[center]ACCOUNT CREATION[/center]"
 fit_content = true
 
-[node name="HSeparator" type="HSeparator" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="HSeparator1" type="HSeparator" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="NoteTextMargin" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="TitleText2" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer2"]
+[node name="NoteText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/NoteTextMargin"]
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 16
 theme_override_font_sizes/bold_font_size = 16
@@ -540,25 +540,25 @@ scroll_active = false
 [node name="HSeparator2" type="HSeparator" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="TextEdit2" type="TextEdit" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "username"
 
-[node name="TextEdit" type="TextEdit" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="DisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "displayname"
 
-[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="WarningTextMargin" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer"]
+[node name="WarningText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/WarningTextMargin"]
 layout_mode = 2
 bbcode_enabled = true
 text = "[color=#ff7373](username entry warning message)[/color]"
@@ -568,19 +568,19 @@ fit_content = true
 custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 
-[node name="Buttons" type="HBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="ButtonsHContainer" type="HBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 size_flags_stretch_ratio = 0.75
 
-[node name="Cancel" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+[node name="CancelButton" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
 text = "cancel"
 
-[node name="Confirm" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+[node name="ConfirmButton" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 10
