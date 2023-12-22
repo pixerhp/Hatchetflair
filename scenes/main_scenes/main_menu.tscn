@@ -339,12 +339,13 @@ layout_mode = 2
 [node name="CreateAccount" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "(new account)"
+text = "create new account"
 
 [node name="ManageAccount" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "(manage selected)"
+disabled = true
+text = "manage selected"
 
 [node name="PopupMenu" type="PopupMenu" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount"]
 title = "Title"
@@ -381,14 +382,15 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
-theme_override_font_sizes/normal_font_size = 28
-theme_override_font_sizes/bold_font_size = 28
-theme_override_font_sizes/italics_font_size = 28
-theme_override_font_sizes/bold_italics_font_size = 28
-theme_override_font_sizes/mono_font_size = 28
+theme_override_font_sizes/normal_font_size = 24
+theme_override_font_sizes/bold_font_size = 24
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/bold_italics_font_size = 24
+theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
 text = "@username: [account's username]
-displayname: [account's displayname]"
+displayname: [account's displayname]
+joined on: [date-time utc]"
 fit_content = true
 autowrap_mode = 0
 
@@ -433,7 +435,12 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 4.0
 
-[node name="AccountsDescription" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+
+[node name="AccountsDescription" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/VBoxContainermore/PanelContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -443,7 +450,9 @@ theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
-text = "[color=lightgray]Accounts are used for some world save data, character metadata, used in game commands, etc. 
+text = "[color=lightgray]	Info about accounts:
+
+Accounts are used for some world save data, character metadata, used in game commands, etc. 
 
 Unlike your displayname which can be changed on a whim, your username should be something that you won't regret or otherwise want to change later (as when changed, various files and all multiplayer worlds need to be updated on the change, some manually, which is a massive hassle.)
 
@@ -524,7 +533,7 @@ theme_override_font_sizes/italics_font_size = 16
 theme_override_font_sizes/bold_italics_font_size = 16
 theme_override_font_sizes/mono_font_size = 16
 bbcode_enabled = true
-text = "	Note: Account usernames may only contain lowercase letters + numbers. (Displaynames may contain anything.)"
+text = "	Note: Account usernames may only contain lowercase letters & numbers. (Displaynames may contain anything.)"
 fit_content = true
 scroll_active = false
 
@@ -552,7 +561,7 @@ theme_override_constants/margin_right = 4
 [node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
-text = "[color=yellow](username entry warning message)[/color]"
+text = "[color=#ff7373](username entry warning message)[/color]"
 fit_content = true
 
 [node name="Spacer" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
@@ -565,12 +574,14 @@ size_flags_vertical = 8
 size_flags_stretch_ratio = 0.75
 
 [node name="Cancel" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
 text = "cancel"
 
 [node name="Confirm" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 3
@@ -682,7 +693,7 @@ theme_override_constants/margin_right = 4
 [node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
-text = "[color=yellow](username entry warning message)[/color]"
+text = "[color=#ff7373](username entry warning message)[/color]"
 fit_content = true
 
 [node name="Spacer" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/MarginContainer/VBoxContainer"]
@@ -699,7 +710,7 @@ custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
-text = "Cancel"
+text = "cancel"
 
 [node name="Confirm" type="Button" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer2/Buttons"]
 custom_minimum_size = Vector2(80, 0)
@@ -707,7 +718,7 @@ layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 3
 disabled = true
-text = "Confirm"
+text = "confirm"
 
 [node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -783,9 +794,9 @@ theme_override_font_sizes/italics_font_size = 16
 theme_override_font_sizes/bold_italics_font_size = 16
 theme_override_font_sizes/mono_font_size = 16
 bbcode_enabled = true
-text = "	Deleting an account is a permanent action and cannot be undone. Be completely sure that you want to do this before proceeding.
+text = "	Deleting an account is a [i]permanent[/i] action and [i]cannot be undone.[/i] Be completely sure that you want to do this before proceeding.
 
-	(Note that saved data using this account's username for characters and worlds will NOT be deleted.)"
+	(Note: saved data using this account's username in characters and worlds will NOT be deleted.)"
 fit_content = true
 scroll_active = false
 
@@ -810,23 +821,37 @@ theme_override_font_sizes/font_size = 16
 placeholder_text = "Retype the above text to confirm account deletion.
 "
 
+[node name="MarginContainer2" type="MarginContainer" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 4
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer2"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=#ff7373](text does not match warning)[/color]"
+fit_content = true
+
 [node name="Buttons" type="HBoxContainer" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 size_flags_stretch_ratio = 0.75
 
 [node name="Cancel" type="Button" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
 text = "cancel"
 
 [node name="Confirm" type="Button" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 3
 disabled = true
-text = "delete account"
+text = "confirm"
 
 [node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer"]
 layout_mode = 2
