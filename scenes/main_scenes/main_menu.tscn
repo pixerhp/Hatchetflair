@@ -1633,7 +1633,7 @@ text = "Back"
 [connection signal="visibility_changed" from="Menus/AccountsMenu" to="Menus/AccountsMenu" method="_on_visibility_changed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodesContainer/BackButtonMargin/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_selected" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/AccountSelector" to="Menus/AccountsMenu" method="_on_account_option_button_item_selected"]
-[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/CreateAccountButton" to="Menus/AccountsMenu" method="_on_add_account_pressed"]
+[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/CreateAccountButton" to="Menus/AccountsMenu" method="_on_create_account_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/ManageAccountButton" to="Menus/AccountsMenu" method="_on_manage_account_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/ChangeDisplaynameButton" to="Menus/AccountsMenu" method="_on_change_displayname_button_pressed"]
 [connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]
