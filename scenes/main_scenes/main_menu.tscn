@@ -320,18 +320,14 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 4
+item_count = 2
 selected = 0
-popup/item_0/text = "GUEST"
+popup/item_0/text = "GUEST ACCOUNT"
 popup/item_0/id = 0
 popup/item_1/text = ""
 popup/item_1/id = 1
 popup/item_1/disabled = true
 popup/item_1/separator = true
-popup/item_2/text = "david"
-popup/item_2/id = 2
-popup/item_3/text = "ted"
-popup/item_3/id = 3
 
 [node name="ButtonsHContainer" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer"]
 layout_mode = 2
@@ -388,9 +384,7 @@ theme_override_font_sizes/italics_font_size = 24
 theme_override_font_sizes/bold_italics_font_size = 24
 theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
-text = "@username: [account's username]
-displayname: [account's displayname]
-account created (UTC): [date-time utc]"
+text = "<not initialized>"
 fit_content = true
 autowrap_mode = 0
 

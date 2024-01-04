@@ -20,7 +20,7 @@ const PATH_SPLASHES: String = PATH_ASSETS + "/text_files/splash_texts.txt"
 # user://
 const PATH_STORAGE: String = "user://storage"
 const PATH_PROGRAM_META: String = PATH_STORAGE + "/program_meta.cfg"
-const PATH_USERS: String = PATH_STORAGE + "/user_accounts.cfg"
+const PATH_ACCOUNTS: String = PATH_STORAGE + "/accounts.cfg"
 const PATH_SERVERS: String = PATH_STORAGE + "/saved_hosts.cfg"
 const PATH_WORLDS: String = PATH_STORAGE + "/worlds"
 const PATH_SCREENSHOTS: String = PATH_STORAGE + "/screenshots"
@@ -656,7 +656,7 @@ func ensure_required_dirs() -> Error:
 func ensure_required_files():
 	var cfgs_to_ensure: Array[String] = [
 		PATH_PROGRAM_META,
-		PATH_USERS,
+		PATH_ACCOUNTS,
 		PATH_SERVERS,
 	]
 	var dict: Dictionary = {}
