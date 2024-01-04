@@ -10,22 +10,42 @@ var selector_index_to_username: Dictionary = {}
 
 func _ready():
 	_update_everything()
-	# !!! make a specific account be chosen upon startup (the last saved one as stored in the program_meta file.)
-	_on_account_option_button_item_selected(0)
-	
-	# !!! Reset all nodes to how they should be when you open the accounts menu.
+	var last_selected_account_username = FileManager.read_cfg_keyval(
+		FileManager.PATH_ACCOUNTS,
+		"meta",
+		"last_selected_account_username",
+		"guest",
+	)
+	var index_of_last_selected_username = selector_index_to_username.find_key(last_selected_account_username)
+	if index_of_last_selected_username == null:
+		_on_account_option_button_item_selected(0)
+	else:
+		_on_account_option_button_item_selected(index_of_last_selected_username)
+	_reset_node_visibilities()
+	_reset_screen_visibilities()
 	return
 func _on_visibility_changed():
 	if not is_node_ready():
 		await ready
-	
-	# !!! Reset all nodes to how they should be when you open the accounts menu.
+	_reset_node_visibilities()
+	_reset_screen_visibilities()
 	return
 
 func _update_everything():
 	_update_accounts_from_file()
 	_update_account_selector()
 	_update_account_info_text()
+	_update_manage_account_button_disabledness()
+
+func _reset_node_visibilities():
+	change_displayname_button.visible = true
+	change_displayname_container.visible = false
+
+func _reset_screen_visibilities():
+	$GeneralScreen.visible = true
+	$CreateNewAccountScreen.visible = false
+	$RenameUsernameScreen.visible = false
+	$DeleteAccountScreen.visible = false
 
 func _update_accounts_from_file():
 	accounts.clear()
@@ -34,6 +54,12 @@ func _update_accounts_from_file():
 
 
 ### GENERAL SCREEN:
+@onready var account_selector_node: OptionButton = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/AccountSelector
+@onready var account_info_text_node: RichTextLabel = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/AccountText
+@onready var manage_account_button_node: Button = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/ManageAccountButton
+@onready var manage_account_choice_popup: PopupMenu = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/ManageAccountButton/ManageAccountPopup
+@onready var change_displayname_button: Button = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/ChangeDisplaynameButton
+@onready var change_displayname_container: HBoxContainer = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes
 
 func _update_account_selector():
 	var opening_texts: Array[String] = ["GUEST ACCOUNT", ""]
@@ -49,33 +75,53 @@ func _update_account_selector():
 			"@" + selector_texts[index] + " - " + 
 			Globals.dict_safeget(accounts, [selector_texts[index], "displayname"], FileManager.ERRMSG_CFG)
 		)
-	var selector_node: OptionButton = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/AccountSelector
-	if selector_node == null:
+	if account_selector_node == null:
 		push_error("Account selector node not found.")
 		return
-	selector_node.clear()
-	selector_node.add_item(selector_texts[0])
-	selector_node.add_separator(selector_texts[1])
+	account_selector_node.clear()
+	account_selector_node.add_item(selector_texts[0])
+	account_selector_node.add_separator(selector_texts[1])
 	for index in range(2,selector_texts.size()):
-		selector_node.add_item(selector_texts[index])
+		account_selector_node.add_item(selector_texts[index])
 	return
 func _update_account_info_text():
-	var account_info_text_node: RichTextLabel = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/AccountText
 	if account_info_text_node == null:
 		push_error("Account username and displayname text node not found.")
 		return
 	account_info_text_node.text = (
 		"@username: " + Globals.player_username + "\n" +
-		"displayname: " + Globals.player_displayname + "\n" +
-		"creation date UTC: [date-time]" + "\n" +
-		"last played UTC: [date-time]"
+		"displayname: " + Globals.player_displayname
 	)
+	if not account_selector_node.selected < 2:
+		account_info_text_node.text += (
+			"\n" +
+			"creation date UTC: [date-time]" + "\n" +
+			"last played UTC: [date-time]"
+		)
+	return
+func _update_manage_account_button_disabledness():
+	if account_selector_node.selected < 2:
+		manage_account_button_node.disabled = true
+	else:
+		manage_account_button_node.disabled = false
 	return
 
 func _on_account_option_button_item_selected(index: int):
+	account_selector_node.select(index)
 	if index < 2:
 		Globals.player_username = "guest"
-		Globals.player_displayname = "Guest"
+		Globals.player_displayname = FileManager.read_cfg_keyval(
+			FileManager.PATH_ACCOUNTS, 
+			"meta", 
+			"guest_displayname", 
+			"Guest"
+		)
+		FileManager.write_cfg_keyval(
+			FileManager.PATH_ACCOUNTS, 
+			"meta", 
+			"last_selected_account_username", 
+			"guest",
+		)
 	else:
 		Globals.player_username = Globals.normalize_username_str(selector_index_to_username[index])
 		Globals.player_displayname = Globals.dict_safeget(
@@ -83,31 +129,73 @@ func _on_account_option_button_item_selected(index: int):
 			[selector_index_to_username[index], "displayname"], 
 			selector_index_to_username[index]
 		)
+		FileManager.write_cfg_keyval(
+			FileManager.PATH_ACCOUNTS, 
+			"meta", 
+			"last_selected_account_username", 
+			selector_index_to_username[index],
+		)
 	_update_account_info_text()
+	_update_manage_account_button_disabledness()
+	_reset_node_visibilities()
 	return
 
 func _on_create_account_button_pressed():
-	return
-
+	pass
 func _on_manage_account_button_pressed():
+	if account_selector_node.selected < 2:
+		return
 	# Get the setup the popuop node used for choosing which way you want to manage the account.
-	var choice_popup: PopupMenu = $VBoxContainer/HBoxContainer/VBoxContainermore/AccountSelectContainer/VBoxContainer/AccountButtonsContainer/ManageAccount/PopupMenu
-	if choice_popup == null:
-		push_error("Could not find manage-account managing-type-selection popup.")
+	if manage_account_choice_popup == null:
+		push_error("Couldn't find the manage account choice popup node.")
 		return
-	choice_popup.position = choice_popup.get_parent().global_position
-	choice_popup.visible = true
+	manage_account_choice_popup.position = manage_account_choice_popup.get_parent().global_position
+	manage_account_choice_popup.visible = true
 	return
-
 func _on_change_displayname_button_pressed():
-	var change_display_container: HBoxContainer #= $VBoxContainer/HBoxContainer/VBoxContainermore/VBoxContainer/HBoxContainer2
-	if change_display_container == null:
-		push_error("Could not find the container node of new displayname entry nodes.")
+	if change_displayname_container == null:
+		push_error("Could not find change-displayname nodes container node.")
 		return
-	change_display_container.visible = not change_display_container.visible
+	change_displayname_container.visible = true
+	if change_displayname_button == null:
+		push_error("Could not find change-displayname button node.")
+		return
+	change_displayname_button.visible = false
 	return
 
-
+func _on_change_displayname_cancel_button():
+	if change_displayname_container == null:
+		push_error("Could not find change-displayname nodes container node.")
+		return
+	change_displayname_container.visible = false
+	if change_displayname_button ==  null:
+		push_error("Could not find change-displayname button node.")
+		return
+	change_displayname_button.visible = true
+	change_displayname_container.get_node("DisplaynameInput").text = ""
+func _on_change_displayname_confirm_button():
+	var new_displayname_text: String = change_displayname_container.get_node("DisplaynameInput").text
+	if new_displayname_text.is_empty():
+		return
+	Globals.player_displayname = new_displayname_text
+	if Globals.player_username == "guest":
+		FileManager.write_cfg_keyval(
+			FileManager.PATH_ACCOUNTS, 
+			"meta",
+			"guest_displayname",
+			Globals.player_displayname,
+		)
+	else:
+		FileManager.write_cfg_keyval(
+			FileManager.PATH_ACCOUNTS, 
+			Globals.player_username,
+			"displayname",
+			Globals.player_displayname,
+		)
+	_update_everything()
+	change_displayname_container.visible = false
+	change_displayname_button.visible = true
+	change_displayname_container.get_node("DisplaynameInput").text = ""
 
 #	var formatted_username: String = Globals.normalize_username_str(
 #		account_popup_contents.get_node("UsernameInput").text)

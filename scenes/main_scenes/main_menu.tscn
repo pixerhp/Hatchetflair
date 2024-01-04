@@ -400,7 +400,6 @@ size_flags_vertical = 4
 text = "change displayname"
 
 [node name="ChangeDisplaynameNodes" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 
 [node name="CancelButton" type="Button" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes"]
@@ -409,7 +408,7 @@ size_flags_horizontal = 0
 text = "Cancel"
 
 [node name="DisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes"]
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(216, 24)
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Enter new displayname..."
@@ -450,7 +449,7 @@ Accounts are used for some world save data, character metadata, used in game com
 
 Unlike your displayname which can be changed on a whim, your username should be something that you won't regret or otherwise want to change later (as when changed, various files and all multiplayer worlds need to be updated on the change, some manually, which is a massive hassle.)
 
-Your username should also be unique enough to avoid multiplayer conflicts, as there's currently no system in place to enforce username uniqueness. (It's possible for two people to play on the same world with the same username, which can lead to issues and unexpected behavior.)[/color]"
+Your username should also be unique enough to avoid multiplayer conflicts, as there's currently no system in place to enforce username uniqueness. (It's possible for two people to play on the same world with the same username, which can lead to unexpected issues and behavior.)[/color]"
 
 [node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -1630,6 +1629,8 @@ text = "Back"
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/CreateAccountButton" to="Menus/AccountsMenu" method="_on_create_account_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/ManageAccountButton" to="Menus/AccountsMenu" method="_on_manage_account_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/ChangeDisplaynameButton" to="Menus/AccountsMenu" method="_on_change_displayname_button_pressed"]
+[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes/CancelButton" to="Menus/AccountsMenu" method="_on_change_displayname_cancel_button"]
+[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes/ConfirmButton" to="Menus/AccountsMenu" method="_on_change_displayname_confirm_button"]
 [connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_activated" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="start_world_by_index"]
