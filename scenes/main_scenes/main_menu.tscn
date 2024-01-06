@@ -320,7 +320,7 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 2
+item_count = 3
 selected = 0
 popup/item_0/text = "GUEST ACCOUNT"
 popup/item_0/id = 0
@@ -328,6 +328,8 @@ popup/item_1/text = ""
 popup/item_1/id = 1
 popup/item_1/disabled = true
 popup/item_1/separator = true
+popup/item_2/text = "<not initialized>"
+popup/item_2/id = 2
 
 [node name="ButtonsHContainer" type="HBoxContainer" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer"]
 layout_mode = 2
@@ -347,11 +349,13 @@ text = "manage selected"
 title = "Title"
 position = Vector2i(650, 250)
 size = Vector2i(200, 62)
-item_count = 2
-item_0/text = "Edit Username"
-item_0/id = 0
-item_1/text = "Delete Account"
-item_1/id = 1
+item_count = 3
+item_0/text = "View More Info"
+item_0/id = 2
+item_1/text = "Edit Username"
+item_1/id = 0
+item_2/text = "Delete Account"
+item_2/id = 1
 
 [node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer"]
 layout_mode = 2
@@ -592,6 +596,12 @@ size_flags_stretch_ratio = 0.5
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.75
+
+[node name="ViewMoreAccountInfoScreen" type="Control" parent="Menus/AccountsMenu"]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="RenameUsernameScreen" type="Control" parent="Menus/AccountsMenu"]
 visible = false
@@ -1626,11 +1636,15 @@ text = "Back"
 [connection signal="visibility_changed" from="Menus/AccountsMenu" to="Menus/AccountsMenu" method="_on_visibility_changed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodesContainer/BackButtonMargin/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_selected" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/AccountSelector" to="Menus/AccountsMenu" method="_on_account_option_button_item_selected"]
-[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/CreateAccountButton" to="Menus/AccountsMenu" method="_on_create_account_button_pressed"]
+[connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/CreateAccountButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["CreateNewAccountScreen"]]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/ManageAccountButton" to="Menus/AccountsMenu" method="_on_manage_account_button_pressed"]
+[connection signal="index_pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/ManageAccountButton/ManageAccountPopup" to="Menus/AccountsMenu" method="_on_manage_account_popup_index_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/ChangeDisplaynameButton" to="Menus/AccountsMenu" method="_on_change_displayname_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes/CancelButton" to="Menus/AccountsMenu" method="_on_change_displayname_cancel_button"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes/ConfirmButton" to="Menus/AccountsMenu" method="_on_change_displayname_confirm_button"]
+[connection signal="pressed" from="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
+[connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/BottomButtons/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
+[connection signal="pressed" from="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/BottomButtons/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
 [connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]
 [connection signal="pressed" from="Menus/WorldsMenu/WorldsUI/TopNodes/BackButton" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="item_activated" from="Menus/WorldsMenu/WorldsUI/SavedWorldsList" to="Menus/WorldsMenu" method="start_world_by_index"]

@@ -1,12 +1,24 @@
 extends Control
 
-# !!! make meta not an allowed username for file reasons.
+# !!! make meta and guest not allowed usernames for file reasons.
 # !!! Remember to add/have serveral failsafes to prevent errors/attemtps to modify/delete the GUEST account.
 # !!! Make it so that if a username is renamed, edit all files that use it for saving things accordingly.
 
 var accounts: Dictionary = {}
 var selector_index_to_username: Dictionary = {}
 
+
+func _switch_to_screen(screen_node_name: String):
+	var node_to_make_visible: Node = get_node(screen_node_name)
+	if node_to_make_visible == null:
+		push_error("Child node named \"", screen_node_name, "\" not found.")
+		return
+	
+	_reset_node_visibilities()
+	for child_node in self.get_children():
+		child_node.visible = false
+	node_to_make_visible.visible = true
+	return
 
 func _ready():
 	_update_everything()
@@ -24,6 +36,7 @@ func _ready():
 	_reset_node_visibilities()
 	_reset_screen_visibilities()
 	return
+
 func _on_visibility_changed():
 	if not is_node_ready():
 		await ready
@@ -38,6 +51,8 @@ func _update_everything():
 	_update_manage_account_button_disabledness()
 
 func _reset_node_visibilities():
+	_update_account_info_text() # If the account info text should be reset when the change displayname stuff is hidden.
+	account_info_right_spacer_node.visible = true
 	change_displayname_button.visible = true
 	change_displayname_container.visible = false
 
@@ -56,6 +71,7 @@ func _update_accounts_from_file():
 ### GENERAL SCREEN:
 @onready var account_selector_node: OptionButton = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/AccountSelector
 @onready var account_info_text_node: RichTextLabel = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/AccountText
+@onready var account_info_right_spacer_node: Node = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/SpacerMiddle
 @onready var manage_account_button_node: Button = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/ManageAccountButton
 @onready var manage_account_choice_popup: PopupMenu = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/SelectButtonsHContainer/VBoxContainer/ButtonsHContainer/ManageAccountButton/ManageAccountPopup
 @onready var change_displayname_button: Button = $GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/ChangeDisplaynameButton
@@ -95,8 +111,8 @@ func _update_account_info_text():
 	if not account_selector_node.selected < 2:
 		account_info_text_node.text += (
 			"\n" +
-			"creation date UTC: [date-time]" + "\n" +
-			"last played UTC: [date-time]"
+			"creation date UTC: <date-time utc>" + "\n" +
+			"last played UTC: <date-time utc>"
 		)
 	return
 func _update_manage_account_button_disabledness():
@@ -140,8 +156,6 @@ func _on_account_option_button_item_selected(index: int):
 	_reset_node_visibilities()
 	return
 
-func _on_create_account_button_pressed():
-	pass
 func _on_manage_account_button_pressed():
 	if account_selector_node.selected < 2:
 		return
@@ -152,6 +166,18 @@ func _on_manage_account_button_pressed():
 	manage_account_choice_popup.position = manage_account_choice_popup.get_parent().global_position
 	manage_account_choice_popup.visible = true
 	return
+func _on_manage_account_popup_index_pressed(index):
+	match index:
+		0:
+			_switch_to_screen("ViewMoreAccountInfoScreen")
+		1:
+			_switch_to_screen("RenameUsernameScreen")
+		2:
+			_switch_to_screen("DeleteAccountScreen")
+		_:
+			push_error("Manage account popup had an item with index ", index," pressed which did not have defined behavior.")
+	return
+
 func _on_change_displayname_button_pressed():
 	if change_displayname_container == null:
 		push_error("Could not find change-displayname nodes container node.")
@@ -161,8 +187,21 @@ func _on_change_displayname_button_pressed():
 		push_error("Could not find change-displayname button node.")
 		return
 	change_displayname_button.visible = false
+	
+	if account_info_text_node == null:
+		push_error("Account username and displayname text node not found.")
+		return
+	account_info_text_node.text = (
+		"[center]" + 
+		"current displayname:\n" + 
+		Globals.player_displayname + 
+		"[/center]"
+	)
+	if account_info_right_spacer_node == null:
+		push_error("Account info spacer node not found.")
+		return
+	account_info_right_spacer_node.visible = false
 	return
-
 func _on_change_displayname_cancel_button():
 	if change_displayname_container == null:
 		push_error("Could not find change-displayname nodes container node.")
@@ -173,6 +212,12 @@ func _on_change_displayname_cancel_button():
 		return
 	change_displayname_button.visible = true
 	change_displayname_container.get_node("DisplaynameInput").text = ""
+	if account_info_right_spacer_node == null:
+		push_error("Account info spacer node not found.")
+		return
+	account_info_right_spacer_node.visible = true
+	_update_account_info_text()
+	return
 func _on_change_displayname_confirm_button():
 	var new_displayname_text: String = change_displayname_container.get_node("DisplaynameInput").text
 	if new_displayname_text.is_empty():
@@ -196,6 +241,10 @@ func _on_change_displayname_confirm_button():
 	change_displayname_container.visible = false
 	change_displayname_button.visible = true
 	change_displayname_container.get_node("DisplaynameInput").text = ""
+	return
+
+
+
 
 #	var formatted_username: String = Globals.normalize_username_str(
 #		account_popup_contents.get_node("UsernameInput").text)
