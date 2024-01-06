@@ -46,7 +46,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleMenu" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -207,6 +206,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="AccountsMenu" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -447,13 +447,14 @@ theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
-text = "[color=lightgray]	Info about accounts:
+text = "[color=darkgray]Info & tips about the accounts system:[/color][color=lightgray]
 
-Accounts are used for some world save data, character metadata, used in game commands, etc. 
+* The account system is used for saving player-specific data to files, and can be used by in-game commands (especially in multiplayer.) There is no server system in place to regulate usernames, so username conflicts on servers is possible, which can cause issues.
 
-Unlike your displayname which can be changed on a whim, your username should be something that you won't regret or otherwise want to change later (as when changed, various files and all multiplayer worlds need to be updated on the change, some manually, which is a massive hassle.)
+* Changing your displayname has no consequences, but changing an account's username is a massive hassle (due to files using it to associate player-specific data with that account.) All files that this concerns which are stored locally can be updated automatically, but those on other devices (such as a server you have played on which you don't own) will need to be updated by whoever owns them.
 
-Your username should also be unique enough to avoid multiplayer conflicts, as there's currently no system in place to enforce username uniqueness. (It's possible for two people to play on the same world with the same username, which can lead to unexpected issues and behavior.)[/color]"
+TIP: 
+- When creating a new account or renaming an account's username, try to choose a username which is unique enough to avoid server conflicts (concerning the unregulated accounts system,) and one which you're unlikely to regret or otherwise want to change in the future (due to changing an account's username being a hassle.)[/color]"
 
 [node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer"]
 layout_mode = 2

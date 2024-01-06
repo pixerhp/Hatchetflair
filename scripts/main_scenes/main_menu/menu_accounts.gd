@@ -102,12 +102,6 @@ func _update_account_info_text():
 		"@username: " + Globals.player_username + "\n" +
 		"displayname: " + Globals.player_displayname
 	)
-	if not account_selector_node.selected < 2:
-		account_info_text_node.text += (
-			"\n" +
-			"creation date UTC: <date-time utc>" + "\n" +
-			"last played UTC: <date-time utc>"
-		)
 	return
 func _update_manage_account_button_disabledness():
 	if account_selector_node.selected < 2:
@@ -266,8 +260,9 @@ func _update_advanced_account_info_text():
 		)
 	
 	advanced_account_info_text_node.text += (
-		"[color=lightgray]accounts location >> [/color]" +
-		"[color=greenyellow]" + ProjectSettings.globalize_path(FileManager.PATH_ACCOUNTS) + "[/color]" + "\n\n" +
+		"[color=lightgray]accounts file location >> [/color]" +
+		"[color=greenyellow]" + ProjectSettings.globalize_path(FileManager.PATH_ACCOUNTS) + "[/color]" + "\n" +
+		"[color=darkgray](displaying all stored information about account from file:)[/color]" + "\n\n" +
 		"[color=lightgray]username >> [/color]" + Globals.player_username + "\n"
 	)
 	if accounts.has(Globals.player_username):
