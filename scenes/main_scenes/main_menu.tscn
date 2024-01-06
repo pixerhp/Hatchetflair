@@ -350,7 +350,7 @@ title = "Title"
 position = Vector2i(650, 250)
 size = Vector2i(200, 62)
 item_count = 3
-item_0/text = "View More Info"
+item_0/text = "View Advanced"
 item_0/id = 2
 item_1/text = "Edit Username"
 item_1/id = 0
@@ -442,10 +442,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_font_sizes/normal_font_size = 20
-theme_override_font_sizes/bold_font_size = 24
-theme_override_font_sizes/italics_font_size = 24
-theme_override_font_sizes/bold_italics_font_size = 24
-theme_override_font_sizes/mono_font_size = 24
+theme_override_font_sizes/bold_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
 text = "[color=lightgray]	Info about accounts:
 
@@ -599,9 +599,111 @@ size_flags_stretch_ratio = 0.75
 
 [node name="ViewMoreAccountInfoScreen" type="Control" parent="Menus/AccountsMenu"]
 visible = false
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="SpacerTop" type="Control" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.05
+
+[node name="TopNodesContainer" type="HBoxContainer" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="BackButtonMargin" type="MarginContainer" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/TopNodesContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 8
+theme_override_constants/margin_left = 8
+
+[node name="BackButton" type="Button" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/TopNodesContainer/BackButtonMargin"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+text = "Back"
+
+[node name="MenuTitle" type="RichTextLabel" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/TopNodesContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/normal_font_size = 48
+theme_override_font_sizes/bold_font_size = 48
+theme_override_font_sizes/italics_font_size = 48
+theme_override_font_sizes/bold_italics_font_size = 48
+theme_override_font_sizes/mono_font_size = 48
+bbcode_enabled = true
+text = "[center][wave freq=4 amp=10]Advanced Account Info[/wave][/center]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/TopNodesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SpacerMiddle" type="Control" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/HBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="AboutAccountsText" type="RichTextLabel" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/HBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_font_sizes/bold_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
+bbcode_enabled = true
+text = "[color=lightgray]<info not yet loaded>"
+
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
 
 [node name="RenameUsernameScreen" type="Control" parent="Menus/AccountsMenu"]
 visible = false
@@ -1643,6 +1745,8 @@ text = "Back"
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes/CancelButton" to="Menus/AccountsMenu" method="_on_change_displayname_cancel_button"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes/ConfirmButton" to="Menus/AccountsMenu" method="_on_change_displayname_confirm_button"]
 [connection signal="pressed" from="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
+[connection signal="visibility_changed" from="Menus/AccountsMenu/ViewMoreAccountInfoScreen" to="Menus/AccountsMenu" method="_update_advanced_account_info_text"]
+[connection signal="pressed" from="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/TopNodesContainer/BackButtonMargin/BackButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
 [connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/BottomButtons/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
 [connection signal="pressed" from="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/BottomButtons/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
 [connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]

@@ -34,14 +34,14 @@ func _ready():
 	else:
 		_on_account_option_button_item_selected(index_of_last_selected_username)
 	_reset_node_visibilities()
-	_reset_screen_visibilities()
+	_switch_to_screen("GeneralScreen")
 	return
 
 func _on_visibility_changed():
 	if not is_node_ready():
 		await ready
 	_reset_node_visibilities()
-	_reset_screen_visibilities()
+	_switch_to_screen("GeneralScreen")
 	return
 
 func _update_everything():
@@ -55,12 +55,6 @@ func _reset_node_visibilities():
 	account_info_right_spacer_node.visible = true
 	change_displayname_button.visible = true
 	change_displayname_container.visible = false
-
-func _reset_screen_visibilities():
-	$GeneralScreen.visible = true
-	$CreateNewAccountScreen.visible = false
-	$RenameUsernameScreen.visible = false
-	$DeleteAccountScreen.visible = false
 
 func _update_accounts_from_file():
 	accounts.clear()
@@ -250,3 +244,45 @@ func _on_change_displayname_confirm_button():
 #		account_popup_contents.get_node("UsernameInput").text)
 #	account_popup_contents.get_node("UsernameInput").text = formatted_username
 #	account_popup_contents.get_node("UsernameInput").set_caret_column(formatted_username.length())
+
+
+### VIEW ADVANCED ACCOUNT INFO SCREEN:
+@onready var advanced_account_info_text_node: RichTextLabel = $ViewMoreAccountInfoScreen/VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/AboutAccountsText
+
+func _update_advanced_account_info_text():
+	if $ViewMoreAccountInfoScreen.visible == false:
+		return
+	
+	_update_accounts_from_file()
+	
+	advanced_account_info_text_node.text = ""
+	
+	if not (Globals.player_username == selector_index_to_username[account_selector_node.selected]):
+		advanced_account_info_text_node.text += (
+			"[color=#ff7373]" +
+			"player username currently stored in globals does not match username currently selected by account selector. please report this as a bug to developers." + "\n\n" +
+			"for the following advanced account information, the account associated with the globally stored username will be used." + "\n\n" + 
+			"[/color]"
+		)
+	
+	advanced_account_info_text_node.text += (
+		"[color=lightgray]accounts location >> [/color]" +
+		"[color=greenyellow]" + ProjectSettings.globalize_path(FileManager.PATH_ACCOUNTS) + "[/color]" + "\n\n" +
+		"[color=lightgray]username >> [/color]" + Globals.player_username + "\n"
+	)
+	if accounts.has(Globals.player_username):
+		for key in accounts[Globals.player_username].keys():
+			advanced_account_info_text_node.text += (
+				"[color=lightgray]" + str(key) + " >> [/color]" + 
+				accounts[Globals.player_username][key] + "\n"
+			)
+	else:
+		advanced_account_info_text_node.text += (
+			"[color=#ff7373]account information under this username does not exist in file. showing all file contents:[/color]" + "\n\n\n"
+		)
+		for username in accounts.keys():
+			advanced_account_info_text_node.text += ("[color=lightgray]username >> [/color]" + username + "\n")
+			for key in accounts[username].keys():
+				advanced_account_info_text_node.text += ("[color=lightgray]" + str(key) + " >> [/color]" + accounts[username][key] + "\n")
+			advanced_account_info_text_node.text += "\n"
+	return
