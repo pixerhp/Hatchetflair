@@ -550,13 +550,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "displayname"
 
-[node name="WarningTextMargin" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="WarningMargin" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 
-[node name="WarningText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/WarningTextMargin"]
+[node name="WarningText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/WarningMargin"]
 layout_mode = 2
 bbcode_enabled = true
 text = "[color=#ff7373](username entry warning message)[/color]"
@@ -790,13 +791,14 @@ theme_override_font_sizes/font_size = 16
 placeholder_text = "(enter a new username for the account.)
 "
 
-[node name="MarginContainer" type="MarginContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/MarginContainer/VBoxContainer"]
+[node name="WarningMargin" type="MarginContainer" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer"]
+[node name="WarningText" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/MarginContainer/VBoxContainer/WarningMargin"]
 layout_mode = 2
 bbcode_enabled = true
 text = "[color=#ff7373](username entry warning message)[/color]"
@@ -927,16 +929,17 @@ theme_override_font_sizes/font_size = 16
 placeholder_text = "Retype the above text to confirm account deletion.
 "
 
-[node name="RetypeInputWarningMargin" type="MarginContainer" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+[node name="WarningMargin" type="MarginContainer" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 4
 
-[node name="RetypeInputWarning" type="RichTextLabel" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/RetypeInputWarningMargin"]
+[node name="WarningText" type="RichTextLabel" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/WarningMargin"]
 layout_mode = 2
 bbcode_enabled = true
-text = "[color=#ff7373](text does not match warning)[/color]"
+text = "[color=#ff7373](typed-text does not match copy-text)[/color]"
 fit_content = true
 
 [node name="BottomButtons" type="HBoxContainer" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
