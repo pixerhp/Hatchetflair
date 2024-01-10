@@ -46,6 +46,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleMenu" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -206,7 +207,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="AccountsMenu" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -216,6 +216,7 @@ grow_vertical = 2
 script = ExtResource("2_ykccs")
 
 [node name="GeneralScreen" type="Control" parent="Menus/AccountsMenu"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -466,139 +467,6 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
-[node name="CreateNewAccountScreen" type="Control" parent="Menus/AccountsMenu"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.75
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="SpacerTop" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
-
-[node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer"]
-layout_mode = 2
-
-[node name="TitleText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/normal_font_size = 32
-theme_override_font_sizes/bold_font_size = 32
-theme_override_font_sizes/italics_font_size = 32
-theme_override_font_sizes/bold_italics_font_size = 32
-theme_override_font_sizes/mono_font_size = 32
-bbcode_enabled = true
-text = "[center]ACCOUNT CREATION[/center]"
-fit_content = true
-
-[node name="HSeparator1" type="HSeparator" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="NoteTextMargin" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_right = 16
-
-[node name="NoteText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/NoteTextMargin"]
-layout_mode = 2
-theme_override_font_sizes/normal_font_size = 16
-theme_override_font_sizes/bold_font_size = 16
-theme_override_font_sizes/italics_font_size = 16
-theme_override_font_sizes/bold_italics_font_size = 16
-theme_override_font_sizes/mono_font_size = 16
-bbcode_enabled = true
-text = "	Note: Account usernames may only contain lowercase letters & numbers. (Displaynames may contain anything.)"
-fit_content = true
-scroll_active = false
-
-[node name="HSeparator2" type="HSeparator" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 38)
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "username"
-
-[node name="DisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 38)
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "displayname"
-
-[node name="WarningMargin" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_constants/margin_left = 4
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 4
-
-[node name="WarningText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/WarningMargin"]
-layout_mode = 2
-bbcode_enabled = true
-text = "[color=#ff7373](username entry warning message)[/color]"
-fit_content = true
-
-[node name="Spacer" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 4)
-layout_mode = 2
-
-[node name="ButtonsHContainer" type="HBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-size_flags_stretch_ratio = 0.75
-
-[node name="CancelButton" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 2
-size_flags_vertical = 3
-text = "cancel"
-
-[node name="ConfirmButton" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 3
-disabled = true
-text = "create
-"
-
-[node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.5
-
-[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.75
-
 [node name="ViewMoreAccountInfoScreen" type="Control" parent="Menus/AccountsMenu"]
 visible = false
 layout_mode = 1
@@ -707,6 +575,138 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.1
 
+[node name="CreateNewAccountScreen" type="Control" parent="Menus/AccountsMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpacerLeft" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.75
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SpacerTop" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="PanelContainer" type="PanelContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TitleText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 32
+theme_override_font_sizes/bold_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
+bbcode_enabled = true
+text = "[center]ACCOUNT CREATION[/center]"
+fit_content = true
+
+[node name="HSeparator1" type="HSeparator" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="NoteTextMargin" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="NoteText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/NoteTextMargin"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 16
+theme_override_font_sizes/italics_font_size = 16
+theme_override_font_sizes/bold_italics_font_size = 16
+theme_override_font_sizes/mono_font_size = 16
+bbcode_enabled = true
+text = "	Note: Account usernames may only contain lowercase letters & numbers. (Displaynames may contain anything.)"
+fit_content = true
+scroll_active = false
+
+[node name="HSeparator2" type="HSeparator" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="UsernameInput" type="TextEdit" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "username"
+
+[node name="DisplaynameInput" type="TextEdit" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+placeholder_text = "displayname"
+
+[node name="WarningMargin" type="MarginContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+
+[node name="WarningText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/WarningMargin"]
+layout_mode = 2
+theme_override_colors/default_color = Color(1, 0.45098, 0.45098, 1)
+bbcode_enabled = true
+text = "<warning message>"
+fit_content = true
+
+[node name="Spacer" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="ButtonsHContainer" type="HBoxContainer" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+size_flags_stretch_ratio = 0.75
+
+[node name="CancelButton" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 3
+text = "cancel"
+
+[node name="ConfirmButton" type="Button" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 3
+disabled = true
+text = "create
+"
+
+[node name="SpacerBottom" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.5
+
+[node name="SpacerRight" type="Control" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.75
+
 [node name="RenameUsernameScreen" type="Control" parent="Menus/AccountsMenu"]
 visible = false
 layout_mode = 1
@@ -800,8 +800,9 @@ theme_override_constants/margin_right = 4
 
 [node name="WarningText" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/MarginContainer/VBoxContainer/WarningMargin"]
 layout_mode = 2
+theme_override_colors/default_color = Color(1, 0.45098, 0.45098, 1)
 bbcode_enabled = true
-text = "[color=#ff7373](username entry warning message)[/color]"
+text = "<warning message>"
 fit_content = true
 
 [node name="Spacer" type="Control" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/MarginContainer/VBoxContainer"]
@@ -938,8 +939,9 @@ theme_override_constants/margin_right = 4
 
 [node name="WarningText" type="RichTextLabel" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/WarningMargin"]
 layout_mode = 2
+theme_override_colors/default_color = Color(1, 0.45098, 0.45098, 1)
 bbcode_enabled = true
-text = "[color=#ff7373](typed-text does not match copy-text)[/color]"
+text = "<warning message>"
 fit_content = true
 
 [node name="BottomButtons" type="HBoxContainer" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
@@ -1748,9 +1750,13 @@ text = "Back"
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/TextAndButtonHContainer/ChangeDisplaynameButton" to="Menus/AccountsMenu" method="_on_change_displayname_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes/CancelButton" to="Menus/AccountsMenu" method="_on_change_displayname_cancel_button"]
 [connection signal="pressed" from="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer/VBoxContainer/ChangeDisplaynameNodes/ConfirmButton" to="Menus/AccountsMenu" method="_on_change_displayname_confirm_button"]
-[connection signal="pressed" from="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
 [connection signal="visibility_changed" from="Menus/AccountsMenu/ViewMoreAccountInfoScreen" to="Menus/AccountsMenu" method="_update_advanced_account_info_text"]
 [connection signal="pressed" from="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/TopNodesContainer/BackButtonMargin/BackButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
+[connection signal="visibility_changed" from="Menus/AccountsMenu/CreateNewAccountScreen" to="Menus/AccountsMenu" method="_on_create_new_account_screen_visibility_changed"]
+[connection signal="text_changed" from="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/UsernameInput" to="Menus/AccountsMenu" method="_on_create_account_username_input_text_changed"]
+[connection signal="text_changed" from="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DisplaynameInput" to="Menus/AccountsMenu" method="_on_create_account_displayname_input_text_changed"]
+[connection signal="pressed" from="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
+[connection signal="pressed" from="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer/ConfirmButton" to="Menus/AccountsMenu" method="_on_create_account_confirm_button_pressed"]
 [connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/BottomButtons/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
 [connection signal="pressed" from="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/BottomButtons/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
 [connection signal="visibility_changed" from="Menus/WorldsMenu" to="Menus/WorldsMenu" method="update_worlds_list"]

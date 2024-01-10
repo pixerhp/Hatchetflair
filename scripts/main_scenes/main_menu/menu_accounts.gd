@@ -22,17 +22,7 @@ func _switch_to_screen(screen_node_name: String):
 
 func _ready():
 	_update_everything()
-	var last_selected_account_username = FileManager.read_cfg_keyval(
-		FileManager.PATH_ACCOUNTS,
-		"meta",
-		"last_selected_account_username",
-		"guest",
-	)
-	var index_of_last_selected_username = selector_index_to_username.find_key(last_selected_account_username)
-	if index_of_last_selected_username == null:
-		_on_account_option_button_item_selected(0)
-	else:
-		_on_account_option_button_item_selected(index_of_last_selected_username)
+	_select_remembered_last_selected_account()
 	_reset_node_visibilities()
 	_switch_to_screen("GeneralScreen")
 	return
@@ -60,6 +50,27 @@ func _update_accounts_from_file():
 	accounts.clear()
 	accounts = FileManager.read_cfg(FileManager.PATH_ACCOUNTS, ["meta"])
 	return
+func _update_file_from_accounts(new_selected_username: String = "guest"):
+	var meta: Dictionary = FileManager.read_cfg_section(FileManager.PATH_ACCOUNTS, "meta")
+	meta["last_selected_account_username"] = new_selected_username
+	var complete_file_dictionary: Dictionary = accounts
+	complete_file_dictionary["meta"] = meta
+	FileManager.write_cfg(FileManager.PATH_ACCOUNTS, complete_file_dictionary)
+	return
+
+func _select_remembered_last_selected_account():
+	var last_selected_account_username = FileManager.read_cfg_keyval(
+		FileManager.PATH_ACCOUNTS,
+		"meta",
+		"last_selected_account_username",
+		"guest",
+	)
+	var index_of_last_selected_username = selector_index_to_username.find_key(last_selected_account_username)
+	if index_of_last_selected_username == null:
+		_on_account_option_button_item_selected(0)
+	else:
+		_on_account_option_button_item_selected(index_of_last_selected_username)
+
 
 
 ### GENERAL SCREEN:
@@ -233,13 +244,6 @@ func _on_change_displayname_confirm_button():
 
 
 
-
-#	var formatted_username: String = Globals.normalize_username_str(
-#		account_popup_contents.get_node("UsernameInput").text)
-#	account_popup_contents.get_node("UsernameInput").text = formatted_username
-#	account_popup_contents.get_node("UsernameInput").set_caret_column(formatted_username.length())
-
-
 ### VIEW ADVANCED ACCOUNT INFO SCREEN:
 @onready var advanced_account_info_text_node: RichTextLabel = $ViewMoreAccountInfoScreen/VBoxContainer/HBoxContainer/PanelContainer/MarginContainer/AboutAccountsText
 
@@ -280,4 +284,81 @@ func _update_advanced_account_info_text():
 			for key in accounts[username].keys():
 				advanced_account_info_text_node.text += ("[color=lightgray]" + str(key) + " >> [/color]" + accounts[username][key] + "\n")
 			advanced_account_info_text_node.text += "\n"
+	return
+
+
+
+### CREATE NEW ACCOUNT SCREEN:
+@onready var create_account_username_input_node: TextEdit = $CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/UsernameInput
+@onready var create_account_displayname_input_node: TextEdit = $CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DisplaynameInput
+@onready var create_account_warning_text_node: RichTextLabel = $CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/WarningMargin/WarningText
+@onready var create_account_confirm_button: Button = $CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer/ConfirmButton
+
+func _on_create_new_account_screen_visibility_changed():
+	if not is_node_ready():
+		await ready
+	# Clears the typed text whenever you close out or open the account creation screen.
+	create_account_username_input_node.text = ""
+	create_account_displayname_input_node.text = ""
+	_update_create_account_warning_and_confirm_button()
+	return
+
+func _update_create_account_warning_and_confirm_button():
+	var warning: String = ""
+	var username: String = create_account_username_input_node.text
+	var displayname: String = create_account_displayname_input_node.text
+	
+	# Username warnings:
+	if username.length() < 1:
+		if not warning.is_empty(): warning += "\n"
+		warning += "username may not be blank"
+	if username.length() > 32:
+		if not warning.is_empty(): warning += "\n"
+		warning += "username may not exceed 32 characters (" + str(username.length()) + ")"
+	if (username == "meta") or (username == "guest"):
+		if not warning.is_empty(): warning += "\n"
+		warning += "username cannot be \"meta\" or \"guest\""
+	if accounts.has(username):
+		if not warning.is_empty(): warning += "\n"
+		warning += "account with username already exists"
+	
+	# Displayname warnings:
+#	if displayname.length() < 1:
+#		if not warning.is_empty(): warning += "\n"
+#		warning += "displayname may not be blank"
+	if displayname.length() > 64:
+		if not warning.is_empty(): warning += "\n"
+		warning += "displayname may not exceed 64 characters (" + str(displayname.length()) + ")"
+	
+	create_account_warning_text_node.text = warning
+	create_account_warning_text_node.get_parent().visible = not warning.is_empty()
+	create_account_confirm_button.disabled = not warning.is_empty()
+	return
+
+func _on_create_account_username_input_text_changed():
+	create_account_username_input_node.text = Globals.normalize_username_str(create_account_username_input_node.text)
+	create_account_username_input_node.set_caret_column(create_account_username_input_node.text.length())
+	_update_create_account_warning_and_confirm_button()
+	return
+func _on_create_account_displayname_input_text_changed():
+	_update_create_account_warning_and_confirm_button()
+	return
+
+func _on_create_account_confirm_button_pressed():
+	# !!! make safer / more robust against accidentally destroying the file contents if something goes wrong?
+	_update_accounts_from_file()
+	_update_create_account_warning_and_confirm_button()
+	if create_account_confirm_button.disabled == true:
+		return
+	var username: String = create_account_username_input_node.text
+	var displayname: String = create_account_displayname_input_node.text
+	accounts[username] = {
+		"displayname": displayname,
+		"creation_datetime_utc": Time.get_datetime_string_from_system(true, true),
+		"last_played_datetime_utc": Time.get_datetime_string_from_system(true, true),
+	}
+	_update_file_from_accounts(username)
+	_update_everything()
+	_select_remembered_last_selected_account()
+	_switch_to_screen("GeneralScreen")
 	return
