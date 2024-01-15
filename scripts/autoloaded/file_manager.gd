@@ -684,4 +684,53 @@ func ensure_world(dirname: String) -> Error:
 		return FAILED
 	return OK
 
+
+# !!! double-check that all of these have all of the functionality they need.
+# (in particular, delete_account should also delete somethings like saved settings for that account,
+# and rename_account should update all files that use usernames or are otherwise applicable.)
+func _new_accounts_meta_section() -> Dictionary:
+	return {
+		"version": Globals.V_ENTIRE,
+		"guest_displayname": "Guest",
+		"last_selected_account_username": "guest"
+	}
+func create_account(username: String, displayname: String) -> Error:
+	var current_datetime: String = Time.get_datetime_string_from_system(true, true)
+	var file_data: Dictionary = read_cfg(PATH_ACCOUNTS)
+	
+	file_data[username] = {
+		"displayname": displayname,
+		"creation_datetime_utc": current_datetime,
+		"last_played_datetime_utc": current_datetime,
+	}
+	
+	if not file_data.has("meta"):
+		file_data["meta"] = _new_accounts_meta_section()
+	file_data["meta"]["last_selected_account_username"] = username
+	
+	return write_cfg(PATH_ACCOUNTS, file_data)
+func delete_account(username):
+	# These inputs, if they somehow get passed in, would have terrible consequences if accepted.
+	if (username == "guest") or (username == "meta"):
+		push_error("Called to delete an account named \"guest\" or \"meta\". (Ignoring deletion request.)")
+		return
+	
+	var accounts_file_data: Dictionary = read_cfg(PATH_ACCOUNTS)
+	
+	# Remove the associated account from the accounts file data.
+	accounts_file_data.erase(username)
+	
+	# If the last selected username is the account being deleted, defualt it to guest.
+	if not accounts_file_data.has("meta"):
+		accounts_file_data["meta"] = _new_accounts_meta_section()
+	if accounts_file_data["meta"]["last_selected_account_username"] == username:
+		accounts_file_data["meta"]["last_selected_account_username"] = "guest"
+	
+	write_cfg(PATH_ACCOUNTS, accounts_file_data)
+	
+	# !!! REMEMBER TO ALSO DELETE SOME ACCOUNT SPECIFIC THINGS LIKE SAVED SETTINGS LATER!
+	return
+func rename_account(original_username: String, new_username: String):
+	pass
+
 #-=-=-=-# <~

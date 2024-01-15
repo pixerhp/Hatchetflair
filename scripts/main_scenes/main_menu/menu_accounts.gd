@@ -50,13 +50,6 @@ func _update_accounts_from_file():
 	accounts.clear()
 	accounts = FileManager.read_cfg(FileManager.PATH_ACCOUNTS, ["meta"])
 	return
-func _update_file_from_accounts(new_selected_username: String = "guest"):
-	var meta: Dictionary = FileManager.read_cfg_section(FileManager.PATH_ACCOUNTS, "meta")
-	meta["last_selected_account_username"] = new_selected_username
-	var complete_file_dictionary: Dictionary = accounts
-	complete_file_dictionary["meta"] = meta
-	FileManager.write_cfg(FileManager.PATH_ACCOUNTS, complete_file_dictionary)
-	return
 
 func _select_remembered_last_selected_account():
 	var last_selected_account_username = FileManager.read_cfg_keyval(
@@ -174,7 +167,7 @@ func _on_manage_account_popup_index_pressed(index):
 		2:
 			_switch_to_screen("DeleteAccountScreen")
 		_:
-			push_error("Manage account popup had an item with index ", index," pressed which did not have defined behavior.")
+			push_error("Manage account popup had an item with index ", index," pressed which did not have a defined behavior.")
 	return
 
 func _on_change_displayname_button_pressed():
@@ -350,14 +343,55 @@ func _on_create_account_confirm_button_pressed():
 	_update_create_account_warning_and_confirm_button()
 	if create_account_confirm_button.disabled == true:
 		return
-	var username: String = create_account_username_input_node.text
+	
+	var username: String = Globals.normalize_username_str(create_account_username_input_node.text)
 	var displayname: String = create_account_displayname_input_node.text
-	accounts[username] = {
-		"displayname": displayname,
-		"creation_datetime_utc": Time.get_datetime_string_from_system(true, true),
-		"last_played_datetime_utc": Time.get_datetime_string_from_system(true, true),
-	}
-	_update_file_from_accounts(username)
+	FileManager.create_account(username, displayname)
+	
+	_update_everything()
+	_select_remembered_last_selected_account()
+	_switch_to_screen("GeneralScreen")
+	return
+
+
+
+### DELETE ACCOUNT SCREEN:
+@onready var delete_account_retype_text_node: RichTextLabel = $DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/RetypeText
+@onready var deletion_retype_string: String = "<NOT YET LOADED>"
+@onready var deletion_retype_input_node: TextEdit = $DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/RetypeInput
+@onready var delete_account_warning_text_node: RichTextLabel = $DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/WarningMargin/WarningText
+@onready var delete_account_confirm_button: Button = $DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/BottomButtons/ConfirmButton
+
+func _on_delete_account_screen_visibility_changed():
+	_randomize_delete_account_copy_text()
+	_update_delete_account_warning_and_confirm_button()
+	return
+
+func _randomize_delete_account_copy_text():
+	deletion_retype_string = "%x" % abs(Globals.rand_int())
+	delete_account_retype_text_node.text = "[center]" + "retype text: " + deletion_retype_string + "[/center]"
+	deletion_retype_input_node.text = ""
+	return
+
+func _update_delete_account_warning_and_confirm_button():
+	var warning: String = ""
+	
+	if not deletion_retype_input_node.text == deletion_retype_string:
+		if not warning.is_empty(): warning += "\n"
+		warning += "input text does not match provided retype string"
+	
+	delete_account_warning_text_node.text = warning
+	delete_account_warning_text_node.get_parent().visible = not warning.is_empty()
+	delete_account_confirm_button.disabled = not warning.is_empty()
+	pass
+
+func _on_delete_account_confirm_button_pressed():
+	if account_selector_node.selected < 2:
+		return
+	var username: String = selector_index_to_username[account_selector_node.selected]
+	if not accounts.has(username):
+		push_error("Attempting to delete a username not contained in the accounts dictionary var. (Attempting anyway.)")
+	FileManager.delete_account(username)
 	_update_everything()
 	_select_remembered_last_selected_account()
 	_switch_to_screen("GeneralScreen")
