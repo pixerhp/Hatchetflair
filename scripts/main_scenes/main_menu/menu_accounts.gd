@@ -338,7 +338,7 @@ func _on_create_account_displayname_input_text_changed():
 	return
 
 func _on_create_account_confirm_button_pressed():
-	# !!! make safer / more robust against accidentally destroying the file contents if something goes wrong?
+	# !!! make safer / more robust against accidentally destroying the file contents if something goes wrong? (Also consider equivalents in renaming/deleting)
 	_update_accounts_from_file()
 	_update_create_account_warning_and_confirm_button()
 	if create_account_confirm_button.disabled == true:
@@ -355,6 +355,65 @@ func _on_create_account_confirm_button_pressed():
 
 
 
+### RENAME ACCOUNT USERNAME SCREEN:
+@onready var rename_account_new_username_input_node: TextEdit = $RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/MarginContainer/VBoxContainer/UsernameInput
+@onready var rename_account_warning_text_node: RichTextLabel = $RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/MarginContainer/VBoxContainer/WarningMargin/WarningText
+@onready var rename_account_confirm_button: Button = $RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/BottomButtons/ConfirmButton
+
+func _on_rename_account_screen_visibility_changed():
+	if not is_node_ready():
+		await ready
+	rename_account_new_username_input_node.text = ""
+	_update_rename_account_warning_and_confirm_button()
+	return
+
+func _on_rename_account_new_username_input_text_changed():
+	rename_account_new_username_input_node.text = Globals.normalize_username_str(rename_account_new_username_input_node.text)
+	rename_account_new_username_input_node.set_caret_column(rename_account_new_username_input_node.text.length())
+	_update_rename_account_warning_and_confirm_button()
+	return
+
+func _update_rename_account_warning_and_confirm_button():
+	var warning: String = ""
+	var new_username: String = rename_account_new_username_input_node.text
+	
+	# New username warnings:
+	if new_username.length() < 1:
+		if not warning.is_empty(): warning += "\n"
+		warning += "new username may not be blank"
+	if new_username.length() > 32:
+		if not warning.is_empty(): warning += "\n"
+		warning += "new username may not exceed 32 characters (" + str(new_username.length()) + ")"
+	if (new_username == "meta") or (new_username == "guest"):
+		if not warning.is_empty(): warning += "\n"
+		warning += "new username cannot be \"meta\" or \"guest\""
+	# (Note: accounts.has(new_username) should always cover the current selected one, but the or statement is for just in case it somehow doesn't.)
+	if accounts.has(new_username) or (new_username == selector_index_to_username[account_selector_node.selected]):
+		if not warning.is_empty(): warning += "\n"
+		warning += "account with new username already exists"
+	
+	rename_account_warning_text_node.text = warning
+	rename_account_warning_text_node.get_parent().visible = not warning.is_empty()
+	rename_account_confirm_button.disabled = not warning.is_empty()
+	return
+
+func _on_rename_account_confirm_button_pressed():
+	_update_accounts_from_file()
+	_update_create_account_warning_and_confirm_button()
+	if rename_account_confirm_button.disabled == true:
+		return
+	
+	var old_username: String = Globals.normalize_username_str(selector_index_to_username[account_selector_node.selected])
+	var new_username: String = Globals.normalize_username_str(rename_account_new_username_input_node.text)
+	FileManager.rename_account(old_username, new_username)
+	
+	_update_everything()
+	_select_remembered_last_selected_account()
+	_switch_to_screen("GeneralScreen")
+	return
+
+
+
 ### DELETE ACCOUNT SCREEN:
 @onready var delete_account_retype_text_node: RichTextLabel = $DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/RetypeText
 @onready var deletion_retype_string: String = "<NOT YET LOADED>"
@@ -363,6 +422,8 @@ func _on_create_account_confirm_button_pressed():
 @onready var delete_account_confirm_button: Button = $DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/BottomButtons/ConfirmButton
 
 func _on_delete_account_screen_visibility_changed():
+	if not is_node_ready():
+		await ready
 	_randomize_delete_account_copy_text()
 	_update_delete_account_warning_and_confirm_button()
 	return

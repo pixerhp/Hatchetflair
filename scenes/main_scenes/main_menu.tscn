@@ -46,7 +46,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleMenu" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -207,6 +206,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="AccountsMenu" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1757,7 +1757,10 @@ text = "Back"
 [connection signal="text_changed" from="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/DisplaynameInput" to="Menus/AccountsMenu" method="_on_create_account_displayname_input_text_changed"]
 [connection signal="pressed" from="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
 [connection signal="pressed" from="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/ButtonsHContainer/ConfirmButton" to="Menus/AccountsMenu" method="_on_create_account_confirm_button_pressed"]
+[connection signal="visibility_changed" from="Menus/AccountsMenu/RenameUsernameScreen" to="Menus/AccountsMenu" method="_on_rename_account_screen_visibility_changed"]
+[connection signal="text_changed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/MarginContainer/VBoxContainer/UsernameInput" to="Menus/AccountsMenu" method="_on_rename_account_new_username_input_text_changed"]
 [connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/BottomButtons/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
+[connection signal="pressed" from="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/BottomButtons/ConfirmButton" to="Menus/AccountsMenu" method="_on_rename_account_confirm_button_pressed"]
 [connection signal="visibility_changed" from="Menus/AccountsMenu/DeleteAccountScreen" to="Menus/AccountsMenu" method="_on_delete_account_screen_visibility_changed"]
 [connection signal="text_changed" from="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/RetypeInput" to="Menus/AccountsMenu" method="_update_delete_account_warning_and_confirm_button"]
 [connection signal="pressed" from="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/BottomButtons/CancelButton" to="Menus/AccountsMenu" method="_switch_to_screen" binds= ["GeneralScreen"]]
