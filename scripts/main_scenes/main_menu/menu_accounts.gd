@@ -429,7 +429,7 @@ func _on_delete_account_screen_visibility_changed():
 	return
 
 func _randomize_delete_account_copy_text():
-	deletion_retype_string = "%x" % abs(Globals.rand_int())
+	deletion_retype_string = "%x" % abs(Globals.random_int())
 	delete_account_retype_text_node.text = "[center]" + "retype text: " + deletion_retype_string + "[/center]"
 	deletion_retype_input_node.text = ""
 	return
