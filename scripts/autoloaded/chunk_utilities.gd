@@ -51,7 +51,7 @@ func gen_unit_rhombdo_indices_table() -> Array[PackedByteArray]:
 # 	ex: if the 2nd and 5th vertices are connected with an edge, edges should contain [1, 4].
 # Note: The indices of the edges listed is the same as their associated midpoints as used in the output table.
 # Note: Only works with up to 256 vertices and 256 edges. This limit can be increased by 
-#	replacing PackedByteArray with int all over the place, but at the cost of larger memory costs.
+#	replacing PackedByteArray with int all over the place, but at the expense of larger memory costs.
 func gen_indices_table(vertices: Array[Vector3], edges: Array[PackedByteArray]) -> Array[PackedByteArray]:
 	if vertices.size() < 4:
 		push_error("Not enough vertices to constitute a 3D shape. (Requires at least 4, was provided ", vertices.size(), ")")

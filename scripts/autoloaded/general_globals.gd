@@ -43,15 +43,16 @@ func _enter_tree() -> void:
 	_initialize_inputmap_defaults()
 	
 	
-	var valthing: float = 0
-	var list: Array[float] = []
-	for i in 2:
-		valthing = random_raritytier_val_natural()
-		list.append(valthing)
-		print(valthing)
-	print()
-	print(list)
-	print(raritytier_val_combine(exp(1), list))
+	var vertex_states: PackedByteArray = []
+	vertex_states.resize(5)
+	var midpoint_states: PackedByteArray = []
+	midpoint_states.resize(4)
+	for combination in 32:
+		# Get the on/off state of each vertex based on the current combination:
+		for i in vertex_states.size():
+			vertex_states[i] = (combination >> i) & 1
+		print(vertex_states)
+	
 	
 	
 #	# TEMPORARY CODE FOR TESTING OUTPUT
