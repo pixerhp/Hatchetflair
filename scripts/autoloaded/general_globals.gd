@@ -43,15 +43,8 @@ func _enter_tree() -> void:
 	_initialize_inputmap_defaults()
 	
 	
-	var vertex_states: PackedByteArray = []
-	vertex_states.resize(5)
-	var midpoint_states: PackedByteArray = []
-	midpoint_states.resize(4)
-	for combination in 32:
-		# Get the on/off state of each vertex based on the current combination:
-		for i in vertex_states.size():
-			vertex_states[i] = (combination >> i) & 1
-		print(vertex_states)
+	# TEMPORARY TESTING 2!
+	ChunkUtils.get_marched_geo_tri_indices_table(ChunkUtils.unit_cube[0], ChunkUtils.unit_cube[1], true)
 	
 	
 	

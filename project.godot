@@ -26,6 +26,7 @@ Globals="*res://scripts/autoloaded/general_globals.gd"
 FileManager="*res://scripts/autoloaded/file_manager.gd"
 VManager="*res://scripts/autoloaded/version_manager.gd"
 ChunkUtilities="*res://scripts/autoloaded/chunk_utilities.gd"
+ChunkUtils="*res://scripts/autoloaded/chunk_utils.gd"
 
 [input]
 
