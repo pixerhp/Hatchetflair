@@ -44,7 +44,8 @@ func _enter_tree() -> void:
 	
 	
 	# TEMPORARY TESTING 2!
-	ChunkUtils.get_marched_geo_tri_indices_table(ChunkUtils.unit_cube[0], ChunkUtils.unit_cube[1], true)
+	# !!! (add polyhedron faces to the function input)
+	ChunkUtils.get_marched_polyhedron_tri_indices_table(ChunkUtils.unit_cube[0], ChunkUtils.unit_cube[1], , true)
 	
 	
 	
