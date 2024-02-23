@@ -45,7 +45,11 @@ func _enter_tree() -> void:
 	
 	# TEMPORARY TESTING 2!
 	# !!! (add polyhedron faces to the function input)
-	ChunkUtils.get_marched_polyhedron_tri_indices_table(ChunkUtils.unit_cube[0], ChunkUtils.unit_cube[1], , true)
+	ChunkUtils.get_marched_polyhedron_tri_indices_table(
+		ChunkUtils.unit_cube.verts, 
+		ChunkUtils.unit_cube.edges, 
+		ChunkUtils.unit_cube.faces, 
+		true)
 	
 	
 	
