@@ -43,6 +43,8 @@ func _enter_tree() -> void:
 	_initialize_inputmap_defaults()
 	
 	
+	
+	
 	# TEMPORARY TESTING 2!
 	# !!! (add polyhedron faces to the function input)
 	ChunkUtils.get_marched_polyhedron_tri_indices_table(
@@ -51,6 +53,19 @@ func _enter_tree() -> void:
 		ChunkUtils.unit_cube.faces, 
 		true)
 	
+	print()
+	print()
+	print()
+	
+	var a: PackedByteArray = [1,5]
+	var b: PackedByteArray = [4,6]
+	var c: PackedByteArray = [4,6]
+	print(a, " duplicated is: ", a.duplicate())
+	print(b, " duplicated is: ", b.duplicate())
+	print(c, " duplicated is: ", c.duplicate())
+	print("does ", a, " equal ", b, "?: ", (a==b))
+	print("does ", a, " equal ", c, "?: ", (a==c))
+	print("does ", b, " equal ", c, "?: ", (b==c))
 	
 	
 #	# TEMPORARY CODE FOR TESTING OUTPUT

@@ -80,33 +80,176 @@ func get_marched_polyhedron_tri_indices_table(
 	faces: Array[PackedByteArray],
 	# Creative choice for result of quad ambiguities (if true bridge ons, if false bridge offs.)
 	quad_ambiguity_bridge_type: bool,
-) -> Array[PackedByteArray]:
+	) -> Array[PackedByteArray]:
+	
 	print("Generating triangle indices table (length: ", pow(2, verts.size()), ") for marched polyhedron with ", 
-	verts.size(), " vertices and ", edges.size(), " vertex edges...")
+		verts.size(), " vertices, ", edges.size(), " edges and ", faces.size(), " faces... ",
+		"(quad bridge type = ", int(quad_ambiguity_bridge_type), ")")
 	
-	if verts.size() > 256:
-		push_error("Provided geometry has too many vertices (has ", verts.size(), " when max is 256.)")
-		return []
-	if (verts.size() < 4) or (edges.size() < 6) or (faces.size() < 4):
-		push_error("Provided geometry does not have enough vertices (has ", verts.size(), "/4), ", 
-			"edges (has ", edges.size(), "/6), ", 
-			"and/or faces (has ", faces.size(), "/4) to constitute a 3 dimensional polyhedron.")
-		return []
-	#if true: # So that the temporary variables below get deleted later.
-		#var is_edge_used_by_faces: PackedByteArray = []
-		#is_edge_used_by_faces.resize(edges.size())
-		#is_edge_used_by_faces.fill(false)
-		#for face in faces:
-			#if face.size() > 4:
-				#push_error()
-				#return []
+	# Collects warnings and fatal errors related to the input polyhedron information.
+	var polyhedron_errors: Array[PackedStringArray]
+	polyhedron_errors = get_polyhedron_errors(verts, edges, faces, 4)
+	
+	print("Polyhedron Warnings: (", polyhedron_errors[0].size(), ")")
+	for warning_message in polyhedron_errors[0]:
+		print("\t" + warning_message)
+	print("Polyhedron Errors: (", polyhedron_errors[1].size(), ")")
+	for error_message in polyhedron_errors[1]:
+		print("\t" + error_message)
+	
+	if polyhedron_errors[1].size() > 0:
+		print("Aborting triangle indices table generation due to polyhedron errors.")
 	
 	
 	
-	# !!! probably make the user input object vertex faces. think of blender how a shape with only vertices and edges could have faces pretty much anywhere, it's undeterminable without creative input
+	
+	
+	
+	
+	
+	# Checks for errors and mistakes related to provided faces:
+	if true:
+		var too_many_edges_in_faces: bool = false
+		var edges_used_by_faces: PackedByteArray = []
+		edges_used_by_faces.resize(edges.size())
+		edges_used_by_faces.fill(false)
+		var faces_use_nonexistant_edges: bool = false
+		for face in faces:
+			if face.size() > 4:
+				too_many_edges_in_faces = true
+			for edge in face:
+				if edge < edges.size():
+					edges_used_by_faces[edge] = true
+				else:
+					faces_use_nonexistant_edges = true
+		var number_of_edges_unused_by_faces: int = 0
+		for edge_usedness in edges_used_by_faces:
+			if edge_usedness == int(false):
+				number_of_edges_unused_by_faces += 1
+		if too_many_edges_in_faces:
+			push_error("At least one face of the provided geometry had 5 or more edges, which is ",
+				"not currently supported due to the complexity of created midpoint-banding ambiguities.")
+		if number_of_edges_unused_by_faces > 0:
+			push_warning(number_of_edges_unused_by_faces, " edges are unused by faces.")
+		if faces_use_nonexistant_edges:
+			push_error("At least one face of the provided geometry depended on unprovided edges.")
+		if too_many_edges_in_faces or faces_use_nonexistant_edges:
+			return []
+	
+	
+	
 	
 	# {u} determine active midpoints
 	# {u} determine midpoint loops by making active midpoint connection on every main vertex face
 	
 	
 	return []
+
+func get_polyhedron_errors(
+	verts: Array[Vector3], 
+	edges: Array[PackedByteArray], 
+	faces: Array[PackedByteArray],
+	max_face_gon_allowed: int = -1 #(use -1 for no limit)
+	) -> Array[PackedStringArray]:
+	
+	var polyhedron_errors: Array[PackedStringArray] = [[],[]]
+	
+	if verts.size() > 256:
+		polyhedron_errors[1].append("Too many vertices. (Limit is 256.)")
+	if edges.size() > 256:
+		polyhedron_errors[1].append("Too many edges. (Limit is 256.)")
+	# (Faces don't currently have a reason to be limited.)
+	
+	if (verts.size() < 4):
+		polyhedron_errors[1].append("Not enough vertices to constitute a 3 dimensional polyhedron. " +
+			" (" + str(verts.size()) + "/4)")
+	if (edges.size() < 6):
+		polyhedron_errors[1].append("Not enough edges to constitute a 3 dimensional polyhedron. " +
+			" (" + str(edges.size()) + "/6)")
+	if (faces.size() < 4):
+		polyhedron_errors[1].append("Not enough faces to constitute a 3 dimensional polyhedron."  +
+			" (" + str(faces.size()) + "/4)")
+	
+	var bad_edges_count: int = 0
+	for edge in edges:
+		if edge.size() != 2:
+			bad_edges_count += 1
+	polyhedron_errors[1].append("Found " + str(bad_edges_count) + " instances of edges referencing a wrong number of vertices.")
+	var bad_faces_count: int = 0
+	for face in faces:
+		if face.size() < 3:
+			bad_faces_count += 1
+	polyhedron_errors[1].append("Found " + str(bad_faces_count) + " instances of faces referencing too few vertices.")
+	
+	# Check for duplicate vertices, edges and faces.
+	# (verts:)
+	var duplicates_count: int = 0
+	if verts.size() > 1:
+		for index_a in range(0, verts.size() - 1):
+			for index_b in range(index_a + 1, verts.size()):
+				if verts[index_a] == verts[index_b]:
+					duplicates_count += 1
+		if duplicates_count > 0:
+			polyhedron_errors[0].append("Found (roughly) " + str(duplicates_count) + " instances of duplicate vertices.")
+	# (edges:)
+	duplicates_count = 0
+	if edges.size() > 1:
+		var sorted_edge_a: PackedByteArray
+		var sorted_edge_b: PackedByteArray
+		for index_a in range(0, edges.size() - 1):
+			for index_b in range(index_a + 1, edges.size()):
+				print("(",index_a,",",index_b,"):")
+				print(edges[index_a], ", ", edges[index_b])
+				print(edges[index_a].duplicate(), ", ", edges[index_b].duplicate())
+				sorted_edge_a = edges[index_a]
+				sorted_edge_b = edges[index_b]
+				print(sorted_edge_a, ", ", sorted_edge_b)
+				sorted_edge_a.sort()
+				sorted_edge_b.sort()
+				print(sorted_edge_a, ", ", sorted_edge_b)
+				print("Does ", sorted_edge_a, " equal ", sorted_edge_b, "?: ", (sorted_edge_a == sorted_edge_b))
+				print()
+				if sorted_edge_a == sorted_edge_b:
+					duplicates_count += 1
+		if duplicates_count > 0:
+			polyhedron_errors[0].append("Found (roughly) " + str(duplicates_count) + " instances of duplicate edges.")
+	# (faces:)
+	duplicates_count = 0
+	if faces.size() > 1:
+		var sorted_face_a: PackedByteArray = []
+		var sorted_face_b: PackedByteArray = []
+		for index_a in range(0, faces.size() - 1):
+			for index_b in range(index_a + 1, faces.size()):
+				sorted_face_a = faces[index_a].duplicate()
+				sorted_face_a.sort()
+				sorted_face_b = faces[index_b].duplicate()
+				sorted_face_b.sort()
+				if sorted_face_a == sorted_face_b:
+					duplicates_count += 1
+		if duplicates_count > 0:
+			polyhedron_errors[0].append("Found (roughly) " + str(duplicates_count) + " instances of duplicate faces.")
+	
+	# Check whether any edges are left unused by all of the faces:
+	var edges_used_states: PackedByteArray = []
+	edges_used_states.resize(edges.size())
+	edges_used_states.fill(int(false))
+	for face in faces:
+		for edge_index in face:
+			edges_used_states[edge_index] = int(true)
+	var edges_left_unused_by_faces: int = 0
+	for state in edges_used_states:
+		if state == int(false):
+			edges_left_unused_by_faces += 1
+	if edges_left_unused_by_faces > 0:
+		polyhedron_errors[0].append(str(edges_left_unused_by_faces) + " edges were not used by any faces.")
+	
+	if not max_face_gon_allowed == -1:
+		var highest_face_gon: int = 0
+		for face in faces:
+			if face.size() > highest_face_gon:
+				highest_face_gon = face.size()
+		if highest_face_gon > max_face_gon_allowed:
+			polyhedron_errors[1].append("At least 1 face found referencing more than allowed number of edges. " + 
+				"(at least one face referenced " + str(highest_face_gon) + " out of max allowed " + str(max_face_gon_allowed) + ".)")
+	
+	return polyhedron_errors
