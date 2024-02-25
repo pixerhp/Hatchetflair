@@ -26,12 +26,14 @@ class unit_cube:
 		Vector3(-0.5, 0.5, 0.5),
 		Vector3(0.5, 0.5, 0.5),
 	]
-	const edges: Array[PackedByteArray] = [
+	# !!! MAKE THESE CONSTANTS NOT VARIABLES ONCE THE RELATED GODOT BUGS ARE FIXED!!
+	# (their uses will also be different, not requiring an instanciated cube class object to access them.)
+	var edges: Array[PackedByteArray] = [
 		[0,1], [0,2], [1,3], [2,3],
 		[0,4], [1,5], [2,6], [3,7],
 		[4,5], [4,6], [5,7], [6,7],
 	]
-	const faces: Array[PackedByteArray] = [
+	var faces: Array[PackedByteArray] = [
 		[0,2,3,1],
 		
 	]
@@ -173,13 +175,16 @@ func get_polyhedron_errors(
 	var bad_edges_count: int = 0
 	for edge in edges:
 		if edge.size() != 2:
+			print("bad edge: ", edge, " size: ", edge.size())
 			bad_edges_count += 1
-	polyhedron_errors[1].append("Found " + str(bad_edges_count) + " instances of edges referencing a wrong number of vertices.")
+	if bad_edges_count > 0:
+		polyhedron_errors[1].append("Found " + str(bad_edges_count) + " instances of edges referencing a wrong number of vertices.")
 	var bad_faces_count: int = 0
 	for face in faces:
 		if face.size() < 3:
 			bad_faces_count += 1
-	polyhedron_errors[1].append("Found " + str(bad_faces_count) + " instances of faces referencing too few vertices.")
+	if bad_faces_count > 0:
+		polyhedron_errors[1].append("Found " + str(bad_faces_count) + " instances of faces referencing too few vertices.")
 	
 	# Check for duplicate vertices, edges and faces.
 	# (verts:)
@@ -198,17 +203,10 @@ func get_polyhedron_errors(
 		var sorted_edge_b: PackedByteArray
 		for index_a in range(0, edges.size() - 1):
 			for index_b in range(index_a + 1, edges.size()):
-				print("(",index_a,",",index_b,"):")
-				print(edges[index_a], ", ", edges[index_b])
-				print(edges[index_a].duplicate(), ", ", edges[index_b].duplicate())
-				sorted_edge_a = edges[index_a]
-				sorted_edge_b = edges[index_b]
-				print(sorted_edge_a, ", ", sorted_edge_b)
+				sorted_edge_a = edges[index_a].duplicate()
 				sorted_edge_a.sort()
+				sorted_edge_b = edges[index_b].duplicate()
 				sorted_edge_b.sort()
-				print(sorted_edge_a, ", ", sorted_edge_b)
-				print("Does ", sorted_edge_a, " equal ", sorted_edge_b, "?: ", (sorted_edge_a == sorted_edge_b))
-				print()
 				if sorted_edge_a == sorted_edge_b:
 					duplicates_count += 1
 		if duplicates_count > 0:
