@@ -35,7 +35,11 @@ class unit_cube:
 	]
 	var faces: Array[PackedByteArray] = [
 		[0,2,3,1],
-		
+		[0,4,8,5],
+		[1,6,9,4],
+		[2,5,10,7],
+		[3,7,11,6],
+		[8,9,11,10],
 	]
 
 class unit_rhombdo:
