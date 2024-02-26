@@ -64,14 +64,27 @@ class unit_rhombdo:
 		
 		Vector3(0, (1.0/sqrt(3)), 0),
 	]
-	const edges: Array[PackedByteArray] = [
+	# !!! MAKE THESE CONSTANTS NOT VARIABLES ONCE THE RELATED GODOT BUGS ARE FIXED!!
+	# (their uses will also be different, not requiring an instanciated cube class object to access them.)
+	var edges: Array[PackedByteArray] = [
 		[0,1], [0,2], [0,3], [0,4],
 		[1,5], [1,6], [2,5], [3,6], [2,7], [3,8], [4,7], [4,8],
 		[5,9], [6,9], [5,10], [6,11], [7,10], [8,11], [7,12], [8,12],
 		[9,13], [10,13], [11,13], [12,13], 
 	]
-	const faces: Array[PackedByteArray] = [
-		
+	var faces: Array[PackedByteArray] = [
+		[0,1,6,4],
+		[0,5,7,2],
+		[1,3,10,8],
+		[2,9,11,3],
+		[4,12,13,5],
+		[6,8,16,14],
+		[7,15,17,9],
+		[10,11,19,18],
+		[12,14,21,20],
+		[13,20,22,15],
+		[16,18,23,21],
+		[17,22,23,19],
 	]
 
 
