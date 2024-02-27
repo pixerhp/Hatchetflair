@@ -119,43 +119,37 @@ func get_marched_polyhedron_tri_indices_table(
 	if polyhedron_errors[1].size() > 0:
 		print("Aborting triangle indices table generation due to polyhedron errors.")
 	
-	
-	
-	
-	
-	
-	
-	
-	# Checks for errors and mistakes related to provided faces:
-	if true:
-		var too_many_edges_in_faces: bool = false
-		var edges_used_by_faces: PackedByteArray = []
-		edges_used_by_faces.resize(edges.size())
-		edges_used_by_faces.fill(false)
-		var faces_use_nonexistant_edges: bool = false
+	var vertex_states: PackedByteArray = []
+	vertex_states.resize(verts.size())
+	var edge_mid_states: PackedByteArray = []
+	edge_mid_states.resize(edges.size())
+	var mid_conns: PackedByteArray = []
+	var active_mids_in_face: int = 0
+	for combination in int(pow(2, verts.size())):
+		if (combination % 1000) == 0:
+			print(100 * (float(combination) / pow(2, verts.size())), "% completed... (on combination index ", combination, ")")
+		for index in verts.size():
+			vertex_states[index] = (combination >> index) & 1
+		for index in edges.size():
+			edge_mid_states[index] = int(vertex_states[edges[index][0]] != vertex_states[edges[index][1]])
+		
+		mid_conns = []
 		for face in faces:
-			if face.size() > 4:
-				too_many_edges_in_faces = true
-			for edge in face:
-				if edge < edges.size():
-					edges_used_by_faces[edge] = true
-				else:
-					faces_use_nonexistant_edges = true
-		var number_of_edges_unused_by_faces: int = 0
-		for edge_usedness in edges_used_by_faces:
-			if edge_usedness == int(false):
-				number_of_edges_unused_by_faces += 1
-		if too_many_edges_in_faces:
-			push_error("At least one face of the provided geometry had 5 or more edges, which is ",
-				"not currently supported due to the complexity of created midpoint-banding ambiguities.")
-		if number_of_edges_unused_by_faces > 0:
-			push_warning(number_of_edges_unused_by_faces, " edges are unused by faces.")
-		if faces_use_nonexistant_edges:
-			push_error("At least one face of the provided geometry depended on unprovided edges.")
-		if too_many_edges_in_faces or faces_use_nonexistant_edges:
-			return []
+			active_mids_in_face = 0
+			for edge_index in face:
+				if edge_mid_states[edge_index] == int(true):
+					active_mids_in_face += 1
+			match active_mids_in_face:
+				0:
+					pass
+				2:
+					pass
+				4: #quad midpoint-banding ambiguity situation
+					pass
+				_:
+					push_error("REVISE CODE, active_mids_in_face CAN APPARENTLY EQUAL ", active_mids_in_face)
 	
-	
+	print("100% completed.")
 	
 	
 	# {u} determine active midpoints
