@@ -97,13 +97,15 @@ func get_marched_polyhedron_tri_indices_table(
 	# The vertex order should appear clockwise when the face's normal vector points towards the viewer perspective,
 	# and counter clockwise when the face is facing away from the viewer's perspective.
 	faces: Array[PackedByteArray],
-	# Creative choice for result of quad ambiguities (if true bridge ons, if false bridge offs.)
-	quad_ambiguity_bridge_type: bool,
+	# Creative choice for how quad midpoint-banding ambiguities should be solved.
+	# 0 = Bridge Offs; 1 = Bridge Ons;
+	# 2 = Minimize number of bands; 3 = Maximize number of bands;
+	quad_ambiguity_style: int,
 	) -> Array[PackedByteArray]:
 	
 	print("Generating triangle indices table (length: ", pow(2, verts.size()), ") for marched polyhedron with ", 
 		verts.size(), " vertices, ", edges.size(), " edges and ", faces.size(), " faces... ",
-		"(quad bridge type = ", int(quad_ambiguity_bridge_type), ")")
+		"(quad bridge type = ", quad_ambiguity_style, ")")
 	
 	# Collects warnings and fatal errors related to the input polyhedron information.
 	var polyhedron_errors: Array[PackedStringArray]
@@ -119,15 +121,18 @@ func get_marched_polyhedron_tri_indices_table(
 	if polyhedron_errors[1].size() > 0:
 		print("Aborting triangle indices table generation due to polyhedron errors.")
 	
+	var percentage_statement_interval: int = max(10, min(16000, int(pow(2, verts.size())/10)))
 	var vertex_states: PackedByteArray = []
 	vertex_states.resize(verts.size())
 	var edge_mid_states: PackedByteArray = []
 	edge_mid_states.resize(edges.size())
-	var mid_conns: PackedByteArray = []
-	var active_mids_in_face: int = 0
+	var mid_conns: Array[PackedByteArray] = []
+	var active_mids_in_face: PackedByteArray = []
 	for combination in int(pow(2, verts.size())):
-		if (combination % 1000) == 0:
+		# Occasional percentage completion text:
+		if (combination % percentage_statement_interval) == 0:
 			print(100 * (float(combination) / pow(2, verts.size())), "% completed... (on combination index ", combination, ")")
+		
 		for index in verts.size():
 			vertex_states[index] = (combination >> index) & 1
 		for index in edges.size():
@@ -135,19 +140,33 @@ func get_marched_polyhedron_tri_indices_table(
 		
 		mid_conns = []
 		for face in faces:
-			active_mids_in_face = 0
+			active_mids_in_face = []
 			for edge_index in face:
 				if edge_mid_states[edge_index] == int(true):
-					active_mids_in_face += 1
-			match active_mids_in_face:
+					active_mids_in_face.append(edge_index)
+			match active_mids_in_face.size():
 				0:
-					pass
+					continue
 				2:
-					pass
-				4: #quad midpoint-banding ambiguity situation
-					pass
+					mid_conns.append(active_mids_in_face.duplicate())
+				4:
+					match quad_ambiguity_style:
+						0:
+							pass
+						1:
+							pass
+						2:
+							pass
+						3:
+							pass
+						_:
+							push_error("Unsupported quad midpoint-banding ambiguity solution style: ", quad_ambiguity_style)
 				_:
-					push_error("REVISE CODE, active_mids_in_face CAN APPARENTLY EQUAL ", active_mids_in_face)
+					push_error("Unsupported number of active midpoints in single face: ", active_mids_in_face)
+		if combination == 26:
+			print(vertex_states)
+			print(edge_mid_states)
+			print(mid_conns)
 	
 	print("100% completed.")
 	
