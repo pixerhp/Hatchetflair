@@ -258,6 +258,33 @@ func get_polyhedron_errors(
 	if edges_left_unused_by_faces > 0:
 		polyhedron_errors[0].append(str(edges_left_unused_by_faces) + " edges were not used by any faces.")
 	
+	# Check whether the edges in a face actually connect to eachother in the order given:
+	var n_of_disconnected_faces: int = 0
+	var face_edge_indices: PackedByteArray = []
+	for face in faces:
+		face_edge_indices = []
+		for index in face.size():
+			if edges[face[index]].size() != 2:
+				n_of_disconnected_faces += 1
+				break
+			if (
+				(
+					edges[face[(index-1)%face.size()]].has(edges[face[index]][0]) and 
+					edges[face[(index+1)%face.size()]].has(edges[face[index]][1])
+				) or
+				(
+					edges[face[(index-1)%face.size()]].has(edges[face[index]][1]) and 
+					edges[face[(index+1)%face.size()]].has(edges[face[index]][0])
+				)
+			):
+				continue
+			else:
+				n_of_disconnected_faces += 1
+				break
+	if n_of_disconnected_faces > 0:
+		polyhedron_errors[1].append("Found " + str(n_of_disconnected_faces) + " instances of " + 
+			"faces whose edges do not actually connect together in the given order.")
+	
 	if not max_face_gon_allowed == -1:
 		var highest_face_gon: int = 0
 		for face in faces:
