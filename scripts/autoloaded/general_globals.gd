@@ -50,7 +50,7 @@ func _enter_tree() -> void:
 		ChunkUtils.unit_cube.verts, 
 		ChunkUtils.unit_cube.new().edges, 
 		ChunkUtils.unit_cube.new().faces, 
-		true)
+		0)
 	
 	
 	

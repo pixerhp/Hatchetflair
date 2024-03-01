@@ -121,17 +121,20 @@ func get_marched_polyhedron_tri_indices_table(
 	if polyhedron_errors[1].size() > 0:
 		print("Aborting triangle indices table generation due to polyhedron errors.")
 	
-	var percentage_statement_interval: int = max(10, min(16000, int(pow(2, verts.size())/10)))
+	var table_size: int = int(pow(2, verts.size()))
+	var percentage_statement_interval: int = max(10, min(16000, int(float(table_size)/10.0)))
 	var vertex_states: PackedByteArray = []
 	vertex_states.resize(verts.size())
 	var edge_mid_states: PackedByteArray = []
 	edge_mid_states.resize(edges.size())
 	var mid_conns: Array[PackedByteArray] = []
 	var active_mids_in_face: PackedByteArray = []
-	for combination in int(pow(2, verts.size())):
+	var face_off_verts: PackedByteArray = []
+	var face_on_verts: PackedByteArray = []
+	for combination in table_size:
 		# Occasional percentage completion text:
 		if (combination % percentage_statement_interval) == 0:
-			print(100 * (float(combination) / pow(2, verts.size())), "% completed... (on combination index ", combination, ")")
+			print(100 * (float(combination) / pow(2, verts.size())), "% completed... (", combination, "/", table_size, ")")
 		
 		for index in verts.size():
 			vertex_states[index] = (combination >> index) & 1
@@ -141,9 +144,17 @@ func get_marched_polyhedron_tri_indices_table(
 		mid_conns = []
 		for face in faces:
 			active_mids_in_face = []
+			face_off_verts = []
+			face_on_verts = []
 			for edge_index in face:
 				if edge_mid_states[edge_index] == int(true):
 					active_mids_in_face.append(edge_index)
+				for vert_index in edges[edge_index]:
+					if (not face_off_verts.has(vert_index)) and (not face_on_verts.has(vert_index)):
+						if vertex_states[vert_index] == int(false):
+							face_off_verts.append(vert_index)
+						else:
+							face_on_verts.append(vert_index)
 			match active_mids_in_face.size():
 				0:
 					continue
@@ -152,29 +163,57 @@ func get_marched_polyhedron_tri_indices_table(
 				4:
 					match quad_ambiguity_style:
 						0:
-							pass
+							mid_conns.append(PackedByteArray([]))
+							mid_conns.append(PackedByteArray([]))
+							for edge_index in active_mids_in_face:
+								if (edges[edge_index][0] == face_on_verts[0]) or (edges[edge_index][1] == face_on_verts[0]):
+									mid_conns[-2].append(edge_index)
+								elif (edges[edge_index][0] == face_on_verts[1]) or (edges[edge_index][1] == face_on_verts[1]):
+									mid_conns[-1].append(edge_index)
+								else:
+									push_error("Bad situation; off-verts: ", face_off_verts, " on verts: ", face_on_verts)
+									return []
 						1:
-							pass
+							mid_conns.append(PackedByteArray([]))
+							mid_conns.append(PackedByteArray([]))
+							for edge_index in active_mids_in_face:
+								if (edges[edge_index][0] == face_off_verts[0]) or (edges[edge_index][1] == face_off_verts[0]):
+									mid_conns[-2].append(edge_index)
+								elif (edges[edge_index][0] == face_off_verts[1]) or (edges[edge_index][1] == face_off_verts[1]):
+									mid_conns[-1].append(edge_index)
+								else:
+									push_error("Bad situation; off-verts: ", face_off_verts, " on verts: ", face_on_verts)
+									return []
 						2:
+							# !!! not finished, this and 3 require saving all quad situations and then finding the combination of them with certain results
 							pass
 						3:
+							# !!! not finished
 							pass
 						_:
 							push_error("Unsupported quad midpoint-banding ambiguity solution style: ", quad_ambiguity_style)
+							return []
+					
+					if not (mid_conns[-2].size() == 2) and (mid_conns[-1].size() == 2):
+						push_error("Fix your code, you must've done something wrong.",
+						" Ambiguity style: ", quad_ambiguity_style,
+						" Combination: ", combination, 
+						" Face off verts and on verts: ", face_off_verts, face_on_verts,
+						" Mid' conn's: ", mid_conns[-2], mid_conns[-1])
 				_:
 					push_error("Unsupported number of active midpoints in single face: ", active_mids_in_face)
-		if combination == 26:
-			print(vertex_states)
-			print(edge_mid_states)
-			print(mid_conns)
+		
+		# {u} form midpoint bands out of midpoint connections
+		
+		# {u} determine whether which if any midpoint bands have triangulation ambiguities.
+		# (AKA whether all of the midpoints in a band fall along a plane.)
+		
+		# {u} triangulate midpoint bands (remember to orient the triangles correctly.)
+		
+		
 	
-	print("100% completed.")
-	
-	
-	# {u} determine active midpoints
-	# {u} determine midpoint loops by making active midpoint connection on every main vertex face
-	
-	
+	print("100% completed!")
+	# !!! (remember to make this return the completed tri indices table.)
 	return []
 
 func get_polyhedron_errors(
