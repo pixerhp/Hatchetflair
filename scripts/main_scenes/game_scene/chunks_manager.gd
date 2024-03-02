@@ -15,6 +15,7 @@ func _ready():
 		for x1 in range(-3, 4):
 			for x2 in range(-3, 4):
 				new_static_chunks_queue.append(Vector3i(h, x1, x2))
+	# Top "stem" of chunks, partially for seeing orientation
 	new_static_chunks_queue.append(Vector3i(4, 0, 0))
 	new_static_chunks_queue.append(Vector3i(5, 0, 0))
 	new_static_chunks_queue.append(Vector3i(6, 0, 0))
