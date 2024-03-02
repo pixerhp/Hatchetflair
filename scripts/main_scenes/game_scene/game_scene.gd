@@ -20,7 +20,7 @@ func _process(delta):
 	if Input.is_action_pressed("game_play_speed_fast"):
 		cam_speed = 100
 	elif Input.is_action_pressed("game_play_speed_slow"):
-		cam_speed = 2
+		cam_speed = 1
 	else:
 		cam_speed = 20
 	
@@ -43,6 +43,17 @@ func _process(delta):
 	
 	if (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED) and not (Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	if Input.is_action_pressed("debug_cause_lag_spike"):
+		var a: float = 0
+		for i1 in 40:
+			for i2 in 40:
+				for i3 in 40:
+					for i4 in 40:
+						if (i1 + i2 + i3 + i4) % 2 == 0:
+							a = pow(2.718281828, 6.2831853071)
+						else:
+							a = pow(6.2831853071, 2.718281828)
 
 func _input(event) -> void:
 	if event is InputEventMouseMotion:

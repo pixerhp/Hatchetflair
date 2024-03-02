@@ -213,7 +213,7 @@ func normalize_username_str(string: String) -> String:
 		formatted_str += acceptable_segment.get_string()
 	return formatted_str
 
-# Used to swap between the zyx and hz1z2 coordinate systems.
+# Used to swap between the zyx and hz1z2 coordinate systems (also flips handedness.)
 func swap_zyx_hzz_i(coords: Vector3i) -> Vector3i:
 	return Vector3i(coords[1], coords[0], -coords[2])
 func swap_zyx_hzz_f(coords: Vector3) -> Vector3:
