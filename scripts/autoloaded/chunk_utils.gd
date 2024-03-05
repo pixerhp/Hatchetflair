@@ -131,6 +131,7 @@ func get_marched_polyhedron_tri_indices_table(
 	var active_mids_in_face: PackedByteArray = []
 	var face_off_verts: PackedByteArray = []
 	var face_on_verts: PackedByteArray = []
+	var mid_bands: Array[PackedByteArray]
 	for combination in table_size:
 		# Occasional percentage completion text:
 		if (combination % percentage_statement_interval) == 0:
@@ -185,6 +186,7 @@ func get_marched_polyhedron_tri_indices_table(
 									push_error("Bad situation; off-verts: ", face_off_verts, " on verts: ", face_on_verts)
 									return []
 						2:
+							
 							# !!! not finished, this and 3 require saving all quad situations and then finding the combination of them with certain results
 							pass
 						3:
@@ -203,7 +205,13 @@ func get_marched_polyhedron_tri_indices_table(
 				_:
 					push_error("Unsupported number of active midpoints in single face: ", active_mids_in_face)
 		
+		# {u} If quad midpoint-banding ambiguity style is 2 or 3, determine the the most appropriate
+		# combination of midpoint connections between all combinations for instances of quad ambiguities
+		
 		# {u} form midpoint bands out of midpoint connections
+		for conn in mid_conns:
+			
+			pass
 		
 		# {u} determine whether which if any midpoint bands have triangulation ambiguities.
 		# (AKA whether all of the midpoints in a band fall along a plane.)
@@ -347,3 +355,19 @@ func get_polyhedron_errors(
 				"(at least one face referenced " + str(highest_face_gon) + " out of max allowed " + str(max_face_gon_allowed) + ".)")
 	
 	return polyhedron_errors
+
+func are_vector3s_coplanar(points: Array[Vector3], tolerance: float) -> bool:
+	if points.size() < 4:
+		return true
+	
+	var triangle_normal_vector: Vector3 = (
+		points[0].cross(points[1]) + 
+		points[1].cross(points[2]) + 
+		points[2].cross(points[0])
+	).normalized()
+	
+	for index in range(3, points.size()):
+		if abs(triangle_normal_vector.dot(points[index] - points[0])) > tolerance:
+			return false
+	
+	return true
