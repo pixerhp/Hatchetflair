@@ -345,6 +345,19 @@ func get_polyhedron_errors(
 		polyhedron_errors[1].append("Found " + str(n_of_disconnected_faces) + " instances of " + 
 			"faces whose edges do not actually connect together in the given order.")
 	
+	# Determine whether the vertices that make up a face are actually coplanar (the face is flat.)
+	var vertices_in_face: Array[Vector3]
+	for face in faces:
+		vertices_in_face = []
+		for edge_index in face:
+			for vertex_index in edges[edge_index]:
+				if not vertices_in_face.has(verts[vertex_index]):
+					vertices_in_face.append(verts[vertex_index])
+		if not are_vector3s_coplanar(vertices_in_face, 0.0001):
+			polyhedron_errors[1].append("Found that at least one face is not actually flat.")
+			break
+	
+	# Check whether face polygons have more vertices than the allowed amount.
 	if not max_face_gon_allowed == -1:
 		var highest_face_gon: int = 0
 		for face in faces:
