@@ -131,6 +131,7 @@ func get_marched_polyhedron_tri_indices_table(
 	var active_mids_in_face: PackedByteArray = []
 	var face_off_verts: PackedByteArray = []
 	var face_on_verts: PackedByteArray = []
+	var quad_ambiguities_to_test: PackedInt32Array = [] # (stores face indices)
 	var mid_bands: Array[PackedByteArray]
 	for combination in table_size:
 		# Occasional percentage completion text:
@@ -143,19 +144,21 @@ func get_marched_polyhedron_tri_indices_table(
 			edge_mid_states[index] = int(vertex_states[edges[index][0]] != vertex_states[edges[index][1]])
 		
 		mid_conns = []
-		for face in faces:
+		quad_ambiguities_to_test = []
+		for face_index in faces.size():
 			active_mids_in_face = []
 			face_off_verts = []
 			face_on_verts = []
-			for edge_index in face:
+			for edge_index in faces[face_index]:
 				if edge_mid_states[edge_index] == int(true):
 					active_mids_in_face.append(edge_index)
-				for vert_index in edges[edge_index]:
-					if (not face_off_verts.has(vert_index)) and (not face_on_verts.has(vert_index)):
-						if vertex_states[vert_index] == int(false):
-							face_off_verts.append(vert_index)
-						else:
-							face_on_verts.append(vert_index)
+				if (quad_ambiguity_style == 0) or (quad_ambiguity_style == 1):
+					for vert_index in edges[edge_index]:
+						if (not face_off_verts.has(vert_index)) and (not face_on_verts.has(vert_index)):
+							if vertex_states[vert_index] == int(false):
+								face_off_verts.append(vert_index)
+							else:
+								face_on_verts.append(vert_index)
 			match active_mids_in_face.size():
 				0:
 					continue
@@ -185,13 +188,8 @@ func get_marched_polyhedron_tri_indices_table(
 								else:
 									push_error("Bad situation; off-verts: ", face_off_verts, " on verts: ", face_on_verts)
 									return []
-						2:
-							
-							# !!! not finished, this and 3 require saving all quad situations and then finding the combination of them with certain results
-							pass
-						3:
-							# !!! not finished
-							pass
+						2, 3:
+							quad_ambiguities_to_test.append(face_index)
 						_:
 							push_error("Unsupported quad midpoint-banding ambiguity solution style: ", quad_ambiguity_style)
 							return []
@@ -205,8 +203,21 @@ func get_marched_polyhedron_tri_indices_table(
 				_:
 					push_error("Unsupported number of active midpoints in single face: ", active_mids_in_face)
 		
-		# {u} If quad midpoint-banding ambiguity style is 2 or 3, determine the the most appropriate
-		# combination of midpoint connections between all combinations for instances of quad ambiguities
+		# Form midpoint bands out of midpoint connections.
+		mid_bands = []
+		match quad_ambiguity_style:
+			2, 3:
+				# {u} 
+				# probably first form longer connections out of non-quad-ambiguities, and then deal with them
+				#for quad_amb_combination in int(pow(2, quad_ambiguities_to_test.size())):
+					## something like this next here?:
+					##vertex_states[index] = (combination >> index) & 1
+					#pass
+				pass
+			_:
+				for conn_index in mid_conns.size():
+					pass
+		
 		
 		# {u} form midpoint bands out of midpoint connections
 		for conn in mid_conns:
@@ -216,8 +227,15 @@ func get_marched_polyhedron_tri_indices_table(
 		# {u} determine whether which if any midpoint bands have triangulation ambiguities.
 		# (AKA whether all of the midpoints in a band fall along a plane.)
 		
-		# {u} triangulate midpoint bands (remember to orient the triangles correctly.)
+		# {u} triangulate midpoint bands+
 		
+		# {u} orient the triangles correctly
+		# PLAN IDEA:
+		# In a similar way as how the “are all of the vector3s coplanar” function works, 
+		# by not having the abs(), check whether the distance from the trangle to a vector3 
+		# is facing outwards from is positive or negative, you’ll know whether the triangle 
+		# needs to be flipped based on that. (A distance of 0 means you picked a bad 
+		# outwards-from point since it’s coplanar, and you need to revise how it’s picked.)
 		
 	
 	print("100% completed!")
