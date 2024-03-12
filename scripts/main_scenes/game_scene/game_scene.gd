@@ -41,6 +41,11 @@ func _process(delta):
 	if Input.is_action_pressed("game_play_crouch_slide_crawl"):
 		temporary_cam.position += (cam_speed * delta) * Vector3(0,-1,0)
 	
+	# !!! toggle showing chunk boundaries + grids.
+	if Input.is_action_just_pressed("game_special_debug_menu"):
+		print("test")
+		pass
+	
 	if (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED) and not (Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	

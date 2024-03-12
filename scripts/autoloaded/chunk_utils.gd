@@ -99,7 +99,8 @@ func get_marched_polyhedron_tri_indices_table(
 	faces: Array[PackedByteArray],
 	# Creative choice for how quad midpoint-banding ambiguities should be solved.
 	# 0 = Bridge Offs; 1 = Bridge Ons;
-	# 2 = Minimize number of bands; 3 = Maximize number of bands;
+	# 2 = Dynamic. Attempt to find a combination with flat bands, secondly prioritizing more/smaller bands;
+	# 3 = Random !!! NOT IMPLIMENTED
 	quad_ambiguity_style: int,
 	) -> Array[PackedByteArray]:
 	
@@ -132,7 +133,9 @@ func get_marched_polyhedron_tri_indices_table(
 	var face_off_verts: PackedByteArray = []
 	var face_on_verts: PackedByteArray = []
 	var quad_ambiguities_to_test: PackedInt32Array = [] # (stores face indices)
-	var mid_bands: Array[PackedByteArray]
+	var mid_bandlets: Array[PackedByteArray] = []
+	var mid_conn_banding_context: Array = []
+	var mid_bands: Array[PackedByteArray] = []
 	for combination in table_size:
 		# Occasional percentage completion text:
 		if (combination % percentage_statement_interval) == 0:
@@ -188,7 +191,7 @@ func get_marched_polyhedron_tri_indices_table(
 								else:
 									push_error("Bad situation; off-verts: ", face_off_verts, " on verts: ", face_on_verts)
 									return []
-						2, 3:
+						2:
 							quad_ambiguities_to_test.append(face_index)
 						_:
 							push_error("Unsupported quad midpoint-banding ambiguity solution style: ", quad_ambiguity_style)
@@ -204,10 +207,22 @@ func get_marched_polyhedron_tri_indices_table(
 					push_error("Unsupported number of active midpoints in single face: ", active_mids_in_face)
 		
 		# Form midpoint bands out of midpoint connections.
+		mid_bandlets = []
 		mid_bands = []
 		match quad_ambiguity_style:
-			2, 3:
-				# {u} 
+			0, 1:
+				for conn_index in mid_conns.size():
+					if (not mid_conns[conn_index].size() == 2) or (mid_conns[conn_index][0] == mid_conns[conn_index][1]):
+						push_error("Bad midpoint connection. Connection in question: ", mid_conns[conn_index])
+						return []
+					mid_conn_banding_context = []
+					for bandlet_index in mid_bandlets.size():
+						pass
+						#if THING.has(mid_bandlets[bandlet_index].front())
+					# !!!{u}
+				pass
+			2:
+				# !!!{u} 
 				# probably first form longer connections out of non-quad-ambiguities, and then deal with them
 				#for quad_amb_combination in int(pow(2, quad_ambiguities_to_test.size())):
 					## something like this next here?:
@@ -215,8 +230,7 @@ func get_marched_polyhedron_tri_indices_table(
 					#pass
 				pass
 			_:
-				for conn_index in mid_conns.size():
-					pass
+				pass
 		
 		
 		# {u} form midpoint bands out of midpoint connections
