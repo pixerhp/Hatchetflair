@@ -74,6 +74,9 @@ func _process(delta):
 		DebugDraw.set_text("Coord's (h,z1,z2)", 
 			"(" + Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 2) + ")")
 	
+	DebugDraw.draw_axes(Transform3D(Basis(), 
+	temporary_cam.global_position - 4 * temporary_cam.global_transform.basis.z))
+	
 	if Globals.draw_chunks_debug:
 		DebugDraw.draw_line_3d(
 			Globals.swap_zyx_hzz_f(Vector3(0,0,0)), 
