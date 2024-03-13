@@ -105,9 +105,9 @@ func draw_axes(transform: Transform3D, scale = 1.0):
 	draw_ray_3d(transform.origin - Vector3(0, 0.75, 0), transform.basis.y, scale, Color(0,1,0))
 	draw_ray_3d(transform.origin - Vector3(0, 0.75, 0), transform.basis.z, scale, Color(0,0,1))
 	# hzz coords:
-	draw_ray_3d(transform.origin + Vector3(0, 0.75, 0), transform.basis.x, scale, Color(1,0,1))
 	draw_ray_3d(transform.origin + Vector3(0, 0.75, 0), transform.basis.y, scale, Color(1,1,0))
-	draw_ray_3d(transform.origin + Vector3(0, 0.75, 0), -1 * transform.basis.z, scale, Color(0,1,1))
+	draw_ray_3d(transform.origin + Vector3(0, 0.75, 0), -1 * transform.basis.z, scale, Color(1,0,1))
+	draw_ray_3d(transform.origin + Vector3(0, 0.75, 0), transform.basis.x, scale, Color(0,1,1))
 
 
 ## @brief Draws the unshaded outline of a 3D box.
