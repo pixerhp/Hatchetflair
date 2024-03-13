@@ -31,6 +31,8 @@ var INPUTMAP_DEFAULTS: Dictionary = {}
 var player_username: String = "guest"
 var player_displayname: String = "Guest"
 
+var draw_chunks_debug: bool = false
+
 
 #-=-=-=-# INITIALIZATION:
 
@@ -42,7 +44,7 @@ func _enter_tree() -> void:
 	_set_window_title()
 	_initialize_inputmap_defaults()
 	
-	
+	print(get_coords3d_string(Vector3(0.325346, 234634.234, 738926328), 2))
 	
 	
 	# TEMPORARY TESTING 2!
@@ -213,6 +215,23 @@ func normalize_username_str(string: String) -> String:
 	for acceptable_segment in regex.search_all(semi_formatted_str):
 		formatted_str += acceptable_segment.get_string()
 	return formatted_str
+
+func get_coords3d_string(coords: Vector3, length_after_period: int) -> String:
+	var finalized_string: String = ""
+	var stringified_component: String = ""
+	var period_index: int = 0
+	if length_after_period < -1:
+		length_after_period = -1
+	for component in [coords.x, coords.y, coords.z]:
+		stringified_component = str(component)
+		period_index = stringified_component.find(".")
+		if not finalized_string.is_empty():
+			finalized_string += ", "
+		if (length_after_period != -1) and (period_index == -1):
+			finalized_string += stringified_component + "." + "0".repeat(length_after_period)
+		else:
+			finalized_string += stringified_component.substr(0, period_index + length_after_period + 1)
+	return finalized_string
 
 # Used to swap between the zyx and hz1z2 coordinate systems (also flips handedness.)
 func swap_zyx_hzz_i(coords: Vector3i) -> Vector3i:

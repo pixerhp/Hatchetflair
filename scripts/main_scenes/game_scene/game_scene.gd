@@ -41,11 +41,6 @@ func _process(delta):
 	if Input.is_action_pressed("game_play_crouch_slide_crawl"):
 		temporary_cam.position += (cam_speed * delta) * Vector3(0,-1,0)
 	
-	# !!! toggle showing chunk boundaries + grids.
-	if Input.is_action_just_pressed("game_special_debug_menu"):
-		print("test")
-		pass
-	
 	if (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED) and not (Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
@@ -59,6 +54,47 @@ func _process(delta):
 							a = pow(2.718281828, 6.2831853071)
 						else:
 							a = pow(6.2831853071, 2.718281828)
+	
+	# !!! toggle showing chunk boundaries + grids.
+	if Input.is_action_just_pressed("game_special_debug_menu"):
+		Globals.draw_chunks_debug = not Globals.draw_chunks_debug
+		if Globals.draw_chunks_debug == false:
+			# (Required to stop drawing all otherwise drawn lines:)
+			DebugDraw.draw_line_3d(Vector3(0,0,0), Vector3(0,0,0), Color.WHITE)
+		print("draw chunks debug is now: ", Globals.draw_chunks_debug)
+	
+	# Coordinates text:
+	if Input.is_action_pressed("game_play_speed_fast"):
+		DebugDraw.set_text("Coord's (h,z1,z2)", 
+			"(" + Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), -1) + ")")
+	elif Input.is_action_pressed("game_play_speed_slow"):
+		DebugDraw.set_text("Coord's (h,z1,z2)", 
+			"(" + Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 6) + ")")
+	else:
+		DebugDraw.set_text("Coord's (h,z1,z2)", 
+			"(" + Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 2) + ")")
+	
+	if Globals.draw_chunks_debug:
+		DebugDraw.draw_line_3d(
+			Globals.swap_zyx_hzz_f(Vector3(0,0,0)), 
+			Globals.swap_zyx_hzz_f(Vector3(1,0,0)), 
+			Color.GREEN,
+		)
+		DebugDraw.draw_line_3d(
+			Globals.swap_zyx_hzz_f(Vector3(0,0,0)), 
+			Globals.swap_zyx_hzz_f(Vector3(0,1,0)), 
+			Color.BLUE,
+		)
+		DebugDraw.draw_line_3d(
+			Globals.swap_zyx_hzz_f(Vector3(0,0,0)), 
+			Globals.swap_zyx_hzz_f(Vector3(0,0,1)), 
+			Color.RED,
+		)
+		DebugDraw.draw_line_3d(
+			Globals.swap_zyx_hzz_f(Vector3(0,0,0)), 
+			Globals.swap_zyx_hzz_f(Vector3(1,1,1).normalized()), 
+			Color.WHITE,
+		)
 
 func _input(event) -> void:
 	if event is InputEventMouseMotion:

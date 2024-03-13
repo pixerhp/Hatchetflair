@@ -30,17 +30,18 @@ func _ready():
 func _process(_delta):
 	frame_num += 1
 	if frame_num < 30:
-		print("frame: ", frame_num)
+		#print("frame: ", frame_num)
+		pass
 	if not do_chunk_generating:
 		return
 	if chunk_gen_thread.is_started() and not chunk_gen_thread.is_alive():
 		chunk_gen_thread.wait_to_finish()
 		new_chunks.clear()
-		print("children after: ", self.get_child_count())
+		#print("children after: ", self.get_child_count())
 	if not chunk_gen_thread.is_started():
 		determine_new_static_chunks()
 	if not new_static_chunks_queue.is_empty():
-		print("children before: ", self.get_child_count())
+		#print("children before: ", self.get_child_count())
 		if new_static_chunks_queue.size() > MAX_NEW_STATIC_CHUNKS_BATCH_SIZE:
 			add_static_chunks(new_static_chunks_queue.slice(0, MAX_NEW_STATIC_CHUNKS_BATCH_SIZE).duplicate())
 			new_static_chunks_queue = new_static_chunks_queue.slice(MAX_NEW_STATIC_CHUNKS_BATCH_SIZE)

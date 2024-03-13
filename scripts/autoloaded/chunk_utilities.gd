@@ -1,6 +1,6 @@
 extends Node
 
-const STATIC_CHUNK_SIZE = 8
+const STATIC_CHUNK_SIZE = 16
 
 var tetra_rhombdo_tri_ind_table: Array[PackedByteArray] = (
 	FileManager.read_file_apba(FileManager.PATH_TETRA_RHOMBDO_TABLE, true))
