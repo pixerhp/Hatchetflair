@@ -9,6 +9,7 @@ func switch_to_main_menu():
 var cam_speed = 20
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+var previous_mouse_position: Vector2 = Vector2(0, 0)
 func _process(delta):
 	# Toggle the pause menu if its associated key is pressed.
 	# !!! [in the future, esc should also be able to close out of other things WITHOUT opening this menu.]
@@ -40,9 +41,6 @@ func _process(delta):
 		temporary_cam.position += (cam_speed * delta) * Vector3(0,1,0)
 	if Input.is_action_pressed("game_play_crouch_slide_crawl"):
 		temporary_cam.position += (cam_speed * delta) * Vector3(0,-1,0)
-	
-	if (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED) and not (Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
 	if Input.is_action_pressed("debug_cause_lag_spike"):
 		var a: float = 0
@@ -77,15 +75,23 @@ func _process(delta):
 	if Globals.draw_chunks_debug:
 		DebugDraw.draw_axes(Transform3D(Basis(), 
 			temporary_cam.global_position - 4 * temporary_cam.global_transform.basis.z))
+		# !!! set mouse position back to what it was before
 
 func _input(event) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+				previous_mouse_position = get_viewport().get_mouse_position()
+				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+			else:
+				Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+				Input.warp_mouse(previous_mouse_position)
 	if event is InputEventMouseMotion:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			# !!! research *why* these need to be multiplied by such a small number,
 			# potentially allowing a proper/known conversion like "angle per mouse pixel" (or similar.)
 			temporary_cam.rotation.y += event.relative.x * -0.005
 			temporary_cam.rotation.x += event.relative.y * -0.005
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _on_pausemenu_resumegameplay_pressed():
 	# !!! Later, the game world may be actually paused by the pause-menu in singleplayer, unpause it here.
