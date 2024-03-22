@@ -30,6 +30,8 @@ const developer_credits_data: Array = [
 	[SECTION, "~~ Programs Notably Used ~~"],
 	[NAME, "Godot Game Engine"],
 	[NAME, "Blender (Modeling)"],
+	[NAME, "Aseprite (Pixel Art)"],
+	[NAME, "FL Studio"],
 	[],
 	[SECTION, "~~ Special Thanks ~~"],
 	[NAME, "Matt Bowlby \"Blue\""],
