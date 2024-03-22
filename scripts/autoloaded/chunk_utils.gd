@@ -26,8 +26,8 @@ class unit_cube:
 		Vector3(-0.5, 0.5, 0.5),
 		Vector3(0.5, 0.5, 0.5),
 	]
-	# !!! MAKE THESE CONSTANTS NOT VARIABLES ONCE THE RELATED GODOT BUGS ARE FIXED!!
-	# (their uses will also be different, not requiring an instanciated cube class object to access them.)
+	# !!! Change var to const (and thus access the values differently) once related GDScript bug is fixed.
+	# The bug (issue 88753, also see 67873) causes const Array[PackedByteArray] to act unpredictable and crashy.
 	var edges: Array[PackedByteArray] = [
 		[0,1], [0,2], [1,3], [2,3],
 		[0,4], [1,5], [2,6], [3,7],
@@ -64,8 +64,8 @@ class unit_rhombdo:
 		
 		Vector3(0, (1.0/sqrt(3)), 0),
 	]
-	# !!! MAKE THESE CONSTANTS NOT VARIABLES ONCE THE RELATED GODOT BUGS ARE FIXED!!
-	# (their uses will also be different, not requiring an instanciated cube class object to access them.)
+	# !!! Change var to const (and thus access the values differently) once related GDScript bug is fixed.
+	# The bug (issue 88753, also see 67873) causes const Array[PackedByteArray] to act unpredictable and crashy.
 	var edges: Array[PackedByteArray] = [
 		[0,1], [0,2], [0,3], [0,4],
 		[1,5], [1,6], [2,5], [3,6], [2,7], [3,8], [4,7], [4,8],

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bbwhtlk15abxa"]
+[gd_scene load_steps=11 format=3 uid="uid://bbwhtlk15abxa"]
 
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_main.gd" id="1_jsr8e"]
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_title.gd" id="2_1jmm2"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_accounts.gd" id="2_ykccs"]
 [ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_join.gd" id="3_r4aqp"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="4_j121s"]
+[ext_resource type="Script" path="res://scripts/main_scenes/main_menu/menu_credits.gd" id="7_0howm"]
 
 [sub_resource type="Gradient" id="Gradient_skhgw"]
 interpolation_mode = 2
@@ -1565,6 +1566,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("7_0howm")
 
 [node name="CreditsUI" type="VBoxContainer" parent="Menus/CreditsMenu"]
 layout_mode = 1
@@ -1635,28 +1637,7 @@ theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
-text = "
-[center]Creator & Lead Developer
-[wave][color=yellow]Pixer H. Pinecone[/color][/wave]
-
-Assistant Developers
-[wave][color=orange]Jcodefox[/color][/wave]
-[wave][color=Lightsteelblue]Stevemc32[/color][/wave]
-
-Available Assistant
-Playtesters & Debuggers
-[color=Lightsteelblue][wave]Blitceed
-LandOcto950
-Redstone[/wave][/color]
-
-Programs Used:[color=Lightsteelblue][wave]
-Godot Game Engine
-Blender (Modelling)[/wave][/color]
-
-Special Thanks
-[color=Lightsteelblue][wave]Matt Bowlby (Blue)
-S. S. Developer
-(various others, inspirations, and you!)[/wave][/color][/center]
+text = "CREDITS TEXT NOT YET SET
 
 "
 fit_content = true
@@ -1783,5 +1764,6 @@ text = "Back"
 [connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/EditServer" to="Menus/JoinMenu" method="open_edit_server_popup"]
 [connection signal="pressed" from="Menus/JoinMenu/JoinUI/ServerButtons/RemoveServer" to="Menus/JoinMenu" method="open_remove_server_popup"]
 [connection signal="close_settings_menu" from="Menus/SettingsMenu" to="." method="_on_close_settings_menu"]
+[connection signal="meta_clicked" from="Menus/CreditsMenu/CreditsUI/ScrollContainer/PanelContainer/HBoxContainer/CreditsText" to="Menus/CreditsMenu" method="_on_credits_text_url_clicked"]
 [connection signal="pressed" from="Menus/CreditsMenu/CreditsUI/Back" to="." method="switch_to_menu" binds= ["TitleMenu"]]
 [connection signal="pressed" from="Menus/NetworkStatusOverlay/Back" to="." method="_on_network_info_overlay_back_button_pressed" binds= ["Pressed back button", false, false]]
