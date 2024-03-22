@@ -215,11 +215,33 @@ func get_marched_polyhedron_tri_indices_table(
 					if (not mid_conns[conn_index].size() == 2) or (mid_conns[conn_index][0] == mid_conns[conn_index][1]):
 						push_error("Bad midpoint connection. Connection in question: ", mid_conns[conn_index])
 						return []
-					mid_conn_banding_context = []
+					
+					# INFORMATION NEEDED:
+					# list of which bandlets conn side 1 connects to the end of (and whether it's front vs back of each)
+					# list of which bandlets conn side 2 connects to the end of (and whether it's front vs back of each)
+					
+					# Get a list of which bandlets each side of the conn' connect to, and which side of the bandlet they do at.
+					mid_conn_banding_context = [[],[]]
 					for bandlet_index in mid_bandlets.size():
-						pass
-						#if THING.has(mid_bandlets[bandlet_index].front())
-					# !!!{u}
+						if mid_conns[conn_index][0] == mid_bandlets[bandlet_index][0]:
+							mid_conn_banding_context[0].append([bandlet_index, 0])
+						if mid_conns[conn_index][0] == mid_bandlets[bandlet_index][mid_bandlets[bandlet_index].size() - 1]:
+							mid_conn_banding_context[0].append([bandlet_index, 1])
+						if mid_conns[conn_index][1] == mid_bandlets[bandlet_index][0]:
+							mid_conn_banding_context[1].append([bandlet_index, 0])
+						if mid_conns[conn_index][1] == mid_bandlets[bandlet_index][mid_bandlets[bandlet_index].size() - 1]:
+							mid_conn_banding_context[1].append([bandlet_index, 1])
+					
+					# {u} if neither connection side is found on any existing bandlets, create a new bandlet for it.
+					
+					# {u} if only one side connects to an existing bandlet: add onto that bandlet.
+					
+					# {u} if both connection sides are found on the ends of an existing bandlet, then that bandlet is now a complete and no longer needs to be checked.
+					
+					# {u} if each side connects to two different existing bandlets, connect the bandlets into one bigger bandlet.
+					
+					# {u} if any other situation (fits into 3+ bandlets, etc,) push an error.
+					
 				pass
 			2:
 				# !!!{u} 
