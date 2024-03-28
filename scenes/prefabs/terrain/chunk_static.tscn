@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://cqel5u2mt3uov"]
 
-[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunk_static.gd" id="1_pb1r6"]
+[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunk.gd" id="1_2jpv8"]
 [ext_resource type="Texture2D" uid="uid://xu571uosd32e" path="res://assets/textures/animated/loading_wheel.png" id="3_4wjlj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a45j2"]
@@ -68,7 +68,7 @@ animations = [{
 }]
 
 [node name="ChunkStatic" type="StaticBody3D"]
-script = ExtResource("1_pb1r6")
+script = ExtResource("1_2jpv8")
 
 [node name="LoadingWheel" type="AnimatedSprite3D" parent="."]
 pixel_size = 0.05

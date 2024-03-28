@@ -25,7 +25,7 @@ func _process(_delta):
 					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
 					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
 				),
-				Color(0, 0, 0.125)
+				Color(0, 0.025, 0.025)
 			)
 			DebugDraw.draw_line_3d(
 				self.position - Vector3(
@@ -38,7 +38,7 @@ func _process(_delta):
 					(-1 * ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
 					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
 				),
-				Color(0.05,0.03125,0)
+				Color(0.025, 0.025, 0)
 			)
 			DebugDraw.draw_line_3d(
 				self.position - Vector3(
@@ -51,7 +51,7 @@ func _process(_delta):
 					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
 					(-1 * ChunkUtilities.STATIC_CHUNK_SIZE / 2),
 				),
-				Color(0.05, 0, 0.1125)
+				Color(0.025, 0, 0.025)
 			)
 		else:
 			DebugDraw.draw_line_3d(
@@ -65,7 +65,7 @@ func _process(_delta):
 					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
 					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
 				),
-				Color(0, 0, 0.5)
+				Color(0, 0.25, 0.25)
 			)
 			DebugDraw.draw_line_3d(
 				self.position - Vector3(
@@ -78,7 +78,7 @@ func _process(_delta):
 					(-1 * ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
 					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
 				),
-				Color(0.2,0.125,0)
+				Color(0.25,0.25,0)
 			)
 			DebugDraw.draw_line_3d(
 				self.position - Vector3(
@@ -91,5 +91,5 @@ func _process(_delta):
 					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
 					(-1 * ChunkUtilities.STATIC_CHUNK_SIZE / 2),
 				),
-				Color(0.2, 0, 0.45)
+				Color(0.25, 0, 0.25)
 			)

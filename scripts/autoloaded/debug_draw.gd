@@ -61,6 +61,9 @@ func _ready():
 func draw_cube(position: Vector3, size: float, color: Color = Color.WHITE, linger := 0):
 	draw_box(position, Vector3(size, size, size), color, linger)
 
+func draw_cube_corner(position_xyz: Vector3, side_length: float, colors: Array[Color] = [Color.RED, Color.GREEN, Color.BLUE], centered: bool = false):
+	pass
+
 
 ## @brief Draws the unshaded outline of a 3D box.
 ## @param position: world-space position of the center of the box
@@ -99,15 +102,15 @@ func draw_transformed_cube(trans: Transform3D, color: Color = Color.WHITE):
 ##        of color red for X, green for Y, and blue for Z.
 ## @param transform
 ## @param scale: extra scale applied on top of the transform
-func draw_axes(transform: Transform3D, scale = 1.0):
-	# xyz coords:
-	draw_ray_3d(transform.origin - Vector3(0, 0.75, 0), transform.basis.x, scale, Color(1,0,0))
-	draw_ray_3d(transform.origin - Vector3(0, 0.75, 0), transform.basis.y, scale, Color(0,1,0))
-	draw_ray_3d(transform.origin - Vector3(0, 0.75, 0), transform.basis.z, scale, Color(0,0,1))
-	# hzz coords:
-	draw_ray_3d(transform.origin + Vector3(0, 0.75, 0), transform.basis.y, scale, Color(1,1,0))
-	draw_ray_3d(transform.origin + Vector3(0, 0.75, 0), -1 * transform.basis.z, scale, Color(1,0,1))
-	draw_ray_3d(transform.origin + Vector3(0, 0.75, 0), transform.basis.x, scale, Color(0,1,1))
+func draw_axes(transform: Transform3D, scale: float = 1.0, is_hzz: bool = false):
+	if is_hzz:
+		draw_ray_3d(transform.origin, transform.basis.y, scale, Color(1,1,0)) # h
+		draw_ray_3d(transform.origin, -1 * transform.basis.z, scale, Color(1,0,1)) # z1
+		draw_ray_3d(transform.origin, transform.basis.x, scale, Color(0,1,1)) # z2
+	else:
+		draw_ray_3d(transform.origin, transform.basis.x, scale, Color(1,0,0)) # x
+		draw_ray_3d(transform.origin, transform.basis.y, scale, Color(0,1,0)) # y
+		draw_ray_3d(transform.origin, transform.basis.z, scale, Color(0,0,1)) # z
 
 
 ## @brief Draws the unshaded outline of a 3D box.

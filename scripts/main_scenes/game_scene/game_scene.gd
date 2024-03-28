@@ -74,8 +74,9 @@ func _process(delta):
 	
 	if Globals.draw_chunks_debug:
 		DebugDraw.draw_axes(Transform3D(Basis(), 
-			temporary_cam.global_position - 4 * temporary_cam.global_transform.basis.z))
-		# !!! set mouse position back to what it was before
+			temporary_cam.global_position + Vector3(0, 0.75, 0) - 4 * temporary_cam.global_transform.basis.z), 1, true)
+		DebugDraw.draw_axes(Transform3D(Basis(), 
+			temporary_cam.global_position + Vector3(0, -0.75, 0) - 4 * temporary_cam.global_transform.basis.z), 1, false)
 
 func _input(event) -> void:
 	if event is InputEventMouseButton:
