@@ -1,8 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://o3dnyoj5ql3m"]
+[gd_scene load_steps=19 format=3 uid="uid://o3dnyoj5ql3m"]
 
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="2_gr5ms"]
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunks_manager.gd" id="3_5gspe"]
+[ext_resource type="PackedScene" uid="uid://le6nokyx2imu" path="res://assets/models/phuvel_rigidbody.tscn" id="4_6hyka"]
+[ext_resource type="PackedScene" uid="uid://dp274vji63hbb" path="res://assets/models/shovel_rigidbody.tscn" id="5_wetda"]
+[ext_resource type="PackedScene" uid="uid://cujngsb66hqh5" path="res://assets/models/axe_rigidbody.tscn" id="6_sc7j8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
 sky_top_color = Color(0.454902, 0.537255, 0.65098, 1)
@@ -223,6 +226,15 @@ mesh = SubResource("CylinderMesh_16jjm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SharedObjectsMS/WeriumTestCylinder"]
 shape = SubResource("CylinderShape3D_tgoxd")
+
+[node name="PhuvelRigidbody" parent="SharedObjectsMS" instance=ExtResource("4_6hyka")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 23.6753, 0)
+
+[node name="ShovelRigidbody" parent="SharedObjectsMS" instance=ExtResource("5_wetda")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32.9499, 0)
+
+[node name="AxeRigidbody" parent="SharedObjectsMS" instance=ExtResource("6_sc7j8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 41.8945, 0)
 
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ResumeGameplay" to="." method="_on_pausemenu_resumegameplay_pressed"]
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/TogglePlaying" to="." method="_on_pausemenu_toggleplaying_pressed"]
