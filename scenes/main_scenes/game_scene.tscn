@@ -18,10 +18,10 @@ sky = SubResource("Sky_76n8d")
 tonemap_mode = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2gfpn"]
-albedo_color = Color(0.560784, 0.560784, 0.560784, 1)
+albedo_color = Color(0.658824, 0.662745, 0.678431, 1)
 metallic = 1.0
-metallic_specular = 1.0
 roughness = 0.5
+clearcoat_enabled = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_tmbcn"]
 material = SubResource("StandardMaterial3D_2gfpn")
@@ -183,7 +183,7 @@ transform = Transform3D(0.91187, -0.215957, 0.349079, 0.349079, 0.855393, -0.382
 mass = 212.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="SharedObjectsMS/FerriumTestCube"]
-transform = Transform3D(1, -7.45058e-09, -5.96046e-08, 7.45058e-09, 1, -2.98023e-08, 0, 0, 1, 0.00206137, 0.002841, -0.0005126)
+transform = Transform3D(1, -7.45058e-09, -1.19209e-07, 7.45058e-09, 1, -2.98023e-08, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("BoxMesh_tmbcn")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SharedObjectsMS/FerriumTestCube"]
