@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://cqel5u2mt3uov"]
+[gd_scene load_steps=16 format=3 uid="uid://cqel5u2mt3uov"]
 
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunk.gd" id="1_2jpv8"]
 [ext_resource type="Texture2D" uid="uid://xu571uosd32e" path="res://assets/textures/animated/loading_wheel.png" id="3_4wjlj"]
+[ext_resource type="Texture2D" uid="uid://cp3swkwyhnuuh" path="res://assets/textures/static/chunk_gridlines.png" id="3_caxpt"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a45j2"]
 atlas = ExtResource("3_4wjlj")
@@ -67,6 +68,18 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aqqla"]
+cull_mode = 2
+albedo_texture = ExtResource("3_caxpt")
+albedo_texture_force_srgb = true
+texture_filter = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5r63b"]
+size = Vector2(16, 16)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_un3c7"]
+size = Vector3(16, 2, 16)
+
 [node name="ChunkStatic" type="StaticBody3D"]
 script = ExtResource("1_2jpv8")
 
@@ -78,3 +91,16 @@ sprite_frames = SubResource("SpriteFrames_sdxsx")
 animation = &"loading_wheel"
 autoplay = "loading_wheel"
 frame_progress = 0.666556
+
+[node name="EarlyTestingPlaneMeshTop" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_aqqla")
+mesh = SubResource("PlaneMesh_5r63b")
+
+[node name="EarlyTestingPlaneMeshBottom" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+material_override = SubResource("StandardMaterial3D_aqqla")
+mesh = SubResource("PlaneMesh_5r63b")
+
+[node name="EarlyTestingPlaneCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+shape = SubResource("BoxShape3D_un3c7")

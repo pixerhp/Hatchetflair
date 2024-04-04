@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://o3dnyoj5ql3m"]
+[gd_scene load_steps=13 format=3 uid="uid://o3dnyoj5ql3m"]
 
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="2_gr5ms"]
@@ -16,6 +16,24 @@ sky_material = SubResource("ProceduralSkyMaterial_ci51s")
 background_mode = 2
 sky = SubResource("Sky_76n8d")
 tonemap_mode = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2gfpn"]
+albedo_color = Color(0.560784, 0.560784, 0.560784, 1)
+metallic = 1.0
+metallic_specular = 1.0
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_tmbcn"]
+material = SubResource("StandardMaterial3D_2gfpn")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gyykb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lmwrv"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_71cm0"]
+material = SubResource("StandardMaterial3D_lmwrv")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0rdrm"]
 
 [node name="GameScene" type="Node3D"]
 script = ExtResource("1_h6q16")
@@ -148,7 +166,7 @@ transform = Transform3D(1, 0, 0, 0, 0.925871, 0.377841, 0, -0.377841, 0.925871, 
 script = ExtResource("3_5gspe")
 
 [node name="REMOVE_LATER_cam" type="Camera3D" parent="."]
-transform = Transform3D(-0.595339, -0.223828, 0.771669, -0.0318996, 0.966242, 0.255655, -0.802841, 0.127586, -0.582381, 17.4965, 9.41445, -14.4152)
+transform = Transform3D(-0.601815, -0.204008, 0.772139, 0, 0.966824, 0.255446, -0.798635, 0.153731, -0.581849, 17.4965, 9.41445, -14.4152)
 
 [node name="DefaultCam" type="Camera3D" parent="."]
 transform = Transform3D(-0.941098, -0.309562, -0.136034, -0.3256, 0.721124, 0.611527, -0.0912082, 0.6198, -0.779442, 0, 210, -156)
@@ -159,6 +177,26 @@ spawn_path = NodePath(".")
 
 [node name="SharedObjectsMS" type="MultiplayerSpawner" parent="."]
 spawn_path = NodePath(".")
+
+[node name="FerriumTestCube" type="RigidBody3D" parent="SharedObjectsMS"]
+transform = Transform3D(0.91187, -0.215957, 0.349079, 0.349079, 0.855393, -0.382683, -0.215957, 0.470814, 0.855393, 0, 16, 0)
+mass = 212.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SharedObjectsMS/FerriumTestCube"]
+transform = Transform3D(1, -7.45058e-09, -5.96046e-08, 7.45058e-09, 1, -2.98023e-08, 0, 0, 1, 0.00206137, 0.002841, -0.0005126)
+mesh = SubResource("BoxMesh_tmbcn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SharedObjectsMS/FerriumTestCube"]
+shape = SubResource("BoxShape3D_gyykb")
+
+[node name="FoamTestCube" type="RigidBody3D" parent="SharedObjectsMS"]
+transform = Transform3D(0.628441, -0.674647, 0.387186, 0.267174, 0.654689, 0.707107, -0.730534, -0.340929, 0.591682, 0, 18, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SharedObjectsMS/FoamTestCube"]
+mesh = SubResource("BoxMesh_71cm0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SharedObjectsMS/FoamTestCube"]
+shape = SubResource("BoxShape3D_0rdrm")
 
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ResumeGameplay" to="." method="_on_pausemenu_resumegameplay_pressed"]
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/TogglePlaying" to="." method="_on_pausemenu_toggleplaying_pressed"]

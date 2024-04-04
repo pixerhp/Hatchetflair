@@ -4,10 +4,20 @@ var chunk_coords_hzz: Vector3i = Vector3i.ZERO
 
 # Loads the chunk's terrain and mesh. (Ran when the chunk is first loaded into the world.)
 func generate():
-	pass # Replace with function body.
+	pass
+
+func _ready():
+	if chunk_coords_hzz[0] == 0:
+		find_child("LoadingWheel").queue_free()
+	else:
+		find_child("LoadingWheel").queue_free()
+		find_child("EarlyTestingPlaneMeshTop").queue_free()
+		find_child("EarlyTestingPlaneMeshBottom").queue_free()
+		find_child("EarlyTestingPlaneCollision").queue_free()
 
 @onready var test_player_cam := get_node("../../REMOVE_LATER_cam")
 var distance_to_cam: float
+var testbool: bool = false
 func _process(_delta):
 	if Globals.draw_chunks_debug:
 		distance_to_cam = self.position.distance_to(test_player_cam.position)
