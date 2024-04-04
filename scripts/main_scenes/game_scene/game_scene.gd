@@ -13,7 +13,7 @@ var previous_mouse_position: Vector2 = Vector2(0, 0)
 func _process(delta):
 	# Toggle the pause menu if its associated key is pressed.
 	# !!! [in the future, esc should also be able to close out of other things WITHOUT opening this menu.]
-	if Input.is_action_just_pressed("game_special_pause_menu"):
+	if Input.is_action_just_pressed("game_special_pause_menu") and not $SettingsMenu.visible:
 		$PauseMenu.visible = not $PauseMenu.visible
 	
 	# Temporary controls for flying the camera around:
