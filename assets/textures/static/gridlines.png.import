@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cp3swkwyhnuuh"
-path.bptc="res://.godot/imported/chunk_gridlines.png-f1b17a077c3d9483a091b962e6324e61.bptc.ctex"
+path.bptc="res://.godot/imported/gridlines.png-57324b1501c39546f32ad7da34b26608.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/static/chunk_gridlines.png"
-dest_files=["res://.godot/imported/chunk_gridlines.png-f1b17a077c3d9483a091b962e6324e61.bptc.ctex"]
+source_file="res://assets/textures/static/gridlines.png"
+dest_files=["res://.godot/imported/gridlines.png-57324b1501c39546f32ad7da34b26608.bptc.ctex"]
 
 [params]
 

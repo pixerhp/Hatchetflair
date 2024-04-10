@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunk.gd" id="1_2jpv8"]
 [ext_resource type="Texture2D" uid="uid://xu571uosd32e" path="res://assets/textures/animated/loading_wheel.png" id="3_4wjlj"]
-[ext_resource type="Texture2D" uid="uid://cp3swkwyhnuuh" path="res://assets/textures/static/chunk_gridlines.png" id="3_caxpt"]
+[ext_resource type="Texture2D" uid="uid://dhf2mo4ihbknf" path="res://assets/textures/static/gridlines_2.png" id="3_ds12g"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a45j2"]
 atlas = ExtResource("3_4wjlj")
@@ -68,14 +68,16 @@ animations = [{
 "speed": 12.0
 }]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hh3st"]
-albedo_texture = ExtResource("3_caxpt")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ri4ao"]
+albedo_texture = ExtResource("3_ds12g")
+texture_filter = 2
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_5r63b"]
 size = Vector2(16, 16)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2gf5j"]
-albedo_texture = ExtResource("3_caxpt")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gydsk"]
+albedo_texture = ExtResource("3_ds12g")
+texture_filter = 2
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_2yjn6"]
 flip_faces = true
@@ -98,11 +100,11 @@ autoplay = "loading_wheel"
 frame_progress = 0.666556
 
 [node name="EarlyTestingPlaneMeshTop" type="MeshInstance3D" parent="."]
-material_override = SubResource("StandardMaterial3D_hh3st")
+material_override = SubResource("StandardMaterial3D_ri4ao")
 mesh = SubResource("PlaneMesh_5r63b")
 
 [node name="EarlyTestingPlaneMeshBottom" type="MeshInstance3D" parent="."]
-material_override = SubResource("StandardMaterial3D_2gf5j")
+material_override = SubResource("StandardMaterial3D_gydsk")
 mesh = SubResource("PlaneMesh_2yjn6")
 
 [node name="EarlyTestingPlaneCollision" type="CollisionShape3D" parent="."]
