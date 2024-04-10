@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cujngsb66hqh5"]
+[gd_scene load_steps=7 format=3 uid="uid://cujngsb66hqh5"]
 
 [ext_resource type="Texture2D" uid="uid://dvgs1y5jv74l0" path="res://assets/models/axe_texture.png" id="1_8lknb"]
 
@@ -41,8 +41,11 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_qn1fh")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_40byp"]
+size = Vector3(0.12, 3.86456, 0.2)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_130xt"]
-size = Vector3(0.106018, 2.15225, 0.390991)
+size = Vector3(0.089, 0.26, 0.525)
 
 [node name="AxeRigidbody" type="RigidBody3D"]
 
@@ -51,6 +54,10 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 mesh = SubResource("ArrayMesh_ehmc5")
 skeleton = NodePath("")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 1.83667, 0.103)
+[node name="ShaftCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.06688, 0)
+shape = SubResource("BoxShape3D_40byp")
+
+[node name="HeadCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0.308829)
 shape = SubResource("BoxShape3D_130xt")

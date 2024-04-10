@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://le6nokyx2imu"]
+[gd_scene load_steps=8 format=3 uid="uid://le6nokyx2imu"]
 
 [ext_resource type="Texture2D" uid="uid://c86mktkgpr7dp" path="res://assets/models/phuvel_texture.png" id="1_g2jnt"]
 
@@ -42,8 +42,14 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_3thkw")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_wuur1"]
+size = Vector3(0.13813, 0.361511, 0.907715)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_2x4sn"]
-size = Vector3(0.246521, 7.72318, 1)
+size = Vector3(0.162827, 5.70371, 0.161743)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iea3w"]
+size = Vector3(0.243896, 2.00885, 1.23413)
 
 [node name="PhuvelRigidbody" type="RigidBody3D"]
 
@@ -51,6 +57,14 @@ size = Vector3(0.246521, 7.72318, 1)
 mesh = SubResource("ArrayMesh_etjnc")
 skeleton = NodePath("")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000701904, 2.83086, 0)
+[node name="HandleCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.5, 0)
+shape = SubResource("BoxShape3D_wuur1")
+
+[node name="ShaftCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
 shape = SubResource("BoxShape3D_2x4sn")
+
+[node name="PhuvelBoxCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000366211, -0.0316467, 0.00134277)
+shape = SubResource("BoxShape3D_iea3w")
