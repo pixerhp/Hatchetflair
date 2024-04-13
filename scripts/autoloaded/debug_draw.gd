@@ -62,7 +62,13 @@ func draw_cube(position: Vector3, size: float, color: Color = Color.WHITE, linge
 	draw_box(position, Vector3(size, size, size), color, linger)
 
 func draw_cube_corner(position_xyz: Vector3, side_length: float, colors: Array[Color] = [Color.RED, Color.GREEN, Color.BLUE], centered: bool = false):
-	pass
+	var lines_origin: Vector3 = position_xyz
+	if centered:
+		lines_origin -= (Vector3(side_length, side_length, side_length) / 2)
+	
+	draw_line_3d(lines_origin, lines_origin + Vector3(side_length, 0, 0), colors[0])
+	draw_line_3d(lines_origin, lines_origin + Vector3(0, side_length, 0), colors[1])
+	draw_line_3d(lines_origin, lines_origin + Vector3(0, 0, side_length), colors[2])
 
 
 ## @brief Draws the unshaded outline of a 3D box.

@@ -43,82 +43,16 @@ func _process(_delta):
 		if distance_to_cam > (4 * ChunkUtilities.STATIC_CHUNK_SIZE):
 			pass
 		elif distance_to_cam > (1.8 * ChunkUtilities.STATIC_CHUNK_SIZE):
-			DebugDraw.draw_line_3d(
-				self.position - Vector3(
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				), 
-				self.position - Vector3(
-					(-1 * ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				),
-				Color(0, 0.025, 0.025)
-			)
-			DebugDraw.draw_line_3d(
-				self.position - Vector3(
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				), 
-				self.position - Vector3(
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(-1 * ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				),
-				Color(0.025, 0.025, 0)
-			)
-			DebugDraw.draw_line_3d(
-				self.position - Vector3(
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				), 
-				self.position - Vector3(
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(-1 * ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				),
-				Color(0.025, 0, 0.025)
+			DebugDraw.draw_cube_corner(
+				self.position,
+				ChunkUtilities.STATIC_CHUNK_SIZE,
+				[Color(0, 0.025, 0.025), Color(0.025, 0.025, 0), Color(0.025, 0, 0.025)],
+				true
 			)
 		else:
-			DebugDraw.draw_line_3d(
-				self.position - Vector3(
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				), 
-				self.position - Vector3(
-					(-1 * ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				),
-				Color(0, 0.25, 0.25)
-			)
-			DebugDraw.draw_line_3d(
-				self.position - Vector3(
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				), 
-				self.position - Vector3(
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(-1 * ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				),
-				Color(0.25,0.25,0)
-			)
-			DebugDraw.draw_line_3d(
-				self.position - Vector3(
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				), 
-				self.position - Vector3(
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(ChunkUtilities.STATIC_CHUNK_SIZE / 2), 
-					(-1 * ChunkUtilities.STATIC_CHUNK_SIZE / 2),
-				),
-				Color(0.25, 0, 0.25)
+			DebugDraw.draw_cube_corner(
+				self.position,
+				ChunkUtilities.STATIC_CHUNK_SIZE,
+				[Color(0, 0.25, 0.25), Color(0.25,0.25,0), Color(0.25, 0, 0.25)],
+				true
 			)
