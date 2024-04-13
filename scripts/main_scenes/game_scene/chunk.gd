@@ -9,31 +9,24 @@ func generate():
 func _ready():
 	if chunk_coords_hzz[0] == 0:
 		find_child("LoadingWheel").queue_free()
-		if (posmod(chunk_coords_hzz[1], 4) == 0) and (posmod(chunk_coords_hzz[2], 3) == 0):
-			var new_child_mesh: MeshInstance3D = MeshInstance3D.new()
-			var ramp: PrismMesh = PrismMesh.new()
-			ramp.left_to_right = 0
-			ramp.size = Vector3(16, 16 * 0.577350, 16)
-			new_child_mesh.mesh = ramp
-			new_child_mesh.position += Vector3(0, 8 * 0.577350, 0)
-			add_child(new_child_mesh)
-			var new_child_collision: CollisionShape3D = CollisionShape3D.new()
-			new_child_collision.shape = ramp.create_convex_shape(true)
-			new_child_collision.position += Vector3(0, 8 * 0.577350, 0)
-			add_child(new_child_collision)
-			
-		elif (posmod(chunk_coords_hzz[1], 3) == 2) and (posmod(chunk_coords_hzz[2], 5) == 2):
-			var new_child_mesh: MeshInstance3D = MeshInstance3D.new()
-			var ramp: PrismMesh = PrismMesh.new()
-			ramp.left_to_right = 0
-			ramp.size = Vector3(16, 16 * 1.732050, 16)
-			new_child_mesh.mesh = ramp
-			new_child_mesh.position += Vector3(0, 8 * 1.732050, 0)
-			add_child(new_child_mesh)
-			var new_child_collision: CollisionShape3D = CollisionShape3D.new()
-			new_child_collision.shape = ramp.create_convex_shape(true)
-			new_child_collision.position += Vector3(0, 8 * 1.732050, 0)
-			add_child(new_child_collision)
+		if (posmod(chunk_coords_hzz[1], 2) == 0) and (posmod(chunk_coords_hzz[2], 4) == 0):
+			var ramp_height_scaler: float = 1
+			if bool(posmod(randi(), 2)):
+				# For a 30 degree angle ramp:
+				ramp_height_scaler = 0.577350
+			else:
+				# For a 60 degree angle ramp:
+				ramp_height_scaler = 1.732050
+			var ramp_mesh: MeshInstance3D = MeshInstance3D.new()
+			ramp_mesh.mesh = PrismMesh.new()
+			ramp_mesh.mesh.left_to_right = posmod(randi(), 2)
+			ramp_mesh.mesh.size = Vector3(16, 16 * ramp_height_scaler, 16)
+			ramp_mesh.position += Vector3(0, 8 * ramp_height_scaler, 0)
+			add_child(ramp_mesh)
+			var ramp_collision: CollisionShape3D = CollisionShape3D.new()
+			ramp_collision.shape = ramp_mesh.mesh.create_convex_shape()
+			ramp_collision.position += Vector3(0, 8 * ramp_height_scaler, 0)
+			add_child(ramp_collision)
 	else:
 		find_child("LoadingWheel").queue_free()
 		find_child("EarlyTestingPlaneMeshTop").queue_free()
