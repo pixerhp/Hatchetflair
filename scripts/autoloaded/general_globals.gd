@@ -47,6 +47,7 @@ func _enter_tree() -> void:
 	print(get_coords3d_string(Vector3(0.325346, 234634.234, 738926328), 2))
 	
 	
+	
 	# TEMPORARY TESTING 2!
 	# !!! (access edges and faces differently once that godot bug is fixed.)
 	ChunkUtils.get_marched_polyhedron_tri_indices_table(

@@ -11,19 +11,23 @@ var frame_num: int = 0
 
 
 func _ready():
-	for h in range(-3, 4):
-		for x1 in range(-3, 4):
-			for x2 in range(-3, 4):
-				new_static_chunks_queue.append(Vector3i(h, x1, x2))
-	# Top "stem" of chunks, partially for seeing orientation
-	new_static_chunks_queue.append(Vector3i(4, 0, 0))
-	new_static_chunks_queue.append(Vector3i(5, 0, 0))
-	new_static_chunks_queue.append(Vector3i(6, 0, 0))
-	new_static_chunks_queue.append(Vector3i(7, 0, 0))
-	new_static_chunks_queue.append(Vector3i(8, 0, 0))
-	new_static_chunks_queue.append(Vector3i(8, 1, 0))
-	new_static_chunks_queue.append(Vector3i(8, 2, 0))
-	new_static_chunks_queue.append(Vector3i(8, 0, 1))
+	for z1 in range(-6, 7):
+		for z2 in range(-6, 7):
+			new_static_chunks_queue.append(Vector3i(0, z1, z2))
+	
+	#for h in range(-3, 4):
+		#for x1 in range(-3, 4):
+			#for x2 in range(-3, 4):
+				#new_static_chunks_queue.append(Vector3i(h, x1, x2))
+	## Top "stem" of chunks, partially for seeing orientation
+	#new_static_chunks_queue.append(Vector3i(4, 0, 0))
+	#new_static_chunks_queue.append(Vector3i(5, 0, 0))
+	#new_static_chunks_queue.append(Vector3i(6, 0, 0))
+	#new_static_chunks_queue.append(Vector3i(7, 0, 0))
+	#new_static_chunks_queue.append(Vector3i(8, 0, 0))
+	#new_static_chunks_queue.append(Vector3i(8, 1, 0))
+	#new_static_chunks_queue.append(Vector3i(8, 2, 0))
+	#new_static_chunks_queue.append(Vector3i(8, 0, 1))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
