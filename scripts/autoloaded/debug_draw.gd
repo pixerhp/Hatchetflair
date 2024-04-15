@@ -23,7 +23,7 @@ const TEXT_BG_COLOR = Color(0, 0, 0, 0.75)
 # 2D
 
 var _canvas_item : CanvasItem = null
-var _texts := {}
+var _texts: Array[String] = []
 var _font : Font = null
 # 3D
 
@@ -161,11 +161,12 @@ func draw_ray_3d(origin: Vector3, direction: Vector3, length: float, color : Col
 ## Multiple calls with the same `key` will override previous text.
 ## @param key: identifier of the line
 ## @param text: text to show next to the key
-func set_text(key: String, value):
-	_texts[key] = {
-		"text": value if typeof(value) == TYPE_STRING else str(value),
-		"frame": Engine.get_frames_drawn() + TEXT_LINGER_FRAMES
-	}
+func add_text(str: String):
+	_texts.append(str)
+	 #= {
+		#"text": value if typeof(value) == TYPE_STRING else str(value),
+		#"frame": Engine.get_frames_drawn() + TEXT_LINGER_FRAMES
+	#}
 
 
 func _get_box() -> MeshInstance3D:
@@ -265,11 +266,14 @@ func _process_lines():
 
 
 func _process_canvas():
+	#for str_index in _texts.size():
+		#pass
+	
 	# Remove text lines after some time
-	for key in _texts.keys():
-		var t = _texts[key]
-		if t.frame <= Engine.get_frames_drawn():
-			_texts.erase(key)
+	#for key in _texts.keys():
+		#var t = _texts[key]
+		#if t.frame <= Engine.get_frames_drawn():
+			#_texts.erase(key)
 
 	# Update canvas
 	if _canvas_item == null:
@@ -282,21 +286,29 @@ func _process_canvas():
 
 func _on_CanvasItem_draw():
 	var ci := _canvas_item
-
+	
 	var ascent := Vector2(0, _font.get_ascent())
 	var pos := Vector2()
 	var xpad := 2
 	var ypad := 1
 	var font_offset := ascent + Vector2(xpad, ypad)
 	var line_height := _font.get_height() + 2 * ypad
-
-	for key in _texts.keys():
-		var t = _texts[key]
-		var text := str(key, ": ", t.text, "\n")
-		var ss := _font.get_string_size(text)
-		ci.draw_rect(Rect2(pos, Vector2(ss.x + xpad * 2, line_height)), TEXT_BG_COLOR)
-		ci.draw_string(_font, pos + font_offset, text, HORIZONTAL_ALIGNMENT_LEFT, -1, ThemeDB.fallback_font_size, TEXT_COLOR)
+	
+	var string_size: Vector2 = Vector2(0, 0)
+	for str in _texts:
+		string_size = _font.get_string_size(str)
+		ci.draw_rect(Rect2(pos, Vector2(string_size.x + xpad * 2, line_height)), TEXT_BG_COLOR)
+		ci.draw_string(_font, pos + font_offset, str, HORIZONTAL_ALIGNMENT_LEFT, -1, ThemeDB.fallback_font_size, TEXT_COLOR)
 		pos.y += line_height
+	_texts.clear()
+	
+	#for key in _texts.keys():
+		#var t = _texts[key]
+		#var text := str(key, ": ", t.text, "\n")
+		#var ss := _font.get_string_size(text)
+		#ci.draw_rect(Rect2(pos, Vector2(ss.x + xpad * 2, line_height)), TEXT_BG_COLOR)
+		#ci.draw_string(_font, pos + font_offset, text, HORIZONTAL_ALIGNMENT_LEFT, -1, ThemeDB.fallback_font_size, TEXT_COLOR)
+		#pos.y += line_height
 
 
 static func _create_wirecube_mesh(color := Color.WHITE) -> ArrayMesh:

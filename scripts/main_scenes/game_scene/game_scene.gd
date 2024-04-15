@@ -61,16 +61,18 @@ func _process(delta):
 			DebugDraw.draw_line_3d(Vector3(0,0,0), Vector3(0,0,0), Color.WHITE)
 		print("draw chunks debug is now: ", Globals.draw_chunks_debug)
 	
+	DebugDraw.add_text("frame delta: " + str(delta))
+	
 	# Coordinates text:
 	if Input.is_action_pressed("game_play_speed_fast"):
-		DebugDraw.set_text("Coord's (h,z1,z2)", 
-			"(" + Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), -1) + ")")
+		DebugDraw.add_text("coords (h,z1,z2): " +
+			"(" + str(Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), -1)) + ")")
 	elif Input.is_action_pressed("game_play_speed_slow"):
-		DebugDraw.set_text("Coord's (h,z1,z2)", 
-			"(" + Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 6) + ")")
+		DebugDraw.add_text("coords (h,z1,z2): " + 
+			"(" + str(Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 6)) + ")")
 	else:
-		DebugDraw.set_text("Coord's (h,z1,z2)", 
-			"(" + Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 2) + ")")
+		DebugDraw.add_text("coords (h,z1,z2): " + 
+			"(" + str(Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 2)) + ")")
 	
 	if Globals.draw_chunks_debug:
 		DebugDraw.draw_axes(Transform3D(Basis(), 
