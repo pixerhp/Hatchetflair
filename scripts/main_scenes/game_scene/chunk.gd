@@ -43,14 +43,14 @@ func _process(_delta):
 		if distance_to_cam > (4 * ChunkUtilities.STATIC_CHUNK_SIZE):
 			pass
 		elif distance_to_cam > (1.8 * ChunkUtilities.STATIC_CHUNK_SIZE):
-			DebugDraw.draw_cube_corner(
+			DebugDraw.draw_chunk_corner(
 				self.position,
 				ChunkUtilities.STATIC_CHUNK_SIZE,
 				[Color(0, 0.025, 0.025), Color(0.025, 0.025, 0), Color(0.025, 0, 0.025)],
 				true
 			)
 		else:
-			DebugDraw.draw_cube_corner(
+			DebugDraw.draw_chunk_corner(
 				self.position,
 				ChunkUtilities.STATIC_CHUNK_SIZE,
 				[Color(0, 0.25, 0.25), Color(0.25,0.25,0), Color(0.25, 0, 0.25)],

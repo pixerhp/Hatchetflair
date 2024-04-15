@@ -1,13 +1,9 @@
 # Original code by Zylann: https://github.com/Zylann/godot_debug_draw
 # This script originates from an altered version: https://codefile.io/f/7GIUyZdW5g3xqKzSzMQw
-# This script is now modified/updated for personal use by Pixer H. Pinecone (+ other HF devs.)
+# This instance of the script is modified/updated for personal use by Pixer H. Pinecone (+ other HF devs.)
 
-## @brief Single-file autoload for debug drawing and printing.
-## Draw and print on screen from anywhere in a single line of code.
-## Find it quickly by naming it "DDD".
-
-# TODO Thread-safety
-# TODO 2D functions
+## @brief Single-file autoload for debug drawing and text printing.
+## Draw and print on-screen from anywhere with a single line of code.
 
 extends CanvasLayer
 
@@ -21,32 +17,28 @@ const TEXT_COLOR = Color(1,1,1)
 const TEXT_BG_COLOR = Color(0, 0, 0, 0.75)
 
 # 2D
-
-var _canvas_item : CanvasItem = null
+var dd_canvas_item: CanvasItem = null
 var _texts: Array[String] = []
-var _font : Font = null
+var _font: Font = ThemeDB.fallback_font
+
 # 3D
+var _boxes: Array = []
+var _box_pool: Array = []
+var _box_mesh: Mesh = null
+var _line_material_pool: Array = []
 
-var _boxes := []
-var _box_pool := []
-var _box_mesh : Mesh = null
-var _line_material_pool := []
+var _lines: Array = []
+var _line_immediate_geometry: ImmediateMesh = ImmediateMesh.new()
 
-var _lines := []
-var _line_immediate_geometry : ImmediateMesh
-
-var _mesh_instance : MeshInstance3D
+var _mesh_instance: MeshInstance3D = MeshInstance3D.new()
 
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	# !!! figure out what this does and see if it should be reduced:
 	layer = 100
 	
-	_font = ThemeDB.fallback_font
-	
-	_line_immediate_geometry = ImmediateMesh.new()
-	
-	_mesh_instance = MeshInstance3D.new()
 	_mesh_instance.mesh = _line_immediate_geometry
 	_mesh_instance.material_override = _get_line_material()
 	
@@ -61,7 +53,7 @@ func _ready():
 func draw_cube(position: Vector3, size: float, color: Color = Color.WHITE, linger := 0):
 	draw_box(position, Vector3(size, size, size), color, linger)
 
-func draw_cube_corner(position_xyz: Vector3, side_length: float, colors: Array[Color] = [Color.RED, Color.GREEN, Color.BLUE], centered: bool = false):
+func draw_chunk_corner(position_xyz: Vector3, side_length: float, colors: Array[Color] = [Color.RED, Color.GREEN, Color.BLUE], centered: bool = true):
 	var lines_origin: Vector3 = position_xyz
 	if centered:
 		lines_origin -= (Vector3(side_length, side_length, side_length) / 2)
@@ -136,37 +128,15 @@ func draw_box_aabb(aabb: AABB, color = Color.WHITE, linger_frames = 0):
 	mi.material_override = mat
 
 
-## @brief Draws an unshaded 3D line.
-## @param a: begin position in world units
-## @param b: end position in world units
-## @param color
-func draw_line_3d(a: Vector3, b: Vector3, color: Color):
-	_lines.append([
-		a, b, color,
-		Engine.get_frames_drawn() + LINES_LINGER_FRAMES,
-	])
 
+func draw_line_3d(from: Vector3, to: Vector3, color: Color):
+	_lines.append([from, to, color])
 
-## @brief Draws an unshaded 3D line defined as a ray.
-## @param origin: begin position in world units
-## @param direction
-## @param length: length of the line in world units
-## @param color
 func draw_ray_3d(origin: Vector3, direction: Vector3, length: float, color : Color):
-	draw_line_3d(origin, origin + direction * length, color)
+	draw_line_3d(origin, origin + (direction.normalized() * length), color)
 
-
-## @brief Adds a text monitoring line to the HUD, from the provided value.
-## It will be shown as such: - {key}: {text}
-## Multiple calls with the same `key` will override previous text.
-## @param key: identifier of the line
-## @param text: text to show next to the key
 func add_text(str: String):
 	_texts.append(str)
-	 #= {
-		#"text": value if typeof(value) == TYPE_STRING else str(value),
-		#"frame": Engine.get_frames_drawn() + TEXT_LINGER_FRAMES
-	#}
 
 
 func _get_box() -> MeshInstance3D:
@@ -204,7 +174,7 @@ func _recycle_line_material(mat: StandardMaterial3D):
 	_line_material_pool.append(mat)
 
 
-func _process(delta: float):
+func _process(_delta):
 	_process_boxes()
 	
 	if _lines.size() > 0:
@@ -241,51 +211,26 @@ func _process_lines():
 	_line_immediate_geometry.surface_begin(Mesh.PRIMITIVE_LINES)
 	
 	for line in _lines:
-		var p1 : Vector3 = line[0]
-		var p2 : Vector3 = line[1]
-		var color : Color = line[2]
-		
-		#prints(p1, " ", p2)
-		
-		_line_immediate_geometry.surface_set_color(color)
-		_line_immediate_geometry.surface_add_vertex(p1)
-		_line_immediate_geometry.surface_add_vertex(p2)
+		_line_immediate_geometry.surface_set_color(line[2])
+		_line_immediate_geometry.surface_add_vertex(line[0])
+		_line_immediate_geometry.surface_add_vertex(line[1])
 	
 	_line_immediate_geometry.surface_end()
-	
-	# Delayed removal
-	var i := 0
-	while i < len(_lines):
-		var item = _lines[i]
-		var frame = item[3]
-		if frame <= Engine.get_frames_drawn():
-			_lines[i] = _lines[len(_lines) - 1]
-			_lines.pop_back()
-		else:
-			i += 1
+	_lines.clear()
 
 
 func _process_canvas():
-	#for str_index in _texts.size():
-		#pass
-	
-	# Remove text lines after some time
-	#for key in _texts.keys():
-		#var t = _texts[key]
-		#if t.frame <= Engine.get_frames_drawn():
-			#_texts.erase(key)
-
 	# Update canvas
-	if _canvas_item == null:
-		_canvas_item = Node2D.new()
-		_canvas_item.position = Vector2(8, 8)
-		_canvas_item.connect("draw", _on_CanvasItem_draw)
-		add_child(_canvas_item)
-	_canvas_item.queue_redraw()
+	if dd_canvas_item == null:
+		dd_canvas_item = Node2D.new()
+		dd_canvas_item.position = Vector2(8, 8)
+		dd_canvas_item.connect("draw", _on_CanvasItem_draw)
+		add_child(dd_canvas_item)
+	dd_canvas_item.queue_redraw()
 
 
 func _on_CanvasItem_draw():
-	var ci := _canvas_item
+	var ci := dd_canvas_item
 	
 	var ascent := Vector2(0, _font.get_ascent())
 	var pos := Vector2()
@@ -301,14 +246,6 @@ func _on_CanvasItem_draw():
 		ci.draw_string(_font, pos + font_offset, str, HORIZONTAL_ALIGNMENT_LEFT, -1, ThemeDB.fallback_font_size, TEXT_COLOR)
 		pos.y += line_height
 	_texts.clear()
-	
-	#for key in _texts.keys():
-		#var t = _texts[key]
-		#var text := str(key, ": ", t.text, "\n")
-		#var ss := _font.get_string_size(text)
-		#ci.draw_rect(Rect2(pos, Vector2(ss.x + xpad * 2, line_height)), TEXT_BG_COLOR)
-		#ci.draw_string(_font, pos + font_offset, text, HORIZONTAL_ALIGNMENT_LEFT, -1, ThemeDB.fallback_font_size, TEXT_COLOR)
-		#pos.y += line_height
 
 
 static func _create_wirecube_mesh(color := Color.WHITE) -> ArrayMesh:
