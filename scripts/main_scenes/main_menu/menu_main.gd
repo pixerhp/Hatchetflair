@@ -4,7 +4,6 @@ extends Control
 func switch_to_game_scene():
 	get_tree().change_scene_to_file("res://scenes/main_scenes/game_scene.tscn")
 
-
 # Makes visible one main menu screen after hiding all others.
 func switch_to_menu(menu_name: String) -> void:
 	for child in $Menus.get_children():

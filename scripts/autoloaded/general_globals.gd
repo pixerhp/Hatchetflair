@@ -48,13 +48,13 @@ func _enter_tree() -> void:
 	
 	
 	
-	# TEMPORARY TESTING 2!
-	# !!! (access edges and faces differently once that godot bug is fixed.)
-	ChunkUtils.get_marched_polyhedron_tri_indices_table(
-		ChunkUtils.unit_cube.verts, 
-		ChunkUtils.unit_cube.new().edges, 
-		ChunkUtils.unit_cube.new().faces, 
-		0)
+	## TEMPORARY TESTING 2!
+	## !!! (access edges and faces differently once that godot bug is fixed.)
+	#ChunkUtils.get_marched_polyhedron_tri_indices_table(
+		#ChunkUtils.unit_cube.verts, 
+		#ChunkUtils.unit_cube.new().edges, 
+		#ChunkUtils.unit_cube.new().faces, 
+		#0)
 	
 	
 	
