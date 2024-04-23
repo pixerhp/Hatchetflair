@@ -50,5 +50,5 @@ func _update_welcome_message():
 
 
 func _on_game_title_clicked() -> void:
-	Globals._set_window_title(true)
+	Globals._refresh_window_title(true)
 	return

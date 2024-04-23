@@ -226,6 +226,32 @@ func read_file_lines(file_path: String) -> PackedStringArray:
 		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
 		return []
 	return file.get_as_text().split("\n", false)
+# Note: earlier listed comment indicators take priority over later ones if both are in a line.
+func read_file_commented_lines(file_path: String, comment_indicators: Array[String], ignore_blank_lines: bool = true) -> PackedStringArray:
+	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
+	var err: Error = FileAccess.get_open_error()
+	if err != OK:
+		push_error("Failed to open file: ", file_path, " (Error val:) ", err)
+		return []
+	var all_lines: PackedStringArray = file.get_as_text().split("\n", false)
+	var wanted_lines: PackedStringArray = []
+	var comment_index: int = 0
+	for line in all_lines:
+		if ignore_blank_lines and line.is_empty():
+			continue
+		for indicator in comment_indicators:
+			comment_index = line.find(indicator)
+			if comment_index > -1:
+				break
+		match comment_index:
+			-1:
+				wanted_lines.append(line)
+			0:
+				if not ignore_blank_lines:
+					wanted_lines.append("")
+			_:
+				wanted_lines.append(line.substr(0, comment_index))
+	return wanted_lines
 func read_file_first_line(file_path: String) -> String:
 	var file: FileAccess = FileAccess.open(file_path, FileAccess.READ)
 	var err: Error = FileAccess.get_open_error()

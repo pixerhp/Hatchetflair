@@ -41,7 +41,7 @@ func _enter_tree() -> void:
 	FileManager.ensure_required_dirs()
 	FileManager.ensure_required_files()
 	_initialize_title_entire()
-	_set_window_title()
+	_refresh_window_title()
 	_initialize_inputmap_defaults()
 	
 	print(get_coords3d_string(Vector3(0.325346, 234634.234, 738926328), 2))
@@ -68,7 +68,6 @@ func _enter_tree() -> void:
 #	FileManager.write_file_lines("user://rhombdo_text_text.txt", text_lines)
 	
 	
-	
 	return
 
 
@@ -89,33 +88,27 @@ func _initialize_title_entire() -> void:
 			GAME_NAME + name_exts + " v" + V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
 		)
 	return
-func _set_window_title(include_splash: bool = true) -> Error:
-	if not include_splash:
-		DisplayServer.window_set_title(TITLE_ENTIRE)
-		return OK
-	
-	var splashes_file_lines: PackedStringArray = FileManager.read_file_lines(FileManager.PATH_SPLASHES)
-	var usable_splashes: Array = []
-	# Resize the usable splashes array so that it's not resized repeatedly for each splash added.
-	# Since we don't know the number of usable splashes yet, we make it the same size for now and remove the excess later.
-	usable_splashes.resize(splashes_file_lines.size())
-	# Determine which lines from the array are usable splashes (not a comment, or blank line, etc.)
-	var index: int = 0
-	for item in splashes_file_lines:
-		if (item != "") and (not item.begins_with('#')) and (not item.begins_with("\t")) and (not item.begins_with(" ")):
-			usable_splashes[index] = item
-			index += 1
-	# Resize the array to snuggly fit just the elements we wanted.
-	if usable_splashes.find(null) != -1:
-		usable_splashes.resize(usable_splashes.find(null))
-	
-	if usable_splashes.is_empty():
-		push_warning("No usable splash texts. (Leaving window-title splashless.)")
-		DisplayServer.window_set_title(TITLE_ENTIRE)
-		return OK
+
+func _refresh_window_title(include_random_splash: bool = true):
+	if include_random_splash:
+		var splash: String = get_random_splash()
+		if splash.length() == 0:
+			DisplayServer.window_set_title(TITLE_ENTIRE)
+			return
+		else:
+			DisplayServer.window_set_title(TITLE_ENTIRE + "   ~   " + splash)
+			return
 	else:
-		DisplayServer.window_set_title(TITLE_ENTIRE + "   ~   " + usable_splashes.pick_random())
-		return OK
+		DisplayServer.window_set_title(TITLE_ENTIRE)
+		return
+
+func get_random_splash() -> String:
+	var splashes: PackedStringArray = FileManager.read_file_commented_lines(FileManager.PATH_SPLASHES, ["#", "\t"], true)
+	if splashes.size() > 0:
+		return splashes[randi_range(0, splashes.size() - 1)]
+	else:
+		push_warning("No splash texts found when asked to provide a random splash.")
+		return ""
 
 func _initialize_inputmap_defaults():
 	INPUTMAP_DEFAULTS.clear()

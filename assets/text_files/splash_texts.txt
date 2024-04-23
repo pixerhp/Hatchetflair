@@ -1,18 +1,17 @@
-# Note, lines which are blank *or* start with a '#', '\t' (tab) or ' ' (spacebar) don't get used.
-# Please generally keep all sections contents in alphabetical order.
+# formatting note: 
+# lines which are blank are ignored.
+# '#' and '\t' (tab/indent) characters act like comments, their position and onwards in a line is ignored.
 
 
 #-=-=-=-#   HATCHETFLAIR SPECIFIC AND PERSONAL:
 
-238
 314
-	A peculiar feeling integer I sometimes use.
-3D!
-=^)
-	A smiley face emoticon with a nose. (Noses are neat.)
+	A peculiar integer I occasionally use, usually when an arbitrary int is needed.
+:^)
+	A smiley-face emoticon with a nose that I commonly use.
 <~
-	Aesthetics; to me it looks like a flower of sorts.
-bamboo and woods?
+	aesthetics, it looks like a flower of sorts.
+bamboo and various plant-woods?
 'B' staircase
 	A reference to a game jam game named "you, the game" which I contributed art to.
 	(One level had a prominent staircase made out of letter 'B' tiles.)
@@ -22,14 +21,12 @@ Catholic Christian!
 	I am designing the game with avoiding-tempting-players-into-sin in mind.
 caution: a band of wowzas is velocitating towards your location rapidly.
 	I found a similar humorous splash in one of my old gdocs, inspiring this.
-	(A "wowza" is an early enemy/entity concept for HF.)
+	(A "wowza" is the shortened name of an early enemy/entity concept for HF.)
 creature-friends?
 	The game is likely to have a variety of creaturish-sapients.
 dragons?
 	I will very likely add dragons in some way.
 Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death.
-	I don't know if my game could even be considered worthy of having this as a splash,
-	but I would rather remind people of Mary and asking her to pray for us than not.
 fluffiness?
 grass ropes?
 	I wonder how much of the game will be inspired by those random survival YouTubers...
@@ -41,12 +38,11 @@ Ka-jackelmonoque, Quatuuvix.
 	fun sounding words i thought of a while ago.
 	bastardized segments of trying to pronounce the alphabet as one word.
 lab capsules, researchers, artificial environments?
+may contain ferrium.
 oh- hello!~♪
 picks are great for breaking up hard ground.
 	A break from the more stereotypical use of picks, mining through solid stone.
-(probably) not a horror game. =)
-	=)
-Put on your armor.
+(probably) not a horror game. =^)
 sands, deserts, beaches?
 	although they aren't in the game yet, stuff like that would be lovely to have if executed well.
 :sparkles:
@@ -98,7 +94,6 @@ you open a closet, but it's actually just a dusty emptier mirrored-version of th
 1/0 = argument-less infinity?
 But is air resistance really negligible?
 	Air resistance is almost always considered negligable in physics questions.
-everyone always forgets about nickel, beryllium... but i didn't!
 Has anyone seen my tesseracts?
 	References the phrase "has anyone seen my car keys?".
 	(It'd also be pretty easy to lose a tesseract if you can only see a 3D slice of a 4D world.)
@@ -107,11 +102,12 @@ hexagons are the bestagons!
 	originally added just because I'd randomly heard the phrase and I generally like hexagons.
 i^2 = -1
 icosahedrons are so pretty!
+remembering nicium, muthium...
 tau > pi
 	I recognize tau as the circle constant and pi as the semicircle constant, despite pi's reputation.
 	A pun on 6.28... being literally greater than the number 3.14...
 	(Happy tau day!)
-tell the audience to please use the word "quantum" correctly.
+tell the audience to use the word "quantum" correctly.
 Weaire–Phelan structure?
 	A tileable 3D shape which has the most volume-per-surface area when tesselated.
 Why is my room filled with rhombic dodecahedrons?
