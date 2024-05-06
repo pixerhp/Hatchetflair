@@ -221,7 +221,7 @@ func get_marched_polyhedron_tri_indices_table(
 					# list of which bandlets conn side 2 connects to the end of (and whether it's front vs back of each)
 					
 					# Get a list of which bandlets each side of the conn' connect to, and which side of the bandlet they do at.
-					mid_conn_banding_context = [[],[]]
+					mid_conn_banding_context = [[], []]
 					for bandlet_index in mid_bandlets.size():
 						if mid_conns[conn_index][0] == mid_bandlets[bandlet_index][0]:
 							mid_conn_banding_context[0].append([bandlet_index, 0])
@@ -232,9 +232,24 @@ func get_marched_polyhedron_tri_indices_table(
 						if mid_conns[conn_index][1] == mid_bandlets[bandlet_index][mid_bandlets[bandlet_index].size() - 1]:
 							mid_conn_banding_context[1].append([bandlet_index, 1])
 					
-					# {u} if neither connection side is found on any existing bandlets, create a new bandlet for it.
+					# (untested but probably doesn't need to be) if neither connection side is found on any existing bandlets, create a new bandlet for it.
+					if mid_conn_banding_context == [[], []]:
+						mid_bandlets.append_array(mid_conns[conn_index])
+						continue
 					
-					# {u} if only one side connects to an existing bandlet: add onto that bandlet.
+					# (untested) if only one side connects to an existing bandlet: add onto that bandlet.
+					if (mid_conn_banding_context[0].size() == 1) and (mid_conn_banding_context[1].size() == 0):
+						if mid_conn_banding_context[0][1] == 0:
+							mid_bandlets[mid_conn_banding_context[0][0]].insert(0, mid_conns[conn_index][1])
+						else:
+							mid_bandlets[mid_conn_banding_context[0][0]].append(mid_conns[conn_index][1])
+						continue
+					if (mid_conn_banding_context[0].size() == 0) and (mid_conn_banding_context[1].size() == 1):
+						if mid_conn_banding_context[1][1] == 0:
+							mid_bandlets[mid_conn_banding_context[1][0]].insert(0, mid_conns[conn_index][0])
+						else:
+							mid_bandlets[mid_conn_banding_context[1][0]].append(mid_conns[conn_index][0])
+						continue
 					
 					# {u} if both connection sides are found on the ends of an existing bandlet, then that bandlet is now a complete and no longer needs to be checked.
 					
