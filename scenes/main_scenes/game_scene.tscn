@@ -3,9 +3,9 @@
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="2_gr5ms"]
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunks_manager.gd" id="3_5gspe"]
-[ext_resource type="PackedScene" uid="uid://le6nokyx2imu" path="res://assets/models/phuvel_rigidbody.tscn" id="4_6hyka"]
-[ext_resource type="PackedScene" uid="uid://dp274vji63hbb" path="res://assets/models/shovel_rigidbody.tscn" id="5_wetda"]
-[ext_resource type="PackedScene" uid="uid://cujngsb66hqh5" path="res://assets/models/axe_rigidbody.tscn" id="6_sc7j8"]
+[ext_resource type="PackedScene" uid="uid://le6nokyx2imu" path="res://assets/models/phuvel/phuvel_rigidbody.tscn" id="4_6hyka"]
+[ext_resource type="PackedScene" uid="uid://dp274vji63hbb" path="res://assets/models/shovel/shovel_rigidbody.tscn" id="5_wetda"]
+[ext_resource type="PackedScene" uid="uid://cujngsb66hqh5" path="res://assets/models/axe/axe_rigidbody.tscn" id="6_sc7j8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
 sky_top_color = Color(0.454902, 0.537255, 0.65098, 1)

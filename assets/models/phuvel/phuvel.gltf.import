@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b1coa8q4kbv3y"
-path="res://.godot/imported/axe.gltf-2971ffd98d744fb405e304e442899fe6.scn"
+uid="uid://c8exkoxv6kdei"
+path="res://.godot/imported/phuvel.gltf-e4ce33885d1361ac0e86f771eb7ff8a0.scn"
 
 [deps]
 
-source_file="res://assets/models/axe.gltf"
-dest_files=["res://.godot/imported/axe.gltf-2971ffd98d744fb405e304e442899fe6.scn"]
+source_file="res://assets/models/phuvel/phuvel.gltf"
+dest_files=["res://.godot/imported/phuvel.gltf-e4ce33885d1361ac0e86f771eb7ff8a0.scn"]
 
 [params]
 

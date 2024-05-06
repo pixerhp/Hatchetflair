@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://le6nokyx2imu"]
 
-[ext_resource type="Texture2D" uid="uid://c86mktkgpr7dp" path="res://assets/models/phuvel_texture.png" id="1_g2jnt"]
+[ext_resource type="Texture2D" uid="uid://c86mktkgpr7dp" path="res://assets/models/phuvel/phuvel_texture.png" id="1_g2jnt"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dkbvo"]
 resource_name = "Broken Shovel Material"

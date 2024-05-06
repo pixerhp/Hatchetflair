@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dvgs1y5jv74l0"
-path.bptc="res://.godot/imported/axe_texture.png-d17091430da9d23501555768afed1b50.bptc.ctex"
+uid="uid://c86mktkgpr7dp"
+path.bptc="res://.godot/imported/phuvel_texture.png-98c7c5f8c9ae4acbb39ded27c1eecef5.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ generator_parameters={}
 
 [deps]
 
-source_file="res://assets/models/axe_texture.png"
-dest_files=["res://.godot/imported/axe_texture.png-d17091430da9d23501555768afed1b50.bptc.ctex"]
+source_file="res://assets/models/phuvel/phuvel_texture.png"
+dest_files=["res://.godot/imported/phuvel_texture.png-98c7c5f8c9ae4acbb39ded27c1eecef5.bptc.ctex"]
 
 [params]
 

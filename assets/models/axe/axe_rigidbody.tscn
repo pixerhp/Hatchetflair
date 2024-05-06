@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cujngsb66hqh5"]
 
-[ext_resource type="Texture2D" uid="uid://dvgs1y5jv74l0" path="res://assets/models/axe_texture.png" id="1_8lknb"]
+[ext_resource type="Texture2D" uid="uid://dvgs1y5jv74l0" path="res://assets/models/axe/axe_texture.png" id="1_8lknb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1qdej"]
 resource_name = "Axe Material"
