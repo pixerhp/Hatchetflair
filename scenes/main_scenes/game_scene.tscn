@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://o3dnyoj5ql3m"]
+[gd_scene load_steps=20 format=3 uid="uid://o3dnyoj5ql3m"]
 
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="2_gr5ms"]
@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://dy776yivba4pg" path="res://assets/render_materials/foam.tres" id="5_8aw3w"]
 [ext_resource type="PackedScene" uid="uid://dp274vji63hbb" path="res://assets/models/shovel/shovel_rigidbody.tscn" id="5_wetda"]
 [ext_resource type="PackedScene" uid="uid://cujngsb66hqh5" path="res://assets/models/axe/axe_rigidbody.tscn" id="6_sc7j8"]
+[ext_resource type="PackedScene" uid="uid://d06jwngltje3r" path="res://assets/models/smiley/smiley.glb" id="10_ub1wu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
 sky_top_color = Color(0.454902, 0.537255, 0.65098, 1)
@@ -226,8 +227,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32.9499, 0)
 [node name="AxeRigidbody" parent="SharedObjectsMS" instance=ExtResource("6_sc7j8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 41.8945, 0)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="SharedObjectsMS"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.337713, 16.4734, -2.19905)
+
+[node name="smiley" parent="SharedObjectsMS" instance=ExtResource("10_ub1wu")]
+transform = Transform3D(0.944474, 0, -0.328586, 0, 1, 0, 0.328586, 0, 0.944474, 15.8841, 7.36777, 1.69856)
 
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ResumeGameplay" to="." method="_on_pausemenu_resumegameplay_pressed"]
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/TogglePlaying" to="." method="_on_pausemenu_toggleplaying_pressed"]
