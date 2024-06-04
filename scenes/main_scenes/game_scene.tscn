@@ -231,7 +231,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 41.8945, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.337713, 16.4734, -2.19905)
 
 [node name="smiley" parent="SharedObjectsMS" instance=ExtResource("10_uiufw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.2541, 8.00099, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 8, 0)
 
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ResumeGameplay" to="." method="_on_pausemenu_resumegameplay_pressed"]
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/TogglePlaying" to="." method="_on_pausemenu_toggleplaying_pressed"]

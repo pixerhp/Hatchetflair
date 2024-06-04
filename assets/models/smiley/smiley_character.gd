@@ -22,8 +22,11 @@ func _physics_process(delta):
 	
 	action_timer -= 1
 	if action_timer <= 0:
-		action_timer = randi_range(20, 400)
-		action_type = actions_enums.values().pick_random()
+		action_timer = randi_range(30, 480)
+		if action_type == actions_enums.IDLE:
+			action_type = actions_enums.WALK
+		else:
+			action_type = actions_enums.IDLE
 		
 		match action_type:
 			actions_enums.IDLE:
@@ -33,7 +36,9 @@ func _physics_process(delta):
 			actions_enums.WALK:
 				animation_player.set_assigned_animation("walk")
 				animation_player.play()
-				walk_direction = (Vector2.UP.rotated(randf_range((-PI), (PI)))).normalized()
+				character.rotation.y = randf_range((-PI), (PI))
+				walk_direction = Vector2.UP
+	
 	
 	var direction = (transform.basis * Vector3(walk_direction.x, 0, walk_direction.y)).normalized()
 	velocity.x = direction.x * WALK_SPEED
