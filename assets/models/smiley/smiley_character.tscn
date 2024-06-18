@@ -744,7 +744,7 @@ bones/9/parent = 8
 bones/9/rest = Transform3D(1, 5.97883e-28, 0, -5.97883e-28, 1, 3.19744e-29, 0, -3.19744e-29, 1, -2.10942e-15, 1.08843, -3.33067e-16)
 bones/9/enabled = true
 bones/9/position = Vector3(-2.10942e-15, 1.08843, -3.33067e-16)
-bones/9/rotation = Quaternion(-1.59872e-29, 0, -2.98942e-28, 1)
+bones/9/rotation = Quaternion(-3.19745e-29, 0, -3.0771e-28, 1)
 bones/9/scale = Vector3(1, 1, 1)
 bones/10/name = "Right Hand"
 bones/10/parent = 9
@@ -779,14 +779,14 @@ bones/14/parent = 13
 bones/14/rest = Transform3D(1, 4.61253e-09, 5.99772e-07, -4.6128e-09, 1, 4.47118e-07, -5.99772e-07, -4.47118e-07, 1, 3.70637e-10, 1.44658, 3.39411e-10)
 bones/14/enabled = true
 bones/14/position = Vector3(3.70637e-10, 1.44658, 3.39411e-10)
-bones/14/rotation = Quaternion(-2.23559e-07, 2.99886e-07, -2.30633e-09, 1)
+bones/14/rotation = Quaternion(-2.23559e-07, 2.98023e-07, -2.30633e-09, 1)
 bones/14/scale = Vector3(1, 1, 1)
 bones/15/name = "foot_r"
 bones/15/parent = 14
 bones/15/rest = Transform3D(1, 1.6087e-08, 2.01166e-07, -1.6087e-08, 1, 2.73339e-07, -2.01166e-07, -2.73339e-07, 1, -2.3477e-10, 1.36053, 8.442e-09)
 bones/15/enabled = true
 bones/15/position = Vector3(-2.3477e-10, 1.36053, 8.442e-09)
-bones/15/rotation = Quaternion(-1.36669e-07, 1.00583e-07, -8.0435e-09, 1)
+bones/15/rotation = Quaternion(-1.36669e-07, 1.00583e-07, -8.04349e-09, 1)
 bones/15/scale = Vector3(1, 1, 1)
 bones/16/name = "Left Foot"
 bones/16/parent = 15
@@ -914,7 +914,7 @@ mesh = SubResource("ArrayMesh_t1ai0")
 skeleton = NodePath("")
 
 [node name="Left Foot" type="BoneAttachment3D" parent="Armature/Skeleton3D"]
-transform = Transform3D(1, -3.40218e-09, 1.56462e-07, 3.40221e-09, 1, 3.78308e-09, -4.47035e-08, -3.78308e-09, 1, 0.217686, -3.41017, -5.47639e-09)
+transform = Transform3D(1, -3.40218e-09, 1.60187e-07, 3.40221e-09, 1, 3.78306e-09, -4.84288e-08, -3.78306e-09, 1, 0.217686, -3.41017, -5.47638e-09)
 bone_name = "Left Foot"
 bone_idx = 16
 
@@ -923,7 +923,7 @@ mesh = SubResource("ArrayMesh_5f1fa")
 skeleton = NodePath("")
 
 [node name="Left Leg Lower" type="BoneAttachment3D" parent="Armature/Skeleton3D"]
-transform = Transform3D(1, -4.66147e-09, 3.57628e-07, 4.6615e-09, 1, 3.03061e-09, -2.45869e-07, -3.0306e-09, 1, 0.217686, -2.04963, 1.27387e-08)
+transform = Transform3D(1, -4.66147e-09, 3.61353e-07, 4.6615e-09, 1, 3.03061e-09, -2.49594e-07, -3.0306e-09, 1, 0.217686, -2.04963, 1.27388e-08)
 bone_name = "Left Leg Lower"
 bone_idx = 17
 
