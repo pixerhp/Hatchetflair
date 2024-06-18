@@ -975,6 +975,15 @@ bone_idx = 25
 mesh = SubResource("ArrayMesh_quyt6")
 skeleton = NodePath("")
 
+[node name="IKTargetLeftHand" type="Node3D" parent="Armature/Skeleton3D/Smiley Face"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.565434, 0.0279503, 1.80058)
+
+[node name="SkeletonIK3D" type="SkeletonIK3D" parent="Armature/Skeleton3D"]
+process_priority = 1
+root_bone = &"arm1_l"
+tip_bone = &"hand_l"
+target_node = NodePath("../Smiley Face/IKTargetLeftHand")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_plnkb")
