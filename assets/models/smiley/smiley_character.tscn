@@ -860,7 +860,7 @@ bones/25/rotation = Quaternion(0, 0.707107, 0, 0.707107)
 bones/25/scale = Vector3(1, 1, 1)
 
 [node name="Right Foot" type="BoneAttachment3D" parent="Armature/Skeleton3D"]
-transform = Transform3D(1, 3.32862e-09, -4.84288e-08, -3.32862e-09, 1, 3.73617e-09, -7.45058e-08, -3.73617e-09, 1, -0.217686, -3.41017, -9.25616e-09)
+transform = Transform3D(1, 3.32862e-09, -4.47035e-08, -3.32862e-09, 1, 3.73618e-09, -6.33299e-08, -3.73618e-09, 1, -0.217686, -3.41017, -9.25616e-09)
 bone_name = "Right Foot"
 bone_idx = 4
 
@@ -869,7 +869,7 @@ mesh = SubResource("ArrayMesh_tvdvi")
 skeleton = NodePath("")
 
 [node name="Right Leg Lower" type="BoneAttachment3D" parent="Armature/Skeleton3D"]
-transform = Transform3D(1, 1.10052e-09, -1.3411e-07, -1.10055e-09, 1, -7.65276e-10, 1.11759e-08, 7.65306e-10, 1, -0.217686, -2.04964, 2.2426e-08)
+transform = Transform3D(1, 1.10052e-09, -1.30385e-07, -1.10055e-09, 1, -7.65269e-10, 2.23517e-08, 7.65302e-10, 1, -0.217686, -2.04964, 2.2426e-08)
 bone_name = "Right Leg Lower"
 bone_idx = 5
 
@@ -878,7 +878,7 @@ mesh = SubResource("ArrayMesh_hwmgc")
 skeleton = NodePath("")
 
 [node name="Right Leg Upper" type="BoneAttachment3D" parent="Armature/Skeleton3D"]
-transform = Transform3D(1, 2.16449e-12, 1.21072e-06, -2.16654e-12, 1, 1.24416e-09, -1.27032e-06, -1.24417e-09, 1, -0.217685, -0.603055, 1.44804e-08)
+transform = Transform3D(1, 2.16455e-12, 1.21444e-06, -2.16627e-12, 1, 1.24417e-09, -1.26287e-06, -1.24417e-09, 1, -0.217685, -0.603055, 1.44804e-08)
 bone_name = "Right Leg Upper"
 bone_idx = 6
 
@@ -914,7 +914,7 @@ mesh = SubResource("ArrayMesh_t1ai0")
 skeleton = NodePath("")
 
 [node name="Left Foot" type="BoneAttachment3D" parent="Armature/Skeleton3D"]
-transform = Transform3D(1, -3.40218e-09, 1.60187e-07, 3.40221e-09, 1, 3.78306e-09, -4.84288e-08, -3.78306e-09, 1, 0.217686, -3.41017, -5.47638e-09)
+transform = Transform3D(1, -3.40213e-09, 1.67638e-07, 3.40207e-09, 1, 3.78306e-09, -4.09782e-08, -3.78306e-09, 1, 0.217686, -3.41017, -5.47638e-09)
 bone_name = "Left Foot"
 bone_idx = 16
 
@@ -923,7 +923,7 @@ mesh = SubResource("ArrayMesh_5f1fa")
 skeleton = NodePath("")
 
 [node name="Left Leg Lower" type="BoneAttachment3D" parent="Armature/Skeleton3D"]
-transform = Transform3D(1, -4.66147e-09, 3.61353e-07, 4.6615e-09, 1, 3.03061e-09, -2.49594e-07, -3.0306e-09, 1, 0.217686, -2.04963, 1.27388e-08)
+transform = Transform3D(1, -4.66142e-09, 3.68804e-07, 4.66136e-09, 1, 3.03061e-09, -2.42144e-07, -3.0306e-09, 1, 0.217686, -2.04964, 1.27388e-08)
 bone_name = "Left Leg Lower"
 bone_idx = 17
 
@@ -932,7 +932,7 @@ mesh = SubResource("ArrayMesh_rbcv8")
 skeleton = NodePath("")
 
 [node name="Left Leg Upper" type="BoneAttachment3D" parent="Armature/Skeleton3D"]
-transform = Transform3D(1, -2.82017e-09, -4.09782e-07, 2.82023e-09, 1, -3.28129e-09, 4.65661e-07, 3.28134e-09, 1, 0.217685, -0.603055, 4.54289e-10)
+transform = Transform3D(1, -2.82012e-09, -4.06057e-07, 2.82006e-09, 1, -3.28129e-09, 4.73112e-07, 3.28134e-09, 1, 0.217685, -0.603055, 4.54289e-10)
 bone_name = "Left Leg Upper"
 bone_idx = 18
 
