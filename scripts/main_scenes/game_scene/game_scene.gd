@@ -56,9 +56,6 @@ func _process(delta):
 	# !!! toggle showing chunk boundaries + grids.
 	if Input.is_action_just_pressed("game_special_debug_menu"):
 		Globals.draw_chunks_debug = not Globals.draw_chunks_debug
-		if Globals.draw_chunks_debug == false:
-			# (Required to stop drawing all otherwise drawn lines:)
-			DebugDraw.draw_line_3d(Vector3(0,0,0), Vector3(0,0,0), Color.WHITE)
 		print("draw chunks debug is now: ", Globals.draw_chunks_debug)
 	
 	DebugDraw.add_text("frame delta: " + str(delta))

@@ -176,10 +176,7 @@ func _recycle_line_material(mat: StandardMaterial3D):
 
 func _process(_delta):
 	_process_boxes()
-	
-	if _lines.size() > 0:
-		_process_lines()
-	
+	_process_lines()
 	_process_canvas()
 
 
@@ -207,6 +204,10 @@ func _process_boxes():
 
 
 func _process_lines():
+	if _lines.size() == 0:
+		_line_immediate_geometry.clear_surfaces()
+		return
+	
 	_line_immediate_geometry.clear_surfaces()
 	_line_immediate_geometry.surface_begin(Mesh.PRIMITIVE_LINES)
 	
@@ -248,7 +249,7 @@ func _on_CanvasItem_draw():
 	_texts.clear()
 
 
-static func _create_wirecube_mesh(color := Color.WHITE) -> ArrayMesh:
+static func _create_wirecube_mesh(color: Color = Color.WHITE) -> ArrayMesh:
 	var positions := PackedVector3Array([
 		Vector3(0, 0, 0),
 		Vector3(1, 0, 0),
@@ -268,12 +269,12 @@ static func _create_wirecube_mesh(color := Color.WHITE) -> ArrayMesh:
 		1, 2,
 		2, 3,
 		3, 0,
-
+		
 		4, 5,
 		5, 6,
 		6, 7,
 		7, 4,
-
+		
 		0, 4,
 		1, 5,
 		2, 6,
