@@ -1,160 +1,30 @@
-# formatting note: 
-# lines which are blank are ignored.
-# '#' and '\t' (tab/indent) characters act like comments, their position and onwards in a line is ignored.
+# and '\t' (tab/indent) characters act like comments, their position and onwards in a line is ignored.
+# blank lines are also ignored.
 
 
-#-=-=-=-#   HATCHETFLAIR SPECIFIC AND PERSONAL:
+#### CORE
+:^) ← has a nose
+a bit flat, don'tcha think?
+almost a game
+built on Godot!
+hello!♪
+made with passion!
+may contain ferrium
+ramp-tastic
+splash text!
+turn that smiley, upside-down!
 
-314
-	A peculiar integer I occasionally use, usually when an arbitrary int is needed.
-:^)
-	A smiley-face emoticon with a nose that I commonly use.
-<~
-	aesthetics, it looks like a flower of sorts.
-bamboo and various plant-woods?
-'B' staircase
-	A reference to a game jam game named "you, the game" which I contributed art to.
-	(One level had a prominent staircase made out of letter 'B' tiles.)
-bats?
-	I tend to like vaguely bat-ish characters, so I'm likely to add some later.
-Catholic Christian!
-	I am designing the game with avoiding-tempting-players-into-sin in mind.
-caution: a band of wowzas is velocitating towards your location rapidly.
-	I found a similar humorous splash in one of my old gdocs, inspiring this.
-	(A "wowza" is the shortened name of an early enemy/entity concept for HF.)
-creature-friends?
-	The game is likely to have a variety of creaturish-sapients.
-dragons?
-	I will very likely add dragons in some way.
-Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death.
-fluffiness?
-grass ropes?
-	I wonder how much of the game will be inspired by those random survival YouTubers...
-Hatchetflash, Flerovash, Hatchetflare, Hatchetflair??
-	Inspired by how many times I've felt uncertain about the game's name.
-have a wonderful day!
-have lotsa fun!
-Ka-jackelmonoque, Quatuuvix.
-	fun sounding words i thought of a while ago.
-	bastardized segments of trying to pronounce the alphabet as one word.
-lab capsules, researchers, artificial environments?
-may contain ferrium.
-oh- hello!~♪
-picks are great for breaking up hard ground.
-	A break from the more stereotypical use of picks, mining through solid stone.
-(probably) not a horror game. =^)
-sands, deserts, beaches?
-	although they aren't in the game yet, stuff like that would be lovely to have if executed well.
-smile!
-	added after some smilies stuff.
-:sparkles:
-	A discord emote I commonly use in message reactions.
-sticks and strawberries
-	A splash from my first coding attempt at an older concept of HF. 
-swamps and asremia?
-that lovely azure color between blue and purple?
-	A color I tend to like.
-that lovely rose color slightly-magenta-shifted from red?
-	A color I tend to like.
-to combat or not to combat...
-	I have been struggling significantly with how much the game should have combat and how so.
-	References Shakespeare's Hamlet, "to be, or not to be".
-unincorporated!
-	Unrelatedly, I want development for this game to stay away from anything which by-design puts money first.
-wings of shadow, hearts of flerovia, tears of dreams?
-wood-ash cement?
-
-
-#-=-=-=-#   CODING & OTHER DEVELOPERS:
-
-bojler eladó
-	“boiler for sale” in hungarian, a popular hungarian meme phrase. (SteveMC32)
-declaring and initializing a punch to the face!
-	humorous code-themed sentence.
-HELLO, WORLD.
-SOUND TEST: MONO OR STEREO?
-	Inspired by some old SNES games giving you stated audio options.
-	References how some games have a "sound test" area which lets you listen to various game audio.
-
-
-#-=-=-=-#   LIMINAL / ASREMIC / DREAM-LIKE / STRANGE:
-
-accidentally went down too many stairs and ended up in "second-basement"...
-
-do you hear the water beyond the wall of trees?
-get out of bounds.
-i hear the birds singing by the flowers outside.
-remember an area which you see every day that you haven't properly looked at in years.
-the pool under the hotel pool
-the room above your attic
-windows which are blank-white until you look through them
-you open a closet, but it's actually just a dusty emptier mirrored-version of the room behind you...
-
-
-#-=-=-=-#   MATHEMATICS / GEOMETRY / PHYSICS / CHEMISTRY:
-
-1/0 = argument-less infinity?
-But is air resistance really negligible?
-	Air resistance is almost always considered negligable in physics questions.
-Has anyone seen my tesseracts?
-	References the phrase "has anyone seen my car keys?".
-	(It'd also be pretty easy to lose a tesseract if you can only see a 3D slice of a 4D world.)
-hexagons are the bestagons!
-	incidental reference to CGP Grey, who I don't know much about.
-	originally added just because I'd randomly heard the phrase and I generally like hexagons.
-i^2 = -1
-icosahedrons are so pretty!
-remembering nicium, muthium...
+#### OTHER
 tau > pi
-	I recognize tau as the circle constant and pi as the semicircle constant, despite pi's reputation.
-	A pun on 6.28... being literally greater than the number 3.14...
-	(Happy tau day!)
-tell the audience to use the word "quantum" correctly.
-Weaire–Phelan structure?
-	A tileable 3D shape which has the most volume-per-surface area when tesselated.
-Why is my room filled with rhombic dodecahedrons?
 
-
-#-=-=-=-#   MISCELLANEOUS:
-
-be strong enough to do the little things.
-consider perceiving what you see rather than what you think you see.
-	based on the art advice: "draw what you see, not what you think you see."
-do something helpful for someone and then never mention it or bring it up.
-go do your homework!
-go take care of yourself. drink water, eat if you should...
-
-
-#-=-=-=-#   REFERENCES:
-
-Also see carloacutis.com and miracolieucaristici.org!
-	In respect to Blessed Saint Carlo Acutis.
-a world-class scrabble player and a digital armadillo enter a laboratory...
-	References an obscure game jam i had nothing to do with by "Daring Owl Studios".
-	(https://daring-owl-studios.itch.io/you-lose-good-day-sir-final)
-	References the "an x and a y enter a bar" joke format trope.
--but to answer that, we need to talk about parallel universes.
-	references pannenkoek2012's "SM64 - Watch for Rolling Rocks - 0.5x A Presses (Commentated)" video.
-	nods to the sm64 speedrunning, challenge and otherwise community who really know their stuff about the N64.
-did you accidentally build the school 30 stories tall again?
-	References the (original 3) "Wayside School" books.
-DO NOT TAUNT THE CHICKENS
-	A Secret of Evermore (SNES) reference.
-*drops a garbage block on you*
-	References various action puzzle games, where in vs modes "garbage blocks" are a common concept.
-	(Specifically as can be seen with the word "drop" I had Panel de Pon / Tetris Attack in mind.)
-dyed clothing is my favorite shark-drop
-	A cryptic reference to the game "The Blockheads" by David Frampton.
-	(In Blockheads, shark enemies sometimes drop dyed clothing when killed.)
-It's still Bill's fault!
-	A reference to Secret of Evermore's secret post-credits text: "IT'S BILL'S FAULT".
-	thus also a reference to Brian Fehdrau (@ItsBillsFault) and Bill Kristiansen, both SoE devs.
-Please tell the whale that fell into the library to be more quiet next time.
-	References the game "OFF" by Mortis Ghost.
-seme!? ala kijetesantakalu!?
-	references the toki pona conlang, the phrase related to HF not currently having raccoons/similar.
-Splatting mosquitoes with a femur bone since 1995!
-	References "Secret of Evermore" (SNES), which released in North America on October 1, 1995.
-STEEEVOOOOOOOOOOOOO!!!
-	References "CarlSagan42" and "Stevo" (the latter is a well-known super mario maker troll-level creator.)
-Thanks Godot!
+#### REFERENCES
+bojler eladó
+	“boiler for sale” in hungarian, a popular hungarian meme phrase. (SteveMC32 is hungarian.)
+# DO NOT TAUNT THE CHICKENS
+	Secret of Evermore (SNES)
+hello 4D Miner!
+hello Cosmic Reach!
+seme? kijetesantakalu ala?
+	Toki Pona conlang, it says "what? no raccoons?"
+# The Pipes will always win
+	Rodland of Pipes by Justin Jones
