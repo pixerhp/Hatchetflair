@@ -1,6 +1,7 @@
-# Original code by Zylann: https://github.com/Zylann/godot_debug_draw
-# This script originates from an altered version: https://codefile.io/f/7GIUyZdW5g3xqKzSzMQw
-# This instance of the script is modified/updated for personal use by Pixer H. Pinecone (+ other HF devs.)
+# The original debug_draw script by Zylann: 
+	# https://github.com/Zylann/godot_debug_draw
+# This script is a personal edit of someone's rework which updated Zylann's to Godot 4: 
+	# https://codefile.io/f/7GIUyZdW5g3xqKzSzMQw
 
 ## @brief Single-file autoload for debug drawing and text printing.
 ## Draw and print on-screen from anywhere with a single line of code.
@@ -204,11 +205,11 @@ func _process_boxes():
 
 
 func _process_lines():
+	_line_immediate_geometry.clear_surfaces()
+	
 	if _lines.size() == 0:
-		_line_immediate_geometry.clear_surfaces()
 		return
 	
-	_line_immediate_geometry.clear_surfaces()
 	_line_immediate_geometry.surface_begin(Mesh.PRIMITIVE_LINES)
 	
 	for line in _lines:
@@ -218,10 +219,11 @@ func _process_lines():
 	
 	_line_immediate_geometry.surface_end()
 	_lines.clear()
+	return
 
 
 func _process_canvas():
-	# Update canvas
+	# Update the canvas.
 	if dd_canvas_item == null:
 		dd_canvas_item = Node2D.new()
 		dd_canvas_item.position = Vector2(8, 8)
