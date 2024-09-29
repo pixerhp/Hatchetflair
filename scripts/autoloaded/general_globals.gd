@@ -17,14 +17,18 @@ extends Node
 
 const GAME_NAME: String = "Hatchetflair"
 const GAME_PHASE: String = "pre-alpha"
-const V_MODEL: String = "1"
-const V_MAJOR: String = "1"
-const V_MINOR: String = "0"
-const V_PATCH: String = "0"
+const V_MODEL: String = "1" # (the engine/recoding attempt at making the whole game.)
+const V_MAJOR: String = "1" # (big content milestones, resets minor number.)
+const V_MINOR: String = "0" # (regular content updates, resets patch number.)
+const V_PATCH: String = "0" # (simple bug-fixing/patches.)
+
 const V_ENTIRE: String = V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH
 var TITLE_ENTIRE: String = ""
+
 const IS_MODDED: bool = false
-const IS_INDEV: bool = true
+const IS_VERSION_INDEV: bool = true 
+	# set to true while this version is being developed, 
+	# then set to false once you're finished BEFORE RELEASING IT.
 
 var INPUTMAP_DEFAULTS: Dictionary = {}
 
@@ -76,12 +80,12 @@ func _initialize_title_entire() -> void:
 	if IS_MODDED:
 		name_exts += "*"
 	var v_exts: String = ""
-	if IS_INDEV:
-		v_exts += " [INDEV]"
-	# Include phase in the title only if the game is not at/past release stage.
+	if IS_VERSION_INDEV:
+		v_exts += " [v_indev]"
+	# Includes phase in the title only if it doesn't indicate completion.
 	if (GAME_PHASE != "release") and (GAME_PHASE != "gold") and (GAME_PHASE != "rose-gold"):
 		TITLE_ENTIRE = (
-			GAME_NAME + name_exts + " [" + GAME_PHASE + "] v" + V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
+			GAME_NAME + name_exts + " " + GAME_PHASE + " v" + V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH + v_exts
 		)
 	else:
 		TITLE_ENTIRE = (
