@@ -10,6 +10,7 @@ built on Godot!
 hello!♪
 made with passion!
 may contain ferrium
+may also contain werium
 ramp-tastic
 splash text!
 turn that smiley, upside-down!
