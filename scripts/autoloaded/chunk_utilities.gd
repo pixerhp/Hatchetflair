@@ -166,10 +166,21 @@ func tris_formed_by_edges(edges: Array[PackedByteArray]) -> Array[PackedByteArra
 	
 	return known_tris
 
-func is_triangle_clockwise():
-	pass
-func is_3d_triangle_clockwise():
-	pass
+# checks if a triangle is connected clockwise or counter-clockwise based on the determinant of the matrix being
+# negative for clocwise and positive for counter-clockwise order
+# https://math.stackexchange.com/questions/1324179/how-to-tell-if-3-connected-points-are-connected-clockwise-or-counter-clockwise
+func is_triangle_clockwise(vertices: Array[Vector2]):
+	return Basis(Vector3(vertices[0].x,vertices[0].y,1),
+				 Vector3(vertices[1].x,vertices[1].y,1),
+				 Vector3(vertices[2].x,vertices[2].y,1)).determinant() < 0;
+
+# checks if a 3d triangle is clockwise by first transforing it to a plane defined by a given normal
+# https://math.stackexchange.com/questions/50227/how-do-i-map-a-3d-triangle-into-2d
+func is_3d_triangle_clockwise(vertices: Array[Vector3], normal: Vector3):
+	var tri_normal = (vertices[1]-vertices[0]).cross(vertices[2]-vertices[0]);
+	return normal.dot(tri_normal) < 0
+	
+	
 
 func midpoint_indices_used(vertex_states_bits: PackedByteArray, edges: Array[PackedByteArray]) -> PackedByteArray:
 	var midpoints_used: PackedByteArray = []
