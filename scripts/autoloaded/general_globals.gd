@@ -26,7 +26,7 @@ const V_ENTIRE: String = V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH
 var TITLE_ENTIRE: String = ""
 
 const IS_MODDED: bool = false
-const IS_VERSION_INDEV: bool = true 
+const IS_VERSION_INDEV: bool = false 
 	# set to true while this version is being developed, 
 	# then set to false once you're finished BEFORE RELEASING IT.
 
@@ -48,7 +48,6 @@ func _enter_tree() -> void:
 	_refresh_window_title()
 	_initialize_inputmap_defaults()
 	
-	print(get_coords3d_string(Vector3(0.325346, 234634.234, 738926328), 2))
 	
 	
 	

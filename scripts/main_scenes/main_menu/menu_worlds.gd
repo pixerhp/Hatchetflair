@@ -54,7 +54,7 @@ func start_world_by_index(index: int = -1) -> Error:
 func start_world_by_specifics(world_dir_path: String, 
 allow_multiplayer_joining: bool = $WorldsUI/Toggles/AllowJoining.button_pressed, 
 host_without_playing: bool = $WorldsUI/Toggles/HostWithoutPlaying.button_pressed) -> Error:
-	print("Although technically not using it yet, use world files when loading a world later. ", world_dir_path)
+	# !!! Later on when worlds are saved or otherwise different from eachother, properly use world files: world_dir_path
 	NetworkManager.host_game(allow_multiplayer_joining, host_without_playing)
 #	if NetworkManager.host_game(allow_multiplayer_joining, host_without_playing) != OK:
 #		return FAILED
