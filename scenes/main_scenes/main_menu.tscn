@@ -129,6 +129,7 @@ custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
+disabled = true
 text = "Join world"
 icon_alignment = 1
 
@@ -1035,11 +1036,13 @@ layout_mode = 2
 [node name="AllowJoining" type="CheckButton" parent="Menus/WorldsMenu/WorldsUI/Toggles"]
 layout_mode = 2
 tooltip_text = "Determines whether the world will be hosted as a joinable server."
+disabled = true
 text = "Multiplayer enabled?:"
 
 [node name="HostWithoutPlaying" type="CheckButton" parent="Menus/WorldsMenu/WorldsUI/Toggles"]
 layout_mode = 2
 tooltip_text = "Situationally useful, such as hosting a world for others to play on whilst doing other things yourself."
+disabled = true
 text = "Start world *without* playing?:"
 
 [node name="SavedWorldsList" type="ItemList" parent="Menus/WorldsMenu/WorldsUI"]
