@@ -1,5 +1,7 @@
 extends Control
 
+# !!! to-do: replace instances of the word "hotkeys" with the more appopriate: "keybinds".
+
 signal close_settings_menu
 func _on_close_settings_pressed():
 	close_settings_menu.emit()
