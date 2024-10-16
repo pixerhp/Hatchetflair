@@ -8,7 +8,6 @@ func switch_to_main_menu():
 @onready var temporary_cam: Camera3D = $REMOVE_LATER_cam
 var cam_speed = 20
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 var previous_mouse_position: Vector2 = Vector2(0, 0)
 func _process(delta):
 	# Toggle the pause menu if its associated key is pressed.
@@ -89,7 +88,7 @@ func _input(event) -> void:
 	if event is InputEventMouseMotion:
 		if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 			# !!! research *why* these need to be multiplied by such a small number,
-			# potentially allowing a proper/known conversion like "angle per mouse pixel" (or similar.)
+			# potentially allowing a proper/known conversion like "angle per mouse unit" (or similar.)
 			temporary_cam.rotation.y += event.relative.x * -0.005
 			temporary_cam.rotation.x += event.relative.y * -0.005
 

@@ -19,14 +19,14 @@ const GAME_NAME: String = "Hatchetflair"
 const GAME_PHASE: String = "pre-alpha"
 const V_MODEL: String = "1" # (the engine/recoding attempt at making the whole game.)
 const V_MAJOR: String = "1" # (big content milestones, resets minor number.)
-const V_MINOR: String = "0" # (regular content updates, resets patch number.)
+const V_MINOR: String = "1" # (regular content updates, resets patch number.)
 const V_PATCH: String = "0" # (simple bug-fixing/patches.)
 
 const V_ENTIRE: String = V_MODEL + "." + V_MAJOR + "." + V_MINOR + "." + V_PATCH
 var TITLE_ENTIRE: String = ""
 
 const IS_MODDED: bool = false
-const IS_VERSION_INDEV: bool = false 
+const IS_VERSION_INDEV: bool = true 
 	# set to true while this version is being developed, 
 	# then set to false once you're finished BEFORE RELEASING IT.
 
