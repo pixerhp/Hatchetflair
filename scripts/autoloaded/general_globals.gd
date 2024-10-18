@@ -35,6 +35,15 @@ var INPUTMAP_DEFAULTS: Dictionary = {}
 var player_username: String = "guest"
 var player_displayname: String = "Guest"
 
+# !!! the below are not currently used, but should serve as future reference for stuff that should be.
+enum playmode {
+	SPECTATOR, # Spectate the world and its happenigs without colliding or interacting with it.
+	SURVIVOR, # Live in the world, controlling a player character.
+	BUILDER, # Build/destroy anything with conveniences like invincibility, flying, the catalog, commands, etc.
+	DESIGNER, # A more advanced builder mode, design the world; add/remove custom content like entities and items.
+}
+var player_playmode = playmode.SPECTATOR
+
 var draw_chunks_debug: bool = false
 
 
