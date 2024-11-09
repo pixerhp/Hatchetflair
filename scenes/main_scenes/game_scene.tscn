@@ -237,7 +237,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 8, 0)
 [node name="Pa_ge" type="CharacterBody3D" parent="SharedObjectsMS"]
 transform = Transform3D(0.937889, 0, -0.346936, 0, 1, 0, 0.346936, 0, 0.937889, 17.35, 2.968, -47.724)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="SharedObjectsMS"]
+[node name="NewellTeapot" type="MeshInstance3D" parent="SharedObjectsMS"]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 54.2833, 0)
 mesh = ExtResource("11_jugrp")
 
