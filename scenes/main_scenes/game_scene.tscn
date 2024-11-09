@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://o3dnyoj5ql3m"]
+[gd_scene load_steps=21 format=3 uid="uid://o3dnyoj5ql3m"]
 
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="2_gr5ms"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://dp274vji63hbb" path="res://assets/models/shovel/shovel_rigidbody.tscn" id="5_wetda"]
 [ext_resource type="PackedScene" uid="uid://cujngsb66hqh5" path="res://assets/models/axe/axe_rigidbody.tscn" id="6_sc7j8"]
 [ext_resource type="PackedScene" uid="uid://506kap42wq2p" path="res://assets/models/smiley/smiley_character.tscn" id="10_uiufw"]
+[ext_resource type="ArrayMesh" uid="uid://bsd6yw3q7j8is" path="res://assets/models/newell_teapot/teapot.obj" id="11_jugrp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
 sky_top_color = Color(0.454902, 0.537255, 0.65098, 1)
@@ -235,6 +236,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 8, 0)
 
 [node name="Pa_ge" type="CharacterBody3D" parent="SharedObjectsMS"]
 transform = Transform3D(0.937889, 0, -0.346936, 0, 1, 0, 0.346936, 0, 0.937889, 17.35, 2.968, -47.724)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="SharedObjectsMS"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 54.2833, 0)
+mesh = ExtResource("11_jugrp")
 
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ResumeGameplay" to="." method="_on_pausemenu_resumegameplay_pressed"]
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/TogglePlaying" to="." method="_on_pausemenu_toggleplaying_pressed"]
