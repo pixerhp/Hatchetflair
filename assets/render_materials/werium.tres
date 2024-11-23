@@ -3,7 +3,6 @@
 [resource]
 albedo_color = Color(0.8, 0.0533333, 0, 1)
 metallic = 0.96
-metallic_specular = 0.07
 roughness = 0.01
 clearcoat = 0.0
 clearcoat_roughness = 0.48

@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://o3dnyoj5ql3m"]
+[gd_scene load_steps=24 format=3 uid="uid://o3dnyoj5ql3m"]
 
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="2_gr5ms"]
@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://506kap42wq2p" path="res://assets/models/smiley/smiley_character.tscn" id="10_uiufw"]
 [ext_resource type="ArrayMesh" uid="uid://bsd6yw3q7j8is" path="res://assets/models/newell_teapot/teapot.obj" id="11_jugrp"]
 [ext_resource type="Material" uid="uid://bg8nyj810e8ih" path="res://assets/render_materials/tincium.tres" id="11_rp63k"]
+[ext_resource type="Material" uid="uid://cr6ij6067af8e" path="res://assets/render_materials/digodium.tres" id="12_1og25"]
+[ext_resource type="Material" uid="uid://ckq8ld5hmqbxq" path="res://assets/render_materials/crimsium.tres" id="12_bs3yl"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
 sky_top_color = Color(0.454902, 0.537255, 0.65098, 1)
@@ -25,6 +27,9 @@ sky_material = SubResource("ProceduralSkyMaterial_ci51s")
 background_mode = 2
 sky = SubResource("Sky_76n8d")
 tonemap_mode = 1
+ssr_depth_tolerance = 12.01
+sdfgi_enabled = true
+sdfgi_use_occlusion = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_tmbcn"]
 
@@ -248,12 +253,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.337713, 16.4734, -2.19905)
 [node name="smiley" parent="SharedObjectsMS" instance=ExtResource("10_uiufw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 8, 0)
 
-[node name="Pa_ge" type="CharacterBody3D" parent="SharedObjectsMS"]
+[node name="Paige" type="CharacterBody3D" parent="SharedObjectsMS"]
 transform = Transform3D(0.937889, 0, -0.346936, 0, 1, 0, 0.346936, 0, 0.937889, 17.35, 2.968, -47.724)
 
 [node name="NewellTeapot" type="MeshInstance3D" parent="SharedObjectsMS"]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 54.2833, 0)
+material_override = ExtResource("12_1og25")
 mesh = ExtResource("11_jugrp")
+
+[node name="NewellTeapot2" type="MeshInstance3D" parent="SharedObjectsMS"]
+transform = Transform3D(0.166604, -0.110649, 0, -0.101268, -0.152479, 0.0805909, -0.0445866, -0.0671336, -0.183044, 0.976173, 55.0611, -0.326779)
+material_override = ExtResource("12_bs3yl")
+mesh = ExtResource("11_jugrp")
+skeleton = NodePath("../NewellTeapot")
 
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ResumeGameplay" to="." method="_on_pausemenu_resumegameplay_pressed"]
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/TogglePlaying" to="." method="_on_pausemenu_toggleplaying_pressed"]
