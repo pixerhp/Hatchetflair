@@ -21,6 +21,9 @@ func rand_raritier(rate: float) -> float:
 		rng_float = randf()
 	return prob_to_raritier(rate, rng_float)
 
+func raritier_to_prob(rate: float, val: float) -> float:
+	return 1 - pow(rate, -1 * val)
+
 # Combine raritier values.
 	# Ex. with a rate of 3, combining 3 of the same value n together outputs n + 1.
 	# It's not however limited to nice numbers/combinations though, fractional inputs/outputs are possible.
