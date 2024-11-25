@@ -153,42 +153,6 @@ func random_int() -> int:
 	rng.randomize()
 	return(rng.randi() - 4294967296 + rng.randi())
 
-# Takes in an equally distributed random value between 0 (inclusive) and 1 (exclusive).
-# An output 1 larger than another is `r` times rarer than another.
-# ((rate - 1) / rate) is the probability that the output will lie between 0 and 1.
-func prob_to_raritytier_val(rate: float, prob: float) -> float:
-	return -1 * (log(1 - prob) / log(rate))
-func random_raritytier_val(rate: float) -> float:
-	randomize()
-	var rng_float: float = 1
-	while rng_float == 1:
-		rng_float = randf()
-	return prob_to_raritytier_val(rate, rng_float)
-func prob_to_raritytier_val_natural(prob: float) -> float:
-	return -1 * log(1 - prob)
-func random_raritytier_val_natural() -> float:
-	randomize()
-	var rng_float: float = 1
-	while rng_float == 1:
-		rng_float = randf()
-	return prob_to_raritytier_val_natural(rng_float)
-# Combines raritytier values together into a larger one.
-# For example, if the rate is 3, combining 3 of the same value together outputs said value + 1.
-func raritytier_val_combine(rate: float, values: Array[float]) -> float:
-	if values.size() == 0:
-		return 0
-	var combined_pows: float = 0 
-	for val in values:
-		combined_pows += pow(rate, val)
-	return log(combined_pows)/log(rate)
-func raritytier_val_combine_natural(values: Array[float]) -> float:
-	if values.size() == 0:
-		return 0
-	var combined_pows: float = 0 
-	for val in values:
-		combined_pows += exp(val)
-	return log(combined_pows)
-
 func normalize_name(name_str: String, default: String) -> String:
 	name_str = name_str.replace("\n", "")
 	name_str = name_str.replace("\r", "")

@@ -28,6 +28,7 @@ VManager="*res://scripts/autoloaded/version_manager.gd"
 ChunkUtilities="*res://scripts/autoloaded/chunk_utilities.gd"
 ChunkUtils="*res://scripts/autoloaded/chunk_utils.gd"
 DebugDraw="*res://scripts/autoloaded/debug_draw.gd"
+PixMath="*res://scripts/autoloaded/pix_math.gd"
 
 [input]
 
