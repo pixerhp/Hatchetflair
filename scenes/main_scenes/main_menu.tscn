@@ -47,7 +47,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleMenu" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -978,6 +977,7 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.75
 
 [node name="WorldsMenu" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1080,6 +1080,7 @@ disabled = true
 text = "(dupe -> man')"
 
 [node name="NewWorldPopup" type="Panel" parent="Menus/WorldsMenu"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
