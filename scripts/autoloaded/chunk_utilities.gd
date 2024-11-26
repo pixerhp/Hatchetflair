@@ -1,3 +1,11 @@
+# !!! important context; TLDR: delete this script later.
+# This script, chunk_utilities is older than the script chunk_utils, which was 
+# created to replace it. I had them both exists at the same time because I was 
+# referencing the former’s code while working on the latter. As I never finished 
+# the latter’s code, I have yet to delete the former script and thus I still 
+# need to eventually do that.
+
+
 extends Node
 
 const STATIC_CHUNK_SIZE = 16
@@ -165,6 +173,9 @@ func tris_formed_by_edges(edges: Array[PackedByteArray]) -> Array[PackedByteArra
 					break
 	
 	return known_tris
+
+# !!! is_triangle_clockwise and is_3d_triangle_clockwise were created by steve, 
+# and still need to be tested to see if they work correctly.
 
 # checks if a triangle is connected clockwise or counter-clockwise based on the determinant of the matrix being
 # negative for clocwise and positive for counter-clockwise order

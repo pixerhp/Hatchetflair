@@ -88,6 +88,7 @@ class unit_rhombdo:
 	]
 
 
+# !!! this function is not yet finished.
 func get_marched_polyhedron_tri_indices_table(
 	# Polyhedron's vertices:
 	verts: Array[Vector3],
