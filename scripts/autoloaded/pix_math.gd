@@ -43,7 +43,7 @@ func raritier_combine(rate: float, values: Array[float]) -> float:
 		return 0
 	var combined: float = 0 
 	for val in values:
-		combined += pow(rate, val) # Expected precision-loss or even error with high raritier values.
+		combined += pow(rate, val) # Expected precision-loss or even error with high rate and/or raritier values.
 	return log(combined)/log(rate)
 
 # Combine raritier values that have independant associated rates.
@@ -59,5 +59,5 @@ func raritier_combine_adv(outrate: float, rates: Array[float], values: Array[flo
 		if (rates[i] <= 0) or (rates[i] == 1):
 			push_error("At least 1 bad associated rate (is <= 0 or is == 1) of: ", rates[i], " (returning 0.)")
 			return 0
-		combined += pow(rates[i], values[i]) # Expected precision-loss or even error with high raritier values.
+		combined += pow(rates[i], values[i]) # Expected precision-loss or even error with high rate and/or raritier values.
 	return log(combined)/log(outrate)
