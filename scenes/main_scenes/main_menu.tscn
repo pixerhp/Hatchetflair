@@ -47,6 +47,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TitleMenu" type="Control" parent="Menus"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -977,7 +978,6 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 0.75
 
 [node name="WorldsMenu" type="Control" parent="Menus"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1080,7 +1080,6 @@ disabled = true
 text = "(dupe -> man')"
 
 [node name="NewWorldPopup" type="Panel" parent="Menus/WorldsMenu"]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1090,7 +1089,7 @@ anchor_bottom = 0.5
 offset_left = -200.0
 offset_top = -100.0
 offset_right = 200.0
-offset_bottom = 60.0
+offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -1101,8 +1100,10 @@ anchor_right = 1.0
 offset_bottom = 23.0
 grow_horizontal = 2
 bbcode_enabled = true
-text = "[center]Create a new world:[/center]"
+text = "[center]Create a new world:
+NOTE: currently all worlds are actually just the same pre-created scene, and do not save any unique differences. [/center]"
 fit_content = true
+autowrap_mode = 2
 
 [node name="WorldNameInput" type="TextEdit" parent="Menus/WorldsMenu/NewWorldPopup"]
 layout_mode = 1
@@ -1110,8 +1111,8 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -40.0
-offset_bottom = -4.0
+offset_top = -10.0
+offset_bottom = 26.0
 grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[world name]"
@@ -1122,8 +1123,8 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = 2.0
-offset_bottom = 38.0
+offset_top = 32.0
+offset_bottom = 68.0
 grow_horizontal = 2
 grow_vertical = 2
 placeholder_text = "[integer world seed, leave blank for random]"
