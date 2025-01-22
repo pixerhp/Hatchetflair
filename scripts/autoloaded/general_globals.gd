@@ -35,6 +35,14 @@ var INPUTMAP_DEFAULTS: Dictionary = {}
 var player_username: String = "guest"
 var player_displayname: String = "Guest"
 
+# the player's world floating point origin is functionally offset my this value in chunk coordinates.
+# if the player is a billion chunks out, but their offset is also at the same place,
+# then everything around them should move smoothly like as if they were around (0,0,0).
+# it probably can't be set/changed willy-nilly, but instead have everything systematically update properly
+# so it will probably only be changed on world load/quit, maybe sleeping or dying, a command, etc.
+# "my" because each player's in multiplayer is unique.
+var my_origin_offset: Vector3i = Vector3i(0, 0, 0)
+
 # !!! the below are not currently used, but should serve as future reference for stuff that should be.
 enum playmode {
 	SPECTATOR, # Spectate the world and its happenigs without colliding or interacting with it.
