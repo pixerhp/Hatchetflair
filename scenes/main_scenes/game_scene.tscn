@@ -28,7 +28,6 @@ background_mode = 2
 sky = SubResource("Sky_76n8d")
 tonemap_mode = 1
 ssr_depth_tolerance = 12.01
-sdfgi_enabled = true
 sdfgi_use_occlusion = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_tmbcn"]
