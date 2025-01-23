@@ -1,39 +1,39 @@
 [gd_scene load_steps=18 format=3 uid="uid://cqel5u2mt3uov"]
 
-[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunk.gd" id="1_2jpv8"]
-[ext_resource type="Texture2D" uid="uid://xu571uosd32e" path="res://assets/textures/animated/loading_wheel.png" id="3_4wjlj"]
-[ext_resource type="Texture2D" uid="uid://dhf2mo4ihbknf" path="res://assets/textures/static/gridlines_2.png" id="3_ds12g"]
+[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunk.gd" id="1_16xu5"]
+[ext_resource type="Texture2D" uid="uid://xu571uosd32e" path="res://assets/textures/animated/loading_wheel.png" id="2_v8win"]
+[ext_resource type="Texture2D" uid="uid://dhf2mo4ihbknf" path="res://assets/textures/static/gridlines_2.png" id="3_aebdx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a45j2"]
-atlas = ExtResource("3_4wjlj")
+atlas = ExtResource("2_v8win")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gchu3"]
-atlas = ExtResource("3_4wjlj")
+atlas = ExtResource("2_v8win")
 region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_agse2"]
-atlas = ExtResource("3_4wjlj")
+atlas = ExtResource("2_v8win")
 region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n4n4b"]
-atlas = ExtResource("3_4wjlj")
+atlas = ExtResource("2_v8win")
 region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j8uew"]
-atlas = ExtResource("3_4wjlj")
+atlas = ExtResource("2_v8win")
 region = Rect2(128, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2yrdj"]
-atlas = ExtResource("3_4wjlj")
+atlas = ExtResource("2_v8win")
 region = Rect2(160, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lnndt"]
-atlas = ExtResource("3_4wjlj")
+atlas = ExtResource("2_v8win")
 region = Rect2(192, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bhpda"]
-atlas = ExtResource("3_4wjlj")
+atlas = ExtResource("2_v8win")
 region = Rect2(224, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_sdxsx"]
@@ -69,14 +69,14 @@ animations = [{
 }]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ri4ao"]
-albedo_texture = ExtResource("3_ds12g")
+albedo_texture = ExtResource("3_aebdx")
 texture_filter = 2
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_5r63b"]
 size = Vector2(16, 16)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gydsk"]
-albedo_texture = ExtResource("3_ds12g")
+albedo_texture = ExtResource("3_aebdx")
 texture_filter = 2
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_2yjn6"]
@@ -87,8 +87,8 @@ center_offset = Vector3(0, -2, 0)
 [sub_resource type="BoxShape3D" id="BoxShape3D_un3c7"]
 size = Vector3(16, 2, 16)
 
-[node name="ChunkStatic" type="StaticBody3D"]
-script = ExtResource("1_2jpv8")
+[node name="Chunk" type="StaticBody3D"]
+script = ExtResource("1_16xu5")
 
 [node name="LoadingWheel" type="AnimatedSprite3D" parent="."]
 pixel_size = 0.05
