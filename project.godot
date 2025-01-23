@@ -31,6 +31,10 @@ DebugDraw="*res://scripts/autoloaded/debug_draw.gd"
 PixMath="*res://scripts/autoloaded/pix_math.gd"
 ChunkUtils3="*res://scripts/autoloaded/chunk_utils_3.gd"
 
+[debug]
+
+gdscript/warnings/integer_division=0
+
 [input]
 
 game_special_pause_menu={
