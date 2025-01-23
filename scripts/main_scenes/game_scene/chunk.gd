@@ -1,10 +1,72 @@
 extends StaticBody3D
 
 var chunk_coords_hzz: Vector3i = Vector3i.ZERO
+const tile_count: int = ChunkUtils3.CHUNK_LENGTH ** 3
+var tile_shapes: PackedByteArray = []
+var tile_occs: PackedByteArray = [] # short for "occupiednesses"
+var tile_datas: Array = []
+
 
 # Loads the chunk's terrain and mesh. (Ran when the chunk is first loaded into the world.)
 func generate():
-	pass
+	preset_varaiables()
+	generate_terrain()
+	# determine biome from terrain contents?
+	# generate mesh and collision?
+	return
+
+func preset_varaiables() -> void:
+	tile_shapes.resize((tile_count / 2) + posmod(ChunkUtils3.CHUNK_LENGTH, 2))
+	tile_shapes.fill((ChunkUtils3.TILE_SHAPE.BLANK << 4) + ChunkUtils3.TILE_SHAPE.BLANK)
+		# each byte contains 2 distinct 4-bit values, except for the last one.
+	tile_occs.resize((tile_count / 4) + (0 if posmod(ChunkUtils3.CHUNK_LENGTH, 4) == 0 else 1))
+	tile_shapes.fill(
+		(ChunkUtils3.TILE_OCC.EMPTY << 6) + 
+		(ChunkUtils3.TILE_OCC.EMPTY << 4) +
+		(ChunkUtils3.TILE_OCC.EMPTY << 2) +
+		ChunkUtils3.TILE_OCC.EMPTY)
+		# each byte contains 4 distinct 2-bit values, except for the last one.
+	tile_datas.resize(tile_count)
+	tile_datas.fill(ChunkUtils3.SUBSTANCE.AIR)
+	return
+
+func generate_terrain() -> void:
+	for h in ChunkUtils3.CHUNK_LENGTH:
+		for z1 in ChunkUtils3.CHUNK_LENGTH:
+			for z2 in ChunkUtils3.CHUNK_LENGTH:
+				pass
+
+func get_tilenum(h: int, z1: int, z2: int) -> int:
+	return z2 + (ChunkUtils3.CHUNK_LENGTH * z1) + ((ChunkUtils3.CHUNK_LENGTH ** 2) * h)
+
+func get_shape(tilenum: int) -> int:
+	return (
+		((tile_shapes[tilenum/2] & 0b11110000) >> 4) if (posmod(tilenum, 2) == 0)
+		else (tile_shapes[tilenum/2] & 0b00001111)
+	) 
+func set_shape(tilenum: int, shape: int) -> void:
+	tile_shapes[tilenum/2] = (
+		((tile_shapes[tilenum/2] & 0b00001111) + ((shape & 0b00001111) << 4)) if (posmod(tilenum, 2) == 0)
+		else ((tile_shapes[tilenum/2] & 0b11110000) + (shape & 0b00001111))
+	)
+	return
+func get_occ(tilenum: int) -> int:
+	return (
+		((tile_occs[tilenum/4] & 0b11000000) >> 6) if (posmod(tilenum, 4) == 0)
+		else ((tile_occs[tilenum/4] & 0b00110000) >> 4) if (posmod(tilenum, 4) == 1)
+		else ((tile_occs[tilenum/4] & 0b00001100) >> 2) if (posmod(tilenum, 4) == 2)
+		else ((tile_occs[tilenum/4] & 0b00000011))
+	)
+func set_occ(tilenum: int, occ: int):
+	tile_shapes[tilenum/4] = (
+		((tile_occs[tilenum/4] & 0b00111111) + ((occ & 0b00000011) << 6)) if (posmod(tilenum, 4) == 0)
+		else ((tile_occs[tilenum/4] & 0b11001111) + ((occ & 0b00000011) << 4)) if (posmod(tilenum, 4) == 1)
+		else ((tile_occs[tilenum/4] & 0b11110011) + ((occ & 0b00000011) << 2)) if (posmod(tilenum, 4) == 2)
+		else ((tile_occs[tilenum/4] & 0b11111100) + (occ & 0b00000011))
+	)
+	return
+
+
 
 func _ready():
 	if chunk_coords_hzz[0] == 0:
