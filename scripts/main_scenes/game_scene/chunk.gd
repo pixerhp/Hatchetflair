@@ -68,6 +68,11 @@ func set_occ(tilenum: int, occ: int):
 
 
 
+
+
+
+# (Older code, you'll need to revise through it for updated concepts:)
+
 func _ready():
 	if chunk_coords_hzz[0] == 0:
 		find_child("LoadingWheel").queue_free()
