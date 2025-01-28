@@ -1,11 +1,13 @@
 extends Node
 
 
+const chunk_tiles_count: int = 16**3
+
 class Chunk:
-	const tile_count: int = 16**3
 	# static vs moving chunk? for example, terrain vs a floating boat structure or a rolling massive boulder.
 		# if moving/mobile, then the ccoords could get reused for relativity with  bound neighboring moving chunks.
 	var ccoords: Vector3i = Vector3i(0,0,0)
+	var is_empty: bool
 	var terrain_pieces: Array[TerrainPiece] = []
 	# var terrain_objects
 		# liquid pools in particular, but potentially also things like grounded/lodged rocks, gems, etc.
@@ -32,6 +34,7 @@ class Chunk:
 		var tiles_subs: PackedInt32Array = [] # terrain substances (smooth werium metal, conifer wood, etc.)
 		var tiles_attachdatas: Array = [] # plants growing on terrain, paint and decals plastered on it, etc.
 		# Determinable information, chached for quick access:
+		var is_empty: bool # situationally allows unloaded terrain to stay unloaded when it gets checked.
 		var tiles_occs: PackedByteArray = [] # terrain occupiednesses
 		var tiles_opacs: PackedByteArray = [] # terrain opacities
 		
@@ -64,7 +67,7 @@ enum TILE_SHAPE {
 	TESS_RHOMBDO, 
 	MARCHED_SIMPLE, 
 	MARCHED_SMOOTH,
-	CLIFF,
+	CLIFF, # aka terraced?
 }
 enum TILE_OCC {
 	EMPTY = 0, # contains no solid terrain (only atmosphere/gas/liquid/etc.)
