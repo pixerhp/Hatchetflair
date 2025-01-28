@@ -63,7 +63,7 @@ func process_incoming_instructions():
 			TYPE_INT: # a basic lone-instruction without any additional data.
 				inst_enums.append(in_inst)
 			TYPE_ARRAY: # an instruction as the first element of an array containing associated data.
-				if in_inst.size().is_empty():
+				if in_inst.is_empty():
 					push_error("Empty incoming chunk manager thread instruction array.")
 					inst_enums.append(INSTRUCTION.SKIP)
 				if not typeof(in_inst[0]) == TYPE_INT:
