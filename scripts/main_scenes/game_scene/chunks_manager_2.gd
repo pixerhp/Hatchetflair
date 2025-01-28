@@ -15,13 +15,13 @@ var out_instructions: Array = [] # cm thread adds to it, main thread reads from 
 
 enum INSTRUCTION {
 	SKIP, # skip this instruction, useful for skipping bad/incorrect instruction input.
-	WAIT_FOR_ME, # uses semaphore to pause this thread until the main thread continues it.
+	WAIT_FOR_MAIN_THREAD, # uses semaphore to pause this thread until the main thread continues it.
 	IGNORE_PREVIOUS_INSTRUCTIONS, # when quitting/teleporting (etc,) prior chunk instructions may no longer be relavent.
 	#SAVE_ALL_LOADED_CHUNKS, # such as for autosaving, saving & quitting.
 	#CLEAR_ALL_CHUNKS # 
 }
 enum OUTSTRUCTION {
-	WAITING_FOR_YOU, # !!! (NOT YET IMPLIMENTED RECIEVING-WISE ANYWHERE IN THE MAIN THREAD.)
+	WAITING_FOR_MAIN_THREAD, # !!! (NOT YET IMPLIMENTED RECIEVING-WISE ANYWHERE IN THE MAIN THREAD.)
 	#ALL_LOADED_CHUNKS_SAVED,
 }
 
@@ -87,9 +87,9 @@ func process_incoming_instructions():
 	# Execute the list of instructions:
 	for i in inst_enums.size():
 		match inst_enums[i]:
-			INSTRUCTION.WAIT_FOR_ME:
+			INSTRUCTION.WAIT_FOR_MAIN_THREAD:
 				mutex.lock()
-				out_instructions.append(OUTSTRUCTION.WAITING_FOR_YOU)
+				out_instructions.append(OUTSTRUCTION.WAITING_FOR_MAIN_THREAD)
 				mutex.unlock()
 				semaphore.wait()
 			_:
