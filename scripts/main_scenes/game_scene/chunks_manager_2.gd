@@ -93,7 +93,7 @@ func process_incoming_instructions():
 				mutex.unlock()
 				semaphore.wait()
 			_:
-				push_error("Given an unknown/unsupported instruction enum int: ", inst_enums[i])
+				push_error("Unknown/unsupported instruction-enum: ", inst_enums[i])
 				continue
 	return
 
