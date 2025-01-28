@@ -64,14 +64,14 @@ func process_incoming_instructions():
 				inst_enums.append(in_inst)
 			TYPE_ARRAY: # an instruction as the first element of an array containing associated data.
 				if in_inst.is_empty():
-					push_error("Empty incoming chunk manager thread instruction array.")
+					push_error("Empty in-instruction array.")
 					inst_enums.append(INSTRUCTION.SKIP)
 				if not typeof(in_inst[0]) == TYPE_INT:
-					push_error("First element of incoming chunk manager thread instruction array was not an instruction enum.")
+					push_error("First element of in-instruction array was not an instruction-enum.")
 					inst_enums.append(INSTRUCTION.SKIP)
 				inst_enums.append(in_inst[0])
 			_:
-				push_error("Incoming chunk manager thread instruction-enum not found.")
+				push_error("In-instruction's intruction-enum not found.")
 				inst_enums.append(INSTRUCTION.SKIP)
 	
 	# Check for an "IGNORE_PREVIOUS_INSTRUCTIONS" instruction, and modify the instructions list accordingly.
