@@ -3,6 +3,48 @@ extends Node
 
 const chunk_tiles_count: int = 16**3
 
+enum LOD_TYPE {
+	HIGH_QUALITY, # extra mesh details are generated based on substances + normals.
+	MID_QUALITY, # mesh triangles use textures + render-materials, but don't generate finer details.
+	LOW_QUALITY, # mesh triangles are textured and all use the same (a basic) render-material,
+	GEO_LOD_1, # all terrain tiles are meshed as one mesh of simple marched cubes, based on occs. (no collision.)
+	GEO_LOD_2, # same as before, but the marched cubes geometry is simplified to 8^3 rather than 16^3.
+	GEO_LOD_4, # prior, but simplified to 4^3 (the size of a terrain-piece size.)
+	GEO_LOD_8, # prior, but simplified to 2^4.
+	GEO_LOD_16, # the entire chunk is represented as a single simple marched cubes node beside neighboring chunks'.
+}
+enum TILE_SHAPE {
+	BLANK, 
+	TESS_CUBE, 
+	TESS_OCTREE, 
+	TESS_RHOMBDO, 
+	MARCHED_SIMPLE, 
+	MARCHED_SMOOTH,
+	CLIFF, # aka terraced?
+}
+enum TILE_OCC {
+	EMPTY = 0, # contains no solid terrain (only atmosphere/gas/liquid/etc.)
+	SEMI = 1, # "semi-empty" (half-tile slabs, partially encroaching neighboring solids, etc.)
+	OCCUPIED = 2, # is the center of / is a space that has data for solid terrain
+	ENGULFED = 3, # completely engulfed by surrounding solid terrain despite not itself being distinct solid terrain.
+		# (For example, if a tile is surrounded on all sides by rhombdo tiles.)
+}
+enum TILE_OPAC { # note: occupiedness should also be considered for some related applications (particularly semi.)
+	OPAQUE = 0, # the material is fully opaque.
+	SCISSOR = 1, # the material allows some seeing-through via alpha-scissoring or similar.
+	TRANSLUCENT = 2, # the material allows you to see through it but not fully transparently, such as stained glass.
+	TRANSPARENT = 3, # the material is fully transparent.
+}
+
+# !!! very temporary solution for terrain rendering testing, 
+# a proper place/method for substance data should be set up later.
+enum SUBSTANCE {
+	AIR,
+	WERIUM,
+	FERRIUM,
+	FOAM,
+}
+
 class Chunk:
 	# static vs moving chunk? for example, terrain vs a floating boat structure or a rolling massive boulder.
 		# if moving/mobile, then the ccoords could get reused for relativity with  bound neighboring moving chunks.
@@ -47,47 +89,3 @@ class Chunk:
 	func _init():
 		terrain_pieces.resize(4**3)
 		return
-
-
-
-enum LOD_TYPE {
-	HIGH_QUALITY, # extra mesh details are generated based on substances + normals.
-	MID_QUALITY, # mesh triangles use textures + render-materials, but don't generate finer details.
-	LOW_QUALITY, # mesh triangles are textured and all use the same (a basic) render-material,
-	GEO_LOD_1, # all terrain tiles are meshed as one mesh of simple marched cubes, based on occs. (no collision.)
-	GEO_LOD_2, # same as before, but the marched cubes geometry is simplified to 8^3 rather than 16^3.
-	GEO_LOD_4, # prior, but simplified to 4^3 (the size of a terrain-piece size.)
-	GEO_LOD_8, # prior, but simplified to 2^4.
-	GEO_LOD_16, # the entire chunk is represented as a single simple marched cubes node beside neighboring chunks'.
-}
-enum TILE_SHAPE {
-	BLANK, 
-	TESS_CUBE, 
-	TESS_OCTREE, 
-	TESS_RHOMBDO, 
-	MARCHED_SIMPLE, 
-	MARCHED_SMOOTH,
-	CLIFF, # aka terraced?
-}
-enum TILE_OCC {
-	EMPTY = 0, # contains no solid terrain (only atmosphere/gas/liquid/etc.)
-	SEMI = 1, # "semi-empty" (half-tile slabs, partially encroaching neighboring solids, etc.)
-	OCCUPIED = 2, # is the center of / is a space that has data for solid terrain
-	ENGULFED = 3, # completely engulfed by surrounding solid terrain despite not itself being distinct solid terrain.
-		# (For example, if a tile is surrounded on all sides by rhombdo tiles.)
-}
-enum TILE_OPAC { # note: occupiedness should also be considered for some related applications (particularly semi.)
-	OPAQUE = 0, # the material is fully opaque.
-	SCISSOR = 1, # the material allows some seeing-through via alpha-scissoring or similar.
-	TRANSLUCENT = 2, # the material allows you to see through it but not fully transparently, such as stained glass.
-	TRANSPARENT = 3, # the material is fully transparent.
-}
-
-# !!! very temporary solution for terrain rendering testing, 
-# a proper place/method for substance data should be set up later.
-enum SUBSTANCE {
-	AIR,
-	WERIUM,
-	FERRIUM,
-	FOAM,
-}

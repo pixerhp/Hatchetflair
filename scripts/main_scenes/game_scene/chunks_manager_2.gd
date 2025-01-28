@@ -13,6 +13,18 @@ var exit_thread: bool = false
 var in_instructions: Array = [] # main thread adds to it, cm thread reads from it and clears it.
 var out_instructions: Array = [] # cm thread adds to it, main thread reads from it and clears it.
 
+enum INSTRUCTION {
+	SKIP, # skip this instruction, useful for skipping bad/incorrect instruction input.
+	WAIT_FOR_ME, # uses semaphore to pause this thread until the main thread continues it.
+	IGNORE_PREVIOUS_INSTRUCTIONS, # when quitting/teleporting (etc,) prior chunk instructions may no longer be relavent.
+	#SAVE_ALL_LOADED_CHUNKS, # such as for autosaving, saving & quitting.
+	#CLEAR_ALL_CHUNKS # 
+}
+enum OUTSTRUCTION {
+	WAITING_FOR_YOU, # !!! (NOT YET IMPLIMENTED RECIEVING-WISE ANYWHERE IN THE MAIN THREAD.)
+	#ALL_LOADED_CHUNKS_SAVED,
+}
+
 
 func _ready():
 	mutex = Mutex.new()
@@ -89,17 +101,6 @@ func process_incoming_instructions():
 func unpause_cm_thread():
 	semaphore.post()
 
-enum INSTRUCTION {
-	SKIP, # skip this instruction, useful for skipping bad/incorrect instruction input.
-	WAIT_FOR_ME, # uses semaphore to pause this thread until the main thread continues it.
-	IGNORE_PREVIOUS_INSTRUCTIONS, # when quitting/teleporting (etc,) prior chunk instructions may no longer be relavent.
-	#SAVE_ALL_LOADED_CHUNKS, # such as for autosaving, saving & quitting.
-	#CLEAR_ALL_CHUNKS # 
-}
-enum OUTSTRUCTION {
-	WAITING_FOR_YOU, # !!! (NOT YET IMPLIMENTED RECIEVING-WISE ANYWHERE IN THE MAIN THREAD.)
-	#ALL_LOADED_CHUNKS_SAVED,
-}
 
 func refresh_hzz_to_chunk_i():
 	hzz_to_chunk_i.clear()
