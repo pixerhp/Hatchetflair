@@ -1,3 +1,5 @@
+# !!! remove later, replaced by the newest version of the script.
+
 extends Node
 
 # standard (using BLENDER xyz:)

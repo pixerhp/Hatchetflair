@@ -1,5 +1,6 @@
 extends Node3D
 
+
 const MAX_NEW_STATIC_CHUNKS_BATCH_SIZE = 64
 var do_chunk_generating: bool = true
 var new_static_chunks_queue: Array[Vector3i] = []
