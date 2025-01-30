@@ -30,6 +30,7 @@ ChunkUtils="*res://scripts/autoloaded/chunk_utils.gd"
 DebugDraw="*res://scripts/autoloaded/debug_draw.gd"
 PixMath="*res://scripts/autoloaded/pix_math.gd"
 ChunkUtils3="*res://scripts/autoloaded/chunk_utils_3.gd"
+ChemCraft="*res://scripts/autoloaded/chem_craft.gd"
 
 [debug]
 
