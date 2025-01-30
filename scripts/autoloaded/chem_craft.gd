@@ -20,6 +20,11 @@ class Substance:
 		tags.append_array(in_tags)
 		density = in_density
 
+enum MESH_DETAILING_STYLE {
+	BRICKS,
+	SHALE,
+}
+
 # note: if a tag like "organic" exists, then there does not need to be an "inorganic" tag,
 # as simply not having the "organic" tag would imply being inorganic.
 enum SUBS_TAG { # "substance tag"
