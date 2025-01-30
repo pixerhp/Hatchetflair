@@ -36,15 +36,6 @@ enum TILE_OPAC { # note: occupiedness should also be considered for some related
 	TRANSPARENT = 3, # the material is fully transparent.
 }
 
-# !!! very temporary solution for terrain rendering testing, 
-# a proper place/method for substance data should be set up later.
-enum SUBSTANCE {
-	AIR,
-	WERIUM,
-	FERRIUM,
-	FOAM,
-}
-
 class Chunk:
 	# static vs moving chunk? for example, terrain vs a floating boat structure or a rolling massive boulder.
 		# if moving/mobile, then the ccoords could get reused for relativity with  bound neighboring moving chunks.
