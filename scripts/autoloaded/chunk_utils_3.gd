@@ -1,7 +1,8 @@
 extends Node
 
 
-const chunk_tiles_count: int = 16**3
+const CHUNK_WIDTH: int = 16
+const CHUNK_TILES_COUNT: int = CHUNK_WIDTH**3
 
 enum LOD_TYPE {
 	HIGH_QUALITY, # extra mesh details are generated based on substances + normals.

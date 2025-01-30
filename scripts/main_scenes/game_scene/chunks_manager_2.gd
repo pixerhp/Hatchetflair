@@ -1,3 +1,4 @@
+@icon("res://assets/icons/godot_proj_icons/chunks_manager.png")
 extends Node
 
 # Chunk data & data access:

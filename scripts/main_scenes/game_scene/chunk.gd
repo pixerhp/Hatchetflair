@@ -1,7 +1,7 @@
 extends StaticBody3D
 
 var chunk_coords_hzz: Vector3i = Vector3i.ZERO
-const tile_count: int = ChunkUtils3.CHUNK_LENGTH ** 3
+const tile_count: int = 16
 var tile_shapes: PackedByteArray = []
 var tile_occs: PackedByteArray = [] # short for "occupiednesses"
 var tile_datas: Array = []
@@ -16,10 +16,10 @@ func generate():
 	return
 
 func preset_varaiables() -> void:
-	tile_shapes.resize((tile_count / 2) + posmod(ChunkUtils3.CHUNK_LENGTH, 2))
+	tile_shapes.resize((tile_count / 2) + posmod(ChunkUtils3.CHUNK_WIDTH, 2))
 	tile_shapes.fill((ChunkUtils3.TILE_SHAPE.BLANK << 4) + ChunkUtils3.TILE_SHAPE.BLANK)
 		# each byte contains 2 distinct 4-bit values, except for the last one.
-	tile_occs.resize((tile_count / 4) + (0 if posmod(ChunkUtils3.CHUNK_LENGTH, 4) == 0 else 1))
+	tile_occs.resize((tile_count / 4) + (0 if posmod(ChunkUtils3.CHUNK_WIDTH, 4) == 0 else 1))
 	tile_shapes.fill(
 		(ChunkUtils3.TILE_OCC.EMPTY << 6) + 
 		(ChunkUtils3.TILE_OCC.EMPTY << 4) +
@@ -27,17 +27,17 @@ func preset_varaiables() -> void:
 		ChunkUtils3.TILE_OCC.EMPTY)
 		# each byte contains 4 distinct 2-bit values, except for the last one.
 	tile_datas.resize(tile_count)
-	tile_datas.fill(ChunkUtils3.SUBSTANCE.AIR)
+	tile_datas.fill(ChemCraft.get_substance("air"))
 	return
 
 func generate_terrain() -> void:
-	for h in ChunkUtils3.CHUNK_LENGTH:
-		for z1 in ChunkUtils3.CHUNK_LENGTH:
-			for z2 in ChunkUtils3.CHUNK_LENGTH:
+	for h in ChunkUtils3.CHUNK_WIDTH:
+		for z1 in ChunkUtils3.CHUNK_WIDTH:
+			for z2 in ChunkUtils3.CHUNK_WIDTH:
 				pass
 
 func get_tilenum(h: int, z1: int, z2: int) -> int:
-	return z2 + (ChunkUtils3.CHUNK_LENGTH * z1) + ((ChunkUtils3.CHUNK_LENGTH ** 2) * h)
+	return z2 + (ChunkUtils3.CHUNK_WIDTH * z1) + ((ChunkUtils3.CHUNK_WIDTH ** 2) * h)
 
 func get_shape(tilenum: int) -> int:
 	return (

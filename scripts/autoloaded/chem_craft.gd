@@ -23,7 +23,8 @@ class Substance:
 # note: if a tag like "organic" exists, then there does not need to be an "inorganic" tag,
 # as simply not having the "organic" tag would imply being inorganic.
 enum SUBS_TAG { # "substance tag"
-	PURE_ELEMENT, # only contains 1 element, such as pure ferrium, pure diamond and graphite, etc.
+	PURE_ELEMENT, # only contains 1 element, such as pure ferrium, pure diamond mixed with graphite, etc.
+	PURE_SUBSTANCE, # pure water, pure sulfuric acid, pure diamond with no graphite or vice versa, etc.
 	METAL, # includes pure metals, somewhat-refined metals, metal alloys, etc.
 	NOBLE_GAS, # noble gases and noble gas mixtures.
 	PROCESSED_WOOD, # debarked and sawed wood, like planks and boards.
@@ -32,7 +33,15 @@ enum SUBS_TAG { # "substance tag"
 
 var substance_name_to_i: Dictionary = {}
 
+func get_substance(subs_main_name: String) -> Substance:
+	return substances[substance_name_to_i[subs_main_name]]
+
 var substances: Array[Substance] = [
+	Substance.new(
+		["air"],
+		[],
+		1.0, # !!! set later, this value is temporary due to not having decided on a standard mass unit yet.
+	),
 	Substance.new(
 		["ferrium", "ferry", "iron"],
 		[SUBS_TAG.PURE_ELEMENT, SUBS_TAG.METAL],
@@ -61,4 +70,4 @@ func _ready():
 	# Prepare the substance_name_to_i dictionary, which may be used by various code/threads.
 	substance_name_to_i.clear()
 	for i in substances.size():
-		substance_name_to_i[substances[i].names[1]] = i
+		substance_name_to_i[substances[i].names[0]] = i
