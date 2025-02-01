@@ -1,3 +1,5 @@
+# Delete/replace this script later.
+
 extends StaticBody3D
 
 var chunk_coords_hzz: Vector3i = Vector3i.ZERO
