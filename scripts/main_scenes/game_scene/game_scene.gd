@@ -58,6 +58,7 @@ func _process(delta):
 		print("draw chunks debug is now: ", Globals.draw_chunks_debug)
 	
 	DebugDraw.add_text("frame delta: " + str(delta))
+	DebugDraw.add_text("draw calls: " + str(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)))
 	
 	# Coordinates text:
 	if Input.is_action_pressed("game_play_speed_fast"):
