@@ -8,38 +8,41 @@ enum {SECTION, NAME, LINK}
 # {enum: [body_color, outline_color]}
 const default_colors: Dictionary = {
 	SECTION: [Color(1,1,1), Color(0.101960, 0.149019, 0.149019)],
-	NAME: [Color(0.690196, 0.870588, 0.827450), Color(0.078431, 0.176470, 0.211764)],
+	NAME: [Color(0.690196, 0.870588, 0.757450), Color(0.078431, 0.176470, 0.211764)],
 	LINK: [Color(0.533333, 0.568627, 0.619607), Color(0.105882, 0.121568, 0.180392)],
 }
 # Empty Line: [],
 # Format 1: [type, content],
 # Format 2: [type, content, [custom_body_color, custom_outline_color]],
 const developer_credits_data: Array = [
-	[SECTION, "~~ Creator & Lead Developer ~~"],
-	[NAME, "Pixer H. Pinecone", [Color(0.482352, 0.407843, 0.933333), Color(0.192156, 0.168627, 0.341176)]],
+	[SECTION, "~~ Designer & Lead Developer ~~"],
+	[NAME, "Pixer H. Pinecone (@pixerhp)", [Color(0.901960, 0.901960, 0.980392), Color(0.192156, 0.168627, 0.341176)]],
 	[],
 	[SECTION, "~~ Assistant Developers ~~"],
-	[NAME, "Jcodefox \"Fox\"", [Color(1, 0.647058, 0), default_colors[NAME][1]]],
-	[NAME, "Stevemc32 \"Steve\""],
+	[NAME, "Jcodefox (\"Fox\")", [Color(1, 0.647058, 0), Color(0.272549, 0.135294, 0.037254)]],
+	[NAME, "Stevemc32 (\"Steve\")"],
 	[],
-	[SECTION, "~~ Being Available for Playtesting ~~"],
+	[SECTION, "~~ Available for Playtesting ~~"],
+	[NAME, "E<0>"],
 	[NAME, "Blitceed"],
 	[NAME, "Redstone"],
-	[NAME, "LandOcto950 \"Squid\""],
+	[NAME, "LandOcto950 (\"Squid\")"],
+	[NAME, "JJJokesalot (\"JJ\")"],
 	[],
 	[SECTION, "~~ Programs Notably Used ~~"],
 	[NAME, "Godot Game Engine"],
-	[NAME, "Blender (Modeling)"],
+	[NAME, "Blender (Modelling)"],
 	[NAME, "Aseprite (Pixel Art)"],
-	[NAME, "FL Studio"],
+	[NAME, "Garageband & FL Studio"],
 	[],
 	[SECTION, "~~ Special Thanks ~~"],
-	[NAME, "Matt Bowlby \"Blue\""],
-	[NAME, "Standard Software Developer \"SSD\""],
+	[NAME, "Umbrella Land"],
+	[NAME, "Matt Bowlby (\"Blue\") (recommending Godot)"],
+	[NAME, "Standard Software Developer (\"SSD\")"],
 	[NAME, "Zylann (for original debug draw script:)"],
 	[LINK, "https://github.com/Zylann/godot_debug_draw"],
 	[],
-	[NAME, "(various others, inspirations, and you!)"],
+	[NAME, "(various others, inspirations, and you!)", default_colors[SECTION]],
 ]
 
 
@@ -75,7 +78,9 @@ func refresh_credits_text() -> Error:
 				else:
 					credits_text += "[outline_color=#" + default_colors[SECTION][1].to_html() + "]"
 					credits_text += "[color=#" + default_colors[SECTION][0].to_html() + "]"
+				credits_text += "[font_size=24]"
 				credits_text += str(content_arr[1])
+				credits_text += "[/font_size]"
 				credits_text += "[/color]"
 				credits_text += "[/outline_color]"
 				credits_text += "\n"
