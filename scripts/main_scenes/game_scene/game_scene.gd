@@ -52,10 +52,13 @@ func _process(delta):
 						else:
 							a = pow(6.2831853071, 2.718281828)
 	
-	# !!! toggle showing chunk boundaries + grids.
-	if Input.is_action_just_pressed("game_special_debug_menu"):
-		Globals.draw_chunks_debug = not Globals.draw_chunks_debug
-		print("draw chunks debug is now: ", Globals.draw_chunks_debug)
+	# debug toggles:
+	if Input.is_action_just_pressed("game_special_draw_debug_text"):
+		Globals.draw_debug_info_text = not Globals.draw_debug_info_text
+		print("draw debug text toggled: ", "ON" if Globals.draw_debug_info_text else "OFF")
+	if Input.is_action_just_pressed("game_special_draw_chunk_borders"):
+		Globals.draw_debug_chunk_borders = not Globals.draw_debug_chunk_borders
+		print("draw debug chunk borders toggled: ", "ON" if Globals.draw_debug_chunk_borders else "OFF")
 	 
 	# Coordinates text:
 	if Input.is_action_pressed("game_play_speed_fast"):
@@ -68,24 +71,24 @@ func _process(delta):
 		DebugDraw.add_text("coords (h,z1,z2): " + 
 			"(" + str(Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 2)) + ")")
 	
-	
-	DebugDraw.add_text("(counted) fps: " + str(Performance.get_monitor(Performance.TIME_FPS)))
-	DebugDraw.add_text("")
-	DebugDraw.add_text("draw calls: " + str(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)))
-	DebugDraw.add_text("total primatives: " + str(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)))
-	DebugDraw.add_text("render buffer mem used (bytes): " + str(Performance.get_monitor(Performance.RENDER_BUFFER_MEM_USED)))
-	DebugDraw.add_text("render texture mem used (bytes): " + str(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)))
-	DebugDraw.add_text("")
-	DebugDraw.add_text("object count: " + str(Performance.get_monitor(Performance.OBJECT_COUNT)))
-	DebugDraw.add_text("object resource count: " + str(Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT)))
-	DebugDraw.add_text("object node count: " + str(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)))
-	DebugDraw.add_text("object orphan node count: " + str(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)))
-	DebugDraw.add_text("")
-	DebugDraw.add_text("static memory used (bytes): " + str(Performance.get_monitor(Performance.MEMORY_STATIC)))
-	DebugDraw.add_text("max static memory (bytes): " + str(Performance.get_monitor(Performance.MEMORY_STATIC_MAX)))
+	if Globals.draw_debug_info_text:
+		DebugDraw.add_text("(counted) fps: " + str(Performance.get_monitor(Performance.TIME_FPS)))
+		DebugDraw.add_text("")
+		DebugDraw.add_text("draw calls: " + str(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)))
+		DebugDraw.add_text("total primatives: " + str(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)))
+		DebugDraw.add_text("render buffer mem used (bytes): " + str(Performance.get_monitor(Performance.RENDER_BUFFER_MEM_USED)))
+		DebugDraw.add_text("render texture mem used (bytes): " + str(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)))
+		DebugDraw.add_text("")
+		DebugDraw.add_text("object count: " + str(Performance.get_monitor(Performance.OBJECT_COUNT)))
+		DebugDraw.add_text("object resource count: " + str(Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT)))
+		DebugDraw.add_text("object node count: " + str(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)))
+		DebugDraw.add_text("object orphan node count: " + str(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)))
+		DebugDraw.add_text("")
+		DebugDraw.add_text("static memory used (bytes): " + str(Performance.get_monitor(Performance.MEMORY_STATIC)))
+		DebugDraw.add_text("max static memory (bytes): " + str(Performance.get_monitor(Performance.MEMORY_STATIC_MAX)))
 	
 	 
-	if Globals.draw_chunks_debug:
+	if Globals.draw_debug_chunk_borders:
 		DebugDraw.draw_axes(Transform3D(Basis(), 
 			temporary_cam.global_position + Vector3(0, 0.75, 0) - 4 * temporary_cam.global_transform.basis.z), 1, true)
 		DebugDraw.draw_axes(Transform3D(Basis(), 

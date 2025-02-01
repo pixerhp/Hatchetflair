@@ -52,7 +52,8 @@ enum playmode {
 }
 var player_playmode = playmode.SPECTATOR
 
-var draw_chunks_debug: bool = false
+var draw_debug_info_text: bool = true
+var draw_debug_chunk_borders: bool = false
 
 
 #-=-=-=-# INITIALIZATION:

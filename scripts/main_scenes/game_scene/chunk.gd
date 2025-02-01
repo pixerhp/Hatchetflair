@@ -107,7 +107,7 @@ func _ready():
 var distance_to_cam: float
 var testbool: bool = false
 func _process(_delta):
-	if Globals.draw_chunks_debug:
+	if Globals.draw_debug_chunk_borders:
 		distance_to_cam = self.position.distance_to(test_player_cam.position)
 		if distance_to_cam > (4 * ChunkUtilities.STATIC_CHUNK_SIZE):
 			pass
