@@ -60,3 +60,111 @@ func get_tri_orientation_2d(vertices: Array[Vector2]):
 		return TRI_ORIENTATION.CCW
 	else:
 		return TRI_ORIENTATION.LINE
+
+func are_vector3s_coplanar(points: Array[Vector3], tolerance: float) -> bool:
+	# A set of only 3 or less points are guaranteed to be coplanar.
+	if points.size() < 4:
+		return true
+	
+	var triangle_normal_vector: Vector3 = (
+		points[0].cross(points[1]) + 
+		points[1].cross(points[2]) + 
+		points[2].cross(points[0])
+	).normalized()
+	
+	for index in range(3, points.size()):
+		if abs(triangle_normal_vector.dot(points[index] - points[0])) > tolerance:
+			return false
+	
+	return true
+
+
+# Note: edges lists indices of vertices, and faces lists indices of edges.
+class Polyhedron:
+	var verts: Array[Vector3]
+	var edges: Array[PackedInt32Array]
+	var faces: Array[PackedInt32Array]
+	
+	func _init(
+		in_verts: Array[Vector3],
+		in_edges: Array[PackedInt32Array],
+		in_faces: Array[PackedInt32Array],
+	):
+		verts = in_verts
+		edges = in_edges
+		faces = in_faces
+
+# Defines a 1x1x1 cube centered at (0,0,0).
+var UNIT_CUBE: Polyhedron = Polyhedron.new(
+	[
+		Vector3(-0.5, -0.5, -0.5),
+		Vector3(0.5, -0.5, -0.5),
+		Vector3(-0.5, -0.5, 0.5),
+		Vector3(0.5, -0.5, 0.5),
+		Vector3(-0.5, 0.5, -0.5),
+		Vector3(0.5, 0.5, -0.5),
+		Vector3(-0.5, 0.5, 0.5),
+		Vector3(0.5, 0.5, 0.5),
+	],
+	[
+		[0,1], [0,2], [1,3], [2,3],
+		[0,4], [1,5], [2,6], [3,7],
+		[4,5], [4,6], [5,7], [6,7],
+	],
+	[
+		[0,2,3,1],
+		[0,4,8,5],
+		[1,6,9,4],
+		[2,5,10,7],
+		[3,7,11,6],
+		[8,9,11,10],
+	]
+)
+
+# Defines a regular rhombic dodecahedron centered at (0,0,0).
+var UNIT_RHOMBDO: Polyhedron = Polyhedron.new(
+	[ # !!! double-check whether these are the vertex locations of a perfect or scaled rhombdo.
+		Vector3(0, (-1.0/sqrt(3)), 0),
+		
+		Vector3(0, (-0.5/sqrt(3)), -0.5),
+		Vector3(-0.5, (-0.5/sqrt(3)), 0),
+		Vector3(0.5, (-0.5/sqrt(3)), 0),
+		Vector3(0, (-0.5/sqrt(3)), 0.5),
+		
+		Vector3(-0.5, 0, -0.5),
+		Vector3(0.5, 0, -0.5),
+		Vector3(-0.5, 0, 0.5),
+		Vector3(0.5, 0, 0.5),
+		
+		Vector3(0, (0.5/sqrt(3)), -0.5),
+		Vector3(-0.5, (0.5/sqrt(3)), 0),
+		Vector3(0.5, (0.5/sqrt(3)), 0),
+		Vector3(0, (0.5/sqrt(3)), 0.5),
+		
+		Vector3(0, (1.0/sqrt(3)), 0),
+	],
+	[
+		[0,1], [0,2], [0,3], [0,4],
+		[1,5], [1,6], [2,5], [3,6], [2,7], [3,8], [4,7], [4,8],
+		[5,9], [6,9], [5,10], [6,11], [7,10], [8,11], [7,12], [8,12],
+		[9,13], [10,13], [11,13], [12,13], 
+	],
+	[
+		[0,1,6,4],
+		[0,5,7,2],
+		[1,3,10,8],
+		[2,9,11,3],
+		[4,12,13,5],
+		[6,8,16,14],
+		[7,15,17,9],
+		[10,11,19,18],
+		[12,14,21,20],
+		[13,20,22,15],
+		[16,18,23,21],
+		[17,22,23,19],
+	],
+)
+
+# Maybe some day...
+func generate_marched_polyhedron_indices_table(polyhedron: Polyhedron):
+	return
