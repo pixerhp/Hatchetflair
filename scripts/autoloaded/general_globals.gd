@@ -66,28 +66,6 @@ func _enter_tree() -> void:
 	_refresh_window_title()
 	_initialize_inputmap_defaults()
 	
-	
-	
-	## TEMPORARY TESTING 2!
-	## !!! (access edges and faces differently once that godot bug is fixed.)
-	#ChunkUtils.get_marched_polyhedron_tri_indices_table(
-		#ChunkUtils.unit_cube.verts, 
-		#ChunkUtils.unit_cube.new().edges, 
-		#ChunkUtils.unit_cube.new().faces, 
-		#0)
-	
-	
-	
-#	# TEMPORARY CODE FOR TESTING OUTPUT (1st marching rhombdo attempt)
-#	var rhombdo_table_indices: Array[PackedByteArray] = ChunkUtilities.gen_unit_rhombdo_indices_table()
-#	FileManager.write_file_apba("user://rhombdo_apba_test.apba", rhombdo_table_indices, true)
-#	FileManager.write_file_var("user://rhombdo_store_var_test.data", rhombdo_table_indices, true)
-#	var text_lines: PackedStringArray = []
-#	for indices in rhombdo_table_indices:
-#		text_lines.append(str(indices))
-#	FileManager.write_file_lines("user://rhombdo_text_text.txt", text_lines)
-	
-	
 	return
 
 
