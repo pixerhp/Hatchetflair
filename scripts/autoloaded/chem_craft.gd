@@ -1,16 +1,19 @@
 # A script that defines substances, their relations to other elements and reactions to temperature,
 # chemistry, crafting of things into other things, composite objects and what substances they're made of, etc.
+
 extends Node
 
 
-# Substance instances have unique crafing/chemistry, 
-# and point to a SubsProps instance for their properties.
+# Substances have unique chemistry, crafting, thermal interactions (etc,) 
+	# and point to a SubsProps for their properties.
+# Things with independant crafting/chemistry/value/etc yet share physical properties (such as dyes,)
+	# should all point to the same SubsProp.
 class Substance:
 	var names: PackedStringArray = [] # A substance's "main"/"default" name is the one listed first.
 	var tags: PackedInt32Array = []
 	var subsprop_i: int = -1
 	# !!! add rendering and mesh related info / references to info
-	# !!! mesh detailing style (index?)
+	# !!! mesh detailing style (referenced with index int?)
 	
 	func _init(
 		in_names: PackedStringArray, 
@@ -29,6 +32,9 @@ class Substance:
 			return ChemCraft.bad_subsprop
 		else:
 			return ChemCraft.subsprops[subsprop_i]
+
+# an anti-crash default substance that can be used wherever for if a non-existant substance is called for.
+var bad_substance: Substance = Substance.new(["bad substance"], [], -1)
 
 # Substance instances are separated from their properties so that multiple substances can share properties. 
 # For example, the dyes have different crafting/chemistry/rendering, but can share physical properties.
@@ -62,15 +68,11 @@ class SubsProp:
 	):
 		name = in_name
 
-var bad_subsprop: SubsProp = SubsProp.new("error")
+# an anti-crash default subsprop that can be used wherever for if a non-existant subsprop is called for.
+var bad_subsprop: SubsProp = SubsProp.new("bad subsprop")
 
-enum MESH_DETAILING_STYLE {
-	BRICKS,
-	SHALE,
-}
-
-# note: if a tag like "organic" exists, then there does not need to be an "inorganic" tag,
-# as simply not having the "organic" tag would imply being inorganic.
+# Note: if a tag like "organic" exists, then there shouldn't be an "inorganic" tag,
+# as a substance simply not having the "organic" tag would imply it being inorganic.
 enum SUBS_TAG { # "substance tag"
 	PURE_ELEMENT, # only contains 1 element, such as pure ferrium, pure diamond mixed with graphite, etc.
 	PURE_SUBSTANCE, # pure water, pure sulfuric acid, pure diamond with no graphite or vice versa, etc.
@@ -80,17 +82,10 @@ enum SUBS_TAG { # "substance tag"
 	DYE, 
 }
 
-var substance_name_to_i: Dictionary = {}
-func get_substance(subs_main_name: String) -> Substance:
-	return substances[substance_name_to_i[subs_main_name]]
-
-var subsprop_name_to_i: Dictionary = {}
-func get_subsprop(subsprop_name: String) -> SubsProp:
-	return subsprops[subsprop_name_to_i[subsprop_name]]
-
-var substances: Array[Substance] = []
-
-var subsprops: Array[SubsProp] = []
+enum MESH_DETAILING_STYLE {
+	BRICKS,
+	SHALE,
+}
 
 # These define FUNCTIONAL states of matter rather than describing lore/worldbuilding.
 # Ex. What may in-universe be considered a "plasma" may functionally still be treated as a gas.
@@ -103,10 +98,20 @@ enum STATE_OF_MATTER {
 }
 
 
+var substances: Array[Substance] = []
+
+var substance_name_to_i: Dictionary = {}
+func get_substance(subs_main_name: String) -> Substance:
+	return substances[substance_name_to_i[subs_main_name]]
+
+var subsprops: Array[SubsProp] = []
+
+var subsprop_name_to_i: Dictionary = {}
+func get_subsprop(subsprop_name: String) -> SubsProp:
+	return subsprops[subsprop_name_to_i[subsprop_name]]
+
 
 # !!! define substances' relation with other substances, their melting/boiling/decomposition/etc temperatures, etc.
-
-
 
 
 func _ready():
@@ -115,6 +120,7 @@ func _ready():
 	prepare_subsprop_name_to_i_dict()
 	initialize_substance_list()
 	prepare_substance_name_to_i_dict()
+	# !!! (initalizing chemistry/crafting related data)
 	return
 
 func initialize_subsprops_list() -> void:
