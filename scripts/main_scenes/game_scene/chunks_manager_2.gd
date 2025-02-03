@@ -3,7 +3,7 @@ extends Node
 
 # Chunk data & data access:
 var hzz_to_chunk_i: Dictionary = {}
-var static_chunks: Array[ChunkUtils3.Chunk]
+var static_chunks: Array[ChunkUtils.Chunk]
 
 # Thread-related:
 var mutex: Mutex

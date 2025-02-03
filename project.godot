@@ -27,7 +27,7 @@ FileManager="*res://scripts/autoloaded/file_manager.gd"
 VManager="*res://scripts/autoloaded/version_manager.gd"
 DebugDraw="*res://scripts/autoloaded/debug_draw.gd"
 PixMath="*res://scripts/autoloaded/pix_math.gd"
-ChunkUtils3="*res://scripts/autoloaded/chunk_utils_3.gd"
+ChunkUtils="*res://scripts/autoloaded/chunk_utils.gd"
 ChemCraft="*res://scripts/autoloaded/chem_craft.gd"
 GeoFuncs="*res://scripts/autoloaded/geo_funcs.gd"
 

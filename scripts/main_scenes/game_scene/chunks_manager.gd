@@ -66,7 +66,7 @@ func add_static_chunks(chunk_coords_hzz_queue: Array[Vector3i]):
 		new_chunks[i] = static_chunk_prefab.instantiate()
 		new_chunks[i].name = str(chunk_coords_hzz_queue[i])
 		new_chunks[i].chunk_coords_hzz = chunk_coords_hzz_queue[i]
-		new_chunks[i].position = Globals.swap_zyx_hzz_i(new_chunks[i].chunk_coords_hzz) * ChunkUtils3.CHUNK_WIDTH
+		new_chunks[i].position = Globals.swap_zyx_hzz_i(new_chunks[i].chunk_coords_hzz) * ChunkUtils.CHUNK_WIDTH
 		self.add_child(new_chunks[i])
 	chunk_gen_thread.start(add_static_chunks_threadwork)
 	return
