@@ -8,20 +8,24 @@ func switch_to_main_menu():
 var cam_speed = 20
 
 var previous_mouse_position: Vector2 = Vector2(0, 0)
+var fast_cam_flying_held_duration: float = 0
 func _process(delta):
 	# Toggle the pause menu if its associated key is pressed.
 	# !!! [in the future, esc should also be able to close out of other things WITHOUT opening this menu.]
 	if Input.is_action_just_pressed("game_special_pause_menu") and not $SettingsMenu.visible:
 		$PauseMenu.visible = not $PauseMenu.visible
 	
-	# Temporary controls for flying the camera around:
-	
+	# Temporary controls for flying the testing camera around:
 	if Input.is_action_pressed("game_play_speed_fast"):
-		cam_speed = 100
+		fast_cam_flying_held_duration += delta
+		cam_speed = 120 + pow((fast_cam_flying_held_duration * 4) + 1, 2)
 	elif Input.is_action_pressed("game_play_speed_slow"):
-		cam_speed = 1
+		fast_cam_flying_held_duration = 0
+		cam_speed = 0.5
 	else:
-		cam_speed = 20
+		fast_cam_flying_held_duration = 0
+		cam_speed = 15
+	
 	
 	if Input.is_action_pressed("game_play_move_forwards"):
 		temporary_cam.position += (cam_speed * delta * -1) * temporary_cam.global_transform.basis.z
