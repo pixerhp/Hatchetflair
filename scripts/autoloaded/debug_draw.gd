@@ -1,3 +1,5 @@
+# !!! this whole script is a mess.
+
 # The original debug_draw script by Zylann: 
 	# https://github.com/Zylann/godot_debug_draw
 # This script is a personal edit of someone's rework which updated Zylann's to Godot 4: 
@@ -215,28 +217,6 @@ func _process_chunk_borders():
 	
 	_line_immediate_geometry.surface_end()
 	return
-
-#func draw_chunk_borders(player_pos: Vector3):
-	#var ccoord_offset: Vector3 = floor((player_pos + Vector3(8,8,8)) / ChunkUtils.CHUNK_WIDTH)
-	#_lines.append_array(
-		#[
-			#[Vector3(-8,-8,-8) + (16*ccoord_offset), Vector3(8,-8,-8) + (16*ccoord_offset), Color.RED],
-		#]
-	#)
-	#return
-
-
-
-
-# used for old method of drawing chunk borders:
-func draw_chunk_corner(position_xyz: Vector3, side_length: float, colors: Array[Color] = [Color.RED, Color.GREEN, Color.BLUE], centered: bool = true):
-	var lines_origin: Vector3 = position_xyz
-	if centered:
-		lines_origin -= (Vector3(side_length, side_length, side_length) / 2)
-	
-	draw_line_3d(lines_origin, lines_origin + Vector3(side_length, 0, 0), colors[0])
-	draw_line_3d(lines_origin, lines_origin + Vector3(0, side_length, 0), colors[1])
-	draw_line_3d(lines_origin, lines_origin + Vector3(0, 0, side_length), colors[2])
 
 
 ## @brief Draws the unshaded outline of a 3D box.
