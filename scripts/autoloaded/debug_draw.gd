@@ -44,6 +44,8 @@ func _ready():
 	_mesh_instance.material_override = _get_line_material()
 	
 	add_child(_mesh_instance)
+	
+	refresh_debug_chunk_borders()
 
 
 ## @brief Draws the unshaded outline of a 3D cube.
@@ -54,6 +56,179 @@ func _ready():
 func draw_cube(position: Vector3, size: float, color: Color = Color.WHITE, linger := 0):
 	draw_box(position, Vector3(size, size, size), color, linger)
 
+
+
+
+
+var chunk_borders_lines_vects: PackedVector3Array = []
+var chunk_borders_lines_colors: PackedColorArray = []
+
+func refresh_debug_chunk_borders():
+	chunk_borders_lines_vects.clear()
+	chunk_borders_lines_colors.clear()
+	_add_chunk_border_shell(0, [Color(0, 0.25, 0.25), Color(0.25, 0.25, 0), Color(0.25, 0, 0.25)])
+	_add_chunk_border_shell(1, [Color.RED, Color.RED, Color.RED])
+	_add_chunk_border_shell(2, [Color(0.05, 0, 0), Color(0.05, 0, 0), Color(0.05, 0, 0)])
+	return
+
+func _add_chunk_border_shell(shell_num: int, hzz_colors: PackedColorArray):
+	if shell_num == 0:
+		_add_chunk_border_single(Vector3(0,0,0), 0b111111111111, PackedColorArray([Color.CRIMSON, Color.CRIMSON, Color.CRIMSON]))
+		
+		_add_chunk_border_single(Vector3(-0.00390625,-0.00390625,-0.00390625), 0b111111111111, hzz_colors)
+		_add_chunk_border_single(Vector3(-0.00390625,-0.00390625, 0.00390625), 0b111111111111, hzz_colors)
+		_add_chunk_border_single(Vector3(-0.00390625, 0.00390625,-0.00390625), 0b111111111111, hzz_colors)
+		_add_chunk_border_single(Vector3(-0.00390625, 0.00390625, 0.00390625), 0b111111111111, hzz_colors)
+		_add_chunk_border_single(Vector3( 0.00390625,-0.00390625,-0.00390625), 0b111111111111, hzz_colors)
+		_add_chunk_border_single(Vector3( 0.00390625,-0.00390625, 0.00390625), 0b111111111111, hzz_colors)
+		_add_chunk_border_single(Vector3( 0.00390625, 0.00390625,-0.00390625), 0b111111111111, hzz_colors)
+		_add_chunk_border_single(Vector3( 0.00390625, 0.00390625, 0.00390625), 0b111111111111, hzz_colors)
+		
+		return
+	
+	var bitmask: int = 0b111111111111
+	for h in range(-1 * shell_num, shell_num + 1):
+		for z1 in range(-1 * shell_num, shell_num + 1):
+			for z2 in range(-1 * shell_num, shell_num + 1):
+				bitmask = 0b111111111111
+				
+				if h == (-1 * shell_num):
+					bitmask = bitmask & 0b000011111111
+				if h == (shell_num):
+					bitmask = bitmask & 0b111111110000
+				if z1 == (-1 * shell_num):
+					bitmask = bitmask & 0b011100110111
+				if z1 == (shell_num):
+					bitmask = bitmask & 0b111011001110
+				if z2 == (-1 * shell_num):
+					bitmask = bitmask & 0b101101011011
+				if z2 == (shell_num):
+					bitmask = bitmask & 0b110110101101
+				
+				if (bitmask == 0b111111111111) or (bitmask == 0b000000000000):
+					continue
+				else:
+					_add_chunk_border_single(Globals.swap_zyx_hzz_f(Vector3(h,z1,z2)), bitmask, hzz_colors)
+	
+	
+	return
+
+func _add_chunk_border_single(relative_ccoords: Vector3, bitmask: int, hzz_colors: PackedColorArray):
+	var vertex_multiplier: Vector3 = Vector3(ChunkUtils.CHUNK_WIDTH, ChunkUtils.CHUNK_WIDTH, ChunkUtils.CHUNK_WIDTH)
+	for n in range(0,12):
+		if bitmask & (0b000000000001 << n):
+			match n:
+				0:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[2])
+				1:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[1])
+				2:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[1])
+				3:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[2])
+				4:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[0])
+				5:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[0])
+				6:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[0])
+				7:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[0])
+				8:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[2])
+				9:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[1])
+				10:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[1])
+				11:
+					chunk_borders_lines_vects.append_array([
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+					])
+					chunk_borders_lines_colors.append(hzz_colors[2])
+				_:
+					push_error("??? this should be impossible.")
+	return
+
+
+var player_position_for_chunk_borders: Vector3 = Vector3(0,0,0)
+func _process_chunk_borders():
+	if chunk_borders_lines_vects.size() == 0:
+		return
+	
+	var ccoord_offset: Vector3 = floor((player_position_for_chunk_borders + Vector3(8,8,8)) / ChunkUtils.CHUNK_WIDTH)
+	var repositioned_vects: PackedVector3Array = []
+	repositioned_vects.resize(chunk_borders_lines_vects.size())
+	for i in chunk_borders_lines_vects.size():
+		repositioned_vects[i] = chunk_borders_lines_vects[i] + (16*ccoord_offset)
+	
+	_line_immediate_geometry.surface_begin(Mesh.PRIMITIVE_LINES)
+	
+	for i in chunk_borders_lines_colors.size():
+		_line_immediate_geometry.surface_set_color(chunk_borders_lines_colors[i])
+		_line_immediate_geometry.surface_add_vertex(repositioned_vects[i*2])
+		_line_immediate_geometry.surface_add_vertex(repositioned_vects[(i*2)+1])
+	
+	_line_immediate_geometry.surface_end()
+	return
+
+#func draw_chunk_borders(player_pos: Vector3):
+	#var ccoord_offset: Vector3 = floor((player_pos + Vector3(8,8,8)) / ChunkUtils.CHUNK_WIDTH)
+	#_lines.append_array(
+		#[
+			#[Vector3(-8,-8,-8) + (16*ccoord_offset), Vector3(8,-8,-8) + (16*ccoord_offset), Color.RED],
+		#]
+	#)
+	#return
+
+
+
+
+# used for old method of drawing chunk borders:
 func draw_chunk_corner(position_xyz: Vector3, side_length: float, colors: Array[Color] = [Color.RED, Color.GREEN, Color.BLUE], centered: bool = true):
 	var lines_origin: Vector3 = position_xyz
 	if centered:
@@ -178,6 +353,8 @@ func _recycle_line_material(mat: StandardMaterial3D):
 func _process(_delta):
 	_process_boxes()
 	_process_lines()
+	if Globals.draw_debug_chunk_borders:
+		_process_chunk_borders()
 	_process_canvas()
 
 

@@ -106,22 +106,3 @@ func _ready():
 @onready var test_player_cam := get_node("../../REMOVE_LATER_cam")
 var distance_to_cam: float
 var testbool: bool = false
-func _process(_delta):
-	if Globals.draw_debug_chunk_borders:
-		distance_to_cam = self.position.distance_to(test_player_cam.position)
-		if distance_to_cam > (4 * ChunkUtils.CHUNK_WIDTH):
-			pass
-		elif distance_to_cam > (1.8 * ChunkUtils.CHUNK_WIDTH):
-			DebugDraw.draw_chunk_corner(
-				self.position,
-				ChunkUtils.CHUNK_WIDTH,
-				[Color(0, 0.025, 0.025), Color(0.025, 0.025, 0), Color(0.025, 0, 0.025)],
-				true
-			)
-		else:
-			DebugDraw.draw_chunk_corner(
-				self.position,
-				ChunkUtils.CHUNK_WIDTH,
-				[Color(0, 0.25, 0.25), Color(0.25,0.25,0), Color(0.25, 0, 0.25)],
-				true
-			)

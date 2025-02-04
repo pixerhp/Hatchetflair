@@ -4,7 +4,6 @@ extends Node3D
 func switch_to_main_menu():
 	get_tree().change_scene_to_file("res://scenes/main_scenes/main_menu.tscn")
 
-
 @onready var temporary_cam: Camera3D = $REMOVE_LATER_cam
 var cam_speed = 20
 
@@ -62,14 +61,24 @@ func _process(delta):
 	 
 	# Coordinates text:
 	if Input.is_action_pressed("game_play_speed_fast"):
-		DebugDraw.add_text("coords (h,z1,z2): " +
+		DebugDraw.add_text("coords (h,z₁,z₂): " +
 			"(" + str(Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), -1)) + ")")
 	elif Input.is_action_pressed("game_play_speed_slow"):
-		DebugDraw.add_text("coords (h,z1,z2): " + 
+		DebugDraw.add_text("coords (h,z₁,z₂): " + 
 			"(" + str(Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 6)) + ")")
 	else:
-		DebugDraw.add_text("coords (h,z1,z2): " + 
+		DebugDraw.add_text("coords (h,z₁,z₂): " + 
 			"(" + str(Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 2)) + ")")
+	
+	if Input.is_action_pressed("game_play_speed_fast"):
+		DebugDraw.add_text("coords (x, y, z): " +
+			"(" + str(Globals.get_coords3d_string($REMOVE_LATER_cam.position, -1)) + ")")
+	elif Input.is_action_pressed("game_play_speed_slow"):
+		DebugDraw.add_text("coords (x, y, z): " + 
+			"(" + str(Globals.get_coords3d_string($REMOVE_LATER_cam.position, 6)) + ")")
+	else:
+		DebugDraw.add_text("coords (x, y, z): " + 
+			"(" + str(Globals.get_coords3d_string($REMOVE_LATER_cam.position, 2)) + ")")
 	
 	if Globals.draw_debug_info_text:
 		DebugDraw.add_text("(counted) fps: " + str(Performance.get_monitor(Performance.TIME_FPS)))
@@ -93,6 +102,7 @@ func _process(delta):
 			temporary_cam.global_position + Vector3(0, 0.75, 0) - 4 * temporary_cam.global_transform.basis.z), 1, true)
 		DebugDraw.draw_axes(Transform3D(Basis(), 
 			temporary_cam.global_position + Vector3(0, -0.75, 0) - 4 * temporary_cam.global_transform.basis.z), 1, false)
+		DebugDraw.player_position_for_chunk_borders = temporary_cam.global_position
 
 func _input(event) -> void:
 	if event is InputEventMouseButton:
