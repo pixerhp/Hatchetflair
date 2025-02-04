@@ -5,7 +5,7 @@ const MAX_NEW_STATIC_CHUNKS_BATCH_SIZE = 64
 var do_chunk_generating: bool = true
 var new_static_chunks_queue: Array[Vector3i] = []
 var new_chunks: Array[StaticBody3D] = [] # Used for giving other threads references to the new chunk nodes.
-var static_chunk_prefab: PackedScene = preload("res://scenes/prefabs/terrain/chunk.tscn")
+var static_chunk_prefab: PackedScene = preload("res://scenes/prefabs/terrain/old_chunk.tscn")
 @onready var chunk_gen_thread: Thread = Thread.new()
 
 var frame_num: int = 0
