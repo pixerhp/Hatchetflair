@@ -35,6 +35,10 @@ func _ready():
 	cm_thread = Thread.new()
 	cm_thread.start(cm_thread_loop)
 
+# main thread stuff that runs each frame?:
+#func _process(delta):
+	#pass
+
 func cm_thread_loop():
 	while true:
 		mutex.lock()
