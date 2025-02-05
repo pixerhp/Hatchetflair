@@ -4,7 +4,6 @@
 
 #### CORE
 :^) ← has a nose
-a bit flat, don'tcha think?
 almost a game
 built on Godot!
 hello!♪
@@ -12,7 +11,6 @@ hello!♪
 made with passion!
 may contain ferrium
 may also contain werium
-ramp-tastic
 splash text!
 turn that smiley, upside-down!
 
