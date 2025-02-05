@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://o3dnyoj5ql3m"]
+[gd_scene load_steps=7 format=3 uid="uid://o3dnyoj5ql3m"]
 
 [ext_resource type="Script" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="2_gr5ms"]
+[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunks_manager.gd" id="3_ah17h"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
 sky_top_color = Color(0.454902, 0.537255, 0.65098, 1)
@@ -144,6 +145,9 @@ environment = SubResource("Environment_5ke80")
 
 [node name="Sun" type="DirectionalLight3D" parent="WorldEnvironment"]
 transform = Transform3D(1, 0, 0, 0, 0.925871, 0.377841, 0, -0.377841, 0.925871, 0, 0, 0)
+
+[node name="ChunksManager" type="Node3D" parent="."]
+script = ExtResource("3_ah17h")
 
 [node name="REMOVE_LATER_cam" type="Camera3D" parent="."]
 transform = Transform3D(-0.601815, -0.204008, 0.772139, 0, 0.966824, 0.255446, -0.798635, 0.153731, -0.581849, 17.4965, 9.41445, -14.4152)
