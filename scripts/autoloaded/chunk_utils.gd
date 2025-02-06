@@ -4,6 +4,9 @@ extends Node
 const CHUNK_WIDTH: int = 16
 const CHUNK_TILES_COUNT: int = CHUNK_WIDTH**3
 
+# Current loaded world's seeds and generational/spawning settings:
+var world_seed: int = 0
+
 enum LOD_TYPE {
 	HIGH_QUALITY, # extra mesh details are generated based on substances + normals.
 	MID_QUALITY, # mesh triangles use textures + render-materials, but don't generate finer details.
@@ -38,6 +41,8 @@ enum TILE_OPAC { # note: occupiedness should also be considered for some related
 }
 
 class Chunk:
+	# Stores references to all of this chunk's associated scene tree nodes, for quick access to them.
+	var associated_nodes_refs: Array[Object] = []
 	var ccoords: Vector3i = Vector3i(0,0,0)
 		# if a mobile/dynamic chunk, then this could get reused for which one this chunk is relative to a group.
 	var tp_is_atm_bits: int = 0b0000000000000000 
@@ -59,6 +64,8 @@ class Chunk:
 	# Mesh/collision generation related:
 	var lod_type: int = LOD_TYPE.MID_QUALITY
 	
+	var biome: int = 0 # !!! not yet used, will probably store a biome enum value.
+	
 	
 	
 	# A chunk's terrain is broken up into 4^3 pieces, 
@@ -72,9 +79,6 @@ class Chunk:
 		# Determinable information, chached for quick access:
 		var tiles_occs: PackedByteArray = [] # terrain occupiednesses
 		var tiles_opacs: PackedByteArray = [] # terrain opacities
-		
-		
-		pass
 	
 	
 	
@@ -82,4 +86,13 @@ class Chunk:
 	func _init(in_ccoords: Vector3i):
 		terrain_pieces.resize(4**3)
 		ccoords = in_ccoords
+		return
+	
+	
+	# (Can be done here as chunk terrain generation is not dependant on surrounding chunks' data.)
+	func generate_natural_terrain(tps_to_generate: int = 0b1111111111111111, seed: int = ChunkUtils.world_seed):
+		
+		# !!! write testing code here
+		
+		
 		return

@@ -131,6 +131,8 @@ func cm_thread_loop():
 	# !!! Temporary testing:
 	static_chunks.append(ChunkUtils.Chunk.new(Vector3i(0,0,0)))
 	hzz_to_chunk_i[Vector3i(0,0,0)] = 0
+	static_chunks[hzz_to_chunk_i[Vector3i(0,0,0)]].generate_natural_terrain()
+	determine_chunk_occupiednesses(Vector3i(0,0,0))
 	
 	
 	while true:
@@ -146,6 +148,26 @@ func cm_thread_loop():
 			# (regular chunk loading/unloading/lod-modifying, etc.)
 		
 	return
+
+func refresh_hzz_to_chunk_i():
+	hzz_to_chunk_i.clear()
+	for i in static_chunks.size():
+		hzz_to_chunk_i[static_chunks[i].ccoords] = i
+	return
+
+func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
+	if not hzz_to_chunk_i.has(ccoord):
+		push_error(
+			"Attempted to determine tile occupiednesses for a static chunk which presumably isn't loaded: ",
+			ccoord,
+		)
+		return FAILED
+	
+	# !!! get data of all chunk tiles + sorrounding chunks' tps' tiles.
+	
+	# !!! go tile-by-tile, checking for each scenario that would affect occ.
+	
+	return OK
 
 func process_incoming_instructions():
 	# Read the global in-instructions array:
@@ -198,10 +220,3 @@ func process_incoming_instructions():
 # (Call with the main thread to make the cm thread stop waiting.)
 func unpause_cm_thread():
 	semaphore.post()
-
-
-func refresh_hzz_to_chunk_i():
-	hzz_to_chunk_i.clear()
-	for i in static_chunks.size():
-		hzz_to_chunk_i[static_chunks[i].ccoords] = i
-	return
