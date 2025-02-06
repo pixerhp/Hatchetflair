@@ -68,7 +68,7 @@ var chunk_borders_lines_colors: PackedColorArray = []
 func refresh_debug_chunk_borders():
 	chunk_borders_lines_vects.clear()
 	chunk_borders_lines_colors.clear()
-	_add_chunk_border_shell(0, [Color(0, 0.25, 0.25), Color(0.25, 0.25, 0), Color(0.25, 0, 0.25)])
+	_add_chunk_border_shell(0, [Color(0.25, 0.25, 0), Color(0, 0.25, 0.25), Color(0.25, 0, 0.25)])
 	_add_chunk_border_shell(1, [Color.RED, Color.RED, Color.RED])
 	_add_chunk_border_shell(2, [Color(0.05, 0, 0), Color(0.05, 0, 0), Color(0.05, 0, 0)])
 	return
