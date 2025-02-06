@@ -1,3 +1,7 @@
-[gd_resource type="ShaderMaterial" format=3 uid="uid://ccmb4ox87dgwv"]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://ccmb4ox87dgwv"]
+
+[ext_resource type="Shader" path="res://assets/shaders/substance_shader.gdshader" id="1_v3y0i"]
 
 [resource]
+render_priority = 0
+shader = ExtResource("1_v3y0i")

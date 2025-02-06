@@ -37,7 +37,10 @@ func _ready():
 	cm_thread = Thread.new()
 	cm_thread.start(cm_thread_loop)
 	
-	
+	generate_temporary_testing_mesh()
+	return
+
+func generate_temporary_testing_mesh():
 	# !!! Temporary experimental mesh stuff:
 	var mesh_instance_3d: MeshInstance3D = MeshInstance3D.new()
 	mesh_instance_3d.position = Vector3(0,0,0)
@@ -107,7 +110,7 @@ func _ready():
 	
 	# (For after the arraymesh is created:)
 	mesh_instance_3d.mesh = array_mesh
-	mesh_instance_3d.material_override = load("res://assets/render_materials/digodium.tres")
+	mesh_instance_3d.material_override = load("res://assets/render_materials/substance_shader_material.tres")
 	cm_node.add_child(mesh_instance_3d)
 
 # main thread stuff that runs each frame?:
