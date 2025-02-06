@@ -38,13 +38,13 @@ enum TILE_OPAC { # note: occupiedness should also be considered for some related
 }
 
 class Chunk:
-	# static vs moving chunk? for example, terrain vs a floating boat structure or a rolling massive boulder.
-		# if moving/mobile, then the ccoords could get reused for relativity with  bound neighboring moving chunks.
 	var ccoords: Vector3i = Vector3i(0,0,0)
-	# Unloaded TPs can stay unloaded if it's known that they're just atmosphere:
+		# if a mobile/dynamic chunk, then this could get reused for which one this chunk is relative to a group.
 	var tp_is_atm_bits: int = 0b0000000000000000 
-	# Whether each terrain piece has its data loaded in ram:
+		# Unloaded TPs can stay unloaded if it's known that they're just atmosphere.
 	var tp_is_loaded_bits: int = 0b0000000000000000 
+		# Whether each terrain piece has its data loaded in ram.
+	var is_determinable_info_up_to_date: bool = false
 	var terrain_pieces: Array[TerrainPiece] = []
 	# var terrain_objects
 		# liquid pools in particular, but potentially also things like grounded/lodged rocks, gems, etc.
@@ -79,6 +79,7 @@ class Chunk:
 	
 	
 	
-	func _init():
+	func _init(in_ccoords: Vector3i):
 		terrain_pieces.resize(4**3)
+		ccoords = in_ccoords
 		return

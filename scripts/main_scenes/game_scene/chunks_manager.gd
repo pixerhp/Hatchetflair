@@ -6,6 +6,7 @@ extends Node
 # Chunk data & data access:
 var hzz_to_chunk_i: Dictionary = {}
 var static_chunks: Array[ChunkUtils.Chunk]
+# !!! (Store groups of chunks which are used as dynamic/mobile here as well in the future.)
 
 # Thread-related:
 var mutex: Mutex
@@ -37,7 +38,8 @@ func _ready():
 	cm_thread = Thread.new()
 	cm_thread.start(cm_thread_loop)
 	
-	generate_temporary_testing_mesh()
+	#generate_temporary_testing_mesh()
+	
 	return
 
 func _process(delta):
@@ -125,6 +127,12 @@ func generate_temporary_testing_mesh():
 	cm_node.add_child(mesh_instance_3d)
 
 func cm_thread_loop():
+	
+	# !!! Temporary testing:
+	static_chunks.append(ChunkUtils.Chunk.new(Vector3i(0,0,0)))
+	hzz_to_chunk_i[Vector3i(0,0,0)] = 0
+	
+	
 	while true:
 		mutex.lock()
 		var do_exit_thread: bool = exit_thread
