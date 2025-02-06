@@ -107,6 +107,7 @@ func _ready():
 	
 	# (For after the arraymesh is created:)
 	mesh_instance_3d.mesh = array_mesh
+	mesh_instance_3d.material_override = load("res://assets/render_materials/digodium.tres")
 	cm_node.add_child(mesh_instance_3d)
 
 # main thread stuff that runs each frame?:
