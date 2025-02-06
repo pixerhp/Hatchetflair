@@ -40,6 +40,17 @@ func _ready():
 	generate_temporary_testing_mesh()
 	return
 
+func _process(delta):
+	# !!! process outstructions here (such as node tree accessing)
+	
+	if Globals.draw_debug_info_text:
+		DebugDraw.add_text("")
+		mutex.lock()
+		DebugDraw.add_text("Static chunks stored in CM: " + str(static_chunks.size()))
+		mutex.unlock()
+	
+	return
+
 func generate_temporary_testing_mesh():
 	# !!! Temporary experimental mesh stuff:
 	var mesh_instance_3d: MeshInstance3D = MeshInstance3D.new()
@@ -112,10 +123,6 @@ func generate_temporary_testing_mesh():
 	mesh_instance_3d.mesh = array_mesh
 	mesh_instance_3d.material_override = load("res://assets/render_materials/substance_shader_material.tres")
 	cm_node.add_child(mesh_instance_3d)
-
-# main thread stuff that runs each frame?:
-#func _process(delta):
-	#pass
 
 func cm_thread_loop():
 	while true:
