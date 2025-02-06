@@ -116,7 +116,7 @@ func _add_chunk_border_shell(shell_num: int, hzz_colors: PackedColorArray):
 	return
 
 func _add_chunk_border_single(relative_ccoords: Vector3, bitmask: int, hzz_colors: PackedColorArray):
-	var vertex_multiplier: Vector3 = Vector3(ChunkUtils.CHUNK_WIDTH, ChunkUtils.CHUNK_WIDTH, ChunkUtils.CHUNK_WIDTH)
+	var vertex_multiplier: Vector3 = Vector3(WorldUtils.CHUNK_WIDTH, WorldUtils.CHUNK_WIDTH, WorldUtils.CHUNK_WIDTH)
 	for n in range(0,12):
 		if bitmask & (0b000000000001 << n):
 			match n:
@@ -202,7 +202,7 @@ func _process_chunk_borders():
 	if chunk_borders_lines_vects.size() == 0:
 		return
 	
-	var ccoord_offset: Vector3 = floor((player_position_for_chunk_borders + Vector3(8,8,8)) / ChunkUtils.CHUNK_WIDTH)
+	var ccoord_offset: Vector3 = floor((player_position_for_chunk_borders + Vector3(8,8,8)) / WorldUtils.CHUNK_WIDTH)
 	var repositioned_vects: PackedVector3Array = []
 	repositioned_vects.resize(chunk_borders_lines_vects.size())
 	for i in chunk_borders_lines_vects.size():

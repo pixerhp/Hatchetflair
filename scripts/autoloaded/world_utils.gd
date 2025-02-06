@@ -90,7 +90,7 @@ class Chunk:
 	
 	
 	# (Can be done here as chunk terrain generation is not dependant on surrounding chunks' data.)
-	func generate_natural_terrain(tps_to_generate: int = 0b1111111111111111, seed: int = ChunkUtils.world_seed):
+	func generate_natural_terrain(tps_to_generate: int = 0b1111111111111111, seed: int = WorldUtils.world_seed):
 		
 		# !!! write testing code here
 		

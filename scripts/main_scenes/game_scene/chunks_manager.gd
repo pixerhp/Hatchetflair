@@ -5,7 +5,7 @@ extends Node
 
 # Chunk data & data access:
 var hzz_to_chunk_i: Dictionary = {}
-var static_chunks: Array[ChunkUtils.Chunk]
+var static_chunks: Array[WorldUtils.Chunk]
 # !!! (Store groups of chunks which are used as dynamic/mobile here as well in the future.)
 
 # Thread-related:
@@ -131,7 +131,7 @@ func _process(delta):
 func cm_thread_loop():
 	
 	# !!! Temporary testing:
-	static_chunks.append(ChunkUtils.Chunk.new(Vector3i(0,0,0)))
+	static_chunks.append(WorldUtils.Chunk.new(Vector3i(0,0,0)))
 	hzz_to_chunk_i[Vector3i(0,0,0)] = 0
 	static_chunks[hzz_to_chunk_i[Vector3i(0,0,0)]].generate_natural_terrain()
 	determine_chunk_occupiednesses(Vector3i(0,0,0))
