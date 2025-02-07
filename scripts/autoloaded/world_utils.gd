@@ -6,8 +6,9 @@ const CHUNK_TILES_COUNT: int = CHUNK_WIDTH**3
 
 # Current loaded world's seeds and generational/spawning settings:
 var world_seed: int = 0
+#var ocean_height: int = 0
 
-enum LOD_TYPE {
+enum CHUNK_LOD {
 	HIGH_QUALITY, # extra mesh details are generated based on substances + normals.
 	MID_QUALITY, # mesh triangles use textures + render-materials, but don't generate finer details.
 	LOW_QUALITY, # mesh triangles are textured and all use the same (a basic) render-material,
@@ -30,7 +31,7 @@ enum TILE_OCC {
 	EMPTY = 0, # contains no solid terrain (only atmosphere/gas/liquid/etc.)
 	SEMI = 1, # "semi-empty" (half-tile slabs, partially encroaching neighboring solids, etc.)
 	OCCUPIED = 2, # is the center of / is a space that has data for solid terrain
-	ENGULFED = 3, # completely engulfed by surrounding solid terrain despite not itself being distinct solid terrain.
+	ENGULFED = 3, # completely engulfed by surrounding solid terrain, despite itself being empty terrain.
 		# (For example, if a tile is surrounded on all sides by rhombdo tiles.)
 }
 enum TILE_OPAC { # note: occupiedness should also be considered for some related applications (particularly semi.)
@@ -62,7 +63,7 @@ class Chunk:
 		# and aren't placed in a way like where there's one per every cube unit of 
 		# something like how terrain is with tiles, and can take up various shapes/sizes.
 	# Mesh/collision generation related:
-	var lod_type: int = LOD_TYPE.MID_QUALITY
+	var lod_type: int = CHUNK_LOD.MID_QUALITY
 	
 	var biome: int = 0 # !!! not yet used, will probably store a biome enum value.
 	
@@ -72,7 +73,7 @@ class Chunk:
 		return
 	
 	# A chunk's terrain is broken up into 4^3 pieces, 
-	# so that most of the unseen/unrelavent terrain can remain unloaded.
+		# so that most of the unseen/unrelavent terrain can remain unloaded.
 	class TerrainPiece:
 		# Unique information:
 		var tiles_shapes: PackedByteArray = [] # terrain shape type (marched, tess' cubes, etc.)
@@ -111,5 +112,6 @@ class Chunk:
 		
 		
 		# !!! write terrain generation testing code here
+		
 		
 		return
