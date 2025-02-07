@@ -69,6 +69,7 @@ class Chunk:
 	
 	func _init(in_ccoords: Vector3i):
 		terrain_pieces.resize(4**3)
+		terrain_pieces.fill(TerrainPiece.new())
 		ccoords = in_ccoords
 		return
 	
