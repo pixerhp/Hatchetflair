@@ -127,14 +127,16 @@ func _input(event) -> void:
 func _on_pausemenu_resumegameplay_pressed():
 	# !!! Later, the game world may be actually paused by the pause-menu in singleplayer, unpause it here.
 	$PauseMenu.visible = false
-func _on_pausemenu_toggleplaying_pressed():
-	pass
 func _on_pausemenu_settings_pressed():
 	$PauseMenu.visible = false
 	$SettingsMenu.visible = true
 	pass
+func _on_pausemenu_toggleafk_pressed():
+	pass
+func _on_resetcharacter_pressed():
+	pass
 func _on_pausemenu_saveandquit_pressed():
-	# !!! Remember to SAVE and quit later.
+	# !!! Remember to actually properly SAVE and quit later, currently this just goes to the main menu.
 	switch_to_main_menu()
 
 
