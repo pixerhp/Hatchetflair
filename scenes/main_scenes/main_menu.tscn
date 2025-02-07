@@ -89,6 +89,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+tooltip_text = "Click?"
 flat = true
 
 [node name="Spacer2" type="Control" parent="Menus/TitleMenu/TitleUI"]
@@ -128,6 +129,7 @@ icon_alignment = 1
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+tooltip_text = "(Multiplayer networking has not yet been implimented. Sorry!)"
 theme_override_font_sizes/font_size = 20
 disabled = true
 text = "Join world"
@@ -137,6 +139,7 @@ icon_alignment = 1
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+tooltip_text = "(Character customization has not yet been implimented. Sorry!)"
 theme_override_font_sizes/font_size = 20
 disabled = true
 text = "Characters"
@@ -1062,22 +1065,22 @@ text = "PLAY"
 
 [node name="NewWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
-text = "CREATE new world"
+text = "NEW WORLD"
 
 [node name="DeleteWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 disabled = true
-text = "(del' -> man')"
+text = "[[move world deleting into manage]]"
 
 [node name="EditWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 disabled = true
-text = "MANAGE world"
+text = "MANAGE WORLD"
 
 [node name="DuplicateWorld" type="Button" parent="Menus/WorldsMenu/WorldsUI/WorldButtons"]
 layout_mode = 2
 disabled = true
-text = "(dupe -> man')"
+text = "[[move world duplicating into manage]]"
 
 [node name="NewWorldPopup" type="Panel" parent="Menus/WorldsMenu"]
 visible = false
