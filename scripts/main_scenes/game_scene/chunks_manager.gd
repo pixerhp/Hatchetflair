@@ -161,6 +161,9 @@ func process_incoming_instructions():
 	in_instructions.clear()
 	mutex.unlock()
 	
+	if in_insts.is_empty():
+		return
+	
 	# Get a list of what types of instructions there are to execute:
 	var inst_enums: PackedInt32Array = []
 	for in_inst in in_insts: # player data and other instructions.
@@ -186,12 +189,8 @@ func process_incoming_instructions():
 			inst_enums.clear()
 			in_insts.clear()
 		else:
-			inst_enums.slice(ignore_previous_insts_index + 1)
-			in_insts.slice(ignore_previous_insts_index + 1)
-	
-	# !!! using for testing fixing "IGNORE_PREVIOUS_INSTRUCTIONS" instruction not actually working.
-	#if inst_enums.size() > 0:
-		#print(inst_enums)
+			inst_enums = inst_enums.slice(ignore_previous_insts_index + 1)
+			in_insts = in_insts.slice(ignore_previous_insts_index + 1)
 	
 	# Execute the list of instructions:
 	for i in inst_enums.size():
