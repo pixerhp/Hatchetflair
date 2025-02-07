@@ -41,58 +41,75 @@ enum TILE_OPAC { # note: occupiedness should also be considered for some related
 }
 
 class Chunk:
-	# Stores references to all of this chunk's associated scene tree nodes, for quick access to them.
 	var associated_nodes_refs: Array[Object] = []
+		# Stores references to all of this chunk's associated scene tree nodes, for quick access to them.
 	var ccoords: Vector3i = Vector3i(0,0,0)
 		# if a mobile/dynamic chunk, then this could get reused for which one this chunk is relative to a group.
 	var tp_is_atm_bits: int = 0b0000000000000000 
 		# Unloaded TPs can stay unloaded if it's known that they're just atmosphere.
 	var tp_is_loaded_bits: int = 0b0000000000000000 
 		# Whether each terrain piece has its data loaded in ram.
-	var is_determinable_info_up_to_date: bool = false
+	var is_determinable_info_accurate: bool = false
 	var terrain_pieces: Array[TerrainPiece] = []
 	# var terrain_objects
 		# liquid pools in particular, but potentially also things like grounded/lodged rocks, gems, etc.
 		# instead of being separate node-tree objects, until dislodging- 
 			# they can be rendered as part of the whole chunks' mesh?
 		# regarding liquid pools, they should have a function to check- 
-			# whether and how they are still contained, for pouring.
-	# static structures stuff? (walls, floors, boards, windows, vents, etc.)
-		# notably, structures fall along a finer grid (quarter-metrins?),
-		# and aren't placed a way like where there's one per every cube unit of 
-		# something like how terrain with tiles is.
+			# whether and how they are still contained, for pouring (whether around here or in CM.)
+	# static structures stuff? (walls, floors, boards, windows, vents, stairs, etc etc.)
+		# notably, structures fall along a finer grid (probably quarter-metrins aka 1/256 of a chunk width,)
+		# and aren't placed in a way like where there's one per every cube unit of 
+		# something like how terrain is with tiles, and can take up various shapes/sizes.
 	# Mesh/collision generation related:
 	var lod_type: int = LOD_TYPE.MID_QUALITY
 	
 	var biome: int = 0 # !!! not yet used, will probably store a biome enum value.
-	
-	
-	
-	# A chunk's terrain is broken up into 4^3 pieces, 
-	# so that most of the unseen/unrelavent terrain can remain unloaded.
-	class TerrainPiece:
-		# Unique information:
-		var tiles_shapes: PackedByteArray = [] # terrain shape type (marched, tess' cubes, etc.)
-		var tiles_shapedatas: Array = [] # for storing shape-dependant additional data (slope, octree state, etc.) 
-		var tiles_subs: PackedInt32Array = [] # terrain substances (smooth werium metal, conifer wood, etc.)
-		var tiles_attachdatas: Array = [] # plants growing on terrain, paint and decals plastered on it, etc.
-		# Determinable information, chached for quick access:
-		var tiles_occs: PackedByteArray = [] # terrain occupiednesses
-		var tiles_opacs: PackedByteArray = [] # terrain opacities
-	
-	
-	
 	
 	func _init(in_ccoords: Vector3i):
 		terrain_pieces.resize(4**3)
 		ccoords = in_ccoords
 		return
 	
+	# A chunk's terrain is broken up into 4^3 pieces, 
+	# so that most of the unseen/unrelavent terrain can remain unloaded.
+	class TerrainPiece:
+		# Unique information:
+		var tiles_shapes: PackedByteArray = [] # terrain shape type (marched, tess' cubes, etc.)
+		#var tiles_shapedatas: Array = [] # for storing shape-dependant additional data (slope, octree state, etc.) 
+		var tiles_subs: PackedInt32Array = [] # terrain substances (smooth werium metal, conifer wood, etc.)
+		#var tiles_attachdatas: Array = [] # for paint and decals, plants growing on the terrain, etc.
+		
+		# Determinable information, chached for quick access:
+		var tiles_occs: PackedByteArray = [] # terrain occupiednesses
+		var tiles_opacs: PackedByteArray = [] # terrain opacities
+		
+		func clear_all_data():
+			tiles_shapes.clear()
+			#tiles_shapedatas.clear()
+			tiles_subs.clear()
+			#tiles_attachdatas.clear()
+			tiles_occs.clear()
+			tiles_opacs.clear()
+			return
+	
 	
 	# (Can be done here as chunk terrain generation is not dependant on surrounding chunks' data.)
-	func generate_natural_terrain(tps_to_generate: int = 0b1111111111111111, seed: int = WorldUtils.world_seed):
+	func generate_natural_terrain(
+		tps_to_generate: int = 0b1111111111111111, 
+		clear_unrelated_tp_data: bool = false, 
+		seed: int = WorldUtils.world_seed,
+	):
+		if clear_unrelated_tp_data:
+			for tp in terrain_pieces:
+				tp.clear_all_data()
+		else:
+			# clear the data of all terrain pieces who's terrain is about to be (re)generated.
+			for i in terrain_pieces.size():
+				if tps_to_generate & (0b0000000000000001 << i):
+					terrain_pieces[i].clear_all_data()
 		
-		# !!! write testing code here
 		
+		# !!! write terrain generation testing code here
 		
 		return

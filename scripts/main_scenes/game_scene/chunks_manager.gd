@@ -157,6 +157,9 @@ func refresh_hzz_to_chunk_i():
 		hzz_to_chunk_i[static_chunks[i].ccoords] = i
 	return
 
+# !!! probably combine with determining all other determinables (e.g. opacs).
+	# this way, surrounding chunk data doesn't need to be re-fetched for every determinable array.
+# !!! later on, you could update this to have only some of the chunk's tps update this (with bitshift int.)
 func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
 	if not hzz_to_chunk_i.has(ccoord):
 		push_error(
@@ -165,9 +168,17 @@ func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
 		)
 		return FAILED
 	
+	# All of the chunk's + immediately surrounding tile data needed for calculations.
+	var tile_shapes: PackedByteArray = []
+	var tile_subs: PackedInt32Array = []
+	# Determined information to update the chunk's data with:
+	var chunk_occs: PackedByteArray = []
+	
 	# !!! get data of all chunk tiles + sorrounding chunks' tps' tiles.
 	
 	# !!! go tile-by-tile, checking for each scenario that would affect occ.
+	
+	# !!! set the actual chunk's occs to the calculated chunk_occs
 	
 	return OK
 
