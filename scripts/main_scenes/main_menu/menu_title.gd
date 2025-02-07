@@ -28,7 +28,7 @@ func _update_corner_version_text():
 	if corner_version_text_node == null:
 		push_error("Corner version text node not found.")
 		return
-	corner_version_text_node.text = "v" + Globals.V_ENTIRE
+	corner_version_text_node.text = "v" + Globals.V_ENTIRE + (" [v_indev]" if Globals.IS_VERSION_INDEV else "")
 	return
 
 func _update_welcome_message():
