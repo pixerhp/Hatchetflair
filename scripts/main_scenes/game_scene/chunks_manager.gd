@@ -1,6 +1,8 @@
 @icon("res://assets/icons/godot_proj_icons/chunks_manager.png")
 extends Node
 
+signal chunk_manager_thread_ended
+
 @onready var cm_node: Object = self
 
 # Chunk data & data access:
@@ -21,14 +23,15 @@ enum INSTRUCTION {
 	SKIP, # skip this instruction, useful for skipping bad/incorrect instruction input.
 	WAIT_FOR_MAIN_THREAD, # uses semaphore to pause this thread until the main thread continues it.
 	IGNORE_PREVIOUS_INSTRUCTIONS, # when quitting/teleporting (etc,) prior chunk instructions may no longer be relavent.
-	#SAVE_ALL_LOADED_CHUNKS, # such as for autosaving, saving & quitting.
-	#CLEAR_ALL_CHUNKS # 
+	SAVE_ALL_LOADED_CHUNKS, # such as for autosaving, saving & quitting.
+	#CLEAR_ALL_CHUNKS, # 
+	PING_MAIN,
 }
 enum OUTSTRUCTION {
 	WAITING_FOR_MAIN_THREAD, # !!! (NOT YET IMPLIMENTED RECIEVING-WISE ANYWHERE IN THE MAIN THREAD.)
 	#ALL_LOADED_CHUNKS_SAVED,
+	PING,
 }
-
 
 func _ready():
 	mutex = Mutex.new()
@@ -151,37 +154,6 @@ func cm_thread_loop():
 		
 	return
 
-func refresh_hzz_to_chunk_i():
-	hzz_to_chunk_i.clear()
-	for i in static_chunks.size():
-		hzz_to_chunk_i[static_chunks[i].ccoords] = i
-	return
-
-# !!! probably combine with determining all other determinables (e.g. opacs).
-	# this way, surrounding chunk data doesn't need to be re-fetched for every determinable array.
-# !!! later on, you could update this to have only some of the chunk's tps update this (with bitshift int.)
-func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
-	if not hzz_to_chunk_i.has(ccoord):
-		push_error(
-			"Attempted to determine tile occupiednesses for a static chunk which presumably isn't loaded: ",
-			ccoord,
-		)
-		return FAILED
-	
-	# All of the chunk's + immediately surrounding tile data needed for calculations.
-	var tile_shapes: PackedByteArray = []
-	var tile_subs: PackedInt32Array = []
-	# Determined information to update the chunk's data with:
-	var chunk_occs: PackedByteArray = []
-	
-	# !!! get data of all chunk tiles + sorrounding chunks' tps' tiles.
-	
-	# !!! go tile-by-tile, checking for each scenario that would affect occ.
-	
-	# !!! set the actual chunk's occs to the calculated chunk_occs
-	
-	return OK
-
 func process_incoming_instructions():
 	# Read the global in-instructions array:
 	mutex.lock()
@@ -217,6 +189,10 @@ func process_incoming_instructions():
 			inst_enums.slice(ignore_previous_insts_index + 1)
 			in_insts.slice(ignore_previous_insts_index + 1)
 	
+	# !!! using for testing fixing "IGNORE_PREVIOUS_INSTRUCTIONS" instruction not actually working.
+	#if inst_enums.size() > 0:
+		#print(inst_enums)
+	
 	# Execute the list of instructions:
 	for i in inst_enums.size():
 		match inst_enums[i]:
@@ -225,11 +201,77 @@ func process_incoming_instructions():
 				out_instructions.append(OUTSTRUCTION.WAITING_FOR_MAIN_THREAD)
 				mutex.unlock()
 				semaphore.wait()
+			INSTRUCTION.PING_MAIN:
+				mutex.lock()
+				out_instructions.append(OUTSTRUCTION.PING)
+				mutex.unlock()
+			INSTRUCTION.SAVE_ALL_LOADED_CHUNKS:
+				# !!! Add file saving functionality
+				pass
 			_:
 				push_error("Unknown/unsupported instruction-enum: ", inst_enums[i])
 				continue
 	return
 
+func refresh_hzz_to_chunk_i():
+	hzz_to_chunk_i.clear()
+	for i in static_chunks.size():
+		hzz_to_chunk_i[static_chunks[i].ccoords] = i
+	return
+
+# !!! probably combine with determining all other determinables (e.g. opacs).
+	# this way, surrounding chunk data doesn't need to be re-fetched for every determinable array.
+# !!! later on, you could update this to have only some of the chunk's tps update this (with bitshift int.)
+func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
+	if not hzz_to_chunk_i.has(ccoord):
+		push_error(
+			"Attempted to determine tile occupiednesses for a static chunk which presumably isn't loaded: ",
+			ccoord,
+		)
+		return FAILED
+	
+	# All of the chunk's + immediately surrounding tile data needed for calculations.
+	var tile_shapes: PackedByteArray = []
+	var tile_subs: PackedInt32Array = []
+	# Determined information to update the chunk's data with:
+	var chunk_occs: PackedByteArray = []
+	
+	# !!! get data of all chunk tiles + sorrounding chunks' tps' tiles.
+	
+	# !!! go tile-by-tile, checking for each scenario that would affect occ.
+	
+	# !!! set the actual chunk's occs to the calculated chunk_occs
+	
+	return OK
+
 # (Call with the main thread to make the cm thread stop waiting.)
 func unpause_cm_thread():
 	semaphore.post()
+
+func _on_pausemenu_saveandquit_pressed():
+	mutex.lock()
+	in_instructions.append_array([
+		INSTRUCTION.IGNORE_PREVIOUS_INSTRUCTIONS, 
+		INSTRUCTION.SAVE_ALL_LOADED_CHUNKS,
+		INSTRUCTION.PING_MAIN,
+	])
+	mutex.unlock()
+	
+	var is_cm_done: bool = false
+	while true:
+		mutex.lock()
+		if out_instructions.has(OUTSTRUCTION.PING):
+			is_cm_done = true
+		mutex.unlock()
+		if is_cm_done:
+			break
+		else:
+			# Wait 1/60th of a second:
+			await get_tree().create_timer(0.0166).timeout
+	
+	mutex.lock()
+	exit_thread = true
+	mutex.unlock()
+	cm_thread.wait_to_finish()
+	
+	chunk_manager_thread_ended.emit()

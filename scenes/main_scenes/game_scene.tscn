@@ -176,4 +176,5 @@ transform = Transform3D(0.937889, 0, -0.346936, 0, 1, 0, 0.346936, 0, 0.937889, 
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ToggleAFK" to="." method="_on_pausemenu_toggleafk_pressed"]
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ResetChar" to="." method="_on_resetcharacter_pressed"]
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/SaveAndQuit" to="." method="_on_pausemenu_saveandquit_pressed"]
+[connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/SaveAndQuit" to="ChunksManager" method="_on_pausemenu_saveandquit_pressed"]
 [connection signal="close_settings_menu" from="SettingsMenu" to="." method="_on_close_settings_menu"]

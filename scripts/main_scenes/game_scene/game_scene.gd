@@ -4,6 +4,8 @@ extends Node3D
 func switch_to_main_menu():
 	get_tree().change_scene_to_file("res://scenes/main_scenes/main_menu.tscn")
 
+@onready var chunk_manager_node: Object = $ChunksManager
+
 @onready var temporary_cam: Camera3D = $REMOVE_LATER_cam
 var cam_speed = 20
 
@@ -136,7 +138,9 @@ func _on_pausemenu_toggleafk_pressed():
 func _on_resetcharacter_pressed():
 	pass
 func _on_pausemenu_saveandquit_pressed():
-	# !!! Remember to actually properly SAVE and quit later, currently this just goes to the main menu.
+	# Wait for the chunks manager to finish up its work, such as saving currently loaded chunks.
+	await chunk_manager_node.chunk_manager_thread_ended
+	
 	switch_to_main_menu()
 
 
