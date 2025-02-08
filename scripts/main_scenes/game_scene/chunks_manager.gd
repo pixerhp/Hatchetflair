@@ -20,8 +20,20 @@ var exit_thread: bool = false
 var in_instructions: Array = [] # main thread adds to it, cm thread reads from it and clears it.
 var out_instructions: Array = [] # cm thread adds to it, main thread reads from it and clears it.
 
-## Work quota functionality:
-#var previous_work_quota: int = 20
+# Local understanding of outside data, only accessed/used by the chunks manager thread:
+var player_ccoords: Vector3i = Vector3i(0,0,0) # in hzz
+var player_velocity: Vector3 = Vector3(0,0,0) # in hzz
+
+# Work quota functionality:
+var work_quota: int = 20
+var pause_work_quota: bool = false
+const WORK_QUOTA_MIN: int = 1
+const WORK_QUOTA_MAX: int = 200
+# Used for dynamically adjusting the work quota number:
+var updates_within_last_loop: int = 0
+	# For counting the number of unique data updates contained within the last in-instructions read.
+var loops_since_last_update: int = 0
+	# For counting the number of thread while loops since the last data update from the main thread.
 
 
 enum { # instruction sets:
@@ -35,6 +47,7 @@ enum IN_INST { # list of incoming-type instructions:
 	IGNORE_THE_PREVIOUS_INSTRUCTIONS, # Makes this and all prior instructions array elements be ignored.
 	WAIT_FOR_MAIN_THREAD, # Uses the semaphore to pause this thread until the main thread manually continues it.
 	GIVE_MAIN_THREAD_A_SIGNAL_TO_EMIT,
+	REGULAR_DATA_UPDATE, # Recieved every main thread frame; has delta, player positions, etc.
 	SAVE_ALL_LOADED_CHUNKS, # NYI, useful for autosaving + saving & quitting.
 	#CLEAR_ALL_CHUNKS, # 
 }
@@ -69,7 +82,14 @@ func _process(delta):
 		DebugDraw.add_text("Static chunks stored in CM: " + str(static_chunks.size()))
 		mutex.unlock()
 	
-	# !!! probably regularly give in-struction of player data (position, velocity) for chunk loading/unloading.
+	# !!! later send player's ccoords (remember to account for my_origin_offset) and velocity.
+	mutex.lock()
+	in_instructions.append([
+		IN_INST.REGULAR_DATA_UPDATE, 
+		Vector3i(0,0,0), # player chunk-coords location.
+		Vector3(0,0,0), # player velocity.
+	])
+	mutex.unlock()
 	
 	return
 
@@ -148,12 +168,17 @@ func _process(delta):
 
 func cm_thread_loop():
 	
-	# !!! Temporary testing:
+	
+	
+	# !!! Temporary for testing:
 	static_chunks.append(WorldUtils.Chunk.new(Vector3i(0,0,0)))
 	hzz_to_chunk_i[Vector3i(0,0,0)] = 0
 	static_chunks[hzz_to_chunk_i[Vector3i(0,0,0)]].generate_natural_terrain()
 	determine_chunk_occupiednesses(Vector3i(0,0,0))
 	
+	
+	
+	loops_since_last_update = 0
 	
 	while true:
 		mutex.lock()
@@ -162,11 +187,17 @@ func cm_thread_loop():
 		if do_exit_thread:
 			break
 		
+		updates_within_last_loop = 0
+		loops_since_last_update += 1
+		
 		process_instructions(INCOMING)
 		
-		# for loop for doing other chunk stuff autonomously after already following provided instructions?
-			# (regular chunk loading/unloading/lod-modifying, etc.)
+		adjust_work_quota_size()
 		
+		if not pause_work_quota:
+			do_work_quota()
+	
+	# If the while loop is broken out of:
 	return
 
 func process_instructions(instructions_set: int) -> Error:
@@ -273,10 +304,6 @@ func process_instructions(instructions_set: int) -> Error:
 						mutex.unlock()
 						semaphore.wait()
 						continue
-					IN_INST.SAVE_ALL_LOADED_CHUNKS:
-						# !!! Add file saving functionality later!
-						push_warning("(The functionality of saving chunk data to files has not yet been implimented.)")
-						continue
 					IN_INST.GIVE_MAIN_THREAD_A_SIGNAL_TO_EMIT:
 						if typeof(instructions[i][1]) == TYPE_SIGNAL:
 							mutex.lock()
@@ -284,6 +311,16 @@ func process_instructions(instructions_set: int) -> Error:
 							mutex.unlock()
 						else:
 							push_error("Expected associated Signal type.")
+						continue
+					IN_INST.REGULAR_DATA_UPDATE:
+						updates_within_last_loop += 1
+						loops_since_last_update = 0
+						player_ccoords = instructions[i][1]
+						player_velocity = instructions[i][2]
+						continue
+					IN_INST.SAVE_ALL_LOADED_CHUNKS:
+						# !!! Add file saving functionality later!
+						push_warning("(The functionality of saving chunk data to files has not yet been implimented.)")
 						continue
 					_:
 						push_error("Unknown/unsupported incoming-instruction enum: ", inst_enums[i])
@@ -304,6 +341,55 @@ func process_instructions(instructions_set: int) -> Error:
 						continue
 	
 	return OK
+
+func adjust_work_quota_size():
+	# Prevents weird should-be-impossible values (such as from int overflow.)
+	if updates_within_last_loop < 0:
+		updates_within_last_loop = 0
+	if loops_since_last_update < 0:
+		loops_since_last_update = 0
+	
+	# Adjust work quota:
+	match loops_since_last_update:
+		0: # Just recieved a data update this loop.
+			match updates_within_last_loop:
+				0:
+					push_error("Anomolous impossible contradiction, ",
+					"just received an update but 0 updates this loop.")
+				1: # The CM thread is about the same speed as the main thread.
+					pass
+				2: # The CM thread may be slightly slow.
+					work_quota -= 1
+				_: # The CM thread is substantially too slow.
+					work_quota = roundi(float(work_quota) / (float(updates_within_last_loop) - 1.5))
+		1: # The CM thread may be slightly fast.
+			work_quota += 1
+		2: # The CM thread is at least twice as fast as the main thread.
+			work_quota = roundi(float(work_quota) * 1.5)
+		_: # Avoid compounding work-increases in case the main thread is just experiencing a lag spike.
+			pass
+	
+	# Ensure that the work quota doesn't exceed its allowed range:
+	if work_quota < WORK_QUOTA_MIN:
+		work_quota = WORK_QUOTA_MIN
+		return
+	if work_quota > WORK_QUOTA_MAX:
+		work_quota = WORK_QUOTA_MAX
+		return
+	return
+
+func do_work_quota():
+	var quota_remaining: int = work_quota
+	
+	# !!! code work quota things to do, like loading/unloading/re-lod-meshing chunks
+	# !!! each thing done reduces quota_remaining, usually by 1.
+	
+	# !!! pre while loop stuff, like ensuring the chunks immediately surrounding the player are loaded.
+	
+	#while quota_remaining > 0:
+		#pass
+	
+	return
 
 func refresh_hzz_to_chunk_i():
 	hzz_to_chunk_i.clear()
