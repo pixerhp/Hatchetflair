@@ -20,13 +20,19 @@ var exit_thread: bool = false
 var in_instructions: Array = [] # main thread adds to it, cm thread reads from it and clears it.
 var out_instructions: Array = [] # cm thread adds to it, main thread reads from it and clears it.
 
+## Work quota functionality:
+#var previous_work_quota: int = 20
+
+
 enum { # instruction sets:
 	INCOMING,
 	OUTGOING,
 }
 enum IN_INST { # list of incoming-type instructions:
 	SKIP, # Doesn't do anything, useful for replacing a bad incoming instruction input.
-	IGNORE_THE_PREVIOUS_INSTRUCTIONS, # Makes this and all prior instruction array elements be ignored.
+	IGNORE_THE_FOLLOWING_INSTRUCTIONS, # Makes this and all following instructions array elements be ignored.
+		# (Takes priority over IGNORE_THE_PREVIOUS_INSTRUCTIONS.)
+	IGNORE_THE_PREVIOUS_INSTRUCTIONS, # Makes this and all prior instructions array elements be ignored.
 	WAIT_FOR_MAIN_THREAD, # Uses the semaphore to pause this thread until the main thread manually continues it.
 	GIVE_MAIN_THREAD_A_SIGNAL_TO_EMIT,
 	SAVE_ALL_LOADED_CHUNKS, # NYI, useful for autosaving + saving & quitting.
@@ -34,6 +40,8 @@ enum IN_INST { # list of incoming-type instructions:
 }
 enum OUT_INST { # list of outgoing-type instructions:
 	SKIP, # Doesn't do anything, useful for replacing a bad outgoing instruction input.
+	IGNORE_THE_FOLLOWING_INSTRUCTIONS, # Makes this and all following instructions array elements be ignored.
+		# (Takes priority over IGNORE_THE_PREVIOUS_INSTRUCTIONS.)
 	IGNORE_THE_PREVIOUS_INSTRUCTIONS, # Makes this and all prior instruction array elements be ignored.
 	WAITING_FOR_MAIN_THREAD, # !!! (NOT YET IMPLIMENTED RECIEVING-WISE ANYWHERE IN THE MAIN THREAD.)
 	EMIT_RECIEVED_SIGNAL,
@@ -224,16 +232,28 @@ func process_instructions(instructions_set: int) -> Error:
 	
 	var ignorance_index: int = -1
 	
-	# !!! "IGNORE_FOLLOWING_INSTRUCTIONS" instruction?
+	# Check for a (the first) "IGNORE_THE_FOLLOWING_INSTRUCTIONS" instruction, and do accordingly.
+	match instructions_set:
+		INCOMING:
+			ignorance_index = inst_enums.find(IN_INST.IGNORE_THE_FOLLOWING_INSTRUCTIONS)
+		OUTGOING:
+			ignorance_index = inst_enums.find(OUT_INST.IGNORE_THE_FOLLOWING_INSTRUCTIONS)
+	if ignorance_index != -1:
+		if ignorance_index == 0:
+			# If the first instruction states to ignore all following instructions, then there's nothing to execute.
+			return OK
+		else:
+			inst_enums = inst_enums.slice(0, ignorance_index)
+			instructions = instructions.slice(0, ignorance_index)
 	
-	# Check for a (the lastmost) "IGNORE_THE_PREVIOUS_INSTRUCTIONS" instruction, and act / modify the list accordingly.
+	# Check for a (the last) "IGNORE_THE_PREVIOUS_INSTRUCTIONS" instruction, and do accordingly.
 	match instructions_set:
 		INCOMING:
 			ignorance_index = inst_enums.rfind(IN_INST.IGNORE_THE_PREVIOUS_INSTRUCTIONS)
 		OUTGOING:
 			ignorance_index = inst_enums.rfind(OUT_INST.IGNORE_THE_PREVIOUS_INSTRUCTIONS)
 	if ignorance_index != -1:
-		if inst_enums.size() == ignorance_index + 1:
+		if ignorance_index + 1 == inst_enums.size():
 			# If the last instruction states to ignore all previous instructions, then there's nothing to execute.
 			return OK
 		else:
@@ -326,6 +346,7 @@ func _on_pausemenu_saveandquit_pressed():
 		IN_INST.IGNORE_THE_PREVIOUS_INSTRUCTIONS, 
 		IN_INST.SAVE_ALL_LOADED_CHUNKS,
 		[IN_INST.GIVE_MAIN_THREAD_A_SIGNAL_TO_EMIT, chunks_manager_is_ready],
+		IN_INST.IGNORE_THE_FOLLOWING_INSTRUCTIONS,
 	])
 	mutex.unlock()
 	
