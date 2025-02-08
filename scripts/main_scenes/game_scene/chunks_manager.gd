@@ -180,10 +180,14 @@ func cm_thread_loop():
 	
 	loops_since_last_update = 0
 	
+	var do_exit_thread: bool = false
+	var should_do_quota: bool = true
 	while true:
 		mutex.lock()
-		var do_exit_thread: bool = exit_thread
+		do_exit_thread = exit_thread
+		should_do_quota = not pause_work_quota
 		mutex.unlock()
+		
 		if do_exit_thread:
 			break
 		
@@ -192,9 +196,8 @@ func cm_thread_loop():
 		
 		process_instructions(INCOMING)
 		
-		adjust_work_quota_size()
-		
-		if not pause_work_quota:
+		if should_do_quota:
+			adjust_work_quota_size()
 			do_work_quota()
 	
 	# If the while loop is broken out of:
