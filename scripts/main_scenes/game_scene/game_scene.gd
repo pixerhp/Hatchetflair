@@ -139,7 +139,7 @@ func _on_resetcharacter_pressed():
 	pass
 func _on_pausemenu_saveandquit_pressed():
 	# Wait for the chunks manager to finish up its work, such as saving currently loaded chunks.
-	await chunk_manager_node.chunk_manager_thread_ended
+	await chunk_manager_node.chunks_manager_thread_ended
 	
 	switch_to_main_menu()
 

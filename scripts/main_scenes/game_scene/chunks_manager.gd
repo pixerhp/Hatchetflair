@@ -1,7 +1,8 @@
 @icon("res://assets/icons/godot_proj_icons/chunks_manager.png")
 extends Node
 
-signal chunk_manager_thread_ended
+signal chunks_manager_is_ready
+signal chunks_manager_thread_ended
 
 @onready var cm_node: Object = self
 
@@ -19,18 +20,24 @@ var exit_thread: bool = false
 var in_instructions: Array = [] # main thread adds to it, cm thread reads from it and clears it.
 var out_instructions: Array = [] # cm thread adds to it, main thread reads from it and clears it.
 
-enum IN_INST {
-	SKIP, # skip this instruction, useful for skipping bad/incorrect instruction input.
-	IGNORE_PREVIOUS_INSTRUCTIONS, # when quitting/teleporting (etc,) prior chunk instructions may no longer be relavent.
-	WAIT_FOR_MAIN_THREAD, # uses semaphore to pause this thread until the main thread continues it.
-	SAVE_ALL_LOADED_CHUNKS, # such as for autosaving, saving & quitting.
-	#CLEAR_ALL_CHUNKS, # 
-	PING_MAIN,
+enum { # instruction sets:
+	INCOMING,
+	OUTGOING,
 }
-enum OUT_INST {
+enum IN_INST { # list of incoming-type instructions:
+	SKIP, # Doesn't do anything, useful for replacing a bad incoming instruction input.
+	IGNORE_THE_PREVIOUS_INSTRUCTIONS, # Makes this and all prior instruction array elements be ignored.
+	WAIT_FOR_MAIN_THREAD, # Uses the semaphore to pause this thread until the main thread manually continues it.
+	GIVE_MAIN_THREAD_A_SIGNAL_TO_EMIT,
+	SAVE_ALL_LOADED_CHUNKS, # NYI, useful for autosaving + saving & quitting.
+	#CLEAR_ALL_CHUNKS, # 
+}
+enum OUT_INST { # list of outgoing-type instructions:
+	SKIP, # Doesn't do anything, useful for replacing a bad outgoing instruction input.
+	IGNORE_THE_PREVIOUS_INSTRUCTIONS, # Makes this and all prior instruction array elements be ignored.
 	WAITING_FOR_MAIN_THREAD, # !!! (NOT YET IMPLIMENTED RECIEVING-WISE ANYWHERE IN THE MAIN THREAD.)
+	EMIT_RECIEVED_SIGNAL,
 	#ALL_LOADED_CHUNKS_SAVED,
-	PING,
 }
 
 func _ready():
@@ -46,7 +53,7 @@ func _ready():
 	return
 
 func _process(delta):
-	process_outgoing_instructions()
+	process_instructions(OUTGOING)
 	
 	if Globals.draw_debug_info_text:
 		DebugDraw.add_text("")
@@ -57,9 +64,6 @@ func _process(delta):
 	# !!! probably regularly give in-struction of player data (position, velocity) for chunk loading/unloading.
 	
 	return
-
-func process_outgoing_instructions():
-	pass
 
 #func generate_temporary_testing_mesh():
 	## !!! Temporary experimental mesh stuff:
@@ -150,80 +154,136 @@ func cm_thread_loop():
 		if do_exit_thread:
 			break
 		
-		process_incoming_instructions()
+		process_instructions(INCOMING)
 		
 		# for loop for doing other chunk stuff autonomously after already following provided instructions?
 			# (regular chunk loading/unloading/lod-modifying, etc.)
 		
 	return
 
-func process_incoming_instructions():
-	# Read and then clear the incoming instructions array in a thread-safe way:
-	mutex.lock()
-	var in_insts: Array = in_instructions.duplicate()
-	in_instructions.clear()
-	mutex.unlock()
+func process_instructions(instructions_set: int) -> Error:
+	# Read and then clear the associated instructions array in a thread-safe way:
+	var instructions: Array = []
+	match instructions_set:
+		INCOMING:
+			mutex.lock()
+			instructions = in_instructions.duplicate()
+			in_instructions.clear()
+			mutex.unlock()
+		OUTGOING:
+			mutex.lock()
+			instructions = out_instructions.duplicate()
+			out_instructions.clear()
+			mutex.unlock()
+		_:
+			push_error(
+				"Bad instruction-set input (neither incoming nor outgoing,) was: ", 
+				instructions_set,
+			)
+			return FAILED
 	
-	# The rest of this function can be skipped if there are no incoming instructions.
-	if in_insts.is_empty():
-		return
+	# The rest of this function can be skipped if there are no instructions.
+	if instructions.is_empty():
+		return OK
 	
-	# Create a list of what kind of instruction (enum value) each element of the incoming instructions array is:
+	# Create a list of what kind of instruction (enum value) each element of the instructions array is:
 	# (bad instructions will be replaced with the "SKIP" instruction.)
 	var inst_enums: PackedInt32Array = []
-	for i in in_insts.size(): # player data and other instructions.
-		match typeof(in_insts[i]):
-			TYPE_INT: # a basic lone-instruction without any additional data.
-				inst_enums.append(in_insts[i])
-			TYPE_ARRAY: # an instruction as the first element of an array containing associated data.
-				if in_insts[i].is_empty():
-					push_error("Incoming instruction entry is an empty array.")
-					inst_enums.append(IN_INST.SKIP)
+	for i in instructions.size():
+		match typeof(instructions[i]):
+			TYPE_INT: # a simple lone instruction enum without any additional data.
+				inst_enums.append(instructions[i])
+			TYPE_ARRAY: # an array with various instruction-associated data, beginning with the instruction enum.
+				if instructions[i].is_empty():
+					push_error("Instructions entry is an empty array.")
+					match instructions_set:
+						INCOMING:
+							inst_enums.append(IN_INST.SKIP)
+						OUTGOING:
+							inst_enums.append(OUT_INST.SKIP)
 					continue
-				elif not typeof(in_insts[i][0]) == TYPE_INT:
-					push_error("First element of incoming instruction array was not an enum value.")
-					inst_enums.append(IN_INST.SKIP)
+				elif not typeof(instructions[i][0]) == TYPE_INT:
+					push_error("First element of instructions array was not an instruction enum.")
+					match instructions_set:
+						INCOMING:
+							inst_enums.append(IN_INST.SKIP)
+						OUTGOING:
+							inst_enums.append(OUT_INST.SKIP)
 					continue
-				else:
-					inst_enums.append(in_insts[i][0])
+				else: # the array format is OK.
+					inst_enums.append(instructions[i][0])
 					continue
 			_:
-				push_error("In-instruction enum not found.")
-				inst_enums.append(IN_INST.SKIP)
+				push_error("Instruction format not supported, its instruction enum was not found.")
+				match instructions_set:
+					INCOMING:
+						inst_enums.append(IN_INST.SKIP)
+					OUTGOING:
+						inst_enums.append(OUT_INST.SKIP)
 				continue
 	
-	# Check for a (the lastmost) "IGNORE_PREVIOUS_INSTRUCTIONS" instruction, and modify the list accordingly.
-	var ignore_previous_insts_index: int = inst_enums.rfind(IN_INST.IGNORE_PREVIOUS_INSTRUCTIONS)
-	if ignore_previous_insts_index != -1:
-		if inst_enums.size() == ignore_previous_insts_index + 1:
-			inst_enums.clear()
-			in_insts.clear()
+	var ignorance_index: int = -1
+	
+	# !!! "IGNORE_FOLLOWING_INSTRUCTIONS" instruction?
+	
+	# Check for a (the lastmost) "IGNORE_THE_PREVIOUS_INSTRUCTIONS" instruction, and act / modify the list accordingly.
+	match instructions_set:
+		INCOMING:
+			ignorance_index = inst_enums.rfind(IN_INST.IGNORE_THE_PREVIOUS_INSTRUCTIONS)
+		OUTGOING:
+			ignorance_index = inst_enums.rfind(OUT_INST.IGNORE_THE_PREVIOUS_INSTRUCTIONS)
+	if ignorance_index != -1:
+		if inst_enums.size() == ignorance_index + 1:
+			# If the last instruction states to ignore all previous instructions, then there's nothing to execute.
+			return OK
 		else:
-			inst_enums = inst_enums.slice(ignore_previous_insts_index + 1)
-			in_insts = in_insts.slice(ignore_previous_insts_index + 1)
+			inst_enums = inst_enums.slice(ignorance_index + 1)
+			instructions = instructions.slice(ignorance_index + 1)
 	
-	# Execute the list of instructions:
-	for i in inst_enums.size():
-		match inst_enums[i]:
-			IN_INST.SKIP:
-				continue
-			IN_INST.WAIT_FOR_MAIN_THREAD:
-				mutex.lock()
-				out_instructions.append(OUT_INST.WAITING_FOR_MAIN_THREAD)
-				mutex.unlock()
-				semaphore.wait()
-			IN_INST.SAVE_ALL_LOADED_CHUNKS:
-				# !!! Add file saving functionality later!
-				pass
-			IN_INST.PING_MAIN:
-				mutex.lock()
-				out_instructions.append(OUT_INST.PING)
-				mutex.unlock()
-			_:
-				push_error("Unknown/unsupported in-instruction enum: ", inst_enums[i])
-				continue
+	# Execute the finalized list of instructions, in order of first to last:
+	match instructions_set:
+		INCOMING:
+			for i in inst_enums.size():
+				match inst_enums[i]:
+					IN_INST.SKIP:
+						continue
+					IN_INST.WAIT_FOR_MAIN_THREAD:
+						mutex.lock()
+						out_instructions.append(OUT_INST.WAITING_FOR_MAIN_THREAD)
+						mutex.unlock()
+						semaphore.wait()
+						continue
+					IN_INST.SAVE_ALL_LOADED_CHUNKS:
+						# !!! Add file saving functionality later!
+						push_warning("(The functionality of saving chunk data to files has not yet been implimented.)")
+						continue
+					IN_INST.GIVE_MAIN_THREAD_A_SIGNAL_TO_EMIT:
+						if typeof(instructions[i][1]) == TYPE_SIGNAL:
+							mutex.lock()
+							out_instructions.append([OUT_INST.EMIT_RECIEVED_SIGNAL, instructions[i][1]])
+							mutex.unlock()
+						else:
+							push_error("Expected associated Signal type.")
+						continue
+					_:
+						push_error("Unknown/unsupported incoming-instruction enum: ", inst_enums[i])
+						continue
+		OUTGOING:
+			for i in inst_enums.size():
+				match inst_enums[i]:
+					OUT_INST.SKIP:
+						continue
+					OUT_INST.EMIT_RECIEVED_SIGNAL:
+						if typeof(instructions[i][1]) == TYPE_SIGNAL:
+							instructions[i][1].emit()
+						else:
+							push_error("Expected associated Signal type.")
+						continue
+					_:
+						push_error("Unknown/unsupported outgoing-instruction enum: ", inst_enums[i])
+						continue
 	
-	return
+	return OK
 
 func refresh_hzz_to_chunk_i():
 	hzz_to_chunk_i.clear()
@@ -242,10 +302,10 @@ func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
 		)
 		return FAILED
 	
-	# All of the chunk's + immediately surrounding tile data needed for calculations.
+	# For all of the chunk's + immediately surrounding tile data needed for calculations.
 	var tile_shapes: PackedByteArray = []
 	var tile_subs: PackedInt32Array = []
-	# Determined information to update the chunk's data with:
+	# For generated new data which will replace the chunk's outdated data:
 	var chunk_occs: PackedByteArray = []
 	
 	# !!! get data of all chunk tiles + sorrounding chunks' tps' tiles.
@@ -263,27 +323,18 @@ func unpause_cm_thread():
 func _on_pausemenu_saveandquit_pressed():
 	mutex.lock()
 	in_instructions.append_array([
-		IN_INST.IGNORE_PREVIOUS_INSTRUCTIONS, 
+		IN_INST.IGNORE_THE_PREVIOUS_INSTRUCTIONS, 
 		IN_INST.SAVE_ALL_LOADED_CHUNKS,
-		IN_INST.PING_MAIN,
+		[IN_INST.GIVE_MAIN_THREAD_A_SIGNAL_TO_EMIT, chunks_manager_is_ready],
 	])
 	mutex.unlock()
 	
 	var is_cm_done: bool = false
-	while true:
-		mutex.lock()
-		if out_instructions.has(OUT_INST.PING):
-			is_cm_done = true
-		mutex.unlock()
-		if is_cm_done:
-			break
-		else:
-			# Wait 1/60th of a second:
-			await get_tree().create_timer(0.0166).timeout
+	await chunks_manager_is_ready
 	
 	mutex.lock()
 	exit_thread = true
 	mutex.unlock()
 	cm_thread.wait_to_finish()
 	
-	chunk_manager_thread_ended.emit()
+	chunks_manager_thread_ended.emit()
