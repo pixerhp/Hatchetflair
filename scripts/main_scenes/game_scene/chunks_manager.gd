@@ -350,7 +350,6 @@ func _on_pausemenu_saveandquit_pressed():
 	])
 	mutex.unlock()
 	
-	var is_cm_done: bool = false
 	await chunks_manager_is_ready
 	
 	mutex.lock()
