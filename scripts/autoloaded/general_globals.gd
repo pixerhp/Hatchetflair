@@ -17,6 +17,7 @@ extends Node
 
 const GAME_NAME: String = "Hatchetflair"
 const GAME_PHASE: String = "pre-alpha"
+# !!! consider whether the version should be declared in project settings' "version" instead.
 const V_MODEL: String = "1" # (the engine/recoding attempt at making the whole game.)
 const V_MAJOR: String = "2" # (big content milestones, resets minor number.)
 const V_MINOR: String = "0" # (regular content updates, resets patch number.)
