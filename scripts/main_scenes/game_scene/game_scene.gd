@@ -11,7 +11,12 @@ var cam_speed = 20
 
 var previous_mouse_position: Vector2 = Vector2(0, 0)
 var fast_cam_flying_held_duration: float = 0
+var test_num: int = 0 #!!1 delete later
 func _process(delta):
+	test_num += 1
+	if posmod(test_num, 60) == 0:
+		print("rough fps: ", (1.0 / delta))
+	
 	# Toggle the pause menu if its associated key is pressed.
 	# !!! [in the future, esc should also be able to close out of other things WITHOUT opening this menu.]
 	if Input.is_action_just_pressed("game_special_pause_menu") and not $SettingsMenu.visible:

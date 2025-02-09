@@ -16,8 +16,9 @@ run/main_scene="res://scenes/main_scenes/main_menu.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Hatchetflair"
 config/features=PackedStringArray("4.2", "GL Compatibility")
-boot_splash/image="res://assets/icons/hf_icon.png"
-config/icon="res://assets/icons/hf_icon.png"
+boot_splash/image="res://assets/icons/hf_icon_opaque.png"
+config/icon="res://assets/icons/hf_icon_opaque.png"
+config/windows_native_icon="res://assets/icons/hf_icon_opaque.ico"
 
 [autoload]
 
