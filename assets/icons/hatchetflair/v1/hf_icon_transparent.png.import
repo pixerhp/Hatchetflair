@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ce3go6khgiwpg"
-path="res://.godot/imported/hf_v2_large.png-4b0caf48594187b6d7faa296a5b1982c.ctex"
+uid="uid://bnjultwpk2c5n"
+path="res://.godot/imported/hf_icon_transparent.png-32c17dc1e2957e2a1e49bc6e73982f41.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/hf_v2_large.png"
-dest_files=["res://.godot/imported/hf_v2_large.png-4b0caf48594187b6d7faa296a5b1982c.ctex"]
+source_file="res://assets/icons/hatchetflair/v1/hf_icon_transparent.png"
+dest_files=["res://.godot/imported/hf_icon_transparent.png-32c17dc1e2957e2a1e49bc6e73982f41.ctex"]
 
 [params]
 

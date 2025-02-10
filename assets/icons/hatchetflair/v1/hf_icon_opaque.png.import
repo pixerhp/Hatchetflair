@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cu12j5wrk8ixs"
-path="res://.godot/imported/hf_icon_opaque.png-fea43b681600f1e3bb01b8d4491c4143.ctex"
+path="res://.godot/imported/hf_icon_opaque.png-42869b01114844189aee6b923d1aac90.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/hf_icon_opaque.png"
-dest_files=["res://.godot/imported/hf_icon_opaque.png-fea43b681600f1e3bb01b8d4491c4143.ctex"]
+source_file="res://assets/icons/hatchetflair/v1/hf_icon_opaque.png"
+dest_files=["res://.godot/imported/hf_icon_opaque.png-42869b01114844189aee6b923d1aac90.ctex"]
 
 [params]
 
