@@ -45,13 +45,22 @@ var player_displayname: String = "Guest"
 var my_origin_offset: Vector3i = Vector3i(0, 0, 0)
 
 # !!! the below are not currently used, but should serve as future reference for stuff that should be.
-enum playmode {
-	SPECTATOR, # Spectate the world and its happenigs without colliding or interacting with it.
-	SURVIVOR, # Live in the world, controlling a player character.
-	BUILDER, # Build/destroy anything with conveniences like invincibility, flying, the catalog, commands, etc.
-	DESIGNER, # A more advanced builder mode, design the world; add/remove custom content like entities and items.
+enum PLAYMODE {
+	SPECTATOR,
+		# Spectate the world passively without colliding or interacting with it.
+	SURVIVOR, 
+		# Live vulnerably in the world as a player character.
+	BUILDER, 
+		# Build, destroy, and terraform anything easily with unlimited resources and ability.
+		# Has catalog access, invulnerability, flying, toggleable collision, associated commands access, etc.
+	DESIGNER, 
+		# More powerful than builder mode, specialized for creating datapacks/mods that alter game content.
+		# Create/modify/remove substances/etc, entities and behaviors, etc.
+	DIRECTOR,
+		# Like builder mode, but specialized for creating photo/video renders, inspired by gmod animations.
+		# Entities and objects can told exactly what to do/say as actors of an animation script.
 }
-var player_playmode = playmode.SPECTATOR
+var my_playmode = PLAYMODE.SPECTATOR
 
 var draw_debug_info_text: bool = true
 var draw_debug_chunk_borders: bool = false
