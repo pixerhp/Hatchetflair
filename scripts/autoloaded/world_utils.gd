@@ -82,8 +82,7 @@ class Chunk:
 		ccoords = in_ccoords
 		tp_is_atm_bits.create(Vector2i(4, 4*4))
 		tp_is_loaded_bits.create(Vector2i(4, 4*4))
-		terrain_pieces.resize(4**3)
-		terrain_pieces.fill(TerrainPiece.new())
+		reset_terrain_pieces()
 		return
 	
 	# A chunk's terrain is broken up into 4^3 pieces, 
@@ -108,25 +107,30 @@ class Chunk:
 			tiles_opacs.clear()
 			return
 	
+	func reset_terrain_pieces():
+		terrain_pieces.clear()
+		terrain_pieces.resize(4**3)
+		terrain_pieces.fill(TerrainPiece.new())
+	
 	
 	# !!! update bitstuff to use packed byte array
 	# (Can be done here as chunk terrain generation is not dependant on surrounding chunks' data.)
 	func generate_natural_terrain(
-		tps_to_generate: int = 0b1111111111111111111111111111111111111111111111111111111111111111, 
-		clear_unrelated_tp_data: bool = false, 
+		tps_to_generate: PackedByteArray = [255, 255, 255, 255, 255, 255, 255, 255], # 64 1's in binary 
+		also_clear_unrelated_tp_data: bool = false, 
 		seed: int = WorldUtils.world_seed,
-	):
-		if clear_unrelated_tp_data:
-			for tp in terrain_pieces:
-				tp.clear_all_data()
-		else:
-			# clear the data of all terrain pieces who's terrain is about to be (re)generated.
-			for i in terrain_pieces.size():
-				if tps_to_generate & (0b0000000000000001 << i):
-					terrain_pieces[i].clear_all_data()
+	) -> Error:
+		if terrain_pieces.size() != (4**3):
+			push_error("Chunk has ", terrain_pieces.size(), " terrain pieces (instead of 64).")
+			reset_terrain_pieces()
 		
+		for tp_i in (4**3):
+			if tps_to_generate[tp_i/8] & (0b1 << posmod(tp_i, 8)):
+				terrain_pieces[tp_i].clear_all_data()
+				
+				# !!! write terrain generation testing code here
+				
+			elif also_clear_unrelated_tp_data:
+				terrain_pieces[tp_i].clear_all_data()
 		
-		# !!! write terrain generation testing code here
-		
-		
-		return
+		return OK
