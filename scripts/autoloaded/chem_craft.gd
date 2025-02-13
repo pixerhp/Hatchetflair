@@ -1,6 +1,24 @@
 # A script that defines substances, their relations to other elements and reactions to temperature,
 # chemistry, crafting of things into other things, composite objects and what substances they're made of, etc.
 
+# HATCHETFLAIR STANDARD UNITS:
+# length 
+	# metrin (m) -- (equal to 1.5 imperial feet.)
+# volume 
+	# cubic metrin (m³)
+	# (hf) liter (l) -- (defined as 1/100th of a cubic metrin, is equal to ~0.95569357 irl metric liters.)
+	# (hf) gallon (gl) -- (defined as 4 (hf) liters, is equal to ~1.00987 USA liquid gallons.)
+# mass
+	# !!! ((hf) gram (g) ???; "pam"/"pram" (p)?) -- (equal to 1 irl metric kilogram.)
+# time
+	# second (s)
+# energy
+	# joule (j)
+# power
+	# watt (w)
+# force
+	# !!! newtons analog?
+
 extends Node
 
 
@@ -40,7 +58,7 @@ var bad_substance: Substance = Substance.new(["bad substance"], [], -1)
 # For example, the dyes have different crafting/chemistry/rendering, but can share physical properties.
 class SubsProp:
 	var name: String = "" 
-		# Used not in functional gameplay, but in ease of linking substances to their properties.
+		# For ease of linking substances to their properties regardless of subsprops list element order.
 	
 	# not state of matter dependant:
 	var ion_emmission_color: Color 
@@ -111,6 +129,43 @@ var subsprop_name_to_i: Dictionary = {}
 func get_subsprop(subsprop_name: String) -> SubsProp:
 	return subsprops[subsprop_name_to_i[subsprop_name]]
 
+
+
+enum REACTION_TYPE {
+	# State of matter changes:
+	MELT_FREEZE,
+	BOIL_CONDENSATE,
+	SUBLIMATE_DEPOSIT,
+	# Chemistry:
+	DECOMPOSITION, # beyond a temperature, breaks down into (usually several) different substances.
+	PYROLYSIS, # like decomposition, but requires the absense of one or more (usually fluid) substances.
+	COMBINATION, # where two or more substances combine together into one or more substances.
+	
+}
+
+# !!! What is chemistry actually functionally?
+	# one or more mixed/together substances, 
+	# in the absense of 0 or more substances, 
+	# beyond or in-relation to a certain temperature(s),
+	# result in one or more substances,
+	# producing/removing some amount of heat.
+
+class ChemReaction :
+	var required_subs: PackedInt32Array = []
+		# the input substances of the reaction.
+	# !!! ratio used of required substances?
+	var disrequired_subs: PackedInt32Array = [] 
+		# substances which prevent the reaction, think of pyrolysis requiring a lack of oxygen.
+	var activation_temp: float = -1 # (using the standard absolute scale temperature unit, probably kelvin.)
+		# the minimum temperature required for the reaction to occur.
+	# !!! reaction speed formula in relation to temperature?
+	# !!! catalyst substances and how much / in what way they change reaction speed / temperature?
+		# (this can include inhibitors which slow down a reaction and/or make the activation temp higher.)
+
+var chem_reactions: Array[ChemReaction] = []
+var chem_reaction_name_to_i: Dictionary = {}
+func get_chem_reaction(chem_reaction_name: String) -> ChemReaction:
+	return chem_reactions[chem_reaction_name_to_i[chem_reaction_name]]
 
 # !!! define substances' relation with other substances, their melting/boiling/decomposition/etc temperatures, etc.
 
