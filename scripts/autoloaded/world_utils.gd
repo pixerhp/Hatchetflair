@@ -46,10 +46,21 @@ class Chunk:
 		# Stores references to all of this chunk's associated scene tree nodes, for quick access to them.
 	var ccoords: Vector3i = Vector3i(0,0,0)
 		# if a mobile/dynamic chunk, then this could get reused for which one this chunk is relative to a group.
-	var tp_is_atm_bits: int = 0b0000000000000000 
+	
+	# NOTE: terrain piece bitstuff works like this:
+		# of the 64 (4*4*4) terrain pieces, in hzz format, the first tp is the (0,0,0) one,
+		# the second tp is the (0,0,1) one, etc up until the fourth tp, (0,0,3).
+		# then the z1 increments and z2 resets back to 0, so the fifth tp is the (0,1,0) one.
+		# the patten continues until both z1 and z2 are 3, and then h increments by 1 and z1 & z2 are set to 0.
+		# the last tp is (3,3,3), which is the 64th tp.
+		#
+		# the 64 bits are stored using an 8 element long packed byte array, 
+		# where the first bit in the the first byte corresponds to the first tp.
+	var tp_is_atm_bits: BitMap = BitMap.new()
 		# Unloaded TPs can stay unloaded if it's known that they're just atmosphere.
-	var tp_is_loaded_bits: int = 0b0000000000000000 
+	var tp_is_loaded_bits: BitMap = BitMap.new()
 		# Whether each terrain piece has its data loaded in ram.
+	
 	var is_determinable_info_accurate: bool = false
 	var terrain_pieces: Array[TerrainPiece] = []
 	# var terrain_objects
@@ -68,9 +79,11 @@ class Chunk:
 	var biome: int = 0 # !!! not yet used, will probably store a biome enum value.
 	
 	func _init(in_ccoords: Vector3i):
+		ccoords = in_ccoords
+		tp_is_atm_bits.create(Vector2i(4, 4*4))
+		tp_is_loaded_bits.create(Vector2i(4, 4*4))
 		terrain_pieces.resize(4**3)
 		terrain_pieces.fill(TerrainPiece.new())
-		ccoords = in_ccoords
 		return
 	
 	# A chunk's terrain is broken up into 4^3 pieces, 
@@ -96,9 +109,10 @@ class Chunk:
 			return
 	
 	
+	# !!! update bitstuff to use packed byte array
 	# (Can be done here as chunk terrain generation is not dependant on surrounding chunks' data.)
 	func generate_natural_terrain(
-		tps_to_generate: int = 0b1111111111111111, 
+		tps_to_generate: int = 0b1111111111111111111111111111111111111111111111111111111111111111, 
 		clear_unrelated_tp_data: bool = false, 
 		seed: int = WorldUtils.world_seed,
 	):

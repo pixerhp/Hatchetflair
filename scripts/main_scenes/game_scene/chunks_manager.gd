@@ -417,6 +417,9 @@ func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
 	# For generated new data which will replace the chunk's outdated data:
 	var chunk_occs: PackedByteArray = []
 	
+	
+	#ensure_load_static_chunk_data()
+	
 	# !!! get data of all chunk tiles + sorrounding chunks' tps' tiles.
 	
 	# !!! go tile-by-tile, checking for each scenario that would affect occ.
@@ -424,6 +427,30 @@ func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
 	# !!! set the actual chunk's occs to the calculated chunk_occs
 	
 	return OK
+
+# Ensures that certain chunks (specifically certain terrain pieces) either are or become loaded.
+func ensure_chunk_tps_loaded(ccoords: Vector3i, tps_bitmap: BitMap):
+	if is_chunk_tps_loaded(ccoords, tps_bitmap):
+		return
+	else:
+		pass
+
+func is_chunk_tps_loaded(ccoords: Vector3i, tps_bitmap: BitMap) -> bool:
+	# (This assumes that hzz_to_chunk_i is accurate/up-to-date.)
+	if hzz_to_chunk_i.has(ccoords):
+		static_chunks[hzz_to_chunk_i[ccoords]]
+	else:
+		return false
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	return true
 
 # (Call with the main thread to make the cm thread stop waiting.)
 func unpause_cm_thread():

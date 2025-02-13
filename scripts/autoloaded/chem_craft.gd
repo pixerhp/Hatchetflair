@@ -83,6 +83,7 @@ enum SUBS_TAG { # "substance tag"
 }
 
 enum MESH_DETAILING_STYLE {
+	NONE,
 	BRICKS,
 	SHALE,
 }
