@@ -56,9 +56,9 @@ class Chunk:
 		#
 		# the 64 bits are stored using an 8 element long packed byte array, 
 		# where the first bit in the the first byte corresponds to the first tp.
-	var tp_is_atm_bits: BitMap = BitMap.new()
+	var tp_is_atm_bitstates: PackedByteArray = []
 		# Unloaded TPs can stay unloaded if it's known that they're just atmosphere.
-	var tp_is_loaded_bits: BitMap = BitMap.new()
+	var tp_is_loaded_bitstates: PackedByteArray = []
 		# Whether each terrain piece has its data loaded in ram.
 	
 	var is_determinable_info_accurate: bool = false
@@ -80,8 +80,8 @@ class Chunk:
 	
 	func _init(in_ccoords: Vector3i):
 		ccoords = in_ccoords
-		tp_is_atm_bits.create(Vector2i(4, 4*4))
-		tp_is_loaded_bits.create(Vector2i(4, 4*4))
+		tp_is_atm_bitstates.resize(8); tp_is_atm_bitstates.fill(0b11111111)
+		tp_is_loaded_bitstates.resize(8); tp_is_loaded_bitstates.fill(0b11111111)
 		reset_terrain_pieces()
 		return
 	

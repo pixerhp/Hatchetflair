@@ -76,6 +76,16 @@ func _enter_tree() -> void:
 	_refresh_window_title()
 	_initialize_inputmap_defaults()
 	
+	var required_tps: PackedByteArray = [0b00011000, 0b01100100, 0b00000000, 0b00001001]
+	var tps_states: PackedByteArray =   [0b01111000, 0b00001100, 0b00000000, 0b00000001]
+	
+	for i in 4:
+		if not (~ ((~ required_tps[i]) | (required_tps[i] & tps_states[i]))):
+			print("PASSED")
+		else:
+			print("FAILED")
+	
+	
 	return
 
 

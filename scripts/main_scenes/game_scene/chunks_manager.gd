@@ -429,16 +429,24 @@ func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
 	return OK
 
 # Ensures that certain chunks (specifically certain terrain pieces) either are or become loaded.
-func ensure_chunk_tps_loaded(ccoords: Vector3i, tps_bitmap: BitMap):
-	if is_chunk_tps_loaded(ccoords, tps_bitmap):
+func ensure_chunk_tps_loaded(ccoords: Vector3i, tps_bitstates: PackedByteArray):
+	if is_chunk_tps_loaded(ccoords, tps_bitstates):
 		return
 	else:
 		pass
 
-func is_chunk_tps_loaded(ccoords: Vector3i, tps_bitmap: BitMap) -> bool:
-	# (This assumes that hzz_to_chunk_i is accurate/up-to-date.)
+# (Note: Assumes that hzz_to_chunk_i is accurate/up-to-date.)
+func is_chunk_tps_loaded(ccoords: Vector3i, required_tps: PackedByteArray) -> bool:
 	if hzz_to_chunk_i.has(ccoords):
-		static_chunks[hzz_to_chunk_i[ccoords]]
+		var tps_states: PackedByteArray = static_chunks[hzz_to_chunk_i[ccoords]].tp_is_loaded_bitstates.duplicate()
+		for i in 8:
+			tps_states[i] = tps_states[i] | static_chunks[hzz_to_chunk_i[ccoords]].tp_is_atm_bitstates[i]
+		for i in 8:
+			if (~ ((~ required_tps[i]) | (required_tps[i] & tps_states[i]))) == 0b00000000:
+				continue
+			else:
+				return false
+		return true
 	else:
 		return false
 	
