@@ -71,11 +71,11 @@ size_flags_stretch_ratio = 0.2
 [node name="GameNameTitle" type="RichTextLabel" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 6
-theme_override_constants/shadow_offset_y = 6
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_constants/outline_size = 4
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/shadow_offset_x = 6
 theme_override_font_sizes/normal_font_size = 64
 bbcode_enabled = true
 text = "[game name title]"
@@ -99,11 +99,11 @@ size_flags_stretch_ratio = 0.01
 
 [node name="WelcomeMessage" type="RichTextLabel" parent="Menus/TitleMenu/TitleUI"]
 layout_mode = 2
+theme_override_font_sizes/bold_italics_font_size = 28
+theme_override_font_sizes/italics_font_size = 28
+theme_override_font_sizes/mono_font_size = 28
 theme_override_font_sizes/normal_font_size = 28
 theme_override_font_sizes/bold_font_size = 28
-theme_override_font_sizes/italics_font_size = 28
-theme_override_font_sizes/bold_italics_font_size = 28
-theme_override_font_sizes/mono_font_size = 28
 bbcode_enabled = true
 text = "[welcome message]"
 fit_content = true
@@ -196,11 +196,11 @@ size_flags_stretch_ratio = 0.0
 [node name="VersionText" type="RichTextLabel" parent="Menus/TitleMenu/TitleUI/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/bold_italics_font_size = 16
+theme_override_font_sizes/italics_font_size = 16
+theme_override_font_sizes/mono_font_size = 16
 theme_override_font_sizes/normal_font_size = 16
 theme_override_font_sizes/bold_font_size = 16
-theme_override_font_sizes/italics_font_size = 16
-theme_override_font_sizes/bold_italics_font_size = 16
-theme_override_font_sizes/mono_font_size = 16
 bbcode_enabled = true
 text = "[version text]"
 fit_content = true
@@ -259,16 +259,16 @@ text = "Back"
 [node name="MenuTitle" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/TopNodesContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 6
-theme_override_constants/shadow_offset_y = 6
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_constants/outline_size = 4
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/shadow_offset_x = 6
+theme_override_font_sizes/bold_italics_font_size = 48
+theme_override_font_sizes/italics_font_size = 48
+theme_override_font_sizes/mono_font_size = 48
 theme_override_font_sizes/normal_font_size = 48
 theme_override_font_sizes/bold_font_size = 48
-theme_override_font_sizes/italics_font_size = 48
-theme_override_font_sizes/bold_italics_font_size = 48
-theme_override_font_sizes/mono_font_size = 48
 bbcode_enabled = true
 text = "[center][wave freq=4 amp=10]User Accounts Menu[/wave][/center]"
 fit_content = true
@@ -298,11 +298,11 @@ size_flags_horizontal = 3
 
 [node name="SelectOrManageText" type="RichTextLabel" parent="Menus/AccountsMenu/GeneralScreen/VBoxContainer/HBoxContainer/MajorityVContainer"]
 layout_mode = 2
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
 theme_override_font_sizes/normal_font_size = 32
 theme_override_font_sizes/bold_font_size = 32
-theme_override_font_sizes/italics_font_size = 32
-theme_override_font_sizes/bold_italics_font_size = 32
-theme_override_font_sizes/mono_font_size = 32
 bbcode_enabled = true
 text = "[center]Select or Manage Account:[/center]"
 fit_content = true
@@ -325,11 +325,9 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 3
 selected = 0
+item_count = 3
 popup/item_0/text = "GUEST ACCOUNT"
-popup/item_0/id = 0
-popup/item_1/text = ""
 popup/item_1/id = 1
 popup/item_1/disabled = true
 popup/item_1/separator = true
@@ -358,7 +356,6 @@ item_count = 3
 item_0/text = "View Advanced"
 item_0/id = 2
 item_1/text = "Edit Username"
-item_1/id = 0
 item_2/text = "Delete Account"
 item_2/id = 1
 
@@ -387,11 +384,11 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
+theme_override_font_sizes/bold_italics_font_size = 24
+theme_override_font_sizes/italics_font_size = 24
+theme_override_font_sizes/mono_font_size = 24
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 24
-theme_override_font_sizes/italics_font_size = 24
-theme_override_font_sizes/bold_italics_font_size = 24
-theme_override_font_sizes/mono_font_size = 24
 bbcode_enabled = true
 text = "<not initialized>"
 fit_content = true
@@ -446,11 +443,11 @@ theme_override_constants/margin_right = 8
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
 theme_override_font_sizes/normal_font_size = 20
 theme_override_font_sizes/bold_font_size = 20
-theme_override_font_sizes/italics_font_size = 20
-theme_override_font_sizes/bold_italics_font_size = 20
-theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
 text = "[color=darkgray]Info & tips about the accounts system:[/color][color=lightgray]
 
@@ -513,16 +510,16 @@ text = "Back"
 [node name="MenuTitle" type="RichTextLabel" parent="Menus/AccountsMenu/ViewMoreAccountInfoScreen/VBoxContainer/TopNodesContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 6
-theme_override_constants/shadow_offset_y = 6
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_constants/outline_size = 4
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/shadow_offset_x = 6
+theme_override_font_sizes/bold_italics_font_size = 48
+theme_override_font_sizes/italics_font_size = 48
+theme_override_font_sizes/mono_font_size = 48
 theme_override_font_sizes/normal_font_size = 48
 theme_override_font_sizes/bold_font_size = 48
-theme_override_font_sizes/italics_font_size = 48
-theme_override_font_sizes/bold_italics_font_size = 48
-theme_override_font_sizes/mono_font_size = 48
 bbcode_enabled = true
 text = "[center][wave freq=4 amp=10]Advanced Account Info[/wave][/center]"
 fit_content = true
@@ -561,11 +558,11 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
 theme_override_font_sizes/normal_font_size = 20
 theme_override_font_sizes/bold_font_size = 20
-theme_override_font_sizes/italics_font_size = 20
-theme_override_font_sizes/bold_italics_font_size = 20
-theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
 text = "[color=lightgray]<info not yet loaded>"
 
@@ -619,11 +616,11 @@ layout_mode = 2
 
 [node name="TitleText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
 theme_override_font_sizes/normal_font_size = 32
 theme_override_font_sizes/bold_font_size = 32
-theme_override_font_sizes/italics_font_size = 32
-theme_override_font_sizes/bold_italics_font_size = 32
-theme_override_font_sizes/mono_font_size = 32
 bbcode_enabled = true
 text = "[center]ACCOUNT CREATION[/center]"
 fit_content = true
@@ -638,11 +635,11 @@ theme_override_constants/margin_right = 16
 
 [node name="NoteText" type="RichTextLabel" parent="Menus/AccountsMenu/CreateNewAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/NoteTextMargin"]
 layout_mode = 2
+theme_override_font_sizes/bold_italics_font_size = 16
+theme_override_font_sizes/italics_font_size = 16
+theme_override_font_sizes/mono_font_size = 16
 theme_override_font_sizes/normal_font_size = 16
 theme_override_font_sizes/bold_font_size = 16
-theme_override_font_sizes/italics_font_size = 16
-theme_override_font_sizes/bold_italics_font_size = 16
-theme_override_font_sizes/mono_font_size = 16
 bbcode_enabled = true
 text = "	Note: Account usernames may only contain lowercase letters & numbers. (Displaynames may contain anything.)"
 fit_content = true
@@ -780,11 +777,11 @@ layout_mode = 2
 
 [node name="TitleText" type="RichTextLabel" parent="Menus/AccountsMenu/RenameUsernameScreen/HBoxContainer/VBoxContainer/AccountRenamePanel/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
 theme_override_font_sizes/normal_font_size = 24
 theme_override_font_sizes/bold_font_size = 20
-theme_override_font_sizes/italics_font_size = 20
-theme_override_font_sizes/bold_italics_font_size = 20
-theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
 text = "[center]ACCOUNT RENAMING[/center]"
 fit_content = true
@@ -882,11 +879,11 @@ layout_mode = 2
 
 [node name="TitleText" type="RichTextLabel" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/bold_italics_font_size = 32
+theme_override_font_sizes/italics_font_size = 32
+theme_override_font_sizes/mono_font_size = 32
 theme_override_font_sizes/normal_font_size = 32
 theme_override_font_sizes/bold_font_size = 32
-theme_override_font_sizes/italics_font_size = 32
-theme_override_font_sizes/bold_italics_font_size = 32
-theme_override_font_sizes/mono_font_size = 32
 bbcode_enabled = true
 text = "[center]ACCOUNT DELETION[/center]"
 fit_content = true
@@ -902,11 +899,11 @@ theme_override_constants/margin_right = 16
 
 [node name="NoteText" type="RichTextLabel" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer/NoteTextMargin"]
 layout_mode = 2
+theme_override_font_sizes/bold_italics_font_size = 16
+theme_override_font_sizes/italics_font_size = 16
+theme_override_font_sizes/mono_font_size = 16
 theme_override_font_sizes/normal_font_size = 16
 theme_override_font_sizes/bold_font_size = 16
-theme_override_font_sizes/italics_font_size = 16
-theme_override_font_sizes/bold_italics_font_size = 16
-theme_override_font_sizes/mono_font_size = 16
 bbcode_enabled = true
 text = "	Deleting an account is a [i]permanent[/i] action and [i]cannot be undone.[/i] Be completely sure that you want to do this before proceeding.
 
@@ -919,11 +916,11 @@ layout_mode = 2
 
 [node name="RetypeText" type="RichTextLabel" parent="Menus/AccountsMenu/DeleteAccountScreen/HBoxContainer/VBoxContainer/PanelContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/bold_italics_font_size = 16
+theme_override_font_sizes/italics_font_size = 16
+theme_override_font_sizes/mono_font_size = 16
 theme_override_font_sizes/normal_font_size = 16
 theme_override_font_sizes/bold_font_size = 16
-theme_override_font_sizes/italics_font_size = 16
-theme_override_font_sizes/bold_italics_font_size = 16
-theme_override_font_sizes/mono_font_size = 16
 bbcode_enabled = true
 text = "[center]text: [random text goes here][/center]"
 fit_content = true
@@ -1014,16 +1011,16 @@ text = "Back"
 [node name="MenuTitle" type="RichTextLabel" parent="Menus/WorldsMenu/WorldsUI/TopNodes"]
 layout_mode = 2
 size_flags_horizontal = 6
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 6
-theme_override_constants/shadow_offset_y = 6
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_constants/outline_size = 4
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/shadow_offset_x = 6
+theme_override_font_sizes/bold_italics_font_size = 48
+theme_override_font_sizes/italics_font_size = 48
+theme_override_font_sizes/mono_font_size = 48
 theme_override_font_sizes/normal_font_size = 48
 theme_override_font_sizes/bold_font_size = 48
-theme_override_font_sizes/italics_font_size = 48
-theme_override_font_sizes/bold_italics_font_size = 48
-theme_override_font_sizes/mono_font_size = 48
 bbcode_enabled = true
 text = "[center][wave freq=4 amp=10]Owned Worlds:[/wave][/center]"
 fit_content = true
@@ -1312,16 +1309,16 @@ text = "Back"
 [node name="MenuTitle" type="RichTextLabel" parent="Menus/JoinMenu/JoinUI/TopNodes"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 6
-theme_override_constants/shadow_offset_y = 6
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_constants/outline_size = 4
+theme_override_constants/shadow_offset_y = 6
+theme_override_constants/shadow_offset_x = 6
+theme_override_font_sizes/bold_italics_font_size = 48
+theme_override_font_sizes/italics_font_size = 48
+theme_override_font_sizes/mono_font_size = 48
 theme_override_font_sizes/normal_font_size = 48
 theme_override_font_sizes/bold_font_size = 48
-theme_override_font_sizes/italics_font_size = 48
-theme_override_font_sizes/bold_italics_font_size = 48
-theme_override_font_sizes/mono_font_size = 48
 bbcode_enabled = true
 text = "[center][wave freq=4 amp=10]Remembered Hosts:[/wave][/center]"
 fit_content = true
@@ -1591,11 +1588,11 @@ size_flags_stretch_ratio = 0.2
 
 [node name="TitleText" type="RichTextLabel" parent="Menus/CreditsMenu/CreditsUI"]
 layout_mode = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/shadow_offset_y = 4
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_constants/outline_size = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 4
 theme_override_font_sizes/normal_font_size = 35
 bbcode_enabled = true
 text = "[center]Hatchetflair is made possible
@@ -1636,14 +1633,14 @@ size_flags_stretch_ratio = 0.1
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 3
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.501961)
 theme_override_constants/outline_size = 4
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
 theme_override_font_sizes/normal_font_size = 20
 theme_override_font_sizes/bold_font_size = 20
-theme_override_font_sizes/italics_font_size = 20
-theme_override_font_sizes/bold_italics_font_size = 20
-theme_override_font_sizes/mono_font_size = 20
 bbcode_enabled = true
 text = "CREDITS TEXT NOT YET SET
 
