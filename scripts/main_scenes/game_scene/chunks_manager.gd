@@ -430,10 +430,11 @@ func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
 
 # Ensures that certain chunks (specifically certain terrain pieces) either are or become loaded.
 func ensure_chunk_tps_loaded(ccoords: Vector3i, tps_bitstates: PackedByteArray):
-	if is_chunk_tps_loaded(ccoords, tps_bitstates):
+	var tps_to_load: PackedByteArray = determine_which_chunk_tps_need_loading(ccoords, tps_bitstates, true)
+	if tps_to_load == PackedByteArray([0,0,0,0,0,0,0,0]):
 		return
 	else:
-		pass
+		load_static_chunk_data(ccoords, tps_to_load)
 
 # (Note: If only need to know whether *all* required chunk tps are loaded, then this func is faster for that.)
 func is_chunk_tps_loaded(
@@ -476,6 +477,38 @@ func determine_which_chunk_tps_need_loading(
 	for i in 8:
 		result[i] = required_tps[i] & (~ tps_states[i])
 	return result
+
+func load_static_chunk_data(
+	ccoords: Vector3i,
+	required_tps: PackedByteArray = [255,255,255,255,255,255,255,255],
+	# !!! terrain objects, structures, etc?
+) -> Error:
+	if not hzz_to_chunk_i.has(ccoords):
+		static_chunks.append(WorldUtils.Chunk.new(ccoords))
+		hzz_to_chunk_i[ccoords] = static_chunks.size() - 1
+	
+	# !!! see if requested chunk data exists stored in files and load it if it does.
+	
+	# !!! for any terrrain data which was requested but isn't stored, generate it from scratch.
+	
+	return OK
+
+func unload_static_chunk_data(ccoords: Vector3i) -> Error:
+	if not hzz_to_chunk_i.has(ccoords):
+		refresh_hzz_to_chunk_i()
+		if hzz_to_chunk_i.has(ccoords):
+			push_warning("hzz_to_chunk_i was originally found to be inaccurate.")
+		else:
+			push_error("No loaded static chunk with specified ccoords exists.")
+			return FAILED
+	
+	# !!! Save all of the chunk to files.
+	
+	# Remove the chunk object and its associated data from RAM:
+	static_chunks.remove_at(hzz_to_chunk_i[ccoords])
+	refresh_hzz_to_chunk_i()
+	
+	return OK
 
 # (Call with the main thread to make the cm thread stop waiting.)
 func unpause_cm_thread():
