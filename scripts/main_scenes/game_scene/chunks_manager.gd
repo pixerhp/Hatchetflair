@@ -56,7 +56,7 @@ enum OUT_INST { # list of outgoing-type instructions:
 	IGNORE_THE_FOLLOWING_INSTRUCTIONS, # Makes this and all following instructions array elements be ignored.
 		# (Takes priority over IGNORE_THE_PREVIOUS_INSTRUCTIONS.)
 	IGNORE_THE_PREVIOUS_INSTRUCTIONS, # Makes this and all prior instruction array elements be ignored.
-	WAITING_FOR_MAIN_THREAD, # !!! (NOT YET IMPLIMENTED RECIEVING-WISE ANYWHERE IN THE MAIN THREAD.)
+	WAITING_FOR_MAIN_THREAD,
 	EMIT_RECIEVED_SIGNAL,
 	#ALL_LOADED_CHUNKS_SAVED,
 }
@@ -82,7 +82,7 @@ func _process(delta):
 		DebugDraw.add_text("Static chunks stored in CM: " + str(static_chunks.size()))
 		mutex.unlock()
 	
-	# !!! later send player's ccoords (remember to account for my_origin_offset) and velocity.
+	# !!! later send player's ccoords (which account for my_origin_offset) and velocity.
 	mutex.lock()
 	in_instructions.append([
 		IN_INST.REGULAR_DATA_UPDATE, 
@@ -385,9 +385,11 @@ func do_work_quota():
 	var quota_remaining: int = work_quota
 	
 	# !!! code work quota things to do, like loading/unloading/re-lod-meshing chunks
-	# !!! each thing done reduces quota_remaining, usually by 1.
+	# !!! each thing done reduces quota_remaining, usually by 1 (but can be more for known expensive things.)
 	
-	# !!! pre while loop stuff, like ensuring the chunks immediately surrounding the player are loaded.
+	
+	# !!! pre while loop stuff which is always done, 
+		# like ensuring the chunks immediately surrounding the player are loaded.
 	
 	#while quota_remaining > 0:
 		#pass
