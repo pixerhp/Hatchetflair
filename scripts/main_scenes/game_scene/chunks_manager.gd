@@ -345,6 +345,10 @@ func process_instructions(instructions_set: int) -> Error:
 	
 	return OK
 
+# (Call with the main thread to make the cm thread stop waiting.)
+func unpause_cm_thread():
+	semaphore.post()
+
 func adjust_work_quota_size():
 	# Prevents weird should-be-impossible values (such as from int overflow.)
 	if updates_within_last_loop < 0:
@@ -507,14 +511,28 @@ func unload_static_chunk_data(ccoords: Vector3i) -> Error:
 	# !!! Save all of the chunk to files.
 	
 	# Remove the chunk object and its associated data from RAM:
-	static_chunks.remove_at(hzz_to_chunk_i[ccoords])
-	refresh_hzz_to_chunk_i()
+	clear_chunk(ccoords)
 	
 	return OK
 
-# (Call with the main thread to make the cm thread stop waiting.)
-func unpause_cm_thread():
-	semaphore.post()
+# Clears chunks from memory, DOESN'T SAVE THEM TO FILES FIRST (use unload chunks funcs for that.)
+func clear_chunk(ccoords: Vector3i) -> Error:
+	if hzz_to_chunk_i.has(ccoords):
+		static_chunks.remove_at(hzz_to_chunk_i[ccoords])
+		refresh_hzz_to_chunk_i()
+		return OK
+	else:
+		refresh_hzz_to_chunk_i()
+		if hzz_to_chunk_i.has(ccoords):
+			push_warning("hzz_to_chunk_i was originally found to be inaccurate.")
+			static_chunks.remove_at(hzz_to_chunk_i[ccoords])
+			refresh_hzz_to_chunk_i()
+			return OK
+		else:
+			return FAILED
+func clear_all_chunks(ccoords: Vector3i):
+	static_chunks.clear()
+	hzz_to_chunk_i.clear()
 
 func _on_pausemenu_saveandquit_pressed():
 	mutex.lock()
