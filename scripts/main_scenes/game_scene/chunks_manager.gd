@@ -435,30 +435,47 @@ func ensure_chunk_tps_loaded(ccoords: Vector3i, tps_bitstates: PackedByteArray):
 	else:
 		pass
 
-# (Note: Assumes that hzz_to_chunk_i is accurate/up-to-date.)
-func is_chunk_tps_loaded(ccoords: Vector3i, required_tps: PackedByteArray) -> bool:
-	if hzz_to_chunk_i.has(ccoords):
-		var tps_states: PackedByteArray = static_chunks[hzz_to_chunk_i[ccoords]].tp_is_loaded_bitstates.duplicate()
-		for i in 8:
-			tps_states[i] = tps_states[i] | static_chunks[hzz_to_chunk_i[ccoords]].tp_is_atm_bitstates[i]
-		for i in 8:
-			if (~ ((~ required_tps[i]) | (required_tps[i] & tps_states[i]))) == 0b00000000:
-				continue
-			else:
-				return false
-		return true
-	else:
+# (Note: If only need to know whether *all* required chunk tps are loaded, then this func is faster for that.)
+func is_chunk_tps_loaded(
+	ccoords: Vector3i, 
+	required_tps: PackedByteArray, 
+	ignore_unloaded_if_atm: bool = true,
+) -> bool:
+	if not hzz_to_chunk_i.has(ccoords):
 		return false
 	
+	var tps_states: PackedByteArray = static_chunks[hzz_to_chunk_i[ccoords]].tp_is_loaded_bitstates.duplicate()
+	if ignore_unloaded_if_atm:
+		for i in 8:
+			tps_states[i] |= static_chunks[hzz_to_chunk_i[ccoords]].tp_is_atm_bitstates[i]
 	
-	
-	
-	
-	
-	
-	
+	for i in 8:
+		if (~ ((~ required_tps[i]) | (required_tps[i] & tps_states[i]))) == 0b00000000:
+			continue
+		else:
+			return false
 	
 	return true
+
+func determine_which_chunk_tps_need_loading(
+	ccoords: Vector3i, 
+	required_tps: PackedByteArray, 
+	ignore_unloaded_if_atm: bool = true,
+) -> PackedByteArray:
+	if not hzz_to_chunk_i.has(ccoords):
+		# The entire chunk isn't loaded, so inherently all of the required tps will need to be loaded.
+		return required_tps
+	
+	var result: PackedByteArray = []
+	result.resize(8)
+	var tps_states: PackedByteArray = static_chunks[hzz_to_chunk_i[ccoords]].tp_is_loaded_bitstates.duplicate()
+	if ignore_unloaded_if_atm:
+		for i in 8:
+			tps_states[i] |= static_chunks[hzz_to_chunk_i[ccoords]].tp_is_atm_bitstates[i]
+	
+	for i in 8:
+		result[i] = required_tps[i] & (~ tps_states[i])
+	return result
 
 # (Call with the main thread to make the cm thread stop waiting.)
 func unpause_cm_thread():
