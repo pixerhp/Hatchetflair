@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://2oeh5cuu2ajo"
-path="res://.godot/imported/jingle_intrigue.mp3-5560cb52f07f7b71982405f477f77eda.mp3str"
+path="res://godot/imported/jingle_intrigue.mp3-5560cb52f07f7b71982405f477f77eda.mp3str"
 
 [deps]
 
 source_file="res://assets/sounds/jingle_intrigue.mp3"
-dest_files=["res://.godot/imported/jingle_intrigue.mp3-5560cb52f07f7b71982405f477f77eda.mp3str"]
+dest_files=["res://godot/imported/jingle_intrigue.mp3-5560cb52f07f7b71982405f477f77eda.mp3str"]
 
 [params]
 

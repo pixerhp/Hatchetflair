@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://d06jwngltje3r"
-path="res://.godot/imported/smiley.glb-1fc1b2e4d051580102bc9ab476366f25.scn"
+path="res://godot/imported/smiley.glb-1fc1b2e4d051580102bc9ab476366f25.scn"
 
 [deps]
 
 source_file="res://assets/models/smiley/smiley.glb"
-dest_files=["res://.godot/imported/smiley.glb-1fc1b2e4d051580102bc9ab476366f25.scn"]
+dest_files=["res://godot/imported/smiley.glb-1fc1b2e4d051580102bc9ab476366f25.scn"]
 
 [params]
 
@@ -17,6 +17,7 @@ nodes/root_type=""
 nodes/root_name=""
 nodes/apply_root_scale=true
 nodes/root_scale=1.0
+nodes/import_as_skeleton_bones=false
 meshes/ensure_tangents=true
 meshes/generate_lods=true
 meshes/create_shadow_meshes=true
@@ -28,6 +29,7 @@ animation/import=true
 animation/fps=24.0
 animation/trimming=false
 animation/remove_immutable_tracks=true
+animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={
 "animations": {
