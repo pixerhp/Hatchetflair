@@ -11,16 +11,19 @@ func _refresh_texts():
 	return
 
 func _update_title_text():
-	var title_text_node: RichTextLabel = $TitleUI/GameNameTitle
-	if title_text_node == null:
+	var node: RichTextLabel = $TitleUI/GameNameTitle
+	if node == null:
 		push_error("Game title text node not found.")
 		return
 	var text: String = (
-		"[center][rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=-2 amp=60]" +
-		Globals.GAME_NAME +
-		"[/wave][/rainbow][/center]"
+		"[center]" + 
+		"[img]" + "res://assets/icons/hatchetflair/v2/hf_v2.png" + "[/img]" +
+		"[rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=-2 amp=60]" +
+		 " " + Globals.GAME_NAME +
+		"[/wave][/rainbow]" + 
+		"[/center]"
 	)
-	title_text_node.text = text
+	node.text = text
 	return
 
 func _update_corner_version_text():
