@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://c8exkoxv6kdei"
-path="res://godot/imported/phuvel.gltf-e4ce33885d1361ac0e86f771eb7ff8a0.scn"
+path="res://.godot/imported/phuvel.gltf-e4ce33885d1361ac0e86f771eb7ff8a0.scn"
 
 [deps]
 
 source_file="res://assets/models/phuvel/phuvel.gltf"
-dest_files=["res://godot/imported/phuvel.gltf-e4ce33885d1361ac0e86f771eb7ff8a0.scn"]
+dest_files=["res://.godot/imported/phuvel.gltf-e4ce33885d1361ac0e86f771eb7ff8a0.scn"]
 
 [params]
 

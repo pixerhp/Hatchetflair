@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://d06jwngltje3r"
-path="res://godot/imported/smiley.glb-1fc1b2e4d051580102bc9ab476366f25.scn"
+path="res://.godot/imported/smiley.glb-1fc1b2e4d051580102bc9ab476366f25.scn"
 
 [deps]
 
 source_file="res://assets/models/smiley/smiley.glb"
-dest_files=["res://godot/imported/smiley.glb-1fc1b2e4d051580102bc9ab476366f25.scn"]
+dest_files=["res://.godot/imported/smiley.glb-1fc1b2e4d051580102bc9ab476366f25.scn"]
 
 [params]
 

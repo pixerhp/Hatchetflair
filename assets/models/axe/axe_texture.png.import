@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dvgs1y5jv74l0"
-path.bptc="res://godot/imported/axe_texture.png-01889b378af3daf8defffb0b3b6c33bb.bptc.ctex"
+path.bptc="res://.godot/imported/axe_texture.png-01889b378af3daf8defffb0b3b6c33bb.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -13,7 +13,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://assets/models/axe/axe_texture.png"
-dest_files=["res://godot/imported/axe_texture.png-01889b378af3daf8defffb0b3b6c33bb.bptc.ctex"]
+dest_files=["res://.godot/imported/axe_texture.png-01889b378af3daf8defffb0b3b6c33bb.bptc.ctex"]
 
 [params]
 

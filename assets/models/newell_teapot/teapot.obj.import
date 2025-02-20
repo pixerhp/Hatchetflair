@@ -4,14 +4,14 @@ importer="wavefront_obj"
 importer_version=1
 type="Mesh"
 uid="uid://bsd6yw3q7j8is"
-path="res://godot/imported/teapot.obj-2a034f33a236554f88dde57832801fbd.mesh"
+path="res://.godot/imported/teapot.obj-2a034f33a236554f88dde57832801fbd.mesh"
 
 [deps]
 
-files=["res://godot/imported/teapot.obj-2a034f33a236554f88dde57832801fbd.mesh"]
+files=["res://.godot/imported/teapot.obj-2a034f33a236554f88dde57832801fbd.mesh"]
 
 source_file="res://assets/models/newell_teapot/teapot.obj"
-dest_files=["res://godot/imported/teapot.obj-2a034f33a236554f88dde57832801fbd.mesh", "res://godot/imported/teapot.obj-2a034f33a236554f88dde57832801fbd.mesh"]
+dest_files=["res://.godot/imported/teapot.obj-2a034f33a236554f88dde57832801fbd.mesh", "res://.godot/imported/teapot.obj-2a034f33a236554f88dde57832801fbd.mesh"]
 
 [params]
 

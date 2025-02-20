@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhf2mo4ihbknf"
-path="res://godot/imported/gridlines_2.png-83f236a11af4a522ae37b002faf2eb3f.ctex"
+path="res://.godot/imported/gridlines_2.png-83f236a11af4a522ae37b002faf2eb3f.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/static/gridlines_2.png"
-dest_files=["res://godot/imported/gridlines_2.png-83f236a11af4a522ae37b002faf2eb3f.ctex"]
+dest_files=["res://.godot/imported/gridlines_2.png-83f236a11af4a522ae37b002faf2eb3f.ctex"]
 
 [params]
 

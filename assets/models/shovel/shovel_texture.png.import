@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dxoposlotsq6p"
-path.bptc="res://godot/imported/shovel_texture.png-912f34df70b88e5bde92ab45a3272f35.bptc.ctex"
+path.bptc="res://.godot/imported/shovel_texture.png-912f34df70b88e5bde92ab45a3272f35.bptc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -13,7 +13,7 @@ generator_parameters={}
 [deps]
 
 source_file="res://assets/models/shovel/shovel_texture.png"
-dest_files=["res://godot/imported/shovel_texture.png-912f34df70b88e5bde92ab45a3272f35.bptc.ctex"]
+dest_files=["res://.godot/imported/shovel_texture.png-912f34df70b88e5bde92ab45a3272f35.bptc.ctex"]
 
 [params]
 

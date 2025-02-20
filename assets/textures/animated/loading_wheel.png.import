@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://xu571uosd32e"
-path="res://godot/imported/loading_wheel.png-6f70e0ee55bfe3345e18984cfb96afe1.ctex"
+path="res://.godot/imported/loading_wheel.png-6f70e0ee55bfe3345e18984cfb96afe1.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://assets/textures/animated/loading_wheel.png"
-dest_files=["res://godot/imported/loading_wheel.png-6f70e0ee55bfe3345e18984cfb96afe1.ctex"]
+dest_files=["res://.godot/imported/loading_wheel.png-6f70e0ee55bfe3345e18984cfb96afe1.ctex"]
 
 [params]
 
