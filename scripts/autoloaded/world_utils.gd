@@ -25,20 +25,40 @@ enum TILE_SHAPE {
 	TESS_RHOMBDO, #!!! NOT YET IMPLIMENTED
 	MARCHED_SIMPLE, #!!! NOT YET IMPLIMENTED
 	MARCHED_SMOOTH, #!!! NOT YET IMPLIMENTED
-	CLIFF, # aka terraced? #!!! NOT YET IMPLIMENTED
+	TERRACE, # aka terraced? #!!! NOT YET IMPLIMENTED
+	# POWDER? #!!! NOT YET IMPLIMENTED
 }
-enum TILE_OCC {
-	EMPTY = 0, # contains no solid terrain (only atmosphere/gas/liquid/etc.)
-	SEMI = 1, # "semi-empty" (half-tile slabs, partially encroaching neighboring solids, etc.)
-	OCCUPIED = 2, # is the center of / is a space that has data for solid terrain
-	ENGULFED = 3, # completely engulfed by surrounding solid terrain, despite itself being empty terrain.
+
+# Tile occupiedness (regarding solid terrain, not fluid occupation.)
+enum TILE_OCC { # used to determine whether/how fluids can reside within the tile and for placement.
+	EMPTY = 0, # contains no solid terrain (only atmosphere/gas/liquid/fluids/etc.)
+	PARTIAL = 1, # "semi-empty" (half-tile slabs, partially encroaching neighboring solids, etc.)
+	ENGULFED = 2, # completely engulfed by surrounding solid terrain, despite itself being empty terrain.
 		# (For example, if a tile is surrounded on all sides by rhombdo tiles.)
+	OCCUPIED = 3, # is the center of / is a space that has data for solid terrain
 }
-enum TILE_OPAC { # note: occupiedness should also be considered for some related applications (particularly semi.)
-	OPAQUE = 0, # the material is fully opaque.
-	SCISSOR = 1, # the material allows some seeing-through via alpha-scissoring or similar.
-	TRANSLUCENT = 2, # the material allows you to see through it but not fully transparently, such as stained glass.
-	TRANSPARENT = 3, # the material is fully transparent.
+# The directions that fluids can/can't flow in/across a tile.
+enum TILE_FLOW {
+	NONE = 0, # fluids may not flow through the tile.
+	LATERAL = 1, # fluids may only flow laterally (z1/z2) within/across the tile.
+	VERTICAL = 2, # fluids may only flow vertically (h) within/across the tile.
+	OMNI = 3, # fluids may flow in any direction (h/z1/z2) within/across the tile.
+}
+# Tile stability (the situation around whether tiles may structurally collapse.)
+enum TILE_STAB {
+	FIXED = 0, # Inherently stable terrain that cannot collapse.
+	STABLE = 1, # Collapsable terrain that is currently in a stable situation.
+		# Ex. Dry powder sitting on top of bedrock, it is well supported.
+	SENSITIVE = 2, # Is primed to collapse upon direct interaction or things like nearby explosions.
+		# Ex. Sticky/wet powder, precarious rocks or a very crumbly substance overhanging atmosphere.
+	UNSTABLE = 3, # Imminent for immediate collapse without provocation.
+		# Ex. Dry powder overhanging/above atmosphere, it should collapse immediately.
+}
+# Whether a tile's transparency should be rendered, for mesh generation.
+	# Think of how if you have a thick wall of leaf blocks in minecraft, they're rendered as opaque a few layers in.
+enum TILE_REND_OPAQ {
+	DO_TRANSPARENCY = 0,
+	FORCE_OPAQUE = 1,
 }
 
 class Chunk:
@@ -61,7 +81,8 @@ class Chunk:
 	var tp_is_loaded_bitstates: PackedByteArray = []
 		# Whether each terrain piece has its data loaded in ram.
 	
-	var is_determinable_info_accurate: bool = false
+	var determinables_uptodate: Array[PackedByteArray] = [[], [], [],]
+	
 	var terrain_pieces: Array[TerrainPiece] = []
 	# var terrain_objects
 		# liquid pools in particular, but potentially also things like grounded/lodged rocks, gems, etc.
@@ -95,8 +116,7 @@ class Chunk:
 		#var tiles_attachdatas: Array = [] # for paint and decals, plants growing on the terrain, etc.
 		
 		# Determinable information, chached for quick access:
-		var tiles_occs: PackedByteArray = [] # terrain occupiednesses
-		var tiles_opacs: PackedByteArray = [] # terrain opacities
+		var tiles_determinables: PackedByteArray = []
 		
 		func clear_all_data():
 			tiles_shapes.clear()

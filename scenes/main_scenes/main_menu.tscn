@@ -356,6 +356,7 @@ item_count = 3
 item_0/text = "View Advanced"
 item_0/id = 2
 item_1/text = "Edit Username"
+item_1/id = 1
 item_2/text = "Delete Account"
 item_2/id = 1
 

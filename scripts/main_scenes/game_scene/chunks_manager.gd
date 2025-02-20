@@ -174,7 +174,7 @@ func cm_thread_loop():
 	static_chunks.append(WorldUtils.Chunk.new(Vector3i(0,0,0)))
 	hzz_to_chunk_i[Vector3i(0,0,0)] = 0
 	static_chunks[hzz_to_chunk_i[Vector3i(0,0,0)]].generate_natural_terrain()
-	determine_chunk_occupiednesses(Vector3i(0,0,0))
+	calculate_chunk_determinables(Vector3i(0,0,0))
 	
 	
 	
@@ -409,7 +409,7 @@ func refresh_hzz_to_chunk_i():
 # !!! probably combine with determining all other determinables (e.g. opacs).
 	# this way, surrounding chunk data doesn't need to be re-fetched for every determinable array.
 # !!! later on, you could update this to have only some of the chunk's tps update this (with bitshift int.)
-func determine_chunk_occupiednesses(ccoord: Vector3i) -> Error:
+func calculate_chunk_determinables(ccoord: Vector3i) -> Error:
 	if not hzz_to_chunk_i.has(ccoord):
 		push_error(
 			"Attempted to determine tile occupiednesses for a static chunk which presumably isn't loaded: ",
