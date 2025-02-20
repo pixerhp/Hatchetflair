@@ -15,15 +15,15 @@ func _update_title_text():
 	if node == null:
 		push_error("Game title text node not found.")
 		return
-	var text: String = (
+	node.text = (
 		"[center]" + 
-		"[img]" + "res://assets/icons/hatchetflair/v2/hf_v2.png" + "[/img]" +
-		"[rainbow freq=0.0075 sat=0.75 val=0.75][wave freq=-2 amp=60]" +
+		"[img=center,center]" + "res://assets/icons/hatchetflair/v2/hf_v2.png" + "[/img]" +
+		"[rainbow freq=0.01 sat=0.75 val=0.75][wave freq=-2 amp=60]" +
+			 # !!! reverse the direction of the rainbow after its functionality changes when GD 4.4 releases.
 		 " " + Globals.GAME_NAME +
 		"[/wave][/rainbow]" + 
 		"[/center]"
 	)
-	node.text = text
 	return
 
 func _update_corner_version_text():
