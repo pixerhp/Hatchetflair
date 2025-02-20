@@ -8,6 +8,10 @@ const CHUNK_TILES_COUNT: int = CHUNK_WIDTH**3
 var world_seed: int = 0
 #var ocean_height: int = 0
 
+enum BIOME {
+	NO_BIOME,
+}
+
 enum CHUNK_LOD {
 	HIGH_QUALITY, # extra mesh details are generated based on substances + normals.
 	MID_QUALITY, # mesh triangles use textures + render-materials, but don't generate finer details.
@@ -56,82 +60,114 @@ enum TILE_STAB {
 }
 # Whether a tile's transparency should be rendered, for mesh generation.
 	# Think of how if you have a thick wall of leaf blocks in minecraft, they're rendered as opaque a few layers in.
-enum TILE_REND_OPAQ {
+enum TILE_FOPAQ { # ("fopaq" from "force to be opaque".)
 	DO_TRANSPARENCY = 0,
 	FORCE_OPAQUE = 1,
 }
+# !!! 1 bit enum, or a 1 bit data increase for an existing enum, is available.
 
 class Chunk:
+	# Non-content data:
 	var associated_nodes_refs: Array[Object] = []
-		# Stores references to all of this chunk's associated scene tree nodes, for quick access to them.
+		# Stores references to associated scene tree nodes (meshes, collisions, etc.) for quick access.
+	var chunk_group: int = -1
+		# Used for mobile groups of chunks which are separate from static chunks,
+		# a value of -1 indicates a static chunk, which is also how you can check whether a chunk is static.
 	var ccoords: Vector3i = Vector3i(0,0,0)
-		# if a mobile/dynamic chunk, then this could get reused for which one this chunk is relative to a group.
+		# For static chunks, specifies where in the world this chunk is located relative to the origin chunk.
+		# For mobile chunks, specifies ccoords relative to the associated group's origin chunk.
 	
-	# NOTE: terrain piece bitstuff works like this:
-		# of the 64 (4*4*4) terrain pieces, in hzz format, the first tp is the (0,0,0) one,
-		# the second tp is the (0,0,1) one, etc up until the fourth tp, (0,0,3).
-		# then the z1 increments and z2 resets back to 0, so the fifth tp is the (0,1,0) one.
-		# the patten continues until both z1 and z2 are 3, and then h increments by 1 and z1 & z2 are set to 0.
-		# the last tp is (3,3,3), which is the 64th tp.
-		#
-		# the 64 bits are stored using an 8 element long packed byte array, 
-		# where the first bit in the the first byte corresponds to the first tp.
-	var tp_is_atm_bitstates: PackedByteArray = []
-		# Unloaded TPs can stay unloaded if it's known that they're just atmosphere.
-	var tp_is_loaded_bitstates: PackedByteArray = []
-		# Whether each terrain piece has its data loaded in ram.
-	
-	var determinables_uptodate: Array[PackedByteArray] = [[], [], [],]
-	
-	var terrain_pieces: Array[TerrainPiece] = []
-	# var terrain_objects
-		# liquid pools in particular, but potentially also things like grounded/lodged rocks, gems, etc.
-		# instead of being separate node-tree objects, until dislodging- 
-			# they can be rendered as part of the whole chunks' mesh?
-		# regarding liquid pools, they should have a function to check- 
-			# whether and how they are still contained, for pouring (whether around here or in CM.)
-	# static structures stuff? (walls, floors, boards, windows, vents, stairs, etc etc.)
-		# notably, structures fall along a finer grid (probably quarter-metrins aka 1/256 of a chunk width,)
-		# and aren't placed in a way like where there's one per every cube unit of 
-		# something like how terrain is with tiles, and can take up various shapes/sizes.
 	# Mesh/collision generation related:
 	var lod_type: int = CHUNK_LOD.MID_QUALITY
 	
-	var biome: int = 0 # !!! not yet used, will probably store a biome enum value.
+	# NOTE: How TerrainPiece's and terrain bitstates PackedByteArray's are ordered:
+	# Each chunk has 64 (4*4*4) TerrainPiece objects.
+	# In (h,z1,z2) format, they can be considered to range from TP (0,0,0) to TP (3,3,3) (opposite corners.)
+	# z2 is incremented from 0-3 and then reset back to 0 for each time z1 gets incremented.
+		# Ex. (..., (0,0,2), (0,0,3), (0,1,0), (0,1,1), ...)
+	# h is incremented similarly for after each loop of z1.
+		# Ex. (..., (0,3,2), (0,3,3), (1,0,0), (1,0,1), ...)
+	# Using that method of ordering TerrainPiece's, 64 bitstates are stored across 8 bytes of a PackedByteArray,
+	# where the least-significant bit of the first byte represents the first TerrainPiece,
+	# the second-least-significant bit of the first byte represents the second TerrainPiece, etc.
+		# Ex. TP (1,2,3) would be represented by the 4th-least-significant bit of PackedByteArray[3].
 	
-	func _init(in_ccoords: Vector3i):
+	# Content data:
+	var biome: int = BIOME.NO_BIOME
+		# A chunk's biome is partially dependant on its content, and thus can be inderectly modified by the player.
+	var terrain_pieces: Array[TerrainPiece] = []
+	var tp_is_loaded_bitstates: PackedByteArray = []
+		# Bitstates for whether each TerrainPiece has its data currently loaded.
+	var tp_is_atm_bitstates: PackedByteArray = []
+		# Bitstates for whether each TerrainPiece is known to be fully empty/atmosphere.
+		# A known-to-be-empty TerrainPiece can stay unloaded to save on RAM, 
+		# and if eventually fully loaded, doesn't need to check/open associated save-files to load it.
+	var tp_determinables_uptodate: Array[PackedByteArray] = [[], [], [], [],]
+		# Elements in the outer array represent the different determinable types,
+		# (occupiednesses, fluid flow directions, solid terrain stabilities, mesh fopaqs,)
+		# each containing a TP bitmask PackedByteArray.
+	# !!! var terrain_objects
+		# A list of lodged/embedded objects in terrain, such as rocks, etc.
+		# !!! May either store the actual objects, pointers to nodetree objects, or otherwise.
+	# !!! var structures
+		# Stores data related to all structures associated with this chunk, I'm not sure of the format yet.
+		# Structures fall along a finer grid than terrain tiles (probably 1/4-metrins, aka 1/256 of a chunk,)
+		# and don't exist on a per-grid-volume basis like solid terrain does with tiles.
+		# Structure pieces may consist of a variety of shapes/sizes.
+	
+	func _init(in_chunk_group: int, in_ccoords: Vector3i):
+		associated_nodes_refs.clear()
+		chunk_group = in_chunk_group
 		ccoords = in_ccoords
-		tp_is_atm_bitstates.resize(8); tp_is_atm_bitstates.fill(0b11111111)
-		tp_is_loaded_bitstates.resize(8); tp_is_loaded_bitstates.fill(0b11111111)
 		reset_terrain_pieces()
-		return
-	
-	# A chunk's terrain is broken up into 4^3 pieces, 
-		# so that most of the unseen/unrelavent terrain can remain unloaded.
-	class TerrainPiece:
-		# Unique information:
-		var tiles_shapes: PackedByteArray = [] # terrain shape type (marched, tess' cubes, etc.)
-		#var tiles_shapedatas: Array = [] # for storing shape-dependant additional data (slope, octree state, etc.) 
-		var tiles_subs: PackedInt32Array = [] # terrain substances (smooth werium metal, conifer wood, etc.)
-		#var tiles_attachdatas: Array = [] # for paint and decals, plants growing on the terrain, etc.
-		
-		# Determinable information, chached for quick access:
-		var tiles_determinables: PackedByteArray = []
-		
-		func clear_all_data():
-			tiles_shapes.clear()
-			#tiles_shapedatas.clear()
-			tiles_subs.clear()
-			#tiles_attachdatas.clear()
-			tiles_occs.clear()
-			tiles_opacs.clear()
-			return
 	
 	func reset_terrain_pieces():
+		# Reset the stored TerrainPiece objects:
 		terrain_pieces.clear()
 		terrain_pieces.resize(4**3)
 		terrain_pieces.fill(TerrainPiece.new())
+		# Reset data variables associated with terrain:
+		biome = BIOME.NO_BIOME
+		tp_is_atm_bitstates.resize(8); tp_is_atm_bitstates.fill(0b00000000)
+		tp_is_loaded_bitstates.resize(8); tp_is_loaded_bitstates.fill(0b00000000)
+		tp_determinables_uptodate.resize(4)
+		for i in tp_determinables_uptodate.size():
+			tp_determinables_uptodate[i].resize(8)
+			tp_determinables_uptodate[i].fill(0b00000000)
 	
+	# A chunk's terrain data separated into 64 (4*4*4) TerrainPiece's (each containing 64 (4*4*4) tiles,)
+	# As then individual TerrainPiece's can be loaded/unloaded or have their data calculated/updated,
+	# rather then the whole chunk every time.
+	class TerrainPiece:
+		# Unique data:
+		var tiles_shapes: PackedByteArray = [] 
+			# Each tile's solid terrain's shape-type.
+		# !!! var tiles_shapedatas: Array = [] 
+			# Stores terrain shape-type dependant additional data (potentially including slopes, heights, etc.) 
+		var tiles_substances: PackedInt32Array = []
+			# Each tile's solid terrain's substance.
+		# !!! var tiles_attachdatas: Array = []
+			# Stores things attached/covering the solid terrain, 
+			# such as paint, a decal, plants growing on / out of the associated terrain, etc.
+		# !!! liquid_substances variables, specifically which substances in order of layer height,
+			# !!! and the heights of said liquid layers.
+		
+		# Determinable data, chached for quick access:
+		var tiles_determinables: PackedByteArray = []
+			# Each byte represents 1 tile: 
+			# 2 bits for occupiednesses, 2 bits for fluid flow directions, 
+			# 2 bits for solid terrain stabilities, 1 bit for mesh fopaqs, 1 currently unused bit.
+	
+	# !!! add more if/when new TP variables are added!
+	func clear_tp(tp_i: int):
+		# Clear terrain data:
+		terrain_pieces[tp_i].tiles_shapes.clear()
+		terrain_pieces[tp_i].tiles_substances.clear()
+		# Update associated chunk variables:
+		tp_is_loaded_bitstates[tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
+		tp_is_atm_bitstates[tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
+		for j in tp_determinables_uptodate.size():
+			tp_determinables_uptodate[j][tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
 	
 	# !!! update bitstuff to use packed byte array
 	# (Can be done here as chunk terrain generation is not dependant on surrounding chunks' data.)
