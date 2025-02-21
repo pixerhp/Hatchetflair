@@ -128,11 +128,6 @@ class Chunk:
 	# the second-least-significant bit of the first byte represents the second TerrainPiece, etc.
 		# Ex. TP (1,2,3) would be represented by the 4th-least-significant bit of PackedByteArray[3] (4th byte.)
 	
-	func tp_i_from_hzz(hzz: Vector3i) -> int:
-		return (hzz[0] * 16) + (hzz[1] * 4) + (hzz[2])
-	func tp_hzz_from_i(i: int) -> Vector3i:
-		return Vector3i(posmod(i/16, 4), posmod(i/4, 4), posmod(i, 4))
-	
 	# Content data:
 	var biome: int = BIOME.NO_BIOME
 		# A chunk's biome is partially dependant on its content, and thus can be inderectly modified by the player.
@@ -198,17 +193,8 @@ class Chunk:
 			# Each byte represents 1 tile: 
 			# 2 bits for occupiednesses, 2 bits for fluid flow directions, 
 			# 2 bits for solid terrain stabilities, 1 bit for mesh fopaqs, 1 currently unused bit.
-	
-	# !!! UPDATE MOVE TO CM (OR SPLIT INTO 2 FUNCS,) AS UPDATING tp_determinables_uptodate
-	# NEEDS TO BE UPDATED TO AFFECT IMMEDIATELY NEIGHBORING TP'S TOO, WHICH COULD BE IN BORDERING CHUNKS.
-	## !!! (revise if/when new TP data gets added.)
-	#func clear_terrain_piece(tp_i: int):
-		## Clear terrain data:
-		#terrain_pieces[tp_i].tiles_shapes.clear()
-		#terrain_pieces[tp_i].tiles_substances.clear()
-		#terrain_pieces[tp_i].tiles_determinables.clear()
-		## Update associated chunk variables:
-		#tp_is_loaded_bitstates[tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
-		#tp_is_atm_bitstates[tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
-		#for j in tp_determinables_uptodate.size():
-			#tp_determinables_uptodate[j][tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
+
+func tp_i_from_hzz(hzz: Vector3i) -> int:
+	return (hzz[0] * 16) + (hzz[1] * 4) + (hzz[2])
+func tp_hzz_from_i(i: int) -> Vector3i:
+	return Vector3i(posmod(i/16, 4), posmod(i/4, 4), posmod(i, 4))

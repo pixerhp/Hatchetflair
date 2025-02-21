@@ -538,6 +538,53 @@ func clear_all_chunks(ccoords: Vector3i):
 	static_chunks.clear()
 	hzz_to_chunk_i.clear()
 
+# Properly clears a tp and updates both its and surounding tps' associated chunk variables.
+func clear_static_chunk_terrain_piece(ccoords: Vector3i, tp_i: int) -> Error:
+	# If the chunk is not found, then it cannot be appropriately modified.
+	var chunk_i: int = hzz_to_chunk_i.get(ccoords, -1)
+	if chunk_i == -1:
+		push_error("Chunk not found stored in static chunks: ", ccoords)
+		return FAILED
+	
+	# Clear the requested TerrainPiece:
+	if static_chunks[chunk_i].terrain_pieces.size() == 64:
+		static_chunks[chunk_i].terrain_pieces[posmod(tp_i, 64)] = WorldUtils.Chunk.TerrainPiece.new()
+	else:
+		push_error(
+			"static chunk ", ccoords, " (index: ", chunk_i, ")" +
+			" does not have its terrain_pieces array sized correctly (size is ", 
+			static_chunks[chunk_i].terrain_pieces.size(), " instead of 64)"
+		)
+	
+	# Update associated chunks' TP-related variables (assumes correct chunk variable sizes,)
+	# both for the specified and all immediately neighboring TPs (some which may be in neighboring chunks.)
+	# If a neighboring TP is unloaded, then nothing is done with variables associated with it.
+	var original_tp_coords: Vector3i = WorldUtils.tp_hzz_from_i(tp_i)
+	for i in (3**3):
+		var targ_tp_c: Vector3i = original_tp_coords + Vector3i(posmod(i/9,3)-1, posmod(i/3,3)-1, posmod(i,3)-1)
+		var targ_chunk_ccoords: Vector3i = Vector3i(
+			# Determines the chunk ccoords depending on if/how this neighboring TP's coords are OOB.
+			((ccoords[0]-1) if (targ_tp_c[0]<0) else (ccoords[0])) if (targ_tp_c[0]<4) else (ccoords[0]+1), 
+			((ccoords[1]-1) if (targ_tp_c[1]<0) else (ccoords[1])) if (targ_tp_c[1]<4) else (ccoords[1]+1),
+			((ccoords[2]-1) if (targ_tp_c[2]<0) else (ccoords[2])) if (targ_tp_c[2]<4) else (ccoords[2]+1),
+		)
+		
+		var targ_chunk_index: int = hzz_to_chunk_i.get(targ_chunk_ccoords, -1)
+		if targ_chunk_index == -1:
+			continue # Chunk is presumably unloaded, do nothing.
+		else:
+			targ_tp_c = Vector3i(posmod(targ_tp_c[0], 4), posmod(targ_tp_c[1], 4), posmod(targ_tp_c[2], 4))
+			var t_tp_i: int = WorldUtils.tp_i_from_hzz(targ_tp_c)
+			# Update chunk variables associated with impacted TP.
+			# (If any associated variables are added/deleted later, then this part will need to be updated.)
+			static_chunks[targ_chunk_index].tp_is_loaded_bitstates[t_tp_i/8] &= ~ (1 << posmod(t_tp_i, 8))
+			static_chunks[targ_chunk_index].tp_is_atm_bitstates[t_tp_i/8] &= ~ (1 << posmod(t_tp_i, 8))
+			for j in static_chunks[targ_chunk_index].tp_determinables_uptodate.size():
+				static_chunks[targ_chunk_index].tp_determinables_uptodate[j][tp_i/8] &= (
+					~ (0b00000001 << posmod(tp_i, 8))
+				)
+	return OK
+
 # !!! MOVED TO CM because it clears tps, which changes is_determineables_uptodate, 
 # which affects surrounding tps, including those of bordering chunks.
 ## !!! update bitstuff to use packed byte array
