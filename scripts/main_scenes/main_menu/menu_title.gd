@@ -19,7 +19,7 @@ func _update_title_text():
 		"[center]" + 
 		"[img=center,center]" + "res://assets/icons/hatchetflair/v2/hf_v2.png" + "[/img]" +
 		"[rainbow freq=0.01 sat=0.75 val=0.75][wave freq=-2 amp=60]" +
-			 # !!! reverse the direction of the rainbow after its functionality changes when GD 4.4 releases.
+			 # !!! reverse the direction of the rainbow after rainbow functionality changes when GD 4.4 releases.
 		 " " + Globals.GAME_NAME +
 		"[/wave][/rainbow]" + 
 		"[/center]"

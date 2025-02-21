@@ -6,7 +6,7 @@ const CHUNK_TILES_COUNT: int = CHUNK_WIDTH**3
 
 # Current loaded world's seeds and generational/spawning settings:
 var world_seed: int = 0
-#var ocean_height: int = 0
+# !!! var ocean_height
 
 enum BIOME {
 	NO_BIOME,
@@ -66,6 +66,42 @@ enum TILE_FOPAQ { # ("fopaq" from "force to be opaque".)
 }
 # !!! 1 bit enum, or a 1 bit data increase for an existing enum, is available.
 
+# template:
+# [0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000],
+const chunk_surround_bitstates: Array[PackedByteArray] = [
+	# Bottom layer:
+	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b10000000], # corner
+	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b11110000], # edge
+	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00010000], # corner
+	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b10001000, 0b10001000], # edge
+	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b11111111, 0b11111111], # face
+	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00010001, 0b00010001], # edge
+	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00001000, 0b00000000], # corner
+	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00001111, 0b00000000], # edge
+	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000001, 0b00000000], # corner
+	# Middle layer:
+	[0b00000000, 0b10000000, 0b00000000, 0b10000000, 0b00000000, 0b10000000, 0b00000000, 0b10000000], # edge
+	[0b00000000, 0b11110000, 0b00000000, 0b11110000, 0b00000000, 0b11110000, 0b00000000, 0b11110000], # face
+	[0b00000000, 0b00010000, 0b00000000, 0b00010000, 0b00000000, 0b00010000, 0b00000000, 0b00010000], # edge
+	[0b10001000, 0b10001000, 0b10001000, 0b10001000, 0b10001000, 0b10001000, 0b10001000, 0b10001000], # face
+	[0b11111111, 0b11111111, 0b11111111, 0b11111111, 0b11111111, 0b11111111, 0b11111111, 0b11111111], # center
+	[0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00010001], # face
+	[0b00001000, 0b00000000, 0b00001000, 0b00000000, 0b00001000, 0b00000000, 0b00001000, 0b00000000], # edge
+	[0b00001111, 0b00000000, 0b00001111, 0b00000000, 0b00001111, 0b00000000, 0b00001111, 0b00000000], # face
+	[0b00000001, 0b00000000, 0b00000001, 0b00000000, 0b00000001, 0b00000000, 0b00000001, 0b00000000], # edge
+	# Top layer:
+	[0b00000000, 0b10000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000], # corner
+	[0b00000000, 0b11110000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000], # edge
+	[0b00000000, 0b00010000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000], # corner
+	[0b10001000, 0b10001000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000], # edge
+	[0b11111111, 0b11111111, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000], # face
+	[0b00010001, 0b00010001, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000], # edge
+	[0b00001000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000], # corner
+	[0b00001111, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000], # edge
+	[0b00000001, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000], # corner
+]
+
+
 class Chunk:
 	# Non-content data:
 	var associated_nodes_refs: Array[Object] = []
@@ -80,7 +116,7 @@ class Chunk:
 	# Mesh/collision generation related:
 	var lod_type: int = CHUNK_LOD.MID_QUALITY
 	
-	# NOTE: How TerrainPiece's and terrain bitstates PackedByteArray's are ordered:
+	# NOTE: How TerrainPiece's and terrain bitstates PackedByteArray's are ordered guide:
 	# Each chunk has 64 (4*4*4) TerrainPiece objects.
 	# In (h,z1,z2) format, they can be considered to range from TP (0,0,0) to TP (3,3,3) (opposite corners.)
 	# z2 is incremented from 0-3 and then reset back to 0 for each time z1 gets incremented.
@@ -90,7 +126,12 @@ class Chunk:
 	# Using that method of ordering TerrainPiece's, 64 bitstates are stored across 8 bytes of a PackedByteArray,
 	# where the least-significant bit of the first byte represents the first TerrainPiece,
 	# the second-least-significant bit of the first byte represents the second TerrainPiece, etc.
-		# Ex. TP (1,2,3) would be represented by the 4th-least-significant bit of PackedByteArray[3].
+		# Ex. TP (1,2,3) would be represented by the 4th-least-significant bit of PackedByteArray[3] (4th byte.)
+	
+	func tp_i_from_hzz(hzz: Vector3i) -> int:
+		return (hzz[0] * 16) + (hzz[1] * 4) + (hzz[2])
+	func tp_hzz_from_i(i: int) -> Vector3i:
+		return Vector3i(posmod(i/16, 4), posmod(i/4, 4), posmod(i, 4))
 	
 	# Content data:
 	var biome: int = BIOME.NO_BIOME
@@ -148,7 +189,7 @@ class Chunk:
 			# Each tile's solid terrain's substance.
 		# !!! var tiles_attachdatas: Array = []
 			# Stores things attached/covering the solid terrain, 
-			# such as paint, a decal, plants growing on / out of the associated terrain, etc.
+			# such as paint/dye, a decal, plants growing on / out of the associated terrain, etc.
 		# !!! liquid_substances variables, specifically which substances in order of layer height,
 			# !!! and the heights of said liquid layers.
 		

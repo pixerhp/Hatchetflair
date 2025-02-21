@@ -167,14 +167,14 @@ func _process(delta):
 	#cm_node.add_child(mesh_instance_3d)
 
 func cm_thread_loop():
-	
+	randomize()
 	
 	
 	# !!! Temporary for testing:
-	static_chunks.append(WorldUtils.Chunk.new(Vector3i(0,0,0)))
+	static_chunks.append(WorldUtils.Chunk.new(-1, Vector3i(0,0,0)))
 	hzz_to_chunk_i[Vector3i(0,0,0)] = 0
 	static_chunks[hzz_to_chunk_i[Vector3i(0,0,0)]].generate_natural_terrain()
-	calculate_chunk_determinables(Vector3i(0,0,0))
+	calculate_chunk_determinables(Vector3i(0,0,0), true, true, true, true)
 	
 	
 	
@@ -323,7 +323,7 @@ func process_instructions(instructions_set: int) -> Error:
 						continue
 					IN_INST.SAVE_ALL_LOADED_CHUNKS:
 						# !!! Add file saving functionality later!
-						push_warning("(The functionality of saving chunk data to files has not yet been implimented.)")
+						push_warning("(Saving chunk data to files functionality has not yet been implimented.)")
 						continue
 					_:
 						push_error("Unknown/unsupported incoming-instruction enum: ", inst_enums[i])
@@ -364,7 +364,7 @@ func adjust_work_quota_size():
 					push_error("Anomolous impossible contradiction, ",
 					"just received an update but 0 updates this loop.")
 				1: # The CM thread is about the same speed as the main thread.
-					pass
+					pass # (nothing needs to be done.)
 				2: # The CM thread may be slightly slow.
 					work_quota -= 1
 				_: # The CM thread is substantially too slow.
@@ -376,13 +376,14 @@ func adjust_work_quota_size():
 		_: # Avoid compounding work-increases in case the main thread is just experiencing a lag spike.
 			pass
 	
-	# Ensure that the work quota doesn't exceed its allowed range:
+	# Ensure that the work quota stays within its allowed range:
 	if work_quota < WORK_QUOTA_MIN:
 		work_quota = WORK_QUOTA_MIN
 		return
 	if work_quota > WORK_QUOTA_MAX:
 		work_quota = WORK_QUOTA_MAX
 		return
+	
 	return
 
 func do_work_quota():
@@ -406,25 +407,27 @@ func refresh_hzz_to_chunk_i():
 		hzz_to_chunk_i[static_chunks[i].ccoords] = i
 	return
 
-# !!! probably combine with determining all other determinables (e.g. opacs).
-	# this way, surrounding chunk data doesn't need to be re-fetched for every determinable array.
-# !!! later on, you could update this to have only some of the chunk's tps update this (with bitshift int.)
-func calculate_chunk_determinables(ccoord: Vector3i) -> Error:
-	if not hzz_to_chunk_i.has(ccoord):
+# !!! eventually revise to work with calculating determinables for specific TPs 
+# rather than always the whole chunk.
+func calculate_chunk_determinables(
+	ccoords: Vector3i, 
+	calc_occs: bool, calc_flows: bool, calc_stabs: bool, calc_fopaqs: bool,
+) -> Error:
+	if (not calc_occs) and (not calc_flows) and (not calc_stabs) and (not calc_fopaqs):
+		push_warning("No determinable types requested to be calculated.")
+		return OK
+	if not hzz_to_chunk_i.has(ccoords):
 		push_error(
-			"Attempted to determine tile occupiednesses for a static chunk which presumably isn't loaded: ",
-			ccoord,
-		)
+			"Attempted to determine tile occupiednesses for an unloaded static chunk: ", ccoords)
 		return FAILED
 	
-	# For all of the chunk's + immediately surrounding tile data needed for calculations.
-	var tile_shapes: PackedByteArray = []
-	var tile_subs: PackedInt32Array = []
-	# For generated new data which will replace the chunk's outdated data:
-	var chunk_occs: PackedByteArray = []
+	# Ensure all required data for calculations is stored in RAM:
+	for i in (3**3):
+		ensure_chunk_tps_loaded(
+			ccoords + Vector3i(posmod(i/9, 3) - 1, posmod(i/3, 3) - 1, posmod(i, 3) - 1),
+			WorldUtils.chunk_surround_bitstates[i],
+		)
 	
-	
-	#ensure_load_static_chunk_data()
 	
 	# !!! get data of all chunk tiles + sorrounding chunks' tps' tiles.
 	
@@ -489,8 +492,9 @@ func load_static_chunk_data(
 	required_tps: PackedByteArray = [255,255,255,255,255,255,255,255],
 	# !!! terrain objects, structures, etc?
 ) -> Error:
+	# If a static chunk with provided ccoords doesn't already exist, instantiate it.
 	if not hzz_to_chunk_i.has(ccoords):
-		static_chunks.append(WorldUtils.Chunk.new(ccoords))
+		static_chunks.append(WorldUtils.Chunk.new(-1, ccoords))
 		hzz_to_chunk_i[ccoords] = static_chunks.size() - 1
 	
 	# !!! see if requested chunk data exists stored in files and load it if it does.
