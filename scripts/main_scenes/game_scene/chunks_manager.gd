@@ -538,6 +538,8 @@ func clear_all_chunks(ccoords: Vector3i):
 	static_chunks.clear()
 	hzz_to_chunk_i.clear()
 
+# !!! (Consider the inefficiency of if several neighboring TPs are cleared in a row,
+# that some chunks/TPs/variables get unnecessarily checked/updated repeatedly.)
 # Properly clears a tp and updates both its and surounding tps' associated chunk variables.
 func clear_static_chunk_terrain_piece(ccoords: Vector3i, tp_i: int) -> Error:
 	# If the chunk is not found, then it cannot be appropriately modified.
