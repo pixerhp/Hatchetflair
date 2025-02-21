@@ -538,6 +538,30 @@ func clear_all_chunks(ccoords: Vector3i):
 	static_chunks.clear()
 	hzz_to_chunk_i.clear()
 
+# !!! MOVED TO CM because it clears tps, which changes is_determineables_uptodate, 
+# which affects surrounding tps, including those of bordering chunks.
+## !!! update bitstuff to use packed byte array
+## (Can be done here as chunk terrain generation is not dependant on surrounding chunks' data.)
+#func generate_natural_terrain(
+	#tps_to_generate: PackedByteArray = [255, 255, 255, 255, 255, 255, 255, 255], # 64 1's in binary 
+	#also_clear_unrelated_tp_data: bool = false, 
+	#seed: int = WorldUtils.world_seed,
+#) -> Error:
+	#if terrain_pieces.size() != (4**3):
+		#push_error("Chunk has ", terrain_pieces.size(), " terrain pieces (instead of 64).")
+		#reset_terrain_pieces()
+	#
+	#for tp_i in (4**3):
+		#if tps_to_generate[tp_i/8] & (0b1 << posmod(tp_i, 8)):
+			#terrain_pieces[tp_i].clear_all_data()
+			#
+			## !!! write terrain generation testing code here
+			#
+		#elif also_clear_unrelated_tp_data:
+			#terrain_pieces[tp_i].clear_all_data()
+	#
+	#return OK
+
 func _on_pausemenu_saveandquit_pressed():
 	mutex.lock()
 	in_instructions.append_array([

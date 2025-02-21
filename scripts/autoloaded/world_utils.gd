@@ -199,35 +199,16 @@ class Chunk:
 			# 2 bits for occupiednesses, 2 bits for fluid flow directions, 
 			# 2 bits for solid terrain stabilities, 1 bit for mesh fopaqs, 1 currently unused bit.
 	
-	# !!! add more if/when new TP variables are added!
-	func clear_tp(tp_i: int):
-		# Clear terrain data:
-		terrain_pieces[tp_i].tiles_shapes.clear()
-		terrain_pieces[tp_i].tiles_substances.clear()
-		# Update associated chunk variables:
-		tp_is_loaded_bitstates[tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
-		tp_is_atm_bitstates[tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
-		for j in tp_determinables_uptodate.size():
-			tp_determinables_uptodate[j][tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
-	
-	# !!! update bitstuff to use packed byte array
-	# (Can be done here as chunk terrain generation is not dependant on surrounding chunks' data.)
-	func generate_natural_terrain(
-		tps_to_generate: PackedByteArray = [255, 255, 255, 255, 255, 255, 255, 255], # 64 1's in binary 
-		also_clear_unrelated_tp_data: bool = false, 
-		seed: int = WorldUtils.world_seed,
-	) -> Error:
-		if terrain_pieces.size() != (4**3):
-			push_error("Chunk has ", terrain_pieces.size(), " terrain pieces (instead of 64).")
-			reset_terrain_pieces()
-		
-		for tp_i in (4**3):
-			if tps_to_generate[tp_i/8] & (0b1 << posmod(tp_i, 8)):
-				terrain_pieces[tp_i].clear_all_data()
-				
-				# !!! write terrain generation testing code here
-				
-			elif also_clear_unrelated_tp_data:
-				terrain_pieces[tp_i].clear_all_data()
-		
-		return OK
+	# !!! UPDATE MOVE TO CM (OR SPLIT INTO 2 FUNCS,) AS UPDATING tp_determinables_uptodate
+	# NEEDS TO BE UPDATED TO AFFECT IMMEDIATELY NEIGHBORING TP'S TOO, WHICH COULD BE IN BORDERING CHUNKS.
+	## !!! (revise if/when new TP data gets added.)
+	#func clear_terrain_piece(tp_i: int):
+		## Clear terrain data:
+		#terrain_pieces[tp_i].tiles_shapes.clear()
+		#terrain_pieces[tp_i].tiles_substances.clear()
+		#terrain_pieces[tp_i].tiles_determinables.clear()
+		## Update associated chunk variables:
+		#tp_is_loaded_bitstates[tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
+		#tp_is_atm_bitstates[tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
+		#for j in tp_determinables_uptodate.size():
+			#tp_determinables_uptodate[j][tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
