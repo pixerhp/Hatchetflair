@@ -407,6 +407,9 @@ func refresh_hzz_to_chunk_i():
 		hzz_to_chunk_i[static_chunks[i].ccoords] = i
 	return
 
+# !!! Functions for setting bits chunk tp bitstates to off for one tp + neighbors, and for 1 whole chunk + tp neighbors?
+# !!! Then, use these functions in other places, like clear chunk tp and generate natural terrain.
+
 # !!! eventually revise to work with calculating determinables for specific TPs 
 # rather than always the whole chunk.
 func calculate_chunk_determinables(
@@ -589,27 +592,53 @@ func clear_static_chunk_terrain_piece(ccoords: Vector3i, tp_i: int) -> Error:
 
 # !!! MOVED TO CM because it clears tps, which changes is_determineables_uptodate, 
 # which affects surrounding tps, including those of bordering chunks.
-## !!! update bitstuff to use packed byte array
-## (Can be done here as chunk terrain generation is not dependant on surrounding chunks' data.)
-#func generate_natural_terrain(
-	#tps_to_generate: PackedByteArray = [255, 255, 255, 255, 255, 255, 255, 255], # 64 1's in binary 
-	#also_clear_unrelated_tp_data: bool = false, 
-	#seed: int = WorldUtils.world_seed,
-#) -> Error:
-	#if terrain_pieces.size() != (4**3):
-		#push_error("Chunk has ", terrain_pieces.size(), " terrain pieces (instead of 64).")
-		#reset_terrain_pieces()
-	#
-	#for tp_i in (4**3):
-		#if tps_to_generate[tp_i/8] & (0b1 << posmod(tp_i, 8)):
-			#terrain_pieces[tp_i].clear_all_data()
-			#
-			## !!! write terrain generation testing code here
-			#
-		#elif also_clear_unrelated_tp_data:
-			#terrain_pieces[tp_i].clear_all_data()
-	#
-	#return OK
+# !!! update bitstuff to use packed byte array
+# (Can be done here as chunk terrain generation is not dependant on surrounding chunks' data.)
+func generate_natural_terrain(
+	group: int,
+	ccoords: Vector3i,
+	tps_to_generate: PackedByteArray = PackedByteArray([255, 255, 255, 255, 255, 255, 255, 255]),
+	clear_all_tps: bool = false, 
+	seed: int = WorldUtils.world_seed,
+) -> Error:
+	var chunk_i: int = -1
+	if hzz_to_chunk_i.has(ccoords):
+		# (Assumes that hzz_to_chunk_i is accurate.)
+		chunk_i = hzz_to_chunk_i[ccoords]
+		if clear_all_tps == true:
+			static_chunks[chunk_i].reset_terrain_pieces()
+	else:
+		chunk_i = static_chunks.size()
+		static_chunks.append(WorldUtils.Chunk.new(group, ccoords))
+		hzz_to_chunk_i[ccoords] = chunk_i
+	
+	if (tps_to_generate == PackedByteArray([255, 255, 255, 255, 255, 255, 255, 255])) or (clear_all_tps == true):
+		pass
+	else:
+		pass
+		# clear_static_chunk_terrain_piece for every tp to generate, mainly to update appropriate chunk vars
+	
+	
+	
+	
+	
+	
+	
+	
+	if terrain_pieces.size() != (4**3):
+		push_error("Chunk has ", terrain_pieces.size(), " terrain pieces (instead of 64).")
+		reset_terrain_pieces()
+	
+	for tp_i in (4**3):
+		if tps_to_generate[tp_i/8] & (0b1 << posmod(tp_i, 8)):
+			terrain_pieces[tp_i].clear_all_data()
+			
+			# !!! write terrain generation testing code here
+			
+		elif also_clear_unrelated_tp_data:
+			terrain_pieces[tp_i].clear_all_data()
+	
+	return OK
 
 func _on_pausemenu_saveandquit_pressed():
 	mutex.lock()
