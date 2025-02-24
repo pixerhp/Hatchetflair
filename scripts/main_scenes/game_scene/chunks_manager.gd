@@ -407,8 +407,22 @@ func refresh_hzz_to_chunk_i():
 		hzz_to_chunk_i[static_chunks[i].ccoords] = i
 	return
 
+
+
+
+
+
 # !!! Functions for setting bits chunk tp bitstates to off for one tp + neighbors, and for 1 whole chunk + tp neighbors?
+func set_tp_and_neighboring_tps_bitstates_off(group: int, ccoords: Vector3i, tp_i: int):
+	pass
 # !!! Then, use these functions in other places, like clear chunk tp and generate natural terrain.
+func set_chunk_and_neighboring_tps_bitstates_off(group: int, ccoords: Vector3i):
+	pass
+
+
+
+
+
 
 # !!! eventually revise to work with calculating determinables for specific TPs 
 # rather than always the whole chunk.
