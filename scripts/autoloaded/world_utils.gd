@@ -162,7 +162,10 @@ class Chunk:
 			for j in tp_determs_uptodate.size():
 				tp_determs_uptodate[j][i] &= ~ affected_tps[i]
 		return
-	
+	func zeroify_determstates_single(tp_i: int):
+		for j in tp_determs_uptodate.size():
+			tp_determs_uptodate[j][tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
+		return
 	
 	func reset_terrain_pieces():
 		# Reset the stored TerrainPiece objects:
@@ -216,17 +219,35 @@ class ChunksGroup:
 			cc_to_i[chunks[i].ccoords] = i
 		return
 	
-	func zeroify_vicinity_determstates_chunk(ccoords: Vector3i):
-		var targ_ccoords: Vector3i
+	# Regarding a full chunk's TPs + the immediately surrounding TPs of neighboring chunks.
+	func zeroify_vicinity_determstates_chunk(cc: Vector3i):
+		var targ_cc: Vector3i = Vector3i.ZERO
+		var targ_chunk_i: int = 0
 		for i in (3**3):
-			targ_ccoords = ccoords + Vector3i(posmod(i/9, 3) - 1, posmod(i/3, 3) - 1, posmod(i, 3) - 1)
-			if cc_to_i.has(targ_ccoords):
-				chunks[cc_to_i[targ_ccoords]].zeroify_determstates(CHUNK_VICINITY_TP_BITSTATES[i])
+			targ_cc = cc + Vector3i(posmod(i/9, 3) - 1, posmod(i/3, 3) - 1, posmod(i, 3) - 1)
+			targ_chunk_i = cc_to_i.get(targ_cc, -1)
+			if targ_chunk_i != -1:
+				chunks[targ_chunk_i].zeroify_determstates(CHUNK_VICINITY_TP_BITSTATES[i])
 		return
-	func zeroify_vicinity_determstates_tp():
-		pass
-	func zeroify_vicinity_determstates_tps():
-		pass
+	# Regarding a single TP + the immediately surrounding TPs (some which may be in neighboring chunks.)
+	func zeroify_vicinity_determstates_tp(cc: Vector3i, tp_i: int):
+		var tp_c: Vector3i = WorldUtils.tp_hzz_from_i(tp_i)
+		var targ_tp_c: Vector3i = Vector3i.ZERO
+		var targ_cc: Vector3i = Vector3i.ZERO
+		var targ_chunk_i: int = 0
+		for i in (3**3):
+			targ_tp_c = tp_c + Vector3i(posmod(i/9, 3) - 1, posmod(i/3, 3) - 1, posmod(i, 3) - 1)
+			targ_cc = Vector3i(
+				( (cc[0]-1) if (targ_tp_c[0]<0) else (cc[0]) ) if (targ_tp_c[0]<4) else (cc[0]+1), 
+				( (cc[1]-1) if (targ_tp_c[1]<0) else (cc[1]) ) if (targ_tp_c[1]<4) else (cc[1]+1),
+				( (cc[2]-1) if (targ_tp_c[2]<0) else (cc[2]) ) if (targ_tp_c[2]<4) else (cc[2]+1),
+			)
+			targ_chunk_i = cc_to_i.get(targ_cc, -1)
+			if targ_chunk_i == -1:
+				continue
+			targ_tp_c = Vector3i(posmod(targ_tp_c[0], 4), posmod(targ_tp_c[1], 4), posmod(targ_tp_c[2], 4))
+			chunks[targ_chunk_i].zeroify_determstates_single(WorldUtils.tp_i_from_hzz(targ_tp_c))
+		return
 
 class StaticChunksGroup:
 	extends ChunksGroup
