@@ -66,8 +66,8 @@ enum TILE_FOPAQ { # ("fopaq" from "force to be opaque".)
 }
 # !!! 1 bit enum, or a 1 bit data increase for an existing enum, is available.
 
-# template:
-# [0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000],
+# Precalculated bitstates values for each of 3^3 (27) chunks in standard hzz order (all - to all +),
+# regarding which of their TPs either are contained in or directly neighbor the central chunk.
 const CHUNK_VICINITY_TP_BITSTATES: Array[PackedByteArray] = [
 	# Bottom layer:
 	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b10000000], # corner
