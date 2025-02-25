@@ -68,13 +68,6 @@ var draw_debug_chunk_borders: bool = false
 
 #-=-=-=-# INITIALIZATION:
 
-
-class Thing:
-	pass
-func f():
-	var a: Thing
-
-
 func _enter_tree() -> void:
 	randomize() # Randomizes global rng.
 	FileManager.ensure_required_dirs()

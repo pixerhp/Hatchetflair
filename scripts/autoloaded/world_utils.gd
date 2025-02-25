@@ -68,7 +68,7 @@ enum TILE_FOPAQ { # ("fopaq" from "force to be opaque".)
 
 # template:
 # [0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000],
-const chunk_surround_bitstates: Array[PackedByteArray] = [
+const CHUNK_VICINITY_TP_BITSTATES: Array[PackedByteArray] = [
 	# Bottom layer:
 	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b10000000], # corner
 	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b11110000], # edge
@@ -138,7 +138,7 @@ class Chunk:
 		# Bitstates for whether each TerrainPiece is known to be fully empty/atmosphere.
 		# A known-to-be-empty TerrainPiece can stay unloaded to save on RAM, 
 		# and if eventually fully loaded, doesn't need to check/open associated save-files to load it.
-	var tp_determinables_uptodate: Array[PackedByteArray] = [[], [], [], [],]
+	var tp_determs_uptodate: Array[PackedByteArray] = [[], [], [], [],]
 		# Elements in the outer array represent the different determinable types,
 		# (occupiednesses, fluid flow directions, solid terrain stabilities, mesh fopaqs,)
 		# each containing a TP bitmask PackedByteArray.
@@ -157,6 +157,13 @@ class Chunk:
 		ccoords = in_ccoords
 		reset_terrain_pieces()
 	
+	func zeroify_determstates(affected_tps: PackedByteArray):
+		for i in 8:
+			for j in tp_determs_uptodate.size():
+				tp_determs_uptodate[j][i] &= ~ affected_tps[i]
+		return
+	
+	
 	func reset_terrain_pieces():
 		# Reset the stored TerrainPiece objects:
 		terrain_pieces.clear()
@@ -166,10 +173,10 @@ class Chunk:
 		biome = BIOME.NO_BIOME
 		tp_is_atm_bitstates.resize(8); tp_is_atm_bitstates.fill(0b00000000)
 		tp_is_loaded_bitstates.resize(8); tp_is_loaded_bitstates.fill(0b00000000)
-		tp_determinables_uptodate.resize(4)
-		for i in tp_determinables_uptodate.size():
-			tp_determinables_uptodate[i].resize(8)
-			tp_determinables_uptodate[i].fill(0b00000000)
+		tp_determs_uptodate.resize(4)
+		for i in tp_determs_uptodate.size():
+			tp_determs_uptodate[i].resize(8)
+			tp_determs_uptodate[i].fill(0b00000000)
 	
 	# A chunk's terrain data separated into 64 (4*4*4) TerrainPiece's (each containing 64 (4*4*4) tiles,)
 	# As then individual TerrainPiece's can be loaded/unloaded or have their data calculated/updated,
@@ -198,3 +205,41 @@ func tp_i_from_hzz(hzz: Vector3i) -> int:
 	return (hzz[0] * 16) + (hzz[1] * 4) + (hzz[2])
 func tp_hzz_from_i(i: int) -> Vector3i:
 	return Vector3i(posmod(i/16, 4), posmod(i/4, 4), posmod(i, 4))
+
+class ChunksGroup:
+	var chunks: Array[Chunk] = []
+	var cc_to_i: Dictionary = {}
+		# chunk coordinates to chunks array index.
+	func refresh_cc_to_i():
+		cc_to_i.clear()
+		for i in chunks.size():
+			cc_to_i[chunks[i].ccoords] = i
+		return
+	
+	func zeroify_vicinity_determstates_chunk(ccoords: Vector3i):
+		var targ_ccoords: Vector3i
+		for i in (3**3):
+			targ_ccoords = ccoords + Vector3i(posmod(i/9, 3) - 1, posmod(i/3, 3) - 1, posmod(i, 3) - 1)
+			if cc_to_i.has(targ_ccoords):
+				chunks[cc_to_i[targ_ccoords]].zeroify_determstates(CHUNK_VICINITY_TP_BITSTATES[i])
+		return
+	func zeroify_vicinity_determstates_tp():
+		pass
+	func zeroify_vicinity_determstates_tps():
+		pass
+
+class StaticChunksGroup:
+	extends ChunksGroup
+
+class MobileChunksGroup:
+	extends ChunksGroup
+	var group_node: Node3D
+		# A reference to the 3D node which parents all of the group's chunk nodes.
+		# For example, if the whole group needs to move together, then this node is the only one that moves.
+	
+	#enum MOBILITY_TYPE {
+		#TRANSLATIONAL,
+		#ROTATIONAL,
+		#OMNI,
+	#}
+	#var mobility_type: int = -1

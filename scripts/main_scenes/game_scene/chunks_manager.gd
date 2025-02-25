@@ -6,10 +6,10 @@ signal chunks_manager_thread_ended
 
 @onready var cm_node: Object = self
 
-# Chunk data & data access:
-var hzz_to_chunk_i: Dictionary = {}
+# Chunk data:
 var static_chunks: Array[WorldUtils.Chunk]
-# !!! (Store groups of chunks which are used as dynamic/mobile here as well in the future.)
+var hzz_to_chunk_i: Dictionary = {}
+var mobile_chunks_groups: Array[WorldUtils.MobileChunksGroup]
 
 # Thread-related:
 var mutex: Mutex
@@ -442,7 +442,7 @@ func calculate_chunk_determinables(
 	for i in (3**3):
 		ensure_chunk_tps_loaded(
 			ccoords + Vector3i(posmod(i/9, 3) - 1, posmod(i/3, 3) - 1, posmod(i, 3) - 1),
-			WorldUtils.chunk_surround_bitstates[i],
+			WorldUtils.CHUNK_VICINITY_TP_BITSTATES[i],
 		)
 	
 	
@@ -639,18 +639,18 @@ func generate_natural_terrain(
 	
 	
 	
-	if terrain_pieces.size() != (4**3):
-		push_error("Chunk has ", terrain_pieces.size(), " terrain pieces (instead of 64).")
-		reset_terrain_pieces()
-	
-	for tp_i in (4**3):
-		if tps_to_generate[tp_i/8] & (0b1 << posmod(tp_i, 8)):
-			terrain_pieces[tp_i].clear_all_data()
-			
-			# !!! write terrain generation testing code here
-			
-		elif also_clear_unrelated_tp_data:
-			terrain_pieces[tp_i].clear_all_data()
+	#if terrain_pieces.size() != (4**3):
+		#push_error("Chunk has ", terrain_pieces.size(), " terrain pieces (instead of 64).")
+		#reset_terrain_pieces()
+	#
+	#for tp_i in (4**3):
+		#if tps_to_generate[tp_i/8] & (0b1 << posmod(tp_i, 8)):
+			#terrain_pieces[tp_i].clear_all_data()
+			#
+			## !!! write terrain generation testing code here
+			#
+		#elif also_clear_unrelated_tp_data:
+			#terrain_pieces[tp_i].clear_all_data()
 	
 	return OK
 
