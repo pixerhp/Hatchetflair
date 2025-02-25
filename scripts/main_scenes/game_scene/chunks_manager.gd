@@ -6,21 +6,21 @@ signal chunks_manager_thread_ended
 
 @onready var cm_node: Object = self
 
-# Chunk data:
-var static_chunks: Array[WorldUtils.Chunk]
-var hzz_to_chunk_i: Dictionary = {}
-var mobile_chunks_groups: Array[WorldUtils.MobileChunksGroup]
+# Chunk data & associated:
+var sc: WorldUtils.StaticChunksGroup = WorldUtils.StaticChunksGroup.new() # static chunks
+var mcg: Array[WorldUtils.MobileChunksGroup] = [] # mobile chunks groups
+var mcg_id_to_i: Dictionary = {}
 
 # Thread-related:
 var mutex: Mutex
 var semaphore: Semaphore
 var cm_thread: Thread
 var exit_thread: bool = false
-# Threads data-exchange:
+# Threads data-exchange arrays:
 var in_instructions: Array = [] # main thread adds to it, cm thread reads from it and clears it.
 var out_instructions: Array = [] # cm thread adds to it, main thread reads from it and clears it.
 
-# Local understanding of outside data, only accessed/used by the chunks manager thread:
+# Local cache of main thread / node tree data for use by the cm thread, updated each exchange:
 var player_ccoords: Vector3i = Vector3i(0,0,0) # in hzz
 var player_velocity: Vector3 = Vector3(0,0,0) # in hzz
 
@@ -79,7 +79,7 @@ func _process(delta):
 	if Globals.draw_debug_info_text:
 		DebugDraw.add_text("")
 		mutex.lock()
-		DebugDraw.add_text("Static chunks stored in CM: " + str(static_chunks.size()))
+		DebugDraw.add_text("Static chunks stored in CM: " + str(sc.chunks.size()))
 		mutex.unlock()
 	
 	# !!! later send player's ccoords (which account for my_origin_offset) and velocity.
@@ -171,9 +171,9 @@ func cm_thread_loop():
 	
 	
 	# !!! Temporary for testing:
-	static_chunks.append(WorldUtils.Chunk.new(-1, Vector3i(0,0,0)))
-	hzz_to_chunk_i[Vector3i(0,0,0)] = 0
-	static_chunks[hzz_to_chunk_i[Vector3i(0,0,0)]].generate_natural_terrain()
+	sc.chunks.append(WorldUtils.Chunk.new(-1, Vector3i(0,0,0)))
+	sc.cc_to_i[Vector3i(0,0,0)] = 0
+	sc.chunks[sc.cc_to_i[Vector3i(0,0,0)]].generate_natural_terrain()
 	calculate_chunk_determinables(Vector3i(0,0,0), true, true, true, true)
 	
 	
@@ -401,11 +401,6 @@ func do_work_quota():
 	
 	return
 
-func refresh_hzz_to_chunk_i():
-	hzz_to_chunk_i.clear()
-	for i in static_chunks.size():
-		hzz_to_chunk_i[static_chunks[i].ccoords] = i
-	return
 
 
 
@@ -433,7 +428,7 @@ func calculate_chunk_determinables(
 	if (not calc_occs) and (not calc_flows) and (not calc_stabs) and (not calc_fopaqs):
 		push_warning("No determinable types requested to be calculated.")
 		return OK
-	if not hzz_to_chunk_i.has(ccoords):
+	if not sc.cc_to_i.has(ccoords):
 		push_error(
 			"Attempted to determine tile occupiednesses for an unloaded static chunk: ", ccoords)
 		return FAILED
@@ -468,13 +463,13 @@ func is_chunk_tps_loaded(
 	required_tps: PackedByteArray, 
 	ignore_unloaded_if_atm: bool = true,
 ) -> bool:
-	if not hzz_to_chunk_i.has(ccoords):
+	if not sc.cc_to_i.has(ccoords):
 		return false
 	
-	var tps_states: PackedByteArray = static_chunks[hzz_to_chunk_i[ccoords]].tp_is_loaded_bitstates.duplicate()
+	var tps_states: PackedByteArray = sc.chunks[sc.cc_to_i[ccoords]].tp_is_loaded_bitstates.duplicate()
 	if ignore_unloaded_if_atm:
 		for i in 8:
-			tps_states[i] |= static_chunks[hzz_to_chunk_i[ccoords]].tp_is_atm_bitstates[i]
+			tps_states[i] |= sc.chunks[sc.cc_to_i[ccoords]].tp_is_atm_bitstates[i]
 	
 	for i in 8:
 		if (~ ((~ required_tps[i]) | (required_tps[i] & tps_states[i]))) == 0b00000000:
@@ -489,16 +484,16 @@ func determine_which_chunk_tps_need_loading(
 	required_tps: PackedByteArray, 
 	ignore_unloaded_if_atm: bool = true,
 ) -> PackedByteArray:
-	if not hzz_to_chunk_i.has(ccoords):
+	if not sc.cc_to_i.has(ccoords):
 		# The entire chunk isn't loaded, so inherently all of the required tps will need to be loaded.
 		return required_tps
 	
 	var result: PackedByteArray = []
 	result.resize(8)
-	var tps_states: PackedByteArray = static_chunks[hzz_to_chunk_i[ccoords]].tp_is_loaded_bitstates.duplicate()
+	var tps_states: PackedByteArray = sc.chunks[sc.cc_to_i[ccoords]].tp_is_loaded_bitstates.duplicate()
 	if ignore_unloaded_if_atm:
 		for i in 8:
-			tps_states[i] |= static_chunks[hzz_to_chunk_i[ccoords]].tp_is_atm_bitstates[i]
+			tps_states[i] |= sc.chunks[sc.cc_to_i[ccoords]].tp_is_atm_bitstates[i]
 	
 	for i in 8:
 		result[i] = required_tps[i] & (~ tps_states[i])
@@ -510,9 +505,9 @@ func load_static_chunk_data(
 	# !!! terrain objects, structures, etc?
 ) -> Error:
 	# If a static chunk with provided ccoords doesn't already exist, instantiate it.
-	if not hzz_to_chunk_i.has(ccoords):
-		static_chunks.append(WorldUtils.Chunk.new(-1, ccoords))
-		hzz_to_chunk_i[ccoords] = static_chunks.size() - 1
+	if not sc.cc_to_i.has(ccoords):
+		sc.chunks.append(WorldUtils.Chunk.new(-1, ccoords))
+		sc.cc_to_i[ccoords] = sc.chunks.size() - 1
 	
 	# !!! see if requested chunk data exists stored in files and load it if it does.
 	
@@ -521,10 +516,10 @@ func load_static_chunk_data(
 	return OK
 
 func unload_static_chunk_data(ccoords: Vector3i) -> Error:
-	if not hzz_to_chunk_i.has(ccoords):
-		refresh_hzz_to_chunk_i()
-		if hzz_to_chunk_i.has(ccoords):
-			push_warning("hzz_to_chunk_i was originally found to be inaccurate.")
+	if not sc.cc_to_i.has(ccoords):
+		sc.refresh_cc_to_i()
+		if sc.cc_to_i.has(ccoords):
+			push_warning("sc.cc_to_i was originally found to be inaccurate.")
 		else:
 			push_error("No loaded static chunk with specified ccoords exists.")
 			return FAILED
@@ -538,41 +533,41 @@ func unload_static_chunk_data(ccoords: Vector3i) -> Error:
 
 # Clears chunks from memory, DOESN'T SAVE THEM TO FILES FIRST (use unload chunks funcs for that.)
 func clear_chunk(ccoords: Vector3i) -> Error:
-	if hzz_to_chunk_i.has(ccoords):
-		static_chunks.remove_at(hzz_to_chunk_i[ccoords])
-		refresh_hzz_to_chunk_i()
+	if sc.cc_to_i.has(ccoords):
+		sc.chunks.remove_at(sc.cc_to_i[ccoords])
+		sc.refresh_cc_to_i()
 		return OK
 	else:
-		refresh_hzz_to_chunk_i()
-		if hzz_to_chunk_i.has(ccoords):
-			push_warning("hzz_to_chunk_i was originally found to be inaccurate.")
-			static_chunks.remove_at(hzz_to_chunk_i[ccoords])
-			refresh_hzz_to_chunk_i()
+		sc.refresh_cc_to_i()
+		if sc.cc_to_i.has(ccoords):
+			push_warning("sc.cc_to_i was originally found to be inaccurate.")
+			sc.chunks.remove_at(sc.cc_to_i[ccoords])
+			sc.refresh_cc_to_i()
 			return OK
 		else:
 			return FAILED
 func clear_all_chunks(ccoords: Vector3i):
-	static_chunks.clear()
-	hzz_to_chunk_i.clear()
+	sc.chunks.clear()
+	sc.cc_to_i.clear()
 
 # !!! (Consider the inefficiency of if several neighboring TPs are cleared in a row,
 # that some chunks/TPs/variables get unnecessarily checked/updated repeatedly.)
 # Properly clears a tp and updates both its and surounding tps' associated chunk variables.
 func clear_static_chunk_terrain_piece(ccoords: Vector3i, tp_i: int) -> Error:
 	# If the chunk is not found, then it cannot be appropriately modified.
-	var chunk_i: int = hzz_to_chunk_i.get(ccoords, -1)
+	var chunk_i: int = sc.cc_to_i.get(ccoords, -1)
 	if chunk_i == -1:
 		push_error("Chunk not found stored in static chunks: ", ccoords)
 		return FAILED
 	
 	# Clear the requested TerrainPiece:
-	if static_chunks[chunk_i].terrain_pieces.size() == 64:
-		static_chunks[chunk_i].terrain_pieces[posmod(tp_i, 64)] = WorldUtils.Chunk.TerrainPiece.new()
+	if sc.chunks[chunk_i].terrain_pieces.size() == 64:
+		sc.chunks[chunk_i].terrain_pieces[posmod(tp_i, 64)] = WorldUtils.Chunk.TerrainPiece.new()
 	else:
 		push_error(
 			"static chunk ", ccoords, " (index: ", chunk_i, ")" +
 			" does not have its terrain_pieces array sized correctly (size is ", 
-			static_chunks[chunk_i].terrain_pieces.size(), " instead of 64)"
+			sc.chunks[chunk_i].terrain_pieces.size(), " instead of 64)"
 		)
 	
 	# Update associated chunks' TP-related variables (assumes correct chunk variable sizes,)
@@ -588,7 +583,7 @@ func clear_static_chunk_terrain_piece(ccoords: Vector3i, tp_i: int) -> Error:
 			((ccoords[2]-1) if (targ_tp_c[2]<0) else (ccoords[2])) if (targ_tp_c[2]<4) else (ccoords[2]+1),
 		)
 		
-		var targ_chunk_index: int = hzz_to_chunk_i.get(targ_chunk_ccoords, -1)
+		var targ_chunk_index: int = sc.cc_to_i.get(targ_chunk_ccoords, -1)
 		if targ_chunk_index == -1:
 			continue # Chunk is presumably unloaded, do nothing.
 		else:
@@ -596,10 +591,10 @@ func clear_static_chunk_terrain_piece(ccoords: Vector3i, tp_i: int) -> Error:
 			var t_tp_i: int = WorldUtils.tp_i_from_hzz(targ_tp_c)
 			# Update chunk variables associated with impacted TP.
 			# (If any associated variables are added/deleted later, then this part will need to be updated.)
-			static_chunks[targ_chunk_index].tp_is_loaded_bitstates[t_tp_i/8] &= ~ (1 << posmod(t_tp_i, 8))
-			static_chunks[targ_chunk_index].tp_is_atm_bitstates[t_tp_i/8] &= ~ (1 << posmod(t_tp_i, 8))
-			for j in static_chunks[targ_chunk_index].tp_determinables_uptodate.size():
-				static_chunks[targ_chunk_index].tp_determinables_uptodate[j][tp_i/8] &= (
+			sc.chunks[targ_chunk_index].tp_is_loaded_bitstates[t_tp_i/8] &= ~ (1 << posmod(t_tp_i, 8))
+			sc.chunks[targ_chunk_index].tp_is_atm_bitstates[t_tp_i/8] &= ~ (1 << posmod(t_tp_i, 8))
+			for j in sc.chunks[targ_chunk_index].tp_determinables_uptodate.size():
+				sc.chunks[targ_chunk_index].tp_determinables_uptodate[j][tp_i/8] &= (
 					~ (0b00000001 << posmod(tp_i, 8))
 				)
 	return OK
@@ -616,15 +611,15 @@ func generate_natural_terrain(
 	seed: int = WorldUtils.world_seed,
 ) -> Error:
 	var chunk_i: int = -1
-	if hzz_to_chunk_i.has(ccoords):
-		# (Assumes that hzz_to_chunk_i is accurate.)
-		chunk_i = hzz_to_chunk_i[ccoords]
+	if sc.cc_to_i.has(ccoords):
+		# (Assumes that sc.cc_to_i is accurate.)
+		chunk_i = sc.cc_to_i[ccoords]
 		if clear_all_tps == true:
-			static_chunks[chunk_i].reset_terrain_pieces()
+			sc.chunks[chunk_i].reset_terrain_pieces()
 	else:
-		chunk_i = static_chunks.size()
-		static_chunks.append(WorldUtils.Chunk.new(group, ccoords))
-		hzz_to_chunk_i[ccoords] = chunk_i
+		chunk_i = sc.chunks.size()
+		sc.chunks.append(WorldUtils.Chunk.new(group, ccoords))
+		sc.cc_to_i[ccoords] = chunk_i
 	
 	if (tps_to_generate == PackedByteArray([255, 255, 255, 255, 255, 255, 255, 255])) or (clear_all_tps == true):
 		pass

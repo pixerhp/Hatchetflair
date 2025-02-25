@@ -261,7 +261,9 @@ class StaticChunksGroup:
 
 class MobileChunksGroup:
 	extends ChunksGroup
-	var group_node: Node3D
+	var identifier: String = ""
+		# Used by the ChunksManager to help differentiate/access different mobile chunk groups.
+	var controller_node: Node3D
 		# A reference to the 3D node which parents all of the group's chunk nodes.
 		# For example, if the whole group needs to move together, then this node is the only one that moves.
 	
