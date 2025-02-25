@@ -109,7 +109,7 @@ class Chunk:
 	var chunk_group: int = -1
 		# Used for mobile groups of chunks which are separate from static chunks,
 		# a value of -1 indicates a static chunk, which is also how you can check whether a chunk is static.
-	var ccoords: Vector3i = Vector3i(0,0,0)
+	var cc: Vector3i = Vector3i(0,0,0)
 		# For static chunks, specifies where in the world this chunk is located relative to the origin chunk.
 		# For mobile chunks, specifies ccoords relative to the associated group's origin chunk.
 	
@@ -151,10 +151,10 @@ class Chunk:
 		# and don't exist on a per-grid-volume basis like solid terrain does with tiles.
 		# Structure pieces may consist of a variety of shapes/sizes.
 	
-	func _init(in_chunk_group: int, in_ccoords: Vector3i):
+	func _init(in_chunk_group: int, in_cc: Vector3i):
 		associated_nodes_refs.clear()
 		chunk_group = in_chunk_group
-		ccoords = in_ccoords
+		cc = in_cc
 		reset_terrain_pieces()
 	
 	func zeroify_determstates(affected_tps: PackedByteArray):
@@ -203,6 +203,13 @@ class Chunk:
 			# Each byte represents 1 tile: 
 			# 2 bits for occupiednesses, 2 bits for fluid flow directions, 
 			# 2 bits for solid terrain stabilities, 1 bit for mesh fopaqs, 1 currently unused bit.
+	
+	# ONLY generates natural terrain/structues, doesn't zeroify determs / update nodes / remesh / etc.
+	func generate_natural(in_seed: int = WorldUtils.world_seed, in_cc: Vector3i = cc):
+		
+		# !!! write terrain/other generation code later
+		
+		pass
 
 func tp_i_from_hzz(hzz: Vector3i) -> int:
 	return (hzz[0] * 16) + (hzz[1] * 4) + (hzz[2])
