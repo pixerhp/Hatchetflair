@@ -68,7 +68,8 @@ enum TILE_FOPAQ { # ("fopaq" from "force to be opaque".)
 
 # Precalculated bitstates values for each of 3^3 (27) chunks in standard hzz order (all - to all +),
 # regarding which of their TPs either are contained in or directly neighbor the central chunk.
-const CHUNK_VICINITY_TP_BITSTATES: Array[PackedByteArray] = [
+# !!! test whether you can set this to const instead of var, the related bug may or may not be fixed.
+var CHUNK_VICINITY_TP_BITSTATES: Array[PackedByteArray] = [
 	# Bottom layer:
 	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b10000000], # corner
 	[0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b00000000, 0b11110000], # edge
@@ -157,14 +158,22 @@ class Chunk:
 		cc = in_cc
 		reset_terrain_pieces()
 	
-	func zeroify_determstates(affected_tps: PackedByteArray):
+	func zeroify_determstates(
+		affected_tps: PackedByteArray, 
+		determs_to_zeroify: Array[bool] = [true, true, true, true],
+	):
 		for i in 8:
 			for j in tp_determs_uptodate.size():
-				tp_determs_uptodate[j][i] &= ~ affected_tps[i]
+				if determs_to_zeroify[j] == true:
+					tp_determs_uptodate[j][i] &= ~ affected_tps[i]
 		return
-	func zeroify_determstates_single(tp_i: int):
+	func zeroify_determstates_single(
+		tp_i: int, 
+		determs_to_zeroify: Array[bool] = [true, true, true, true],
+	):
 		for j in tp_determs_uptodate.size():
-			tp_determs_uptodate[j][tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
+			if determs_to_zeroify[j] == true:
+				tp_determs_uptodate[j][tp_i/8] &= ~ (0b00000001 << posmod(tp_i, 8))
 		return
 	
 	func reset_terrain_pieces():
@@ -217,6 +226,7 @@ func tp_hzz_from_i(i: int) -> Vector3i:
 	return Vector3i(posmod(i/16, 4), posmod(i/4, 4), posmod(i, 4))
 
 class ChunksGroup:
+	var filepath: String = ""
 	var chunks: Array[Chunk] = []
 	var cc_to_i: Dictionary = {}
 		# chunk coordinates to chunks array index.
@@ -227,17 +237,27 @@ class ChunksGroup:
 		return
 	
 	# Regarding a full chunk's TPs + the immediately surrounding TPs of neighboring chunks.
-	func zeroify_vicinity_determstates_chunk(cc: Vector3i):
+	func zeroify_vicinity_determstates_chunk(
+		cc: Vector3i, 
+		determs_to_zeroify: Array[bool] = [true, true, true, true],
+	):
 		var targ_cc: Vector3i = Vector3i.ZERO
 		var targ_chunk_i: int = 0
 		for i in (3**3):
 			targ_cc = cc + Vector3i(posmod(i/9, 3) - 1, posmod(i/3, 3) - 1, posmod(i, 3) - 1)
 			targ_chunk_i = cc_to_i.get(targ_cc, -1)
 			if targ_chunk_i != -1:
-				chunks[targ_chunk_i].zeroify_determstates(CHUNK_VICINITY_TP_BITSTATES[i])
+				chunks[targ_chunk_i].zeroify_determstates(
+					WorldUtils.CHUNK_VICINITY_TP_BITSTATES[i], 
+					determs_to_zeroify,
+				)
 		return
 	# Regarding a single TP + the immediately surrounding TPs (some which may be in neighboring chunks.)
-	func zeroify_vicinity_determstates_tp(cc: Vector3i, tp_i: int):
+	func zeroify_vicinity_determstates_tp(
+		cc: Vector3i, 
+		tp_i: int,
+		determs_to_zeroify: Array[bool] = [true, true, true, true],
+	):
 		var tp_c: Vector3i = WorldUtils.tp_hzz_from_i(tp_i)
 		var targ_tp_c: Vector3i = Vector3i.ZERO
 		var targ_cc: Vector3i = Vector3i.ZERO
@@ -253,11 +273,18 @@ class ChunksGroup:
 			if targ_chunk_i == -1:
 				continue
 			targ_tp_c = Vector3i(posmod(targ_tp_c[0], 4), posmod(targ_tp_c[1], 4), posmod(targ_tp_c[2], 4))
-			chunks[targ_chunk_i].zeroify_determstates_single(WorldUtils.tp_i_from_hzz(targ_tp_c))
+			chunks[targ_chunk_i].zeroify_determstates_single(
+				WorldUtils.tp_i_from_hzz(targ_tp_c),
+				determs_to_zeroify,
+			)
 		return
 
 class StaticChunksGroup:
 	extends ChunksGroup
+	
+	func _init():
+		pass
+		# filepath = FileManager.PATH.STATIC_CHUNKS_GROUP
 
 class MobileChunksGroup:
 	extends ChunksGroup
@@ -273,3 +300,8 @@ class MobileChunksGroup:
 		#OMNI,
 	#}
 	#var mobility_type: int = -1
+	
+	func _init(in_identifier: String):
+		identifier = in_identifier
+		# filepath = FileManager.PATH.MOBILE_CHUNKS_GROUP + "/" + identifier
+		return

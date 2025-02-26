@@ -1,4 +1,4 @@
-@icon("res://assets/icons/godot_proj_icons/chunks_manager.png")
+@icon("res://assets/icons/project_icons/chunks_manager.png")
 extends Node
 
 signal chunks_manager_is_ready
@@ -10,6 +10,11 @@ signal chunks_manager_thread_ended
 var sc: WorldUtils.StaticChunksGroup = WorldUtils.StaticChunksGroup.new() # static chunks
 var mcg: Array[WorldUtils.MobileChunksGroup] = [] # mobile chunks groups
 var mcg_id_to_i: Dictionary = {}
+func refresh_mcg_id_to_i():
+	mcg_id_to_i.clear()
+	for i in mcg.size():
+		mcg_id_to_i[mcg[i].identifier] = i
+	return
 
 # Thread-related:
 var mutex: Mutex
@@ -36,7 +41,7 @@ var loops_since_last_update: int = 0
 	# For counting the number of thread while loops since the last data update from the main thread.
 
 
-enum { # instruction sets:
+enum INST_SET {
 	INCOMING,
 	OUTGOING,
 }
@@ -61,6 +66,7 @@ enum OUT_INST { # list of outgoing-type instructions:
 	#ALL_LOADED_CHUNKS_SAVED,
 }
 
+
 func _ready():
 	mutex = Mutex.new()
 	semaphore = Semaphore.new()
@@ -74,7 +80,7 @@ func _ready():
 	return
 
 func _process(delta):
-	process_instructions(OUTGOING)
+	process_instructions(INST_SET.OUTGOING)
 	
 	if Globals.draw_debug_info_text:
 		DebugDraw.add_text("")
@@ -93,6 +99,7 @@ func _process(delta):
 	
 	return
 
+# !!! impermanent, eventually delete when no longer needed for reference/testing:
 #func generate_temporary_testing_mesh():
 	## !!! Temporary experimental mesh stuff:
 	#var mesh_instance_3d: MeshInstance3D = MeshInstance3D.new()
@@ -177,11 +184,10 @@ func cm_thread_loop():
 	calculate_chunk_determinables(Vector3i(0,0,0), true, true, true, true)
 	
 	
-	
 	loops_since_last_update = 0
-	
 	var do_exit_thread: bool = false
 	var should_do_quota: bool = true
+	
 	while true:
 		mutex.lock()
 		do_exit_thread = exit_thread
@@ -194,7 +200,7 @@ func cm_thread_loop():
 		updates_within_last_loop = 0
 		loops_since_last_update += 1
 		
-		process_instructions(INCOMING)
+		process_instructions(INST_SET.INCOMING)
 		
 		if should_do_quota:
 			adjust_work_quota_size()
@@ -207,12 +213,12 @@ func process_instructions(instructions_set: int) -> Error:
 	# Read and then clear the associated instructions array in a thread-safe way:
 	var instructions: Array = []
 	match instructions_set:
-		INCOMING:
+		INST_SET.INCOMING:
 			mutex.lock()
 			instructions = in_instructions.duplicate()
 			in_instructions.clear()
 			mutex.unlock()
-		OUTGOING:
+		INST_SET.OUTGOING:
 			mutex.lock()
 			instructions = out_instructions.duplicate()
 			out_instructions.clear()
@@ -239,17 +245,17 @@ func process_instructions(instructions_set: int) -> Error:
 				if instructions[i].is_empty():
 					push_error("Instructions entry is an empty array.")
 					match instructions_set:
-						INCOMING:
+						INST_SET.INCOMING:
 							inst_enums.append(IN_INST.SKIP)
-						OUTGOING:
+						INST_SET.OUTGOING:
 							inst_enums.append(OUT_INST.SKIP)
 					continue
 				elif not typeof(instructions[i][0]) == TYPE_INT:
 					push_error("First element of instructions array was not an instruction enum.")
 					match instructions_set:
-						INCOMING:
+						INST_SET.INCOMING:
 							inst_enums.append(IN_INST.SKIP)
-						OUTGOING:
+						INST_SET.OUTGOING:
 							inst_enums.append(OUT_INST.SKIP)
 					continue
 				else: # the array format is OK.
@@ -258,9 +264,9 @@ func process_instructions(instructions_set: int) -> Error:
 			_:
 				push_error("Instruction format not supported, its instruction enum was not found.")
 				match instructions_set:
-					INCOMING:
+					INST_SET.INCOMING:
 						inst_enums.append(IN_INST.SKIP)
-					OUTGOING:
+					INST_SET.OUTGOING:
 						inst_enums.append(OUT_INST.SKIP)
 				continue
 	
@@ -268,9 +274,9 @@ func process_instructions(instructions_set: int) -> Error:
 	
 	# Check for a (the first) "IGNORE_THE_FOLLOWING_INSTRUCTIONS" instruction, and do accordingly.
 	match instructions_set:
-		INCOMING:
+		INST_SET.INCOMING:
 			ignorance_index = inst_enums.find(IN_INST.IGNORE_THE_FOLLOWING_INSTRUCTIONS)
-		OUTGOING:
+		INST_SET.OUTGOING:
 			ignorance_index = inst_enums.find(OUT_INST.IGNORE_THE_FOLLOWING_INSTRUCTIONS)
 	if ignorance_index != -1:
 		if ignorance_index == 0:
@@ -282,9 +288,9 @@ func process_instructions(instructions_set: int) -> Error:
 	
 	# Check for a (the last) "IGNORE_THE_PREVIOUS_INSTRUCTIONS" instruction, and do accordingly.
 	match instructions_set:
-		INCOMING:
+		INST_SET.INCOMING:
 			ignorance_index = inst_enums.rfind(IN_INST.IGNORE_THE_PREVIOUS_INSTRUCTIONS)
-		OUTGOING:
+		INST_SET.OUTGOING:
 			ignorance_index = inst_enums.rfind(OUT_INST.IGNORE_THE_PREVIOUS_INSTRUCTIONS)
 	if ignorance_index != -1:
 		if ignorance_index + 1 == inst_enums.size():
@@ -296,7 +302,7 @@ func process_instructions(instructions_set: int) -> Error:
 	
 	# Execute the finalized list of instructions, in order of first to last:
 	match instructions_set:
-		INCOMING:
+		INST_SET.INCOMING:
 			for i in inst_enums.size():
 				match inst_enums[i]:
 					IN_INST.SKIP:
@@ -328,7 +334,7 @@ func process_instructions(instructions_set: int) -> Error:
 					_:
 						push_error("Unknown/unsupported incoming-instruction enum: ", inst_enums[i])
 						continue
-		OUTGOING:
+		INST_SET.OUTGOING:
 			for i in inst_enums.size():
 				match inst_enums[i]:
 					OUT_INST.SKIP:
@@ -402,23 +408,7 @@ func do_work_quota():
 	return
 
 
-
-
-
-
-
-# !!! Functions for setting bits chunk tp bitstates to off for one tp + neighbors, and for 1 whole chunk + tp neighbors?
-func set_tp_and_neighboring_tps_bitstates_off(group: int, ccoords: Vector3i, tp_i: int):
-	pass
-# !!! Then, use these functions in other places, like clear chunk tp and generate natural terrain.
-func set_chunk_and_neighboring_tps_bitstates_off(group: int, ccoords: Vector3i):
-	pass
-
-
-
-
-
-
+# !!! revise this, it should probably go into ChunksGroup class and call FileManager for file loading.
 # !!! eventually revise to work with calculating determinables for specific TPs 
 # rather than always the whole chunk.
 func calculate_chunk_determinables(
@@ -448,6 +438,10 @@ func calculate_chunk_determinables(
 	# !!! set the actual chunk's occs to the calculated chunk_occs
 	
 	return OK
+
+
+# !!! all below still need to be assessed for where they should be revised into:
+
 
 # Ensures that certain chunks (specifically certain terrain pieces) either are or become loaded.
 func ensure_chunk_tps_loaded(ccoords: Vector3i, tps_bitstates: PackedByteArray):

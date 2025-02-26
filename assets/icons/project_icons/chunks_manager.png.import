@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bdhvfn054gnhg"
-path="res://.godot/imported/chunks_manager.png-60f60ef97db1eab0a61265f4c08263e8.ctex"
+path="res://.godot/imported/chunks_manager.png-705f7a51f448e5bad28894726378bf71.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/godot_proj_icons/chunks_manager.png"
-dest_files=["res://.godot/imported/chunks_manager.png-60f60ef97db1eab0a61265f4c08263e8.ctex"]
+source_file="res://assets/icons/project_icons/chunks_manager.png"
+dest_files=["res://.godot/imported/chunks_manager.png-705f7a51f448e5bad28894726378bf71.ctex"]
 
 [params]
 
