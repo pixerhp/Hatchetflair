@@ -177,11 +177,11 @@ func cm_thread_loop():
 	randomize()
 	
 	
-	# !!! Temporary for testing:
-	sc.chunks.append(WorldUtils.Chunk.new(-1, Vector3i(0,0,0)))
-	sc.cc_to_i[Vector3i(0,0,0)] = 0
-	sc.chunks[sc.cc_to_i[Vector3i(0,0,0)]].generate_natural_terrain()
-	calculate_chunk_determinables(Vector3i(0,0,0), true, true, true, true)
+	## !!! Temporary for testing:
+	#sc.chunks.append(WorldUtils.Chunk.new(-1, Vector3i(0,0,0)))
+	#sc.cc_to_i[Vector3i(0,0,0)] = 0
+	#sc.chunks[sc.cc_to_i[Vector3i(0,0,0)]].generate_natural_terrain()
+	#calculate_chunk_determinables(Vector3i(0,0,0), true, true, true, true)
 	
 	
 	loops_since_last_update = 0

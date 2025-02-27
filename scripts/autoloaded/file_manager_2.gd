@@ -16,6 +16,42 @@ class PATH:
 		const SC: String = "sc" # for static chunks related data.
 		const MCG: String = "mcg" # for mobile chunks groups related data.
 
+class ERRMSG:
+	const ERRMSG_START: String = "<< "
+	const ERRMSG_END: String = " >>"
+	
+	const CFG_READ: String = ERRMSG_START + "cfg file read error" + ERRMSG_END
+
+# ----------------------------------------------------------------
+
+# Recursively delete (or only empty) a directory and all of it's contents.
+func erase_dir(path: String, only_contents: bool, to_recycle_bin: bool) -> Error:
+	if to_recycle_bin:
+		if not only_contents:
+			return OS.move_to_trash(ProjectSettings.globalize_path(path))
+		else:
+			var err: Error = OK
+			for dir in DirAccess.get_directories_at(path):
+				if OS.move_to_trash(ProjectSettings.globalize_path(path.path_join(dir))) != OK:
+					err = FAILED
+			for file in DirAccess.get_files_at(path):
+				if OS.move_to_trash(ProjectSettings.globalize_path(path.path_join(file))) != OK:
+					err = FAILED
+			return err
+	else:
+		var err: Error = OK
+		for dir in DirAccess.get_directories_at(path):
+			if erase_dir(path.path_join(dir), false, false) != OK:
+				err = FAILED
+		for file in DirAccess.get_files_at(path):
+			if DirAccess.remove_absolute(path.path_join(file)) != OK:
+				err = FAILED
+		if not only_contents:
+			if DirAccess.remove_absolute(path) != OK:
+				err = FAILED
+		return err
+
+# ----------------------------------------------------------------
 
 func get_filepath_for_chunkdata(
 	cc: Vector3i,
