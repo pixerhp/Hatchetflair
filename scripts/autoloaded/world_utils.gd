@@ -4,7 +4,8 @@ extends Node
 const CHUNK_WIDTH: int = 16
 const CHUNK_TILES_COUNT: int = CHUNK_WIDTH**3
 
-# Current loaded world's seeds and generational/spawning settings:
+# Current loaded world's data/settings:
+var world_name: String = ""
 var world_seed: int = 0
 # !!! var ocean_height
 
@@ -226,7 +227,6 @@ func tp_hzz_from_i(i: int) -> Vector3i:
 	return Vector3i(posmod(i/16, 4), posmod(i/4, 4), posmod(i, 4))
 
 class ChunksGroup:
-	var filepath: String = ""
 	var chunks: Array[Chunk] = []
 	var cc_to_i: Dictionary = {}
 		# chunk coordinates to chunks array index.
@@ -284,7 +284,6 @@ class StaticChunksGroup:
 	
 	func _init():
 		pass
-		# filepath = FileManager.PATH.STATIC_CHUNKS_GROUP
 
 class MobileChunksGroup:
 	extends ChunksGroup
@@ -303,5 +302,4 @@ class MobileChunksGroup:
 	
 	func _init(in_identifier: String):
 		identifier = in_identifier
-		# filepath = FileManager.PATH.MOBILE_CHUNKS_GROUP + "/" + identifier
 		return

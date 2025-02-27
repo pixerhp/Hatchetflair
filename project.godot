@@ -33,6 +33,7 @@ PixMath="*res://scripts/autoloaded/pix_math.gd"
 WorldUtils="*res://scripts/autoloaded/world_utils.gd"
 ChemCraft="*res://scripts/autoloaded/chem_craft.gd"
 GeoFuncs="*res://scripts/autoloaded/geo_funcs.gd"
+FM="*res://scripts/autoloaded/file_manager_2.gd"
 
 [debug]
 
