@@ -19,16 +19,16 @@ class PATH:
 
 func get_filepath_for_chunkdata(
 	cc: Vector3i,
-	is_static: bool,
+	is_mobile: bool,
 	group_id: String = "",
 	world_name: String = WorldUtils.world_name,
 ) -> String:
 	var region: Vector3i = get_region_from_cc(cc)
 	return (
 		FM.PATH.USER.WORLDS + "/" + world_name.validate_filename() + "/" + ((
-			FM.PATH.PARTIAL.SC
-		) if is_static else (
 			FM.PATH.PARTIAL.MCG + "/" + group_id.validate_filename()
+		) if is_mobile else (
+			FM.PATH.PARTIAL.SC
 		)) + "/" + str(region[0]) + "_" + str(region[1]) + "_" + str(region[2]) + ".hfcr"
 	)
 func get_region_from_cc(cc: Vector3i) -> Vector3i:
@@ -38,15 +38,16 @@ func get_region_from_cc(cc: Vector3i) -> Vector3i:
 		(cc[2] / 16) if (cc[2] >= 0) else (((cc[2] + 1) / 16) - 1),
 	)
 
+# NOTE: In general, use the static/mobile chunk group functions which call this one instead.
 func save_chunk(
 	chunk: WorldUtils.Chunk,
-	is_static: bool,
+	is_mobile: bool,
 	group_id: String = "",
 ) -> Error:
 	if not group_id.is_valid_filename():
 		push_warning("Group identifier contained disallowed filename characters, ",
 		"chunk will be saved under altered group id.")
-	var region_filepath: String = get_filepath_for_chunkdata(chunk.cc, is_static, group_id)
+	var region_filepath: String = get_filepath_for_chunkdata(chunk.cc, is_mobile, group_id)
 	
 	# !!!
 	

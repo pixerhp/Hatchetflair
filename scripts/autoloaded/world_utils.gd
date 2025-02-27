@@ -284,6 +284,21 @@ class StaticChunksGroup:
 	
 	func _init():
 		pass
+	
+	func save_chunk_by_i(chunk_index: int) -> Error:
+		return FM.save_chunk(chunks[chunk_index], false)
+	func save_chunk_by_cc(cc: Vector3i) -> Error:
+		var chunk_index: int = cc_to_i.get(cc, -1)
+		if chunk_index != -1:
+			return save_chunk_by_i(chunk_index)
+		else:
+			return FAILED
+	func save_all_chunks() -> Error:
+		var err: Error = OK
+		for i in chunks.size():
+			if save_chunk_by_i(i) == FAILED:
+				err = FAILED
+		return err
 
 class MobileChunksGroup:
 	extends ChunksGroup
@@ -293,13 +308,21 @@ class MobileChunksGroup:
 		# A reference to the 3D node which parents all of the group's chunk nodes.
 		# For example, if the whole group needs to move together, then this node is the only one that moves.
 	
-	#enum MOBILITY_TYPE {
-		#TRANSLATIONAL,
-		#ROTATIONAL,
-		#OMNI,
-	#}
-	#var mobility_type: int = -1
-	
 	func _init(in_identifier: String):
 		identifier = in_identifier
 		return
+	
+	func save_chunk_by_i(chunk_index: int) -> Error:
+		return FM.save_chunk(chunks[chunk_index], true, identifier)
+	func save_chunk_by_cc(cc: Vector3i) -> Error:
+		var chunk_index: int = cc_to_i.get(cc, -1)
+		if chunk_index != -1:
+			return save_chunk_by_i(chunk_index)
+		else:
+			return FAILED
+	func save_all_chunks() -> Error:
+		var err: Error = OK
+		for i in chunks.size():
+			if save_chunk_by_i(i) == FAILED:
+				err = FAILED
+		return err
