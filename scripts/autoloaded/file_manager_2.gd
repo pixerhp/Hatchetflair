@@ -58,11 +58,11 @@ func erase_dir(path: String, only_contents: bool, to_recycle_bin: bool) -> Error
 				err = FAILED
 		return err
 
+# Use DirAccess.rename() for simply renaming/moving a directory rather than copying it.
 func copy_dir_into_dir(
 	source: String, # Path of the directory to be copied.
 	target: String, # Path of the directory to be copied into, will be created if it doesn't exist.
 	insert_source_dir_name: bool, # Copy the source dir itself into target, instead of just its contents.
-	delete_source: bool, # Delete source after its copied, only if the copy was successful.
 	empty_target: bool, # If the target (including insertion) already exists, empty its contents first.
 	to_recycle_bin: bool, # If any directories/files get deleted, send them to the recycle bin.
 ) -> Error:
@@ -87,18 +87,19 @@ func copy_dir_into_dir(
 			err = FAILED
 	for dir in DirAccess.get_directories_at(source):
 		if copy_dir_into_dir(
-			source.path_join(dir), target.path_join(dir), false, false, false, to_recycle_bin,
+			source.path_join(dir), target.path_join(dir), false, false, to_recycle_bin,
 		) != OK:
 			err = FAILED
-	# If all copying was successful, optionally handle deleting the source directory if requested.
-	if (err == OK) and delete_source:
-		# (Doesn't cause FAILED to be returned regardless of if the deletion fails.)
-		erase_dir(source, not insert_source_dir_name, to_recycle_bin)
 	return err
-
 
 ## ----------------------------------------------------------------
 
+func get_region_from_cc(cc: Vector3i) -> Vector3i:
+	return Vector3i(
+		(cc[0] / 16) if (cc[0] >= 0) else (((cc[0] + 1) / 16) - 1),
+		(cc[1] / 16) if (cc[1] >= 0) else (((cc[1] + 1) / 16) - 1),
+		(cc[2] / 16) if (cc[2] >= 0) else (((cc[2] + 1) / 16) - 1),
+	)
 func get_filepath_for_chunkdata(
 	cc: Vector3i,
 	is_mobile: bool,
@@ -112,12 +113,6 @@ func get_filepath_for_chunkdata(
 		) if is_mobile else (
 			FM.PATH.PARTIAL.SC
 		)) + "/" + str(region[0]) + "_" + str(region[1]) + "_" + str(region[2]) + ".hfcr"
-	)
-func get_region_from_cc(cc: Vector3i) -> Vector3i:
-	return Vector3i(
-		(cc[0] / 16) if (cc[0] >= 0) else (((cc[0] + 1) / 16) - 1),
-		(cc[1] / 16) if (cc[1] >= 0) else (((cc[1] + 1) / 16) - 1),
-		(cc[2] / 16) if (cc[2] >= 0) else (((cc[2] + 1) / 16) - 1),
 	)
 
 # NOTE: In general, use the static/mobile chunk group functions which call this one instead.
