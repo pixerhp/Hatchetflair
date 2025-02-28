@@ -19,13 +19,20 @@ class PATH:
 class ERRMSG:
 	const ERRMSG_START: String = "<< "
 	const ERRMSG_END: String = " >>"
+	static func format(message: String, start: String = "", end: String = "") -> String:
+		return ERRMSG_START + start + message + end + ERRMSG_END
 	
-	const CFG_READ: String = ERRMSG_START + "cfg file read error" + ERRMSG_END
+	const CFG_READ: String = "cfg file read error"
+	const DIR_DOESNT_EXIST: String = "directory doesn't exist"
+	const FILE_DOESNT_EXIST: String = "file doesn't exist"
 
-# ----------------------------------------------------------------
+## ----------------------------------------------------------------
 
 # Recursively delete (or only empty) a directory and all of it's contents.
 func erase_dir(path: String, only_contents: bool, to_recycle_bin: bool) -> Error:
+	if not DirAccess.dir_exists_absolute(path):
+		push_error(FM.ERRMSG.format(FM.ERRMSG.DIR_DOESNT_EXIST, "", ": " + path))
+		return FAILED
 	if to_recycle_bin:
 		if not only_contents:
 			return OS.move_to_trash(ProjectSettings.globalize_path(path))
@@ -51,7 +58,46 @@ func erase_dir(path: String, only_contents: bool, to_recycle_bin: bool) -> Error
 				err = FAILED
 		return err
 
-# ----------------------------------------------------------------
+func copy_dir_into_dir(
+	source: String, # Path of the directory to be copied.
+	target: String, # Path of the directory to be copied into, will be created if it doesn't exist.
+	insert_source_dir_name: bool, # Copy the source dir itself into target, instead of just its contents.
+	delete_source: bool, # Delete source after its copied, only if the copy was successful.
+	empty_target: bool, # If the target (including insertion) already exists, empty its contents first.
+	to_recycle_bin: bool, # If any directories/files get deleted, send them to the recycle bin.
+) -> Error:
+	if not DirAccess.dir_exists_absolute(source):
+		push_error(FM.ERRMSG.format(FM.ERRMSG.DIR_DOESNT_EXIST, "", ": " + source))
+		return FAILED
+	# If the source directory folder itself needs to be copied, alter the target path accordingly.
+	if insert_source_dir_name:
+		target = target.path_join(source.erase(0, source.rfind("/") + 1))
+	# Ensure that the target directory exists, and be empty if requested.
+	if DirAccess.dir_exists_absolute(target):
+		if empty_target:
+			# (The copy is attempted regardless of whether this fails.)
+			erase_dir(target, true, to_recycle_bin)
+	else:
+		if DirAccess.make_dir_recursive_absolute(target) != OK:
+			return FAILED
+	# Do the file/directory copying.
+	var err: Error = OK
+	for file in DirAccess.get_files_at(source):
+		if DirAccess.copy_absolute(source.path_join(file), target.path_join(file)) != OK:
+			err = FAILED
+	for dir in DirAccess.get_directories_at(source):
+		if copy_dir_into_dir(
+			source.path_join(dir), target.path_join(dir), false, false, false, to_recycle_bin,
+		) != OK:
+			err = FAILED
+	# If all copying was successful, optionally handle deleting the source directory if requested.
+	if (err == OK) and delete_source:
+		# (Doesn't cause FAILED to be returned regardless of if the deletion fails.)
+		erase_dir(source, not insert_source_dir_name, to_recycle_bin)
+	return err
+
+
+## ----------------------------------------------------------------
 
 func get_filepath_for_chunkdata(
 	cc: Vector3i,
