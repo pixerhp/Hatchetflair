@@ -95,23 +95,24 @@ func copy_dir_into_dir(
 			err = FAILED
 	return err
 
-func get_dir_size(path: String) -> int:
+func get_dir_size(path: String, attempt_os_ask: bool = true) -> int:
 	# Try getting the filesize quickly using the OS.
-	match OS.get_name():
-		"Windows":
-			var output: Array = []
-			var err: int = OS.execute("powershell.exe", [
-				"/C", "\"ls -r " + ProjectSettings.globalize_path(path) + "|measure -sum length\""
-			], output, false, false)
-			if (err == 0) and (not output.is_empty()):
-				return output[0].split("Sum")[1].split("\n")[0].to_int()
-		"Linux", "FreeBSD", "NetBSD", "OpenBSD", "BSD":
-			var output: Array = []
-			var err: int = OS.execute("du", [
-				"-csb", ProjectSettings.globalize_path(path)
-			], output, false, true)
-			if (err == 0) and (not output.is_empty()):
-				return output[0].split("\t")[0].to_int()
+	if attempt_os_ask:
+		match OS.get_name():
+			"Windows":
+				var output: Array = []
+				var err: int = OS.execute("powershell.exe", [
+					"/C", "\"ls -r " + ProjectSettings.globalize_path(path) + "|measure -sum length\""
+				], output, false, false)
+				if (err == 0) and (not output.is_empty()):
+					return output[0].split("Sum")[1].split("\n")[0].to_int()
+			"Linux", "FreeBSD", "NetBSD", "OpenBSD", "BSD":
+				var output: Array = []
+				var err: int = OS.execute("du", [
+					"-csb", ProjectSettings.globalize_path(path)
+				], output, false, true)
+				if (err == 0) and (not output.is_empty()):
+					return output[0].split("\t")[0].to_int()
 	
 	# Fallback method which opens and checks the length of each file one-by-one.
 	if not DirAccess.dir_exists_absolute(path):
@@ -121,7 +122,7 @@ func get_dir_size(path: String) -> int:
 	for file in DirAccess.get_files_at(path):
 		total += get_file_size(path.path_join(file))
 	for dir in DirAccess.get_directories_at(path):
-		total += get_dir_size(path.path_join(dir))
+		total += get_dir_size(path.path_join(dir), false)
 	return total
 
 func get_file_size(path: String) -> int:
