@@ -98,11 +98,13 @@ func copy_dir_into_dir(
 func get_dir_size(path: String) -> int:
 	if not DirAccess.dir_exists_absolute(path):
 		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_DOESNT_EXIST, path))
-		return FAILED
-	
-	# !!!
-	
-	return 0
+		return 0
+	var total: int = 0
+	for file in DirAccess.get_files_at(path):
+		total += get_file_size(path.path_join(file))
+	for dir in DirAccess.get_directories_at(path):
+		total += get_dir_size(path.path_join(dir))
+	return total
 
 func get_file_size(path: String) -> int:
 	if not FileAccess.file_exists(path):
