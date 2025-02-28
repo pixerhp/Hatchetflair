@@ -96,6 +96,17 @@ func copy_dir_into_dir(
 	return err
 
 func get_dir_size(path: String) -> int:
+	# Try getting the filesize quickly using the OS.
+	match OS.get_name():
+		"Windows":
+			var output: Array = []
+			var err: int = OS.execute("powershell.exe", [
+				"/C", "\"ls -r " + ProjectSettings.globalize_path(path) + "|measure -sum length\""
+			], output, false, false)
+			if (err == 0) and (not output.is_empty()):
+				return output[0].split("Sum")[1].split("\n")[0].to_int()
+	
+	# Fallback method which opens and checks the length of each file one-by-one.
 	if not DirAccess.dir_exists_absolute(path):
 		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_DOESNT_EXIST, path))
 		return 0
