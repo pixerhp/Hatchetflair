@@ -105,6 +105,11 @@ func get_dir_size(path: String) -> int:
 			], output, false, false)
 			if (err == 0) and (not output.is_empty()):
 				return output[0].split("Sum")[1].split("\n")[0].to_int()
+		"Linux", "FreeBSD", "NetBSD", "OpenBSD", "BSD":
+			var output: Array = []
+			var err: int = OS.execute("du", ["-csb", ProjectSettings.globalize_path(path)], output, false, true)
+			if (err == 0) and (not output.is_empty()):
+				return output[0].split("\t")[0].to_int()
 	
 	# Fallback method which opens and checks the length of each file one-by-one.
 	if not DirAccess.dir_exists_absolute(path):
