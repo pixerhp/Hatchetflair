@@ -25,8 +25,8 @@ class ERRMSG:
 		return ERRMSG_START + message + ": " + attach + ERRMSG_END
 	
 	const CFG_READ: String = "cfg file read error"
-	const DIR_DOESNT_EXIST: String = "directory doesn't exist"
-	const FILE_DOESNT_EXIST: String = "file doesn't exist"
+	const DIR_NOT_FOUND: String = "directory wasn't found or doesn't exist"
+	const FILE_NOT_FOUND: String = "file wasn't found or doesn't exist"
 	const FILE_ACCESS_ERROR: String = "file access error"
 
 ## ----------------------------------------------------------------
@@ -34,7 +34,7 @@ class ERRMSG:
 # Recursively delete (or only empty) a directory and all of it's contents.
 func erase_dir(path: String, only_contents: bool, to_recycle_bin: bool) -> Error:
 	if not DirAccess.dir_exists_absolute(path):
-		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_DOESNT_EXIST, path))
+		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_NOT_FOUND, path))
 		return FAILED
 	if to_recycle_bin:
 		if not only_contents:
@@ -70,7 +70,7 @@ func copy_dir_into_dir(
 	to_recycle_bin: bool, # If any directories/files get deleted, send them to the recycle bin.
 ) -> Error:
 	if not DirAccess.dir_exists_absolute(source):
-		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_DOESNT_EXIST, source))
+		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_NOT_FOUND, source))
 		return FAILED
 	# If the source directory folder itself needs to be copied, alter the target path accordingly.
 	if insert_source_dir_name:
@@ -96,6 +96,10 @@ func copy_dir_into_dir(
 	return err
 
 func get_dir_size(path: String, attempt_os_ask: bool = true) -> int:
+	if not DirAccess.dir_exists_absolute(path):
+		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_NOT_FOUND, path))
+		return 0
+	
 	# Try getting the filesize quickly using the OS.
 	if attempt_os_ask:
 		match OS.get_name():
@@ -104,7 +108,7 @@ func get_dir_size(path: String, attempt_os_ask: bool = true) -> int:
 				var err: int = OS.execute("powershell.exe", [
 					"/C", "\"ls -r " + ProjectSettings.globalize_path(path) + "|measure -sum length\""
 				], output, false, false)
-				if (err == 0) and (not output.is_empty()):
+				if (err == 0) and (not (output.is_empty() or (output == [""]))):
 					return output[0].split("Sum")[1].split("\n")[0].to_int()
 			"Linux", "FreeBSD", "NetBSD", "OpenBSD", "BSD":
 				var output: Array = []
@@ -115,9 +119,6 @@ func get_dir_size(path: String, attempt_os_ask: bool = true) -> int:
 					return output[0].split("\t")[0].to_int()
 	
 	# Fallback method which opens and checks the length of each file one-by-one.
-	if not DirAccess.dir_exists_absolute(path):
-		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_DOESNT_EXIST, path))
-		return 0
 	var total: int = 0
 	for file in DirAccess.get_files_at(path):
 		total += get_file_size(path.path_join(file))
@@ -127,7 +128,7 @@ func get_dir_size(path: String, attempt_os_ask: bool = true) -> int:
 
 func get_file_size(path: String) -> int:
 	if not FileAccess.file_exists(path):
-		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.FILE_DOESNT_EXIST, path))
+		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.FILE_NOT_FOUND, path))
 		return FAILED
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 	if FileAccess.get_open_error() != OK:
