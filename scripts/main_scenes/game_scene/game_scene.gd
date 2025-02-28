@@ -46,16 +46,11 @@ func _process(delta):
 	if Input.is_action_pressed("game_play_crouch_slide_crawl"):
 		temporary_cam.position += (cam_speed * delta) * Vector3(0,-1,0)
 	
-	if Input.is_action_pressed("debug_cause_lag_spike"):
-		var a: float = 0
-		for i1 in 40:
-			for i2 in 40:
-				for i3 in 40:
-					for i4 in 40:
-						if (i1 + i2 + i3 + i4) % 2 == 0:
-							a = pow(2.718281828, 6.2831853071)
-						else:
-							a = pow(6.2831853071, 2.718281828)
+	if Input.is_action_just_pressed("debug_cause_lag_spike"):
+		var prev_fps := Engine.max_fps
+		Engine.max_fps = 1
+		await get_tree().create_timer(0.9, true, true, true).timeout
+		Engine.max_fps = prev_fps
 	
 	# debug toggles:
 	if Input.is_action_just_pressed("game_special_draw_debug_text"):
