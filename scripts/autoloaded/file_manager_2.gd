@@ -19,19 +19,22 @@ class PATH:
 class ERRMSG:
 	const ERRMSG_START: String = "<< "
 	const ERRMSG_END: String = " >>"
-	static func format(message: String, start: String = "", end: String = "") -> String:
+	static func form(message: String, start: String = "", end: String = "") -> String:
 		return ERRMSG_START + start + message + end + ERRMSG_END
+	static func form_colon(message: String, attach: String) -> String:
+		return ERRMSG_START + message + ": " + attach + ERRMSG_END
 	
 	const CFG_READ: String = "cfg file read error"
 	const DIR_DOESNT_EXIST: String = "directory doesn't exist"
 	const FILE_DOESNT_EXIST: String = "file doesn't exist"
+	const FILE_ACCESS_ERROR: String = "file access error"
 
 ## ----------------------------------------------------------------
 
 # Recursively delete (or only empty) a directory and all of it's contents.
 func erase_dir(path: String, only_contents: bool, to_recycle_bin: bool) -> Error:
 	if not DirAccess.dir_exists_absolute(path):
-		push_error(FM.ERRMSG.format(FM.ERRMSG.DIR_DOESNT_EXIST, "", ": " + path))
+		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_DOESNT_EXIST, path))
 		return FAILED
 	if to_recycle_bin:
 		if not only_contents:
@@ -67,7 +70,7 @@ func copy_dir_into_dir(
 	to_recycle_bin: bool, # If any directories/files get deleted, send them to the recycle bin.
 ) -> Error:
 	if not DirAccess.dir_exists_absolute(source):
-		push_error(FM.ERRMSG.format(FM.ERRMSG.DIR_DOESNT_EXIST, "", ": " + source))
+		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_DOESNT_EXIST, source))
 		return FAILED
 	# If the source directory folder itself needs to be copied, alter the target path accordingly.
 	if insert_source_dir_name:
@@ -91,6 +94,25 @@ func copy_dir_into_dir(
 		) != OK:
 			err = FAILED
 	return err
+
+func get_dir_size(path: String) -> int:
+	if not DirAccess.dir_exists_absolute(path):
+		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.DIR_DOESNT_EXIST, path))
+		return FAILED
+	
+	# !!!
+	
+	return 0
+
+func get_file_size(path: String) -> int:
+	if not FileAccess.file_exists(path):
+		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.FILE_DOESNT_EXIST, path))
+		return FAILED
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	if FileAccess.get_open_error() != OK:
+		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.FILE_ACCESS_ERROR, str(FileAccess.get_open_error())))
+		return 0
+	return file.get_length()
 
 ## ----------------------------------------------------------------
 
