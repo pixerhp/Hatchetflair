@@ -108,9 +108,6 @@ class Chunk:
 	# Non-content data:
 	var associated_nodes_refs: Array[Object] = []
 		# Stores references to associated scene tree nodes (meshes, collisions, etc.) for quick access.
-	var chunk_group: int = -1
-		# Used for mobile groups of chunks which are separate from static chunks,
-		# a value of -1 indicates a static chunk, which is also how you can check whether a chunk is static.
 	var cc: Vector3i = Vector3i(0,0,0)
 		# For static chunks, specifies where in the world this chunk is located relative to the origin chunk.
 		# For mobile chunks, specifies ccoords relative to the associated group's origin chunk.
@@ -153,9 +150,8 @@ class Chunk:
 		# and don't exist on a per-grid-volume basis like solid terrain does with tiles.
 		# Structure pieces may consist of a variety of shapes/sizes.
 	
-	func _init(in_chunk_group: int, in_cc: Vector3i):
+	func _init(in_cc: Vector3i):
 		associated_nodes_refs.clear()
-		chunk_group = in_chunk_group
 		cc = in_cc
 		reset_terrain_pieces()
 	
@@ -326,3 +322,20 @@ class MobileChunksGroup:
 			if save_chunk_by_i(i) == FAILED:
 				err = FAILED
 		return err
+	
+	# !!! Determine how load chunk stuff should be arranged, here or in generic ChunksGroup or otherwise
+	#func load_chunk_by_cc(cc: Vector3i) -> Error:
+		#var chunk_index: int = cc_to_i.get(cc, -1)
+		#if chunk_index == -1:
+			#chunk_index = chunks.size()
+			#cc_to_i[cc] = chunk_index
+			#chunks.append(FM.load_chunk(cc, true, identifier))
+		#else:
+			#chunks[chunk_index] = FM.load_chunk(cc, true, identifier)
+		#
+		#zeroify_vicinity_determstates_chunk(cc)
+		#
+		#if FM.load_error != OK:
+			#pass
+		#
+		#return OK

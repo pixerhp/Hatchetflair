@@ -1,5 +1,6 @@
 extends Node
 
+# Directory/file paths.
 class PATH:
 	# Full paths:
 	class RES:
@@ -16,6 +17,11 @@ class PATH:
 		const SC: String = "sc" # for static chunks related data.
 		const MCG: String = "mcg" # for mobile chunks groups related data.
 
+# Customly-defined file extensions.
+class CUSTOM_EXT:
+	const CHUNK_REGION: String = ".hfcr"
+
+# Standardized error messages.
 class ERRMSG:
 	const ERRMSG_START: String = "<< "
 	const ERRMSG_END: String = " >>"
@@ -28,6 +34,9 @@ class ERRMSG:
 	const DIR_NOT_FOUND: String = "directory wasn't found or doesn't exist"
 	const FILE_NOT_FOUND: String = "file wasn't found or doesn't exist"
 	const FILE_ACCESS_ERROR: String = "file access error"
+
+# A global var useful for load functions which can't return Error because they return data.
+var load_error: Error = OK
 
 ## ----------------------------------------------------------------
 
@@ -156,7 +165,8 @@ func get_filepath_for_chunkdata(
 			FM.PATH.PARTIAL.MCG + "/" + group_id.validate_filename()
 		) if is_mobile else (
 			FM.PATH.PARTIAL.SC
-		)) + "/" + str(region[0]) + "_" + str(region[1]) + "_" + str(region[2]) + ".hfcr"
+		)) + "/" + str(region[0]) + "_" + str(region[1]) + "_" + str(region[2]) + 
+		FM.CUSTOM_EXT.CHUNK_REGION
 	)
 
 # NOTE: In general, use the static/mobile chunk group functions which call this one instead.
@@ -170,10 +180,19 @@ func save_chunk(
 		"chunk will be saved under altered group id.")
 	var region_filepath: String = get_filepath_for_chunkdata(chunk.cc, is_mobile, group_id)
 	
-	# !!!
+	# !!! write chunkdata saving to files code later!
 	
 	return OK
 
-#func load_chunk(
-	#
-#)
+func load_chunk(
+	cc: Vector3i, 
+	is_mobile: bool, 
+	group_id: String = ""
+) -> WorldUtils.Chunk:
+	load_error = OK
+	var chunk: WorldUtils.Chunk = WorldUtils.Chunk.new(cc)
+	
+	# !!! write chunkdata loading from files code later!
+	
+	load_error = FAILED # !!! temporarily always be FAILED as loading isn't functional yet.
+	return chunk
