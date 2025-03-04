@@ -18,8 +18,7 @@ func _update_title_text():
 	node.text = (
 		"[center]" + 
 		"[img=center,center]" + "res://assets/icons/hatchetflair/v2/hf_v2.png" + "[/img]" +
-		"[rainbow freq=0.01 sat=0.75 val=0.75][wave freq=-2 amp=60]" +
-			 # !!! reverse the direction of the rainbow after rainbow functionality changes when GD 4.4 releases.
+		"[rainbow freq=0.01 sat=0.8 val=1.0 speed=-1.2][wave freq=-2 amp=60]" +
 		 " " + Globals.GAME_NAME +
 		"[/wave][/rainbow]" + 
 		"[/center]"
