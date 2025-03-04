@@ -500,8 +500,10 @@ func load_static_chunk_data(
 ) -> Error:
 	# If a static chunk with provided ccoords doesn't already exist, instantiate it.
 	if not sc.cc_to_i.has(ccoords):
-		sc.chunks.append(WorldUtils.Chunk.new(-1, ccoords))
-		sc.cc_to_i[ccoords] = sc.chunks.size() - 1
+		# !!! update this to work with the new StaticChunksGroup type
+		#sc.chunks.append(WorldUtils.Chunk.new(-1, ccoords))
+		#sc.cc_to_i[ccoords] = sc.chunks.size() - 1
+		pass
 	
 	# !!! see if requested chunk data exists stored in files and load it if it does.
 	
@@ -611,9 +613,11 @@ func generate_natural_terrain(
 		if clear_all_tps == true:
 			sc.chunks[chunk_i].reset_terrain_pieces()
 	else:
-		chunk_i = sc.chunks.size()
-		sc.chunks.append(WorldUtils.Chunk.new(group, ccoords))
-		sc.cc_to_i[ccoords] = chunk_i
+		pass
+		# !!! update this to work with the new StaticChunksGroup type
+		#chunk_i = sc.chunks.size()
+		#sc.chunks.append(WorldUtils.Chunk.new(group, ccoords))
+		#sc.cc_to_i[ccoords] = chunk_i
 	
 	if (tps_to_generate == PackedByteArray([255, 255, 255, 255, 255, 255, 255, 255])) or (clear_all_tps == true):
 		pass

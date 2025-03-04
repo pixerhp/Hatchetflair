@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://o3dnyoj5ql3m"]
 
-[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
+[ext_resource type="Script" uid="uid://b84ku6o0fi4kf" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="2_gr5ms"]
-[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/chunks_manager.gd" id="3_ah17h"]
+[ext_resource type="Script" uid="uid://do32ygum2f5li" path="res://scripts/main_scenes/game_scene/chunks_manager.gd" id="3_ah17h"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
 sky_top_color = Color(0.454902, 0.537255, 0.65098, 1)

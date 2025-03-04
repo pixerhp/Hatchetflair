@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dry5f83aydp54"]
 
-[ext_resource type="Script" path="res://scripts/prefabs/universal_menus/settings.gd" id="1_wqvby"]
+[ext_resource type="Script" uid="uid://bydn4dawilnr2" path="res://scripts/prefabs/universal_menus/settings.gd" id="1_wqvby"]
 
 [node name="SettingsMenu" type="Control"]
 layout_mode = 3

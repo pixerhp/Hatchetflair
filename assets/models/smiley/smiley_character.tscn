@@ -1,6 +1,6 @@
 [gd_scene load_steps=34 format=4 uid="uid://506kap42wq2p"]
 
-[ext_resource type="Script" path="res://assets/models/smiley/smiley_character.gd" id="1_1rupv"]
+[ext_resource type="Script" uid="uid://3fqpkil1vad3" path="res://assets/models/smiley/smiley_character.gd" id="1_1rupv"]
 [ext_resource type="Texture2D" uid="uid://wwytw27l3nbi" path="res://assets/models/smiley/smiley_smiley_texture.png" id="1_tis7d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_usjqd"]
@@ -659,8 +659,8 @@ tracks/13/keys = PackedFloat32Array(0, 1, -3.55271e-15, -4.5139e-36, -5.78811e-2
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_plnkb"]
 _data = {
-"bones_test": SubResource("Animation_ef0ax"),
-"walk": SubResource("Animation_xaged")
+&"bones_test": SubResource("Animation_ef0ax"),
+&"walk": SubResource("Animation_xaged")
 }
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7sbj1"]

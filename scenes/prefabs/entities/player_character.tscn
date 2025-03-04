@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://buneopjw84ltv"]
 
-[ext_resource type="Script" path="res://scripts/main_scenes/game_scene/player_character.gd" id="1_8d8wy"]
+[ext_resource type="Script" uid="uid://csg7ctfp8g7l3" path="res://scripts/main_scenes/game_scene/player_character.gd" id="1_8d8wy"]
 [ext_resource type="PackedScene" uid="uid://dttsd3l1ib5lb" path="res://assets/models/camera_head.tscn" id="2_jmsxm"]
 
 [node name="PlayerCharacter" type="CharacterBody3D"]
