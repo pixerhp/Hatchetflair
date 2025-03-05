@@ -86,16 +86,16 @@ func _process(delta):
 		DebugDraw.add_text("")
 		DebugDraw.add_text("draw calls: " + str(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)))
 		DebugDraw.add_text("total primatives: " + str(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)))
-		DebugDraw.add_text("render buffer mem used (bytes): " + str(Performance.get_monitor(Performance.RENDER_BUFFER_MEM_USED)))
-		DebugDraw.add_text("render texture mem used (bytes): " + str(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)))
+		DebugDraw.add_text("render buffer mem used: " + String.humanize_size(Performance.get_monitor(Performance.RENDER_BUFFER_MEM_USED)))
+		DebugDraw.add_text("render texture mem used: " + String.humanize_size(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)))
 		DebugDraw.add_text("")
 		DebugDraw.add_text("object count: " + str(Performance.get_monitor(Performance.OBJECT_COUNT)))
 		DebugDraw.add_text("object resource count: " + str(Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT)))
 		DebugDraw.add_text("object node count: " + str(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)))
 		DebugDraw.add_text("object orphan node count: " + str(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)))
 		DebugDraw.add_text("")
-		DebugDraw.add_text("static memory used (bytes): " + str(Performance.get_monitor(Performance.MEMORY_STATIC)))
-		DebugDraw.add_text("max static memory (bytes): " + str(Performance.get_monitor(Performance.MEMORY_STATIC_MAX)))
+		DebugDraw.add_text("static memory used: " + String.humanize_size(Performance.get_monitor(Performance.MEMORY_STATIC)))
+		DebugDraw.add_text("max static memory: " + String.humanize_size(Performance.get_monitor(Performance.MEMORY_STATIC_MAX)))
 	
 	 
 	if Globals.draw_debug_chunk_borders:
