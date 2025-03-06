@@ -187,7 +187,9 @@ func save_chunk(
 func load_chunk(
 	cc: Vector3i, 
 	is_mobile: bool, 
-	group_id: String = ""
+	group_id: String = "",
+	# !!! terrain or structures or both?
+	# !!! specific terrain pieces?
 ) -> WorldUtils.Chunk:
 	load_error = OK
 	var chunk: WorldUtils.Chunk = WorldUtils.Chunk.new(cc)

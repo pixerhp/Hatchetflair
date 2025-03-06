@@ -274,6 +274,31 @@ class ChunksGroup:
 				determs_to_zeroify,
 			)
 		return
+	
+	# Generally call the specialized load chunk funcs instead for regular use.
+	func load_chunk_generic(
+		cc: Vector3i, 
+		chunks_group_is_mobile: bool, # (false for is static.)
+		identifier: String = ""
+	) -> Error:
+		var chunk_index: int = cc_to_i.get(cc, -1)
+		if chunk_index == -1:
+			chunk_index = chunks.size()
+			cc_to_i[cc] = chunk_index
+			chunks.append(WorldUtils.Chunk.new(cc))
+		
+		if chunks_group_is_mobile:
+			chunks[chunk_index] = FM.load_chunk(cc, true, identifier)
+		else:
+			chunks[chunk_index] = FM.load_chunk(cc, false)
+		
+		# Regardless of the load's success, the chunk has been affected thus would require this.
+		zeroify_vicinity_determstates_chunk(cc)
+		
+		if FM.load_error != OK:
+			return FAILED
+		else:
+			return OK
 
 class StaticChunksGroup:
 	extends ChunksGroup
@@ -295,6 +320,9 @@ class StaticChunksGroup:
 			if save_chunk_by_i(i) == FAILED:
 				err = FAILED
 		return err
+	
+	func load_chunk(cc: Vector3i) -> Error:
+		return load_chunk_generic(cc, false)
 
 class MobileChunksGroup:
 	extends ChunksGroup
@@ -323,19 +351,5 @@ class MobileChunksGroup:
 				err = FAILED
 		return err
 	
-	# !!! Determine how load chunk stuff should be arranged, here or in generic ChunksGroup or otherwise
-	#func load_chunk_by_cc(cc: Vector3i) -> Error:
-		#var chunk_index: int = cc_to_i.get(cc, -1)
-		#if chunk_index == -1:
-			#chunk_index = chunks.size()
-			#cc_to_i[cc] = chunk_index
-			#chunks.append(FM.load_chunk(cc, true, identifier))
-		#else:
-			#chunks[chunk_index] = FM.load_chunk(cc, true, identifier)
-		#
-		#zeroify_vicinity_determstates_chunk(cc)
-		#
-		#if FM.load_error != OK:
-			#pass
-		#
-		#return OK
+	func load_chunk(cc: Vector3i) -> Error:
+		return load_chunk_generic(cc, true, identifier)
