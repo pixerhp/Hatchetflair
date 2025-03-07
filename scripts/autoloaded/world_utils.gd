@@ -300,6 +300,10 @@ class ChunksGroup:
 		else:
 			return OK
 
+# "Static chunks" refers to the chunks that define the whole world, which everything else is
+# relative to. Every part of the playable space is represented by an associated static chunk,
+# even empty/only-atmosphere space.
+# There only needs to be one static chunks group object.
 class StaticChunksGroup:
 	extends ChunksGroup
 	
@@ -324,6 +328,10 @@ class StaticChunksGroup:
 	func load_chunk(cc: Vector3i) -> Error:
 		return load_chunk_generic(cc, false)
 
+# Distinct mobile terrain/structures which move separately-from/ontop-of the static world, 
+# potentially including player-built boats, airships (etc,) rolling boulders, floating islands (etc,)
+# may each be represented with an associated mobile chunks group. As those things are limited in size,
+# MCGs only load/have chunks relavent to the thing that they represent.
 class MobileChunksGroup:
 	extends ChunksGroup
 	var identifier: String = ""
