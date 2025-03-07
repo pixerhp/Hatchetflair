@@ -7,8 +7,8 @@ signal chunks_manager_thread_ended
 @onready var cm_node: Object = self
 
 # Chunk data & associated:
-var sc: WorldUtils.StaticChunksGroup = WorldUtils.StaticChunksGroup.new() # static chunks
-var mcg: Array[WorldUtils.MobileChunksGroup] = [] # mobile chunks groups
+var sc: WorldUtils.StaticChunksGroup = WorldUtils.StaticChunksGroup.new() # (static chunks group.)
+var mcg: Array[WorldUtils.MobileChunksGroup] = [] # (mobile chunks groups.)
 var mcg_id_to_i: Dictionary = {}
 func refresh_mcg_id_to_i():
 	mcg_id_to_i.clear()

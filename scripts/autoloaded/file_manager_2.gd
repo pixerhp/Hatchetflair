@@ -156,45 +156,49 @@ func get_region_from_cc(cc: Vector3i) -> Vector3i:
 func get_filepath_for_chunkdata(
 	cc: Vector3i,
 	is_mobile: bool,
-	group_id: String = "",
+	mcg_id: String = "",
 	world_name: String = WorldUtils.world_name,
 ) -> String:
 	var region: Vector3i = get_region_from_cc(cc)
 	return (
 		FM.PATH.USER.WORLDS + "/" + world_name.validate_filename() + "/" + ((
-			FM.PATH.PARTIAL.MCG + "/" + group_id.validate_filename()
+			FM.PATH.PARTIAL.MCG + "/" + mcg_id.validate_filename()
 		) if is_mobile else (
 			FM.PATH.PARTIAL.SC
 		)) + "/" + str(region[0]) + "_" + str(region[1]) + "_" + str(region[2]) + 
 		FM.CUSTOM_EXT.CHUNK_REGION
 	)
 
-# NOTE: In general, use the static/mobile chunk group functions which call this one instead.
-func save_chunk(
-	chunk: WorldUtils.Chunk,
+# NOTE: For regular chunk-management, call the static/mobile chunk group class save chunk funcs.
+func save_chunkdata(
 	is_mobile: bool,
-	group_id: String = "",
+	chunk: WorldUtils.Chunk,
+	mcg_id: String = "",
 ) -> Error:
-	if not group_id.is_valid_filename():
-		push_warning("Group identifier contained disallowed filename characters, ",
-		"chunk will be saved under altered group id.")
-	var region_filepath: String = get_filepath_for_chunkdata(chunk.cc, is_mobile, group_id)
+	if not mcg_id.is_valid_filename():
+		push_error("MCG identifier string contained disallowed filename characters, ",
+		"chunk will be saved under altered MCG identifier.")
+	var region_filepath: String = get_filepath_for_chunkdata(chunk.cc, is_mobile, mcg_id)
 	
-	# !!! write chunkdata saving to files code later!
+	# !!! write chunkdata saving-to-files code later!
 	
 	return OK
 
-func load_chunk(
-	cc: Vector3i, 
+# NOTE: For regular chunk-management, call the static/mobile chunk group class load chunk funcs.
+func load_chunkdata(
 	is_mobile: bool, 
+	cc: Vector3i, 
+	tps_to_gen: PackedByteArray,
 	group_id: String = "",
-	# !!! terrain or structures or both?
-	# !!! specific terrain pieces?
 ) -> WorldUtils.Chunk:
 	load_error = OK
 	var chunk: WorldUtils.Chunk = WorldUtils.Chunk.new(cc)
 	
-	# !!! write chunkdata loading from files code later!
+	if tps_to_gen.size() != 8:
+		push_error("tps_to_gen size should be 8 but was: ", tps_to_gen.size())
+		return chunk
+	
+	# !!! write chunkdata loading-from-files code later!
 	
 	load_error = FAILED # !!! temporarily always be FAILED as loading isn't functional yet.
 	return chunk

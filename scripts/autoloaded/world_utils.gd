@@ -274,12 +274,23 @@ class ChunksGroup:
 				determs_to_zeroify,
 			)
 		return
+	# !!! this can be made more efficient, as some tps may get zeroified several times.
+	func zeroify_vicinity_determstates_tps(
+		cc: Vector3i, 
+		tps_to_zeroify: PackedByteArray,
+		determs_to_zeroify: Array[bool] = [true, true, true, true],
+	):
+		for i in 64:
+			if (tps_to_zeroify[i/8] & (0b00000001 << posmod(i, 8))) != 0b00000000:
+				zeroify_vicinity_determstates_tp(cc, i, determs_to_zeroify)
 	
 	# Generally call the specialized load chunk funcs instead for regular use.
-	func load_chunk_generic(
+	# (Assumes that tps_to_load is formatted correctly.)
+	func load_chunk_tps_generic(
+		cg_is_mobile: bool, # (false for is static.)
 		cc: Vector3i, 
-		chunks_group_is_mobile: bool, # (false for is static.)
-		identifier: String = ""
+		tps_to_load: PackedByteArray,
+		mcg_identifier: String = ""
 	) -> Error:
 		var chunk_index: int = cc_to_i.get(cc, -1)
 		if chunk_index == -1:
@@ -287,18 +298,23 @@ class ChunksGroup:
 			cc_to_i[cc] = chunk_index
 			chunks.append(WorldUtils.Chunk.new(cc))
 		
-		if chunks_group_is_mobile:
-			chunks[chunk_index] = FM.load_chunk(cc, true, identifier)
+		var loaded_chunkdata: WorldUtils.Chunk
+		if cg_is_mobile:
+			loaded_chunkdata = FM.load_chunkdata(true, cc, tps_to_load, mcg_identifier)
 		else:
-			chunks[chunk_index] = FM.load_chunk(cc, false)
+			loaded_chunkdata = FM.load_chunkdata(false, cc, tps_to_load)
 		
-		# Regardless of the load's success, the chunk has been affected thus would require this.
-		zeroify_vicinity_determstates_chunk(cc)
-		
-		if FM.load_error != OK:
-			return FAILED
+		if tps_to_load == PackedByteArray([255,255,255,255,255,255,255,255]):
+			chunks[chunk_index] = loaded_chunkdata
+			zeroify_vicinity_determstates_chunk(cc)
 		else:
+			chunks[chunk_index] = chunks[chunk_index].replace_with(loaded_chunkdata)
+			zeroify_vicinity_determstates_tps(cc, tps_to_load)
+		
+		if FM.load_error == OK:
 			return OK
+		else:
+			return FAILED
 
 # "Static chunks" refers to the chunks that define the whole world, which everything else is
 # relative to. Every part of the playable space is represented by an associated static chunk,
@@ -311,7 +327,7 @@ class StaticChunksGroup:
 		pass
 	
 	func save_chunk_by_i(chunk_index: int) -> Error:
-		return FM.save_chunk(chunks[chunk_index], false)
+		return FM.save_chunkdata(false, chunks[chunk_index])
 	func save_chunk_by_cc(cc: Vector3i) -> Error:
 		var chunk_index: int = cc_to_i.get(cc, -1)
 		if chunk_index != -1:
@@ -326,7 +342,9 @@ class StaticChunksGroup:
 		return err
 	
 	func load_chunk(cc: Vector3i) -> Error:
-		return load_chunk_generic(cc, false)
+		return load_chunk_tps_generic(false, cc, PackedByteArray([255,255,255,255,255,255,255,255]))
+	func load_chunk_tps(cc: Vector3i, tps_to_load: PackedByteArray) -> Error:
+		return load_chunk_tps_generic(false, cc, tps_to_load)
 
 # Distinct mobile terrain/structures which move separately-from/ontop-of the static world, 
 # potentially including player-built boats, airships (etc,) rolling boulders, floating islands (etc,)
@@ -345,7 +363,7 @@ class MobileChunksGroup:
 		return
 	
 	func save_chunk_by_i(chunk_index: int) -> Error:
-		return FM.save_chunk(chunks[chunk_index], true, identifier)
+		return FM.save_chunkdata(true, chunks[chunk_index], identifier)
 	func save_chunk_by_cc(cc: Vector3i) -> Error:
 		var chunk_index: int = cc_to_i.get(cc, -1)
 		if chunk_index != -1:
@@ -360,4 +378,6 @@ class MobileChunksGroup:
 		return err
 	
 	func load_chunk(cc: Vector3i) -> Error:
-		return load_chunk_generic(cc, true, identifier)
+		return load_chunk_tps_generic(true, cc, PackedByteArray([255,255,255,255,255,255,255,255]), identifier)
+	func load_chunk_tps(cc: Vector3i, tps_to_load: PackedByteArray) -> Error:
+		return load_chunk_tps_generic(true, cc, tps_to_load, identifier)
