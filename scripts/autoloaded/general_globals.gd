@@ -15,8 +15,16 @@ extends Node
 
 #-=-=-=-# GLOBAL CONSTANTS:
 
-const GAME_NAME: String = "Hatchetflair"
-const GAME_PHASE: String = "pre-alpha"
+class GameInfo:
+	static var NAME: String = ProjectSettings.get_setting("application/config/name", "game_name")
+	static var VERSION: String = ProjectSettings.get_setting("application/config/version", "-1")
+	static var PHASE: String = "pre-alpha"
+	static var IS_MODDED: bool = false
+
+
+var GAME_NAME: String = ProjectSettings.get_setting("application/config/name", "game_name")
+var GAME_VERSION: String = ProjectSettings.get_setting("application/config/version", "-1")
+var GAME_PHASE: String = "pre-alpha"
 # !!! consider whether the version should be declared in project settings' "version" instead.
 const V_MODEL: String = "1" # (the engine/recoding attempt at making the whole game.)
 const V_MAJOR: String = "2" # (big content milestones, resets minor number.)
@@ -111,7 +119,11 @@ func _refresh_window_title(include_random_splash: bool = true):
 		return
 
 func get_random_splash() -> String:
-	var splashes: PackedStringArray = FileManager.read_file_commented_lines(FileManager.PATH_SPLASHES, ["#", "\t"], true)
+	var splashes: PackedStringArray = FM.read_txt_as_commented_lines(
+		FM.PATH.RES.SPLASHES, 
+		PackedStringArray(["#", "\t"]), 
+		true,
+	)
 	if splashes.size() > 0:
 		return splashes[randi_range(0, splashes.size() - 1)]
 	else:

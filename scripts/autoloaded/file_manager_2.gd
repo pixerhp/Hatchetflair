@@ -6,7 +6,8 @@ class PATH:
 	class RES:
 		const ROOT: String = "res://"
 		const ASSETS: String = ROOT + "assets"
-		const SPLASHES: String = ASSETS + "/splash_texts"
+		const TEXTS: String = ASSETS + "/text_files"
+		const SPLASHES: String = TEXTS + "/splash_texts.txt"
 	class USER:
 		const ROOT: String = "user://"
 		const STORAGE: String = ROOT + "storage"
@@ -36,7 +37,7 @@ class ERRMSG:
 	const FILE_ACCESS_ERROR: String = "file access error"
 
 # A global var useful for load functions which can't return Error because they return data.
-var load_error: Error = OK
+var fm_error: Error = OK
 
 ## ----------------------------------------------------------------
 
@@ -145,6 +146,41 @@ func get_file_size(path: String) -> int:
 		return 0
 	return file.get_length()
 
+func read_txt_as_commented_lines(
+	path: String,
+	comment_indicators: PackedStringArray,
+	ignore_empty_lines: bool,
+) -> PackedStringArray:
+	fm_error = OK
+	var lines: PackedStringArray = []
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	if FileAccess.get_open_error() != OK:
+		fm_error = FAILED
+		push_error(ERRMSG.FILE_ACCESS_ERROR)
+		return lines
+	
+	var unparsed_lines: PackedStringArray = file.get_as_text(true).split("\n", not ignore_empty_lines)
+	var ind_pos: int = -1 # The find position of some comment indicator in a line.
+	var min_ind_pos: int = -1 # The leftmost position of any/all comment indicators in a line.
+	for i in unparsed_lines.size():
+		min_ind_pos = -1
+		for indicator in comment_indicators:
+			ind_pos = unparsed_lines[i].find(indicator)
+			if not ind_pos == -1:
+				if min_ind_pos == -1:
+					min_ind_pos = ind_pos
+				else:
+					min_ind_pos = min(min_ind_pos, ind_pos)
+		match min_ind_pos:
+			-1: # No comment indicators were found in the line:
+				lines.append(unparsed_lines[i])
+			0: # The first character of the line was a comment indicator:
+				pass
+			_: # The first comment indicator in the line was not at the start of the line:
+				lines.append(unparsed_lines[i].left(min_ind_pos))
+	
+	return lines
+
 ## ----------------------------------------------------------------
 
 func get_region_from_cc(cc: Vector3i) -> Vector3i:
@@ -191,7 +227,7 @@ func load_chunkdata(
 	tps_to_gen: PackedByteArray,
 	group_id: String = "",
 ) -> WorldUtils.Chunk:
-	load_error = OK
+	fm_error = OK
 	var chunk: WorldUtils.Chunk = WorldUtils.Chunk.new(cc)
 	
 	if tps_to_gen.size() != 8:
@@ -200,5 +236,5 @@ func load_chunkdata(
 	
 	# !!! write chunkdata loading-from-files code later!
 	
-	load_error = FAILED # !!! temporarily always be FAILED as loading isn't functional yet.
+	fm_error = FAILED # !!! temporarily always be FAILED as loading isn't functional yet.
 	return chunk

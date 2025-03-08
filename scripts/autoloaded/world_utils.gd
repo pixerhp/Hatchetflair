@@ -311,7 +311,7 @@ class ChunksGroup:
 			chunks[chunk_index] = chunks[chunk_index].replace_with(loaded_chunkdata)
 			zeroify_vicinity_determstates_tps(cc, tps_to_load)
 		
-		if FM.load_error == OK:
+		if FM.fm_error == OK:
 			return OK
 		else:
 			return FAILED
