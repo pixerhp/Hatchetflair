@@ -1,7 +1,35 @@
+extends Node
+
+# Ordered from oldest to newest, you should support transversioning between all released versions.
+const supported_versions: PackedStringArray = [
+	"1.1.0.0", # NOT YET TRANSVERSIONING SUPPORTED
+	"1.2.0.0", # NOT YET TRANSVERSIONING SUPPORTED
+]
+
+func _ready():
+	# (Reminder to implement proper transversioning support for each latest version.)
+	assert(supported_versions.has(Globals.GameInfo.VERSION))
+
+# "program files" refering to things like accounts, saved servers, meta information, etc.
+func transversion_program_files(start_v: String, end_v: String) -> Error:
+	
+	
+	return OK
+
+func transversion_world(world_path: String, start_v: String, end_v: String) -> Error:
+	
+	
+	return OK
+
+func transversion_character(something, start_v: String, end_v: String) -> Error:
+	
+	
+	return OK
+
 
 # !!! revise pretty much all of this, have a const array of supported versions for transversioning.
 
-extends Node
+
 ## v stands for version.
 ## cv stands for "current version"/similar. (It is also sometimes used like "current version of/for".)
 ## to separate a v_entire into it's components, use `v_entire.split('.')`.
