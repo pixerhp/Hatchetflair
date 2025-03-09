@@ -3,7 +3,9 @@ extends Control
 
 func _ready():
 	_refresh_texts()
+	get_node("TitleUI/GameNameTitle/RefreshSplashButton").pressed.connect(Globals.refresh_window_title.bind(true))
 	return
+
 func _refresh_texts():
 	_update_title_text()
 	_update_corner_version_text()
@@ -19,7 +21,7 @@ func _update_title_text():
 		"[center]" + 
 		"[img=center,center]" + "res://assets/icons/hatchetflair/v2/hf_v2.png" + "[/img]" +
 		"[rainbow freq=0.01 sat=0.8 val=1.0 speed=-1.2][wave freq=-2 amp=60]" +
-		 " " + Globals.GAME_NAME +
+		 " " + Globals.GameInfo.NAME +
 		"[/wave][/rainbow]" + 
 		"[/center]"
 	)
@@ -30,7 +32,7 @@ func _update_corner_version_text():
 	if corner_version_text_node == null:
 		push_error("Corner version text node not found.")
 		return
-	corner_version_text_node.text = "v" + Globals.V_ENTIRE + (" [v_indev]" if Globals.IS_VERSION_INDEV else "")
+	corner_version_text_node.text = "version " + Globals.GameInfo.VERSION
 	return
 
 func _update_welcome_message():
@@ -42,15 +44,10 @@ func _update_welcome_message():
 	welcome_message_node.text = (
 		"[center]" +
 		"Welcome, " + 
-		Globals.player_displayname + " (@" + Globals.player_username + ")"
+		Globals.this_player.displayname + " (@" + Globals.this_player.username + ")"
 	)
-	if Globals.player_username == "guest":
+	if Globals.this_player.username == "":
 		welcome_message_node.text += "\n(you are playing on a guest account.)"
 	
 	welcome_message_node.text += "[/center]"
-	return
-
-
-func _on_game_title_clicked() -> void:
-	Globals._refresh_window_title(true)
 	return

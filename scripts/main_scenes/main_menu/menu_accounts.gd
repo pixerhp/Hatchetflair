@@ -56,7 +56,7 @@ func _select_remembered_last_selected_account():
 		FileManager.PATH_ACCOUNTS,
 		"meta",
 		"last_selected_account_username",
-		"guest",
+		"guest", # !!! replace this with "" ?
 	)
 	var index_of_last_selected_username = selector_index_to_username.find_key(last_selected_account_username)
 	if index_of_last_selected_username == null:
@@ -87,7 +87,7 @@ func _update_account_selector():
 		selector_index_to_username[index] = selector_texts[index]
 		selector_texts[index] = (
 			"@" + selector_texts[index] + " - " + 
-			Globals.dict_safeget(accounts, [selector_texts[index], "displayname"], FileManager.ERRMSG_CFG)
+			Globals.dict_get_recursive(accounts, [selector_texts[index], "displayname"], FileManager.ERRMSG_CFG)
 		)
 	if account_selector_node == null:
 		push_error("Account selector node not found.")
@@ -103,8 +103,8 @@ func _update_account_info_text():
 		push_error("Account username and displayname text node not found.")
 		return
 	account_info_text_node.text = (
-		"@username: " + Globals.player_username + "\n" +
-		"displayname: " + Globals.player_displayname
+		"@username: " + Globals.this_player.username + "\n" +
+		"displayname: " + Globals.this_player.displayname
 	)
 	return
 func _update_manage_account_button_disabledness():
@@ -117,8 +117,8 @@ func _update_manage_account_button_disabledness():
 func _on_account_option_button_item_selected(index: int):
 	account_selector_node.select(index)
 	if index < 2:
-		Globals.player_username = "guest"
-		Globals.player_displayname = FileManager.read_cfg_keyval(
+		Globals.this_player.username = ""
+		Globals.this_player.displayname = FileManager.read_cfg_keyval(
 			FileManager.PATH_ACCOUNTS, 
 			"meta", 
 			"guest_displayname", 
@@ -128,11 +128,11 @@ func _on_account_option_button_item_selected(index: int):
 			FileManager.PATH_ACCOUNTS, 
 			"meta", 
 			"last_selected_account_username", 
-			"guest",
+			"guest", # !!! replace this with "" ?
 		)
 	else:
-		Globals.player_username = Globals.normalize_username_str(selector_index_to_username[index])
-		Globals.player_displayname = Globals.dict_safeget(
+		Globals.this_player.username = Globals.normalize_username(selector_index_to_username[index])
+		Globals.this_player.displayname = Globals.dict_get_recursive(
 			accounts, 
 			[selector_index_to_username[index], "displayname"], 
 			selector_index_to_username[index]
@@ -186,7 +186,7 @@ func _on_change_displayname_button_pressed():
 	account_info_text_node.text = (
 		"[center]" + 
 		"current displayname:\n" + 
-		Globals.player_displayname + 
+		Globals.this_player.displayname + 
 		"[/center]"
 	)
 	if account_info_right_spacer_node == null:
@@ -214,20 +214,20 @@ func _on_change_displayname_confirm_button():
 	var new_displayname_text: String = change_displayname_container.get_node("DisplaynameInput").text
 	if new_displayname_text.is_empty():
 		return
-	Globals.player_displayname = new_displayname_text
-	if Globals.player_username == "guest":
+	Globals.this_player.displayname = new_displayname_text
+	if Globals.this_player.username == "":
 		FileManager.write_cfg_keyval(
 			FileManager.PATH_ACCOUNTS, 
 			"meta",
 			"guest_displayname",
-			Globals.player_displayname,
+			Globals.this_player.displayname,
 		)
 	else:
 		FileManager.write_cfg_keyval(
 			FileManager.PATH_ACCOUNTS, 
-			Globals.player_username,
+			Globals.this_player.username,
 			"displayname",
-			Globals.player_displayname,
+			Globals.this_player.displayname,
 		)
 	_update_everything()
 	change_displayname_container.visible = false
@@ -248,7 +248,7 @@ func _update_advanced_account_info_text():
 	
 	advanced_account_info_text_node.text = ""
 	
-	if not (Globals.player_username == selector_index_to_username[account_selector_node.selected]):
+	if not (Globals.this_player.username == selector_index_to_username[account_selector_node.selected]):
 		advanced_account_info_text_node.text += (
 			"[color=#ff7373]" +
 			"player username currently stored in globals does not match username currently selected by account selector. please report this as a bug to developers." + "\n\n" +
@@ -260,13 +260,13 @@ func _update_advanced_account_info_text():
 		"[color=lightgray]accounts file location >> [/color]" +
 		"[color=greenyellow]" + ProjectSettings.globalize_path(FileManager.PATH_ACCOUNTS) + "[/color]" + "\n" +
 		"[color=darkgray](displaying all stored information about account from file:)[/color]" + "\n\n" +
-		"[color=lightgray]username >> [/color]" + Globals.player_username + "\n"
+		"[color=lightgray]username >> [/color]" + Globals.this_player.username + "\n"
 	)
-	if accounts.has(Globals.player_username):
-		for key in accounts[Globals.player_username].keys():
+	if accounts.has(Globals.this_player.username):
+		for key in accounts[Globals.this_player.username].keys():
 			advanced_account_info_text_node.text += (
 				"[color=lightgray]" + str(key) + " >> [/color]" + 
-				accounts[Globals.player_username][key] + "\n"
+				accounts[Globals.this_player.username][key] + "\n"
 			)
 	else:
 		advanced_account_info_text_node.text += (
@@ -308,9 +308,9 @@ func _update_create_account_warning_and_confirm_button():
 	if username.length() > 32:
 		if not warning.is_empty(): warning += "\n"
 		warning += "username may not exceed 32 characters (" + str(username.length()) + ")"
-	if (username == "meta") or (username == "guest"):
+	if (username == "meta") or (username == ""):
 		if not warning.is_empty(): warning += "\n"
-		warning += "username cannot be \"meta\" or \"guest\""
+		warning += "username cannot be \"meta\" or \"\""
 	if accounts.has(username):
 		if not warning.is_empty(): warning += "\n"
 		warning += "account with username already exists"
@@ -329,7 +329,7 @@ func _update_create_account_warning_and_confirm_button():
 	return
 
 func _on_create_account_username_input_text_changed():
-	create_account_username_input_node.text = Globals.normalize_username_str(create_account_username_input_node.text)
+	create_account_username_input_node.text = Globals.normalize_username(create_account_username_input_node.text)
 	create_account_username_input_node.set_caret_column(create_account_username_input_node.text.length())
 	_update_create_account_warning_and_confirm_button()
 	return
@@ -344,7 +344,7 @@ func _on_create_account_confirm_button_pressed():
 	if create_account_confirm_button.disabled == true:
 		return
 	
-	var username: String = Globals.normalize_username_str(create_account_username_input_node.text)
+	var username: String = Globals.normalize_username(create_account_username_input_node.text)
 	var displayname: String = create_account_displayname_input_node.text
 	FileManager.create_account(username, displayname)
 	
@@ -368,7 +368,7 @@ func _on_rename_account_screen_visibility_changed():
 	return
 
 func _on_rename_account_new_username_input_text_changed():
-	rename_account_new_username_input_node.text = Globals.normalize_username_str(rename_account_new_username_input_node.text)
+	rename_account_new_username_input_node.text = Globals.normalize_username(rename_account_new_username_input_node.text)
 	rename_account_new_username_input_node.set_caret_column(rename_account_new_username_input_node.text.length())
 	_update_rename_account_warning_and_confirm_button()
 	return
@@ -384,9 +384,9 @@ func _update_rename_account_warning_and_confirm_button():
 	if new_username.length() > 32:
 		if not warning.is_empty(): warning += "\n"
 		warning += "new username may not exceed 32 characters (" + str(new_username.length()) + ")"
-	if (new_username == "meta") or (new_username == "guest"):
+	if (new_username == "meta") or (new_username == ""):
 		if not warning.is_empty(): warning += "\n"
-		warning += "new username cannot be \"meta\" or \"guest\""
+		warning += "new username cannot be \"meta\" or \"\""
 	# (Note: accounts.has(new_username) should always cover the current selected one, but the or statement is for just in case it somehow doesn't.)
 	if accounts.has(new_username) or (new_username == selector_index_to_username[account_selector_node.selected]):
 		if not warning.is_empty(): warning += "\n"
@@ -403,8 +403,8 @@ func _on_rename_account_confirm_button_pressed():
 	if rename_account_confirm_button.disabled == true:
 		return
 	
-	var old_username: String = Globals.normalize_username_str(selector_index_to_username[account_selector_node.selected])
-	var new_username: String = Globals.normalize_username_str(rename_account_new_username_input_node.text)
+	var old_username: String = Globals.normalize_username(selector_index_to_username[account_selector_node.selected])
+	var new_username: String = Globals.normalize_username(rename_account_new_username_input_node.text)
 	FileManager.rename_account(old_username, new_username)
 	
 	_update_everything()
@@ -429,7 +429,7 @@ func _on_delete_account_screen_visibility_changed():
 	return
 
 func _randomize_delete_account_copy_text():
-	deletion_retype_string = "%x" % abs(Globals.random_int())
+	deletion_retype_string = "%x" % abs(randi())
 	delete_account_retype_text_node.text = "[center]" + "retype text: " + deletion_retype_string + "[/center]"
 	deletion_retype_input_node.text = ""
 	return

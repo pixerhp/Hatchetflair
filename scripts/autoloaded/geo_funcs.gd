@@ -167,4 +167,5 @@ var UNIT_RHOMBDO: Polyhedron = Polyhedron.new(
 
 # Maybe some day...
 func generate_marched_polyhedron_indices_table(polyhedron: Polyhedron):
+	print(polyhedron)
 	return

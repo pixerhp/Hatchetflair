@@ -558,7 +558,7 @@ func sort_file_line_groups_alphabetically(file_path: String, group_size: int, sk
 #for the future, probably something like: func create_world(cfg_data: Dictionary) -> Error:
 func create_world(world_name: String, world_seed: String) -> Error:
 	world_name = Globals.normalize_name(world_name, "new world")
-	world_seed = Globals.normalize_seed(world_seed)
+	world_seed = str(int(world_seed))
 	
 	# Create the world's directory and subdirectories.
 	var dir_name: String = get_available_dirname(PATH_WORLDS, world_name, false)
@@ -600,7 +600,7 @@ func create_world(world_name: String, world_seed: String) -> Error:
 	return OK
 func edit_world(dir_name: String, new_name: String, new_seed: String) -> Error:
 	new_name = Globals.normalize_name(new_name, "new world")
-	new_seed = Globals.normalize_seed(new_seed)
+	new_seed = str(int(new_seed))
 	
 	var dict: Dictionary = read_cfg(PATH_WORLDS + "/" + dir_name + "/world.cfg")
 	dict["meta"]["world_name"] = new_name

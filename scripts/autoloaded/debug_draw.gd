@@ -110,7 +110,7 @@ func _add_chunk_border_shell(shell_num: int, hzz_colors: PackedColorArray):
 				if (bitmask == 0b111111111111) or (bitmask == 0b000000000000):
 					continue
 				else:
-					_add_chunk_border_single(Globals.swap_zyx_hzz_f(Vector3(h,z1,z2)), bitmask, hzz_colors)
+					_add_chunk_border_single(Globals.swap_xyz_hzz_f(Vector3(h,z1,z2)), bitmask, hzz_colors)
 	
 	
 	return
@@ -122,74 +122,74 @@ func _add_chunk_border_single(relative_ccoords: Vector3, bitmask: int, hzz_color
 			match n:
 				0:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[2])
 				1:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[1])
 				2:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[1])
 				3:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[2])
 				4:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[0])
 				5:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[0])
 				6:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[0])
 				7:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3(-0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3(-0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[0])
 				8:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[2])
 				9:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5,-0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[1])
 				10:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5,-0.5, 0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[1])
 				11:
 					chunk_borders_lines_vects.append_array([
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
-						(Globals.swap_zyx_hzz_f(Vector3( 0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5, 0.5,-0.5)) + relative_ccoords) * vertex_multiplier, 
+						(Globals.swap_xyz_hzz_f(Vector3( 0.5, 0.5, 0.5)) + relative_ccoords) * vertex_multiplier
 					])
 					chunk_borders_lines_colors.append(hzz_colors[2])
 				_:
@@ -291,8 +291,8 @@ func draw_line_3d(from: Vector3, to: Vector3, color: Color):
 func draw_ray_3d(origin: Vector3, direction: Vector3, length: float, color : Color):
 	draw_line_3d(origin, origin + (direction.normalized() * length), color)
 
-func add_text(str: String):
-	_texts.append(str)
+func add_text(text: String):
+	_texts.append(text)
 
 
 func _get_box() -> MeshInstance3D:

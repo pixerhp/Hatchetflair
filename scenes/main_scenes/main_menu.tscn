@@ -1722,7 +1722,6 @@ grow_vertical = 2
 text = "Back"
 
 [connection signal="visibility_changed" from="Menus/TitleMenu" to="Menus/TitleMenu" method="_refresh_texts"]
-[connection signal="pressed" from="Menus/TitleMenu/TitleUI/GameNameTitle/RefreshSplashButton" to="Menus/TitleMenu" method="_on_game_title_clicked"]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/StartWorld" to="." method="switch_to_menu" binds= ["WorldsMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/JoinWorld" to="." method="switch_to_menu" binds= ["JoinMenu"]]
 [connection signal="pressed" from="Menus/TitleMenu/TitleUI/TitleScreenButtons/Accounts" to="." method="switch_to_menu" binds= ["AccountsMenu"]]

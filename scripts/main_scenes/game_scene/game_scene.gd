@@ -63,13 +63,13 @@ func _process(delta):
 	# Coordinates text:
 	if Input.is_action_pressed("game_play_speed_fast"):
 		DebugDraw.add_text("coords (h,z₁,z₂): " +
-			"(" + str(Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), -1)) + ")")
+			"(" + str(Globals.get_coords3d_string(Globals.swap_xyz_hzz_f($REMOVE_LATER_cam.position), -1)) + ")")
 	elif Input.is_action_pressed("game_play_speed_slow"):
 		DebugDraw.add_text("coords (h,z₁,z₂): " + 
-			"(" + str(Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 6)) + ")")
+			"(" + str(Globals.get_coords3d_string(Globals.swap_xyz_hzz_f($REMOVE_LATER_cam.position), 6)) + ")")
 	else:
 		DebugDraw.add_text("coords (h,z₁,z₂): " + 
-			"(" + str(Globals.get_coords3d_string(Globals.swap_zyx_hzz_f($REMOVE_LATER_cam.position), 2)) + ")")
+			"(" + str(Globals.get_coords3d_string(Globals.swap_xyz_hzz_f($REMOVE_LATER_cam.position), 2)) + ")")
 	
 	if Input.is_action_pressed("game_play_speed_fast"):
 		DebugDraw.add_text("coords (x, y, z): " +

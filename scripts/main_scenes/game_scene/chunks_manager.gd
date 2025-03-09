@@ -88,7 +88,7 @@ func _process(delta):
 		DebugDraw.add_text("Static chunks stored in CM: " + str(sc.chunks.size()))
 		mutex.unlock()
 	
-	# !!! later send player's ccoords (which account for my_origin_offset) and velocity.
+	# !!! later send player's ccoords (which account for origin offset) and velocity.
 	mutex.lock()
 	in_instructions.append([
 		IN_INST.REGULAR_DATA_UPDATE, 
