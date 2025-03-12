@@ -38,16 +38,15 @@ func _update_corner_version_text():
 func _update_welcome_message():
 	var welcome_message_node: RichTextLabel = $TitleUI/WelcomeMessage
 	if welcome_message_node == null:
-		push_error("Welcome message text node not found.")
+		push_error("Welcome message text node reference was null.")
 		return
 	
-	welcome_message_node.text = (
-		"[center]" +
-		"Welcome, " + 
-		Globals.this_player.displayname + " (@" + Globals.this_player.username + ")"
-	)
+	welcome_message_node.text = "[center]"
+	welcome_message_node.text += "Welcome, " + Globals.this_player.displayname
 	if Globals.this_player.username == "":
-		welcome_message_node.text += "\n(you are playing on a guest account.)"
-	
+		welcome_message_node.text += "!\n(you are playing as a guest account.)"
+	else:
+		welcome_message_node.text += " (@" + Globals.this_player.username + ")"
 	welcome_message_node.text += "[/center]"
+	
 	return
