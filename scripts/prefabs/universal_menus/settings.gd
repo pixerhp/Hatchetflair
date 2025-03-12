@@ -1,5 +1,6 @@
 extends Control
 
+# PLEASE STOP TELLING ME THAT THERE ARE EXTRENALLY MADE CHANGES WHEN THERE AREN'T!
 # !!! to-do: replace instances of the word "hotkeys" with the more appopriate: "keybinds".
 
 signal close_settings_menu
