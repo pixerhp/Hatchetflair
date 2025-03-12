@@ -59,11 +59,15 @@ func _ready() -> void:
 
 func _process(_delta):
 	# Process inputs that should work globally.
-	if Input.is_action_just_pressed("game_special_fullscreen_toggle"):
+	if Input.is_action_just_pressed("fullscreen_toggle"):
 		if (DisplayServer.window_get_mode() == 0):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	if Input.is_action_just_pressed("spec_screenshot"):
+		print("(Screenshotting is not yet implemented.)")
+	if Input.is_action_just_pressed("console_log"):
+		print("(Toggling opening/viewing the game's console/log output is not yet implemented.)")
 
 func quit_game() -> void:
 	get_tree().quit() 

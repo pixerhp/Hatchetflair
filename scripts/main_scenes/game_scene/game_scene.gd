@@ -14,14 +14,19 @@ var fast_cam_flying_held_duration: float = 0
 func _process(delta):
 	# Toggle the pause menu if its associated key is pressed.
 	# !!! [in the future, esc should also be able to close out of other things WITHOUT opening this menu.]
-	if Input.is_action_just_pressed("game_special_pause_menu") and not $SettingsMenu.visible:
+	if Input.is_action_just_pressed("escape_pausemenu") and not $SettingsMenu.visible:
 		$PauseMenu.visible = not $PauseMenu.visible
 	
+	if Input.is_action_just_pressed("spec_hud"):
+		print("(Toggling/altering your HUD is not yet implemented.)")
+	if Input.is_action_just_pressed("spec_perspective"):
+		print("(Changing/modifying your view perspective is not yet implemented.)")
+	
 	# Temporary controls for flying the testing camera around:
-	if Input.is_action_pressed("game_play_speed_fast"):
+	if Input.is_action_pressed("speed_up"):
 		fast_cam_flying_held_duration += delta
 		cam_speed = 120 + pow((fast_cam_flying_held_duration * 4) + 1, 2)
-	elif Input.is_action_pressed("game_play_speed_slow"):
+	elif Input.is_action_pressed("speed_down"):
 		fast_cam_flying_held_duration = 0
 		cam_speed = 0.5
 	else:
@@ -29,52 +34,52 @@ func _process(delta):
 		cam_speed = 15
 	
 	
-	if Input.is_action_pressed("game_play_move_forwards"):
+	if Input.is_action_pressed("move_forwards"):
 		temporary_cam.position += (cam_speed * delta * -1) * temporary_cam.global_transform.basis.z
-	if Input.is_action_pressed("game_play_move_backwards"):
+	if Input.is_action_pressed("move_backwards"):
 		temporary_cam.position += (cam_speed * delta) * temporary_cam.global_transform.basis.z
-	if Input.is_action_pressed("game_play_move_strafeleft"):
+	if Input.is_action_pressed("move_left"):
 		temporary_cam.position += (cam_speed * delta * -1) * temporary_cam.global_transform.basis.x
-	if Input.is_action_pressed("game_play_move_straferight"):
+	if Input.is_action_pressed("move_right"):
 		temporary_cam.position += (cam_speed * delta) * temporary_cam.global_transform.basis.x
-	if Input.is_action_pressed("game_play_drop_throw_letgo"):
+	if Input.is_action_pressed("move_relative_down"):
 		temporary_cam.position += (cam_speed * delta * -1) * temporary_cam.global_transform.basis.y
-	if Input.is_action_pressed("game_play_interact_act"):
+	if Input.is_action_pressed("move_relative_up"):
 		temporary_cam.position += (cam_speed * delta) * temporary_cam.global_transform.basis.y
-	if Input.is_action_pressed("game_play_jump"):
+	if Input.is_action_pressed("move_jump_up"):
 		temporary_cam.position += (cam_speed * delta) * Vector3(0,1,0)
-	if Input.is_action_pressed("game_play_crouch_slide_crawl"):
+	if Input.is_action_pressed("move_crouch_down"):
 		temporary_cam.position += (cam_speed * delta) * Vector3(0,-1,0)
 	
-	if Input.is_action_just_pressed("debug_cause_lag_spike"):
+	if Input.is_action_just_pressed("debug_lag_spike"):
 		var prev_fps := Engine.max_fps
 		Engine.max_fps = 1
 		await get_tree().create_timer(0.9, true, true, true).timeout
 		Engine.max_fps = prev_fps
 	
 	# debug toggles:
-	if Input.is_action_just_pressed("game_special_draw_debug_text"):
+	if Input.is_action_just_pressed("debug_info"):
 		Globals.draw_debug_info_text = not Globals.draw_debug_info_text
 		print("draw debug text toggled: ", "ON" if Globals.draw_debug_info_text else "OFF")
-	if Input.is_action_just_pressed("game_special_draw_chunk_borders"):
+	if Input.is_action_just_pressed("debug_borders"):
 		Globals.draw_debug_chunk_borders = not Globals.draw_debug_chunk_borders
 		print("draw debug chunk borders toggled: ", "ON" if Globals.draw_debug_chunk_borders else "OFF")
 	 
 	# Coordinates text:
-	if Input.is_action_pressed("game_play_speed_fast"):
+	if Input.is_action_pressed("speed_up"):
 		DebugDraw.add_text("coords (h,z₁,z₂): " +
 			"(" + str(Globals.get_coords3d_string(Globals.swap_xyz_hzz_f($REMOVE_LATER_cam.position), -1)) + ")")
-	elif Input.is_action_pressed("game_play_speed_slow"):
+	elif Input.is_action_pressed("speed_down"):
 		DebugDraw.add_text("coords (h,z₁,z₂): " + 
 			"(" + str(Globals.get_coords3d_string(Globals.swap_xyz_hzz_f($REMOVE_LATER_cam.position), 6)) + ")")
 	else:
 		DebugDraw.add_text("coords (h,z₁,z₂): " + 
 			"(" + str(Globals.get_coords3d_string(Globals.swap_xyz_hzz_f($REMOVE_LATER_cam.position), 2)) + ")")
 	
-	if Input.is_action_pressed("game_play_speed_fast"):
+	if Input.is_action_pressed("speed_up"):
 		DebugDraw.add_text("coords (x, y, z): " +
 			"(" + str(Globals.get_coords3d_string($REMOVE_LATER_cam.position, -1)) + ")")
-	elif Input.is_action_pressed("game_play_speed_slow"):
+	elif Input.is_action_pressed("speed_down"):
 		DebugDraw.add_text("coords (x, y, z): " + 
 			"(" + str(Globals.get_coords3d_string($REMOVE_LATER_cam.position, 6)) + ")")
 	else:
