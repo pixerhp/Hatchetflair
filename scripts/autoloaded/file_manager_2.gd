@@ -12,6 +12,7 @@ class PATH:
 		const ROOT: String = "user://"
 		const STORAGE: String = ROOT + "storage"
 		const WORLDS: String = STORAGE + "/worlds"
+		const ACCOUNTS: String = STORAGE + "/accounts.cfg"
 	
 	# Partial paths:
 	class PARTIAL:

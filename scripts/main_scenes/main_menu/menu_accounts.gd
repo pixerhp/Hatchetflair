@@ -1,3 +1,5 @@
+# !!! Oh goodness revise all of this later. More specifically account saving/loading etc should be done elsewhere
+
 extends Control
 
 # !!! make meta and guest not allowed usernames for file reasons.
@@ -56,7 +58,7 @@ func _select_remembered_last_selected_account():
 		FileManager.PATH_ACCOUNTS,
 		"meta",
 		"last_selected_account_username",
-		"guest", # !!! replace this with "" ?
+		"", 
 	)
 	var index_of_last_selected_username = selector_index_to_username.find_key(last_selected_account_username)
 	if index_of_last_selected_username == null:

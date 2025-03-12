@@ -51,6 +51,7 @@ func _enter_tree() -> void:
 	randomize()
 	FileManager.ensure_required_dirs()
 	FileManager.ensure_required_files()
+	initialize_account()
 	return
 
 func _ready() -> void:
@@ -74,6 +75,20 @@ func quit_game() -> void:
 	return
 
 ## ----------------------------------------------------------------
+
+func initialize_account():
+	# !!! change type to Dictionary[String, Dictionary] after creating and using FM cfg funcs.
+	var accounts: Dictionary = FileManager.read_cfg(
+		FM.PATH.USER.ACCOUNTS, ["meta"])
+	var last_selected_username: String = FileManager.read_cfg_keyval(
+		FM.PATH.USER.ACCOUNTS, "meta", "last_selected_account_username", "")
+	if accounts.has(last_selected_username):
+		this_player.username = last_selected_username
+		this_player.displayname = accounts[last_selected_username].get("displayname", "David")
+	else:
+		this_player.username = ""
+		this_player.displayname = "Guest"
+	return
 
 func refresh_window_title(include_rand_splash: bool):
 	DisplayServer.window_set_title(

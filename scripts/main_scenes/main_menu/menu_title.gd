@@ -2,7 +2,6 @@ extends Control
 
 
 func _ready():
-	_refresh_texts()
 	get_node("TitleUI/GameNameTitle/RefreshSplashButton").pressed.connect(Globals.refresh_window_title.bind(true))
 	return
 
