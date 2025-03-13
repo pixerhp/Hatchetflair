@@ -1,5 +1,18 @@
 extends Node
 
+# !!! Most of this script was typed from Fox when the porject was created,
+# go through and better understand it and maybe retype it with your more specific
+# modern understanding of what hatchetflair is.
+
+# !!! Consider being able to host a world in multiplayer either as high trust or low trust,
+# where with high trust, there are a lot less checks and clients can do their own
+# terrain generation work.
+#enum HOST_TRUST_TYPES {
+	#LOW = 0,
+	#HIGH = 1,
+#}
+#var host_trust_type: bool
+
 
 # Called when script is loaded.
 func _ready() -> void:
