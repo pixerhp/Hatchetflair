@@ -31,7 +31,10 @@ func _update_corner_version_text():
 	if corner_version_text_node == null:
 		push_error("Corner version text node not found.")
 		return
-	corner_version_text_node.text = "version " + Globals.GameInfo.VERSION
+	if Globals.GameInfo.VERSION == "-1":
+		corner_version_text_node.text = "version unspecified"
+	else:
+		corner_version_text_node.text = "version " + Globals.GameInfo.VERSION
 	return
 
 func _update_welcome_message():
