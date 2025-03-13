@@ -1,4 +1,8 @@
-# !!! Oh goodness revise all of this later. More specifically account saving/loading etc should be done elsewhere
+# !!! There should be several kinds of accounts, such as local and itch accounts.
+# You should be automatically signed into an itch account if you launched the game
+# with the itch.io game launcher app (but still be able to select a local account instead.)
+# Revise basically all of current accounts stuff. Code may be rewritten into completely 
+# different scripts and node stuff will probably change a lot.
 
 extends Control
 
