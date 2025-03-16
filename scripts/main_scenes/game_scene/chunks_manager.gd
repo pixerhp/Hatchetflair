@@ -443,14 +443,6 @@ func calculate_chunk_determinables(
 # !!! all below still need to be assessed for where they should be revised into:
 
 
-# Ensures that certain chunks (specifically certain terrain pieces) either are or become loaded.
-func ensure_chunk_tps_loaded(ccoords: Vector3i, tps_bitstates: PackedByteArray):
-	var tps_to_load: PackedByteArray = determine_which_chunk_tps_need_loading(ccoords, tps_bitstates, true)
-	if tps_to_load == PackedByteArray([0,0,0,0,0,0,0,0]):
-		return
-	else:
-		load_static_chunk_data(ccoords, tps_to_load)
-
 # (Note: If only need to know whether *all* required chunk tps are loaded, then this func is faster for that.)
 func is_chunk_tps_loaded(
 	ccoords: Vector3i, 

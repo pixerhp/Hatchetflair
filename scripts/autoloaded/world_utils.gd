@@ -222,6 +222,17 @@ func tp_i_from_hzz(hzz: Vector3i) -> int:
 func tp_hzz_from_i(i: int) -> Vector3i:
 	return Vector3i(posmod(i/16, 4), posmod(i/4, 4), posmod(i, 4))
 
+func determine_tps_to_load(
+	required: PackedByteArray,
+	is_loaded: PackedByteArray,
+	is_atm: PackedByteArray,
+) -> PackedByteArray:
+	var result: PackedByteArray = PackedByteArray()
+	result.resize(required.size())
+	for i in required.size():
+		result[i] = required[i] & (~ (is_loaded[i] | is_atm[i]))
+	return result
+
 class ChunksGroup:
 	var chunks: Array[Chunk] = []
 	var cc_to_i: Dictionary = {}
@@ -284,13 +295,13 @@ class ChunksGroup:
 			if (tps_to_zeroify[i/8] & (0b00000001 << posmod(i, 8))) != 0b00000000:
 				zeroify_vicinity_determstates_tp(cc, i, determs_to_zeroify)
 	
-	# Generally call the specialized load chunk funcs instead for regular use.
+	# Call the specialized load chunk funcs instead for regular use.
 	# (Assumes that tps_to_load is formatted correctly.)
 	func load_chunk_tps_generic(
-		cg_is_mobile: bool, # (false for is static.)
+		cg_is_mobile: bool,
 		cc: Vector3i, 
 		tps_to_load: PackedByteArray,
-		mcg_identifier: String = ""
+		mcg_identifier: String = "",
 	) -> Error:
 		var chunk_index: int = cc_to_i.get(cc, -1)
 		if chunk_index == -1:
@@ -315,6 +326,38 @@ class ChunksGroup:
 			return OK
 		else:
 			return FAILED
+	
+	## Ensures that specific chunk terrain pieces are/be loaded.
+	#func ensure_tps_loaded_generic(
+		#cg_is_mobile: bool,
+		#cc: Vector3i, 
+		#tps_bitstates: PackedByteArray,
+		#mcg_identifier: String = "",
+	#):
+		#if not cc_to_i.has(cc):
+			#if cg_is_mobile:
+				#load_chunk_tps_generic(true, cc, tps_bitstates, mcg_identifier)
+			#else:
+				#load_chunk_tps_generic(false, cc, tps_bitstates)
+		#else:
+			#chunk_index: int = cc_to_i[cc]
+			#for i in 8:
+				#tps_bitstates &= 
+			#chunks[chunk_index].tp_is_loaded_bitstates
+			#
+			#
+			#
+			#
+			#pass
+		#
+		#
+		##var tps_to_load: PackedByteArray = determine_which_chunk_tps_need_loading(ccoords, tps_bitstates, true)
+		##if tps_to_load == PackedByteArray([0,0,0,0,0,0,0,0]):
+			##return
+		##else:
+			##load_static_chunk_data(ccoords, tps_to_load)
+		#
+		#return
 
 # "Static chunks" refers to the chunks that define the whole world, which everything else is
 # relative to. Every part of the playable space is represented by an associated static chunk,

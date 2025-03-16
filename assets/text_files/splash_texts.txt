@@ -12,6 +12,8 @@ made with passion!
 may contain ferrium
 may also contain werium
 splash text!
+# terrain-tastic
+	extends "ramp-tastic", to be implemented once the terrain update (1.2) is ready to be released.
 turn that smiley, upside-down!
 
 #### OTHER
