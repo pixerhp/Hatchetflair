@@ -22,6 +22,26 @@
 extends Node
 
 
+const DYE_COLORS: Dictionary[String, Color] = {
+	"black": Color.BLACK,
+	"white": Color.WHITE,
+	
+	"red": Color.RED,
+	"yellow": Color.YELLOW,
+	"green": Color.GREEN,
+	"cyan": Color.CYAN,
+	"blue": Color.BLUE,
+	"magen": Color.MAGENTA,
+	
+	"orange": Color(1, 0.5, 0),
+	"shar": Color(0.5, 1, 0),
+	"menth": Color(0, 1, 0.5),
+	"azhur": Color(0, 0.5, 1),
+	"violet": Color(0.5, 0, 1),
+	"rose": Color(1.0, 0.0, 0.5),
+}
+
+
 # Substances have unique chemistry, crafting, thermal interactions (etc,) 
 	# and point to a SubsProps for their properties.
 # Things with independant crafting/chemistry/value/etc yet share physical properties (such as dyes,)
