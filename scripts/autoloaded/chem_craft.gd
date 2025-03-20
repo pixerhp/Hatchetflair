@@ -39,6 +39,10 @@ const DYE_COLORS: Dictionary[String, Color] = {
 	"azhur": Color(0, 0.5, 1),
 	"violet": Color(0.5, 0, 1),
 	"rose": Color(1.0, 0.0, 0.5),
+	
+	"indigo": Color(0.25, 0.0, 1.0),
+	"digodium": Color(0.317, 0.0, 1.0),
+	"crimson": Color(1.0, 0.0, 0.25),
 }
 
 
