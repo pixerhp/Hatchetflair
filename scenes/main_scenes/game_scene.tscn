@@ -156,7 +156,7 @@ visible = false
 environment = SubResource("Environment_5ke80")
 
 [node name="Sun" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(1, 0, 0, 0, 0.925871, 0.377841, 0, -0.377841, 0.925871, 0, 0, 0)
+transform = Transform3D(-4.37114e-08, -0.478692, 0.877983, 0, 0.877983, 0.478692, -1, 2.09243e-08, -3.83779e-08, 0, 0, 0)
 
 [node name="ChunksManager" type="Node3D" parent="."]
 script = ExtResource("3_ah17h")

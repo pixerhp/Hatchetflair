@@ -425,10 +425,11 @@ func calculate_chunk_determinables(
 	
 	# Ensure all required data for calculations is stored in RAM:
 	for i in (3**3):
-		ensure_chunk_tps_loaded(
-			ccoords + Vector3i(posmod(i/9, 3) - 1, posmod(i/3, 3) - 1, posmod(i, 3) - 1),
-			WorldUtils.CHUNK_VICINITY_TP_BITSTATES[i],
-		)
+		pass
+		#ensure_chunk_tps_loaded(
+			#ccoords + Vector3i(posmod(i/9, 3) - 1, posmod(i/3, 3) - 1, posmod(i, 3) - 1),
+			#WorldUtils.CHUNK_VICINITY_TP_BITSTATES[i],
+		#)
 	
 	
 	# !!! get data of all chunk tiles + sorrounding chunks' tps' tiles.
