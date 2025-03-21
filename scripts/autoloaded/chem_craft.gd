@@ -23,26 +23,26 @@ extends Node
 
 
 const DYE_COLORS: Dictionary[String, Color] = {
-	"black": Color.BLACK,
-	"white": Color.WHITE,
+	"pure black": Color.BLACK,
+	"pure white": Color.WHITE,
 	
-	"red": Color.RED,
-	"yellow": Color.YELLOW,
-	"green": Color.GREEN,
-	"cyan": Color.CYAN,
-	"blue": Color.BLUE,
-	"magen": Color.MAGENTA,
+	"pure red": Color.RED,
+	"pure yellow": Color.YELLOW,
+	"pure green": Color.GREEN,
+	"pure cyan": Color.CYAN,
+	"pure blue": Color.BLUE,
+	"pure magen": Color.MAGENTA,
 	
-	"orange": Color(1, 0.5, 0),
-	"shar": Color(0.5, 1, 0),
-	"menth": Color(0, 1, 0.5),
-	"azhur": Color(0, 0.5, 1),
-	"violet": Color(0.5, 0, 1),
-	"rose": Color(1.0, 0.0, 0.5),
+	"pure orange": Color(1, 0.5, 0),
+	"pure shar": Color(0.5, 1, 0),
+	"pure menth": Color(0, 1, 0.5),
+	"pure azhur": Color(0, 0.5, 1),
+	"pure violet": Color(0.5, 0, 1),
+	"pure rose": Color(1.0, 0.0, 0.5),
 	
-	"indigo": Color(0.25, 0.0, 1.0),
+	"pure indigo": Color(0.25, 0.0, 1.0),
 	"digodium": Color(0.317, 0.0, 1.0),
-	"crimson": Color(1.0, 0.0, 0.25),
+	"pure crimson": Color(1.0, 0.0, 0.25),
 }
 
 

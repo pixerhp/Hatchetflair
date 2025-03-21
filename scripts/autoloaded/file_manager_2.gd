@@ -137,6 +137,7 @@ func get_dir_size(path: String, attempt_os_ask: bool = true) -> int:
 		total += get_dir_size(path.path_join(dir), false)
 	return total
 
+# !!! (currently in-dev) Godot 4.5 will add a dedicted FileAccess fun for this!
 func get_file_size(path: String) -> int:
 	if not FileAccess.file_exists(path):
 		push_error(FM.ERRMSG.form_colon(FM.ERRMSG.FILE_NOT_FOUND, path))
