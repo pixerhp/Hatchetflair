@@ -202,8 +202,8 @@ func cm_thread_loop():
 		
 		process_instructions(INST_SET.INCOMING)
 		
-		# process liquids flowing, logic wires/things ticking, etc.
-			# probably based on updates_within_last_loop, either for each or after every n updates.
+		if updates_within_last_loop > 0:
+			do_chunks_tick(true)
 		
 		if should_do_quota:
 			adjust_work_quota_size()
@@ -357,6 +357,19 @@ func process_instructions(instructions_set: int) -> Error:
 # (Call with the main thread to make the cm thread stop waiting.)
 func unpause_cm_thread():
 	semaphore.post()
+
+func do_chunks_tick(should_tick_mcg: bool):
+	
+	# !!! tick data for static chunks
+	
+	if not should_tick_mcg:
+		return
+	
+	for i in mcg.size():
+		# !!! tick data for each mobile chunks group
+		pass
+	
+	return
 
 func adjust_work_quota_size():
 	# Prevents weird should-be-impossible values (such as from int overflow.)
