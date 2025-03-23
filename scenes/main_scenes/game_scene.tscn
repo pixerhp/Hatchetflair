@@ -168,9 +168,6 @@ transform = Transform3D(-0.601815, -0.204008, 0.772139, 0, 0.966824, 0.255446, -
 transform = Transform3D(-0.941098, -0.309562, -0.136034, -0.3256, 0.721124, 0.611527, -0.0912082, 0.6198, -0.779442, 0, 210, -156)
 visible = false
 
-[node name="Paige" type="CharacterBody3D" parent="."]
-transform = Transform3D(0.937889, 0, -0.346936, 0, 1, 0, 0.346936, 0, 0.937889, 17.35, 2.968, -47.724)
-
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ResumeGameplay" to="." method="_on_pausemenu_resumegameplay_pressed"]
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/Settings" to="." method="_on_pausemenu_settings_pressed"]
 [connection signal="pressed" from="PauseMenu/HBoxContainer/VBoxContainer/PauseMenuBox/PauseMenuElements/ToggleAFK" to="." method="_on_pausemenu_toggleafk_pressed"]
