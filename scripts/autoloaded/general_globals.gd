@@ -120,6 +120,7 @@ func get_inputmap_dict(include_not_hf_unique: bool) -> Dictionary[StringName, Ar
 
 ## ----------------------------------------------------------------
 
+# !!! revise or disimplement these later.
 func normalize_name(name_str: String, default: String) -> String:
 	name_str = name_str.replace("\n", "")
 	name_str = name_str.replace("\r", "")
