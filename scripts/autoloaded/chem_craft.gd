@@ -22,6 +22,7 @@
 extends Node
 
 
+# Note: probably don't have a generic "pink" which refers to only one specific color.
 const DYE_COLORS: Dictionary[String, Color] = {
 	"pure black": Color.BLACK,
 	"pure white": Color.WHITE,
@@ -35,14 +36,19 @@ const DYE_COLORS: Dictionary[String, Color] = {
 	
 	"pure orange": Color(1, 0.5, 0),
 	"pure shar": Color(0.5, 1, 0),
-	"pure menth": Color(0, 1, 0.5),
-	"pure azhur": Color(0, 0.5, 1),
-	"pure violet": Color(0.5, 0, 1),
+		# from "chartreuse".
+	"pure mint": Color(0, 1, 0.5),
+	"pure cerune": Color(0, 0.5, 1),
+		# from "cerulean", is easier to pronounce than something like "azure".
+	"pure [violet?]": Color(0.5, 0, 1),
+		# reducing the syllables from 3 to 2 would be nice, but otherwise I like "violet".
 	"pure rose": Color(1.0, 0.0, 0.5),
 	
 	"pure indigo": Color(0.25, 0.0, 1.0),
-	"digodium": Color(0.317, 0.0, 1.0),
-	"pure crimson": Color(1.0, 0.0, 0.25),
+	"pure crimsi": Color(1.0, 0.0, 0.25),
+		# !!! conside renaming? is the pure color between rose and red.
+	
+	"digodium indigo": Color(0.3, 0.0, 1.0),
 }
 
 
