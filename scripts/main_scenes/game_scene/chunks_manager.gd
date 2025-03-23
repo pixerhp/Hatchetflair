@@ -202,6 +202,9 @@ func cm_thread_loop():
 		
 		process_instructions(INST_SET.INCOMING)
 		
+		# process liquids flowing, logic wires/things ticking, etc.
+			# probably based on updates_within_last_loop, either for each or after every n updates.
+		
 		if should_do_quota:
 			adjust_work_quota_size()
 			do_work_quota()
