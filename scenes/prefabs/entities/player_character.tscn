@@ -13,5 +13,9 @@ script = ExtResource("1_8d8wy")
 [node name="PlayerCam" type="Camera3D" parent="."]
 
 [node name="CamHeadModel" parent="PlayerCam" instance=ExtResource("2_jmsxm")]
+visible = false
 
-[node name="Nametag" type="Label3D" parent="."]
+[node name="TextLabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+billboard = 2
+text = "<< uninitialized >>"

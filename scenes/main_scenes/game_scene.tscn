@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://o3dnyoj5ql3m"]
+[gd_scene load_steps=8 format=3 uid="uid://o3dnyoj5ql3m"]
 
 [ext_resource type="Script" uid="uid://b84ku6o0fi4kf" path="res://scripts/main_scenes/game_scene/game_scene.gd" id="1_h6q16"]
 [ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="2_gr5ms"]
 [ext_resource type="Script" uid="uid://do32ygum2f5li" path="res://scripts/main_scenes/game_scene/chunks_manager.gd" id="3_ah17h"]
+[ext_resource type="PackedScene" uid="uid://buneopjw84ltv" path="res://scenes/prefabs/entities/player_character.tscn" id="4_aqsws"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ci51s"]
 sky_top_color = Color(0.454902, 0.537255, 0.65098, 1)
@@ -161,8 +162,7 @@ transform = Transform3D(-4.37114e-08, -0.478692, 0.877983, 0, 0.877983, 0.478692
 [node name="ChunksManager" type="Node3D" parent="."]
 script = ExtResource("3_ah17h")
 
-[node name="REMOVE_LATER_cam" type="Camera3D" parent="."]
-transform = Transform3D(-0.601815, -0.204008, 0.772139, 0, 0.966824, 0.255446, -0.798635, 0.153731, -0.581849, 17.4965, 9.41445, -14.4152)
+[node name="PlayerCharacter" parent="." instance=ExtResource("4_aqsws")]
 
 [node name="DefaultCam" type="Camera3D" parent="."]
 transform = Transform3D(-0.941098, -0.309562, -0.136034, -0.3256, 0.721124, 0.611527, -0.0912082, 0.6198, -0.779442, 0, 210, -156)

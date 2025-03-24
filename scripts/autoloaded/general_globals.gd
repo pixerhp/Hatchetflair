@@ -41,7 +41,7 @@ enum PLAYMODE {
 }
 var my_playmode = PLAYMODE.SPECTATOR
 
-var draw_debug_info_text: bool = true
+var draw_debug_info_text: bool = false
 var draw_debug_chunk_borders: bool = false
 
 
@@ -144,7 +144,8 @@ func normalize_username(string: String) -> String:
 		result += part.get_string()
 	return result
 
-func get_coords3d_string(coords: Vector3, length_after_period: int) -> String:
+func get_coords3d_string(in_coords: Vector3, swap_xyz_hzz: bool, length_after_period: int) -> String:
+	var coords: Vector3 = Globals.swap_xyz_hzz_f(in_coords) if swap_xyz_hzz else in_coords
 	var finalized_string: String = ""
 	var stringified_component: String = ""
 	var period_index: int = 0
