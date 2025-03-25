@@ -1,5 +1,8 @@
 extends Node
 
+# !!! future idea: split credits into separate sections, 
+# such as developers, special thanks, software licenses, etc.
+
 @onready var credits_text_node: RichTextLabel = (
 	$CreditsUI/ScrollContainer/PanelContainer/HBoxContainer/CreditsText
 )
@@ -29,8 +32,11 @@ const developer_credits_data: Array = [
 	[NAME, "LandOcto950 (\"Squid\")"],
 	[NAME, "JJJokesalot (\"JJ\")"],
 	[],
-	[SECTION, "~~ Programs Notably Used ~~"],
+	[SECTION, "~~ Programs Used In Development ~~"],
 	[NAME, "Godot Game Engine"],
+	[LINK, "https://godotengine.org/license"], 
+		# !!! note: this is a temporary / not-super-sound solution, see:
+		# https://docs.godotengine.org/en/stable/about/complying_with_licenses.html#doc-complying-with-licenses-thirdparty
 	[NAME, "Blender (Modelling)"],
 	[NAME, "Aseprite (Pixel Art)"],
 	[NAME, "Garageband & FL Studio"],

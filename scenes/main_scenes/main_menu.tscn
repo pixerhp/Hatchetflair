@@ -120,7 +120,6 @@ size_flags_horizontal = 4
 [node name="StartWorld" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
-size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "Start world"
 icon_alignment = 1
@@ -128,7 +127,6 @@ icon_alignment = 1
 [node name="JoinWorld" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
-size_flags_horizontal = 4
 tooltip_text = "(Multiplayer networking has not yet been implimented. Sorry!)"
 theme_override_font_sizes/font_size = 20
 disabled = true
@@ -138,7 +136,6 @@ icon_alignment = 1
 [node name="Characters" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
-size_flags_horizontal = 4
 tooltip_text = "(Character customization has not yet been implimented. Sorry!)"
 theme_override_font_sizes/font_size = 20
 disabled = true
@@ -148,7 +145,6 @@ icon_alignment = 1
 [node name="Accounts" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
-size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "Accounts"
 icon_alignment = 1
@@ -156,7 +152,6 @@ icon_alignment = 1
 [node name="Settings" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
-size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "Settings"
 icon_alignment = 1
@@ -172,7 +167,6 @@ icon_alignment = 1
 [node name="Quit" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
-size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "Quit"
 icon_alignment = 1
