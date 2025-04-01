@@ -40,6 +40,8 @@ var updates_within_last_loop: int = 0
 var loops_since_last_update: int = 0
 	# For counting the number of thread while loops since the last data update from the main thread.
 
+var should_do_chunks_tick: bool = false
+
 
 enum INST_SET {
 	INCOMING,
@@ -202,8 +204,9 @@ func cm_thread_loop():
 		
 		process_instructions(INST_SET.INCOMING)
 		
-		if updates_within_last_loop > 0:
-			do_chunks_tick(true)
+		if should_do_chunks_tick:
+			if updates_within_last_loop > 0:
+				do_chunks_tick(true)
 		
 		if should_do_quota:
 			adjust_work_quota_size()
