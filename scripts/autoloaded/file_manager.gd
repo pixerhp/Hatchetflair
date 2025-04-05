@@ -576,7 +576,7 @@ func create_world(world_name: String, world_seed: String) -> Error:
 	# Set up the dictionary that will be used to create the world info cfg file.
 	var cfg_data: Dictionary = {
 		"meta": {
-			"version": Globals.V_ENTIRE,
+			"version": Globals.GameInfo.VERSION,
 			"world_name": world_name,
 			"favorited": false,
 			"creation_date_utc": Time.get_datetime_string_from_system(true, true),

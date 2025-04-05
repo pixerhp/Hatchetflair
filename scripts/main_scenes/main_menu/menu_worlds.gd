@@ -89,8 +89,8 @@ func open_edit_world_popup() -> Error:
 		return FAILED
 	var dir_name: String = world_dir_names[worlds_list_node.get_selected_items()[0]]
 	var dict: Dictionary = FileManager.read_cfg(FileManager.PATH_WORLDS + "/" + dir_name + "/world.cfg")
-	var world_name: String = Globals.dict_safeget(dict, ["meta", "world_name"], FileManager.ERRMSG_CFG)
-	var world_seed: String = Globals.dict_safeget(dict, ["generation", "seed"], FileManager.ERRMSG_CFG)
+	var world_name: String = Globals.dict_get_recursive(dict, ["meta", "world_name"], FileManager.ERRMSG_CFG)
+	var world_seed: String = Globals.dict_get_recursive(dict, ["generation", "seed"], FileManager.ERRMSG_CFG)
 	var popup: Node = $EditWorldPopup
 	popup.get_node("PopupTitleText").text = "[center]Edit world: \"" + world_name + "\""
 	popup.get_node("WorldNameInput").text = world_name
