@@ -4,15 +4,23 @@ extends Node
 class PATH:
 	# Full paths:
 	class RES:
+		# Directories:
 		const ROOT: String = "res://"
 		const ASSETS: String = ROOT + "assets"
 		const TEXTS: String = ASSETS + "/text_files"
+		# Files:
 		const SPLASHES: String = TEXTS + "/splash_texts.txt"
+	
 	class USER:
+		# Directories:
 		const ROOT: String = "user://"
 		const STORAGE: String = ROOT + "storage"
 		const WORLDS: String = STORAGE + "/worlds"
+		const CHARACTERS: String = STORAGE + "/characters"
+		const SCREENSHOTS: String = STORAGE + "/screenshots"
+		# Files:
 		const ACCOUNTS: String = STORAGE + "/accounts.cfg"
+		const SERVERS: String = STORAGE + "/servers.cfg"
 	
 	# Partial paths:
 	class PARTIAL:
@@ -182,6 +190,29 @@ func read_txt_as_commented_lines(
 				lines.append(unparsed_lines[i].left(min_ind_pos))
 	
 	return lines
+
+## ----------------------------------------------------------------
+
+func ensure_core_dirstructure() -> Error:
+	var paths: PackedStringArray = PackedStringArray([
+		FM.PATH.USER.STORAGE,
+		FM.PATH.USER.CHARACTERS,
+		FM.PATH.USER.WORLDS,
+		FM.PATH.USER.SCREENSHOTS,
+	])
+	for path in paths:
+		if not DirAccess.dir_exists_absolute(path):
+			if not DirAccess.make_dir_absolute(path) == OK:
+				return FAILED
+	return OK
+
+func ensure_core_files() -> Error:
+	
+	
+	
+	
+	
+	return OK
 
 ## ----------------------------------------------------------------
 

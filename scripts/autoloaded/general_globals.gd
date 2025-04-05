@@ -49,8 +49,21 @@ var draw_debug_chunk_borders: bool = false
 
 func _enter_tree() -> void:
 	randomize()
-	FileManager.ensure_required_dirs()
-	FileManager.ensure_required_files()
+	#FileManager.ensure_required_dirs()
+	#FileManager.ensure_required_files()
+	if not ((FM.ensure_core_dirstructure() == OK) and (FM.ensure_core_files() == OK)):
+		create_accept_popup(
+			"/root/MainMenu",
+			"Error!",
+			"Failed to ensure proper core directory/file structure for the game.\n" +
+			"(If proceeding, various actions utilizing file interactions may fail.)\n\n" +
+			"Ensure that the game is provided read/write permissions by your operating system.\n" +
+			"If the problem still can't be resolved, then contact the game's developers.",
+			"OK",
+		)
+	
+	print(get_node("/root").get_children())
+	
 	initialize_account()
 	return
 
@@ -190,3 +203,14 @@ func sort_alphabetically(arr: Array, ascending: bool = true) -> void:
 	else:
 		arr.sort_custom(func(a, b) -> bool: return a.naturalnocasecmp_to(b) > 0)
 	return
+
+func create_accept_popup(parent_node: NodePath, title: String, dialogue: String, confirmation: String):
+	var node: AcceptDialog = AcceptDialog.new()
+	node.title = title
+	node.dialog_text = dialogue
+	node.ok_button_text = confirmation
+	node.reset_size()
+	node.position = (get_window().size / 2)
+	node.position.x -= node.get_size_with_decorations().x / 2
+	node.visible = true
+	get_node(parent_node).add_child(node)
