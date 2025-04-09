@@ -4,20 +4,21 @@
 
 # ---- ---- ---- ---- CORE
 :^) ← has a nose
-almost a game
-built on Godot!
-hello!♪
+# a sparkle in the shadow of titans...
+Almost a game.
+Built on Godot!
+hello!♪~
 # I struggle to move my hands, but I want to move them anyway.
-made with passion!
-may contain ferrium
-may also contain werium
+Made with love and passion!
+May contain ferrium.
+May also contain werium...
 splash text!
 # terrain-tastic
 	extends "ramp-tastic", to be implemented once the terrain update (1.2) is ready to be released.
-turn that smiley, upside-down!
+Turn that smiley, upside-down!
 
 # ---- ---- ---- ---- OTHER
-tau > pi
+τau > πi
 
 # ---- ---- ---- ---- REFERENCES
 bojler eladó
@@ -27,6 +28,7 @@ bojler eladó
 hello 4D Miner!
 hello Cosmic Reach!
 hello Reforj!
+hello Voima!
 seme? kijetesantakalu ala?
 	Toki Pona conlang, it says "what? no raccoons?"
 # The Pipes will always win
