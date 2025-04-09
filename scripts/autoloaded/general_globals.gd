@@ -2,6 +2,9 @@ extends Node
 
 var INPUTMAP_DEFAULTS: Dictionary[StringName, Array] = get_inputmap_dict(true)
 
+var SPLASHES: PackedStringArray = []
+var TIPS: PackedStringArray = []
+
 class GameInfo:
 	static var NAME: String = ProjectSettings.get_setting("application/config/name")
 	const PHASE: String = "pre-alpha"
@@ -49,8 +52,6 @@ var draw_debug_chunk_borders: bool = false
 
 func _enter_tree() -> void:
 	randomize()
-	#FileManager.ensure_required_dirs()
-	#FileManager.ensure_required_files()
 	if not ((FM.ensure_core_dirstructure() == OK) and (FM.ensure_core_files() == OK)):
 		create_accept_popup(
 			"/root/MainMenu",
@@ -61,9 +62,7 @@ func _enter_tree() -> void:
 			"If the problem still can't be resolved, then contact the game's developers.",
 			"OK",
 		)
-	
-	print(get_node("/root").get_children())
-	
+	initialize_splashes_and_tips()
 	initialize_account()
 	return
 
@@ -89,6 +88,25 @@ func quit_game() -> void:
 
 ## ----------------------------------------------------------------
 
+func initialize_splashes_and_tips() -> void:
+	Globals.SPLASHES = FM.read_txt_as_commented_lines(
+		FM.PATH.RES.SPLASHES, 
+		PackedStringArray(["#", "\t"]), 
+		true,
+	)
+	if Globals.SPLASHES.is_empty():
+		push_warning("Splashes array empty upon initialization.")
+		Globals.SPLASHES.append("Splashless?")
+	Globals.TIPS = FM.read_txt_as_commented_lines(
+		FM.PATH.RES.TIPS, 
+		PackedStringArray(["#", "\t"]), 
+		true,
+	)
+	if Globals.TIPS.is_empty():
+		push_warning("Tips array empty upon initialization.")
+		Globals.TIPS.append("There are no tips available.")
+	return
+
 func initialize_account():
 	# !!! change type to Dictionary[String, Dictionary] after creating and using FM cfg funcs.
 	var accounts: Dictionary = FileManager.read_cfg(
@@ -106,19 +124,8 @@ func initialize_account():
 func refresh_window_title(include_rand_splash: bool):
 	DisplayServer.window_set_title(
 		GameInfo.FULL_TITLE + 
-		(("    ~    " + random_splashtext()) if include_rand_splash else (""))
+		(("    ~    " + SPLASHES[randi_range(0, SPLASHES.size() - 1)]) if include_rand_splash else (""))
 	)
-
-func random_splashtext() -> String:
-	var splashes: PackedStringArray = FM.read_txt_as_commented_lines(
-		FM.PATH.RES.SPLASHES, 
-		PackedStringArray(["#", "\t"]), 
-		true,
-	)
-	if splashes.size() == 0:
-		push_warning("No splash texts.")
-		return "Splashless?"
-	return splashes[randi_range(0, splashes.size() - 1)]
 
 func get_inputmap_dict(include_not_hf_unique: bool) -> Dictionary[StringName, Array]: 
 	var dict: Dictionary[StringName, Array]

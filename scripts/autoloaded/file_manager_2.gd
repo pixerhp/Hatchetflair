@@ -10,6 +10,7 @@ class PATH:
 		const TEXTS: String = ASSETS + "/text_files"
 		# Files:
 		const SPLASHES: String = TEXTS + "/splashes.txt"
+		const TIPS: String = TEXTS + "/tips.txt"
 	
 	class USER:
 		# Directories:
