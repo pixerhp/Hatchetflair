@@ -1,0 +1,11 @@
+# and '\t' (tab/indent) characters act like comments, their position and onwards in a line is ignored.
+# blank/empty lines are also ignored.
+
+
+# ---- ---- ---- ---- CORE
+Keybinds can be customized in settings.
+
+# ---- ---- ---- ---- LIFE
+If you find that you're not having fun, then stop playing the game. There's always another day.
+Remember to dedicate time to properly resting your mind, avoid numbing or distracting yourself instead.
+Every 20 minutes of screen time, look at something at least 20 feet away for 20 seconds, to reduce eye strain/fatigue.

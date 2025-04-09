@@ -1,5 +1,5 @@
 # and '\t' (tab/indent) characters act like comments, their position and onwards in a line is ignored.
-# blank lines are also ignored.
+# blank/empty lines are also ignored.
 
 
 # ---- ---- ---- ---- CORE
