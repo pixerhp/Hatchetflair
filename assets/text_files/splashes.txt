@@ -2,7 +2,7 @@
 # blank lines are also ignored.
 
 
-#### CORE
+# ---- ---- ---- ---- CORE
 :^) ← has a nose
 almost a game
 built on Godot!
@@ -16,10 +16,10 @@ splash text!
 	extends "ramp-tastic", to be implemented once the terrain update (1.2) is ready to be released.
 turn that smiley, upside-down!
 
-#### OTHER
+# ---- ---- ---- ---- OTHER
 tau > pi
 
-#### REFERENCES
+# ---- ---- ---- ---- REFERENCES
 bojler eladó
 	“boiler for sale” in hungarian, a popular hungarian meme phrase. (SteveMC32 is hungarian.)
 # DO NOT TAUNT THE CHICKENS
