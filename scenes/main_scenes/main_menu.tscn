@@ -29,10 +29,6 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jsr8e")
 
-[node name="WarningPopup" type="AcceptDialog" parent="."]
-title = "Error!"
-size = Vector2i(143, 100)
-
 [node name="BackgroundTexture" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
