@@ -16,16 +16,6 @@ class GameInfo:
 		NAME + ("* " if IS_MODDED else " ") + PHASE + " version " + VERSION
 	)
 
-var this_player: PlayerData = PlayerData.new()
-class PlayerData:
-	var username: String = "" # !!! change standard everywhere in code that no username is "" rather than "guest"
-	var displayname: String = "Guest"
-	var origin_offset: Vector3i = Vector3i(0, 0, 0)
-		# chunk coords offset of your floating point coords in the world. For example, if your 
-		# origin offset is 100000 chunks out, then terrain 100000 chunks out will be loaded at 
-		# what is internally/functionally (0,0,0).
-		# The point of this is to solve not being able to live/be far out due to rounding errors.
-
 # !!! the below are not yet used, but should serve as future reference for stuff that should be.
 enum PLAYMODE {
 	SPECTATOR,
@@ -48,6 +38,34 @@ var draw_debug_info_text: bool = false
 var draw_debug_chunk_borders: bool = false
 
 
+var this_player: PlayerData = PlayerData.new()
+class PlayerData:
+	var account: Account = Account.new()
+	var ip: String = ""
+	var origin_offset: Vector3i = Vector3i(0, 0, 0)
+		# chunk coords offset of your floating point coords in the world. For example, if your 
+		# origin offset is 100000 chunks out, then terrain 100000 chunks out will be loaded at 
+		# what is internally/functionally (0,0,0).
+		# The point of this is to solve not being able to live/be far out due to rounding errors.
+
+class Account:
+	enum PROVIDER { UNSET = -1,
+		GUEST = 0,
+		LOCAL = 1,
+		ITCH = 2,
+		STEAM = 3,
+		MICROSOFT = 4,
+	}
+	var provider: int = PROVIDER.UNSET
+	var username: String = ""
+	var displayname: String = ""
+class AccountDetailed:
+	extends Account
+	var unix_dt_creation: String = ""
+	var unix_dt_last_played: String = ""
+	var s_time_played: int = -1
+
+
 ## ----------------------------------------------------------------
 
 func _enter_tree() -> void:
@@ -62,6 +80,7 @@ func _enter_tree() -> void:
 			"If the problem still can't be resolved, then contact the game's developers.",
 			"OK",
 		)
+	print(FileManager.read_cfg("user://storage/accounts_TEST_FORMAT.cfg"))
 	initialize_splashes_and_tips()
 	initialize_account()
 	return
@@ -114,11 +133,11 @@ func initialize_account():
 	var last_selected_username: String = FileManager.read_cfg_keyval(
 		FM.PATH.USER.ACCOUNTS, "meta", "last_selected_account_username", "")
 	if accounts.has(last_selected_username):
-		this_player.username = last_selected_username
-		this_player.displayname = accounts[last_selected_username].get("displayname", "David")
+		this_player.account.username = last_selected_username
+		this_player.account.displayname = accounts[last_selected_username].get("displayname", "David")
 	else:
-		this_player.username = ""
-		this_player.displayname = "Guest"
+		this_player.account.username = ""
+		this_player.account.displayname = "Guest"
 	return
 
 func refresh_window_title(include_rand_splash: bool):

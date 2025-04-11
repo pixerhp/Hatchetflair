@@ -44,11 +44,11 @@ func _update_welcome_message():
 		return
 	
 	welcome_message_node.text = "[center]"
-	welcome_message_node.text += "Welcome, " + Globals.this_player.displayname
-	if Globals.this_player.username == "":
+	welcome_message_node.text += "Welcome, " + Globals.this_player.account.displayname
+	if Globals.this_player.account.username == "":
 		welcome_message_node.text += "!\n(you are playing as a guest account.)"
 	else:
-		welcome_message_node.text += " (@" + Globals.this_player.username + ")"
+		welcome_message_node.text += " (@" + Globals.this_player.account.username + ")"
 	welcome_message_node.text += "[/center]"
 	
 	return

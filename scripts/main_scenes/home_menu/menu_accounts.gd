@@ -109,8 +109,8 @@ func _update_account_info_text():
 		push_error("Account username and displayname text node not found.")
 		return
 	account_info_text_node.text = (
-		"@username: " + Globals.this_player.username + "\n" +
-		"displayname: " + Globals.this_player.displayname
+		"@username: " + Globals.this_player.account.username + "\n" +
+		"displayname: " + Globals.this_player.account.displayname
 	)
 	return
 func _update_manage_account_button_disabledness():
@@ -123,8 +123,8 @@ func _update_manage_account_button_disabledness():
 func _on_account_option_button_item_selected(index: int):
 	account_selector_node.select(index)
 	if index < 2:
-		Globals.this_player.username = ""
-		Globals.this_player.displayname = FileManager.read_cfg_keyval(
+		Globals.this_player.account.username = ""
+		Globals.this_player.account.displayname = FileManager.read_cfg_keyval(
 			FileManager.PATH_ACCOUNTS, 
 			"meta", 
 			"guest_displayname", 
@@ -137,8 +137,8 @@ func _on_account_option_button_item_selected(index: int):
 			"guest", # !!! replace this with "" ?
 		)
 	else:
-		Globals.this_player.username = Globals.normalize_username(selector_index_to_username[index])
-		Globals.this_player.displayname = Globals.dict_get_recursive(
+		Globals.this_player.account.username = Globals.normalize_username(selector_index_to_username[index])
+		Globals.this_player.account.displayname = Globals.dict_get_recursive(
 			accounts, 
 			[selector_index_to_username[index], "displayname"], 
 			selector_index_to_username[index]
@@ -192,7 +192,7 @@ func _on_change_displayname_button_pressed():
 	account_info_text_node.text = (
 		"[center]" + 
 		"current displayname:\n" + 
-		Globals.this_player.displayname + 
+		Globals.this_player.account.displayname + 
 		"[/center]"
 	)
 	if account_info_right_spacer_node == null:
@@ -220,20 +220,20 @@ func _on_change_displayname_confirm_button():
 	var new_displayname_text: String = change_displayname_container.get_node("DisplaynameInput").text
 	if new_displayname_text.is_empty():
 		return
-	Globals.this_player.displayname = new_displayname_text
-	if Globals.this_player.username == "":
+	Globals.this_player.account.displayname = new_displayname_text
+	if Globals.this_player.account.username == "":
 		FileManager.write_cfg_keyval(
 			FileManager.PATH_ACCOUNTS, 
 			"meta",
 			"guest_displayname",
-			Globals.this_player.displayname,
+			Globals.this_player.account.displayname,
 		)
 	else:
 		FileManager.write_cfg_keyval(
 			FileManager.PATH_ACCOUNTS, 
-			Globals.this_player.username,
+			Globals.this_player.account.username,
 			"displayname",
-			Globals.this_player.displayname,
+			Globals.this_player.account.displayname,
 		)
 	_update_everything()
 	change_displayname_container.visible = false
@@ -254,7 +254,7 @@ func _update_advanced_account_info_text():
 	
 	advanced_account_info_text_node.text = ""
 	
-	if not (Globals.this_player.username == selector_index_to_username[account_selector_node.selected]):
+	if not (Globals.this_player.account.username == selector_index_to_username[account_selector_node.selected]):
 		advanced_account_info_text_node.text += (
 			"[color=#ff7373]" +
 			"player username currently stored in globals does not match username currently selected by account selector. please report this as a bug to developers." + "\n\n" +
@@ -266,13 +266,13 @@ func _update_advanced_account_info_text():
 		"[color=lightgray]accounts file location >> [/color]" +
 		"[color=greenyellow]" + ProjectSettings.globalize_path(FileManager.PATH_ACCOUNTS) + "[/color]" + "\n" +
 		"[color=darkgray](displaying all stored information about account from file:)[/color]" + "\n\n" +
-		"[color=lightgray]username >> [/color]" + Globals.this_player.username + "\n"
+		"[color=lightgray]username >> [/color]" + Globals.this_player.account.username + "\n"
 	)
-	if accounts.has(Globals.this_player.username):
-		for key in accounts[Globals.this_player.username].keys():
+	if accounts.has(Globals.this_player.account.username):
+		for key in accounts[Globals.this_player.account.username].keys():
 			advanced_account_info_text_node.text += (
 				"[color=lightgray]" + str(key) + " >> [/color]" + 
-				accounts[Globals.this_player.username][key] + "\n"
+				accounts[Globals.this_player.account.username][key] + "\n"
 			)
 	else:
 		advanced_account_info_text_node.text += (

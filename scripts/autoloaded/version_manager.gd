@@ -10,9 +10,27 @@ func _ready():
 	# (Reminder to implement proper transversioning support for each latest version.)
 	assert(supported_versions.has(Globals.GameInfo.VERSION))
 
+
+
 # "program files" refering to things like accounts, saved servers, meta information, etc.
 func transversion_program_files(start_v: String, end_v: String) -> Error:
 	
+	
+	return OK
+
+func transversion_accounts(targ_v: String) -> Error:
+	if not supported_versions.has(targ_v):
+		return FAILED
+	var curr_v: String = get_v_accounts()
+	if curr_v == "":
+		return FAILED
+	if not supported_versions.has(curr_v):
+		return FAILED
+	if curr_v == targ_v:
+		return OK
+	
+	var start_index: int = supported_versions.rfind(curr_v)
+	var end_index: int = supported_versions.rfind(targ_v)
 	
 	return OK
 
@@ -25,6 +43,31 @@ func transversion_character(something, start_v: String, end_v: String) -> Error:
 	
 	
 	return OK
+
+
+
+
+
+func get_v_accounts() -> String:
+	var v: String = ""
+	if FileAccess.file_exists("user://storage/accounts.cfg"):
+		var dict: Dictionary = FileManager.read_cfg("user://storage/accounts.cfg")
+		v = Globals.dict_get_recursive(dict, ["", "version"], "")
+		if not v == "":
+			return v
+		v = Globals.dict_get_recursive(dict, ["meta", "version"], "")
+		if not v == "":
+			return v
+	if FileAccess.file_exists("user://storage/users.cfg"):
+		var dict: Dictionary = FileManager.read_cfg("user://storage/users.cfg")
+		v = Globals.dict_get_recursive(dict, ["meta", "version"], "")
+		if not v == "":
+			return v
+	push_warning("Accounts file version not found.")
+	return ""
+
+
+
 
 
 # !!! revise pretty much all of this, have a const array of supported versions for transversioning.
