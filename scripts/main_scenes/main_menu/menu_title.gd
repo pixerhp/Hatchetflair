@@ -27,14 +27,14 @@ func _update_title_text():
 	return
 
 func _update_corner_version_text():
-	var corner_version_text_node: RichTextLabel = $TitleUI/HBoxContainer/VersionText
-	if corner_version_text_node == null:
-		push_error("Corner version text node not found.")
+	var node: RichTextLabel = %TitlescreenVersionText
+	if node == null:
+		push_error("Node for displaying titlescreen version text was not found.")
 		return
 	if Globals.GameInfo.VERSION == "-1":
-		corner_version_text_node.text = "version unspecified"
+		node.text = "version unspecified"
 	else:
-		corner_version_text_node.text = "version " + Globals.GameInfo.VERSION
+		node.text = "version " + Globals.GameInfo.VERSION
 	return
 
 func _update_welcome_message():
@@ -51,4 +51,8 @@ func _update_welcome_message():
 		welcome_message_node.text += " (@" + Globals.this_player.username + ")"
 	welcome_message_node.text += "[/center]"
 	
+	return
+
+func _on_open_files_button_pressed():
+	OS.shell_show_in_file_manager(ProjectSettings.globalize_path(FM.PATH.USER.ROOT))
 	return
