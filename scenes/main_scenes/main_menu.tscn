@@ -78,7 +78,7 @@ theme_override_constants/shadow_offset_y = 6
 theme_override_constants/shadow_offset_x = 6
 theme_override_font_sizes/normal_font_size = 64
 bbcode_enabled = true
-text = "[game name title]"
+text = "[game name]"
 fit_content = true
 autowrap_mode = 0
 
@@ -121,7 +121,7 @@ size_flags_horizontal = 4
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Start world"
+text = "worlds"
 icon_alignment = 1
 
 [node name="JoinWorld" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
@@ -130,7 +130,7 @@ layout_mode = 2
 tooltip_text = "(Multiplayer networking has not yet been implimented. Sorry!)"
 theme_override_font_sizes/font_size = 20
 disabled = true
-text = "Join world"
+text = "join server"
 icon_alignment = 1
 
 [node name="Characters" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
@@ -139,21 +139,21 @@ layout_mode = 2
 tooltip_text = "(Character customization has not yet been implimented. Sorry!)"
 theme_override_font_sizes/font_size = 20
 disabled = true
-text = "Characters"
+text = "characters"
 icon_alignment = 1
 
 [node name="Accounts" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Accounts"
+text = "accounts"
 icon_alignment = 1
 
 [node name="Settings" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Settings"
+text = "settings"
 icon_alignment = 1
 
 [node name="Credits" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
@@ -161,14 +161,14 @@ custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
-text = "Credits"
+text = "credits"
 icon_alignment = 1
 
 [node name="Quit" type="Button" parent="Menus/TitleMenu/TitleUI/TitleScreenButtons"]
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "Quit"
+text = "quit"
 icon_alignment = 1
 
 [node name="Spacer4" type="Control" parent="Menus/TitleMenu/TitleUI"]
