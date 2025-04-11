@@ -1,12 +1,12 @@
 [gd_scene load_steps=11 format=3 uid="uid://bbwhtlk15abxa"]
 
-[ext_resource type="Script" uid="uid://cjeum4hqynd6" path="res://scripts/main_scenes/main_menu/menu_main.gd" id="1_jsr8e"]
-[ext_resource type="Script" uid="uid://8ugswlbcis1i" path="res://scripts/main_scenes/main_menu/menu_title.gd" id="2_1jmm2"]
-[ext_resource type="Script" uid="uid://dyn0p5c1xrsuo" path="res://scripts/main_scenes/main_menu/menu_worlds.gd" id="2_68qhj"]
-[ext_resource type="Script" uid="uid://cbv337uhik44g" path="res://scripts/main_scenes/main_menu/menu_accounts.gd" id="2_ykccs"]
-[ext_resource type="Script" uid="uid://bgsihfw6ecuvb" path="res://scripts/main_scenes/main_menu/menu_join.gd" id="3_r4aqp"]
-[ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="4_j121s"]
-[ext_resource type="Script" uid="uid://dl0xdfye2cu4v" path="res://scripts/main_scenes/main_menu/menu_credits.gd" id="7_0howm"]
+[ext_resource type="Script" uid="uid://cjeum4hqynd6" path="res://scripts/main_scenes/home_menu/home_menu.gd" id="1_k530k"]
+[ext_resource type="Script" uid="uid://8ugswlbcis1i" path="res://scripts/main_scenes/home_menu/menu_title.gd" id="2_3ghoi"]
+[ext_resource type="Script" uid="uid://cbv337uhik44g" path="res://scripts/main_scenes/home_menu/menu_accounts.gd" id="3_7t5nj"]
+[ext_resource type="Script" uid="uid://dyn0p5c1xrsuo" path="res://scripts/main_scenes/home_menu/menu_worlds.gd" id="4_nn5q6"]
+[ext_resource type="Script" uid="uid://bgsihfw6ecuvb" path="res://scripts/main_scenes/home_menu/menu_join.gd" id="5_yqr10"]
+[ext_resource type="PackedScene" uid="uid://dry5f83aydp54" path="res://scenes/prefabs/universal_menus/settings.tscn" id="6_0tmlg"]
+[ext_resource type="Script" uid="uid://dl0xdfye2cu4v" path="res://scripts/main_scenes/home_menu/menu_credits.gd" id="7_7glur"]
 
 [sub_resource type="Gradient" id="Gradient_skhgw"]
 interpolation_mode = 2
@@ -20,14 +20,14 @@ fractal_ping_pong_strength = 0.837
 color_ramp = SubResource("Gradient_skhgw")
 noise = SubResource("FastNoiseLite_0peb1")
 
-[node name="MainMenu" type="Control"]
+[node name="HomeMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_jsr8e")
+script = ExtResource("1_k530k")
 
 [node name="BackgroundTexture" type="TextureRect" parent="."]
 layout_mode = 1
@@ -53,7 +53,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_1jmm2")
+script = ExtResource("2_3ghoi")
 
 [node name="TitleUI" type="VBoxContainer" parent="Menus/TitleMenu"]
 layout_mode = 1
@@ -206,7 +206,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_ykccs")
+script = ExtResource("3_7t5nj")
 
 [node name="GeneralScreen" type="Control" parent="Menus/AccountsMenu"]
 layout_mode = 1
@@ -974,7 +974,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_68qhj")
+script = ExtResource("4_nn5q6")
 
 [node name="WorldsUI" type="VBoxContainer" parent="Menus/WorldsMenu"]
 layout_mode = 1
@@ -1272,7 +1272,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_r4aqp")
+script = ExtResource("5_yqr10")
 
 [node name="JoinUI" type="VBoxContainer" parent="Menus/JoinMenu"]
 layout_mode = 1
@@ -1549,7 +1549,7 @@ offset_right = 60.0
 grow_vertical = 0
 text = "Cancel"
 
-[node name="SettingsMenu" parent="Menus" instance=ExtResource("4_j121s")]
+[node name="SettingsMenu" parent="Menus" instance=ExtResource("6_0tmlg")]
 visible = false
 layout_mode = 1
 
@@ -1561,7 +1561,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("7_0howm")
+script = ExtResource("7_7glur")
 
 [node name="CreditsUI" type="VBoxContainer" parent="Menus/CreditsMenu"]
 layout_mode = 1
