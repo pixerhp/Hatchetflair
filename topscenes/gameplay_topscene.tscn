@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://caemtw2ni7cl6"]
+[gd_scene load_steps=6 format=3 uid="uid://caemtw2ni7cl6"]
 
 [ext_resource type="Script" uid="uid://dprqbtapra60j" path="res://scripts/flycam.gd" id="1_3dqie"]
 
@@ -11,6 +11,8 @@ sky_material = SubResource("ProceduralSkyMaterial_hoxm8")
 background_mode = 2
 sky = SubResource("Sky_3dqie")
 
+[sub_resource type="BoxMesh" id="BoxMesh_3dqie"]
+
 [node name="GameplayTopscene" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -21,3 +23,6 @@ transform = Transform3D(-4.37114e-08, -0.841511, 0.54024, 0, 0.54024, 0.841511, 
 
 [node name="FlyCam" type="Camera3D" parent="."]
 script = ExtResource("1_3dqie")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_3dqie")

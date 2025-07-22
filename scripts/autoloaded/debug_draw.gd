@@ -16,13 +16,10 @@ func _ready():
 	add_child(canvas_item)
 
 func _process(_delta):
-	texts_to_draw.append("test " + str(randi()))
-	texts_to_draw.append("test " + str(randi()))
-	texts_to_draw.append("test " + str(randi()))
 	canvas_item.queue_redraw()
 
 func _on_CanvasItem_draw():
-	# Handle debug texts:
+	# Draw debug texts:
 	var draw_pos: Vector2 = Vector2()
 	var font_ascent: Vector2 = Vector2(0, texts_font.get_ascent())
 	var font_height: int = texts_font.get_height() + texts_ypad
