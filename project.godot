@@ -17,3 +17,7 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="Hatchetflair"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+DebugDraw="*res://scripts/autoloaded/debug_draw.gd"
