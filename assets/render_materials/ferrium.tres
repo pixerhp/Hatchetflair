@@ -1,8 +1,0 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://cl0ea2oivkxju"]
-
-[resource]
-albedo_color = Color(0.552955, 0.552956, 0.552956, 1)
-metallic = 0.97
-roughness = 0.07
-clearcoat = 0.5
-billboard_keep_scale = true

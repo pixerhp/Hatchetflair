@@ -1,4 +1,0 @@
-IMPORTANT NOTE:
-	The data files folder is very likely not empty despite how it may first appear, 
-	Godot just doesn't showing files with extensions it doesn't recognize.
-	Right click the folder and choose "Open in File Manager" to see its true contents.
