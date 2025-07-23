@@ -4,6 +4,7 @@ func _process(_delta):
 	DebugDraw.texts_to_draw.append("cam x: " + str(self.position.x))
 	DebugDraw.texts_to_draw.append("cam y: " + str(self.position.y))
 	DebugDraw.texts_to_draw.append("cam z: " + str(self.position.z))
+	DebugDraw.lines_to_draw.append([Vector3(-5,-5,-5),Vector3(-5,-5,50),Color(0,1,0.5)])
 
 var fly_speed: float = 0
 var fly_direction_vector: Vector3 = Vector3()
