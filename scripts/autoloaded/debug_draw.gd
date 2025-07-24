@@ -45,7 +45,7 @@ func _ready():
 func initialize_chunkborders_arraymesh():
 	const layers: int = 2
 	const chunk_length: int = 16 # (assumes a metrin is length 1.)
-	const grid_close_hue: float = 3.6 / 6.0
+	const grid_close_hue: float = 3.5 / 6.0
 	const grid_color_range: float = 0.5 / 6.0
 	
 	var verts: PackedVector3Array = []
@@ -93,6 +93,8 @@ func initialize_chunkborders_arraymesh():
 		colors.resize(colors.size() + (12 * (chunk_length - 1)))
 		indices.resize(indices.size() + (6 * (chunk_length - 1) * 2))
 		
+		for i in range(12 * (chunk_length - 1)):
+			pass
 		
 		# !!! ...
 	
