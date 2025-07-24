@@ -23,6 +23,10 @@ config/icon="res://icon.svg"
 DebugDraw="*res://scripts/autoloaded/debug_draw.gd"
 Globals="*res://scripts/autoloaded/general_globals.gd"
 
+[debug]
+
+gdscript/warnings/integer_division=0
+
 [input]
 
 move_backwards={
