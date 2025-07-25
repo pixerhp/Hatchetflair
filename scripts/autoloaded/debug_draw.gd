@@ -22,6 +22,8 @@ var texts_ypad: float = 0
 var texts_do_back: bool = true
 var texts_back_color: Color = Color(0.0833, 0.0833, 0.0833, 0.75)
 
+@onready var cam_node: Node = get_tree().current_scene.find_child("FlyCam")
+
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
@@ -42,9 +44,9 @@ func _ready():
 	chunkborders_mesh_instance.material_override = line_material
 	add_child(chunkborders_mesh_instance)
 
+const chunk_length: int = 16 # (assumes a metrin is length 1.)
 func initialize_chunkborders_arraymesh():
 	const layers: int = 3
-	const chunk_length: int = 16 # (assumes a metrin is length 1.)
 	const grid_close_hue: float = 3.5 / 6.0
 	const grid_color_range: float = 0.5 / 6.0
 	const metrin_lines_color: Color = Color.SPRING_GREEN
@@ -143,7 +145,6 @@ func initialize_chunkborders_arraymesh():
 						(8 * (chunk_length - 1))])
 						ind_i += 1
 					vert_i += 1
-				print("y: ", verts[vert_i])
 			elif (i == 4) or (i == 5) or (i == 6) or (i == 7): # z row
 				for j in range(1, chunk_length, 1):
 					verts[vert_i] = Vector3(
@@ -160,7 +161,6 @@ func initialize_chunkborders_arraymesh():
 						(2 * (chunk_length - 1))])
 						ind_i += 1
 					vert_i += 1
-				print("z: ", verts[vert_i])
 			
 			
 			
@@ -219,6 +219,15 @@ func _process(_delta):
 	if not lines_to_draw.is_empty():
 		draw_lines()
 	canvas_item.queue_redraw()
+
+var move_chunkborders_with_cam: bool = true
+func _physics_process(_delta):
+	if move_chunkborders_with_cam:
+		chunkborders_mesh_instance.position = (
+			floor((cam_node.position + 
+			Vector3(float(chunk_length)/2.0, float(chunk_length)/2.0, float(chunk_length)/2.0)) / 
+			float(chunk_length)) * float(chunk_length)
+		)
 
 func draw_chunk_borders():
 	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES)
