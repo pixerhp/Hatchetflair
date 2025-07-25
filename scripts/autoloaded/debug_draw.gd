@@ -1,10 +1,12 @@
 extends CanvasLayer
 
-var canvas_item: CanvasItem = null
-var general_mesh_instance: MeshInstance3D = MeshInstance3D.new()
-var immediate_mesh: ImmediateMesh = ImmediateMesh.new()
 var line_material: StandardMaterial3D = StandardMaterial3D.new()
 
+var lines_mesh_instance: MeshInstance3D = MeshInstance3D.new()
+var lines_immediate_mesh: ImmediateMesh = ImmediateMesh.new()
+var lines_to_draw: Array[Array] = [] # Expects each line as: [Vector3, Vector3, Color (optional)]
+
+@onready var cam_node: Node = get_tree().current_scene.find_child("FlyCam")
 var borders_draw_mode: int = 0
 var chunkborders_mesh_instance: MeshInstance3D = MeshInstance3D.new()
 var chunkborders_arraymesh: ArrayMesh = ArrayMesh.new()
@@ -13,11 +15,7 @@ var metringrid_mesh_instance: MeshInstance3D = MeshInstance3D.new()
 var metringrid_arraymesh: ArrayMesh = ArrayMesh.new()
 var metringrid_move_with_cam: bool = false
 
-
-
-# Expects each outer element to be in the form [Vector3, Vector3, Color (optional)]
-var lines_to_draw: Array[Array] = []
-
+var texts_canvas_item: CanvasItem = null
 var texts_draw_mode: bool = false
 var texts_to_draw: PackedStringArray = []
 var texts_font: Font = ThemeDB.fallback_font
@@ -26,7 +24,6 @@ var texts_ypad: float = 0
 var texts_do_back: bool = true
 var texts_back_color: Color = Color(0.0833, 0.0833, 0.0833, 0.75)
 
-@onready var cam_node: Node = get_tree().current_scene.find_child("FlyCam")
 
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -34,28 +31,33 @@ func _ready():
 	line_material.flags_unshaded = true
 	line_material.vertex_color_use_as_albedo = true
 	
-	general_mesh_instance.mesh = immediate_mesh
-	general_mesh_instance.material_override = line_material
-	add_child(general_mesh_instance)
+	lines_mesh_instance.mesh = lines_immediate_mesh
+	lines_mesh_instance.material_override = line_material
+	lines_mesh_instance.name = "LinesMeshInstance"
+	add_child(lines_mesh_instance)
 	
-	canvas_item = Node2D.new()
-	canvas_item.position = Vector2(8, 8)
-	canvas_item.connect("draw", _on_CanvasItem_draw)
-	add_child(canvas_item)
+	texts_canvas_item = Node2D.new()
+	texts_canvas_item.position = Vector2(8, 8)
+	texts_canvas_item.connect("draw", _on_texts_canvasitem_draw)
+	texts_canvas_item.visible = true
+	texts_canvas_item.name = "TextsCanvasItem"
+	add_child(texts_canvas_item)
 	
 	initialize_chunkborders_arraymesh()
 	chunkborders_mesh_instance.mesh = chunkborders_arraymesh
 	chunkborders_mesh_instance.material_override = line_material
 	chunkborders_mesh_instance.visible = false
+	chunkborders_mesh_instance.name = "ChunkBordersMeshInstance"
 	add_child(chunkborders_mesh_instance)
 	
 	initialize_metringrid_arraymesh()
 	metringrid_mesh_instance.mesh = metringrid_arraymesh
 	metringrid_mesh_instance.material_override = line_material
 	metringrid_mesh_instance.visible = false
+	metringrid_mesh_instance.name = "MetrinGridMeshInstance"
 	add_child(metringrid_mesh_instance)
 
-const chunk_length: int = 16 # (assumes a metrin is length 1.)
+const chunk_length: int = 16 # (assumes metrin is length 1.)
 func initialize_chunkborders_arraymesh():
 	const layers: int = 3
 	const grid_close_hue: float = 3.5 / 6.0
@@ -201,12 +203,7 @@ func initialize_metringrid_arraymesh():
 	)
 
 func _process(_delta):
-	immediate_mesh.clear_surfaces()
-	#draw_chunk_borders()
-	if not lines_to_draw.is_empty():
-		draw_lines()
-	canvas_item.queue_redraw()
-	
+	# Handle DebugDraw related inputs:
 	if Input.is_action_just_pressed("debug_info"):
 		texts_draw_mode = not texts_draw_mode
 	if Input.is_action_just_pressed("debug_borders"):
@@ -224,6 +221,11 @@ func _process(_delta):
 			3:
 				chunkborders_mesh_instance.visible = false
 				chunkborders_move_with_cam = false
+	
+	lines_immediate_mesh.clear_surfaces()
+	if not lines_to_draw.is_empty():
+		draw_lines()
+	texts_canvas_item.queue_redraw()
 
 func _physics_process(_delta):
 	if not borders_draw_mode == 0:
@@ -236,27 +238,21 @@ func _physics_process(_delta):
 		if metringrid_move_with_cam:
 			metringrid_mesh_instance.position = updated_position
 
-func draw_chunk_borders():
-	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES)
-	#immediate_mesh.surface_set_color(Color(1, 0, 0))
-	#immediate_mesh.surface_add_vertex(Vector3(-10, -10, -10))
-	#immediate_mesh.surface_add_vertex(Vector3(10, 10, 10))
-	immediate_mesh.surface_end()
-
 # Assumes line format: [Vector3, Vector3, Color (optional)]
 func draw_lines():
-	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES)
-	for line in lines_to_draw:
-		if line.size() > 2:
-			immediate_mesh.surface_set_color(line[2])
-		else:
-			immediate_mesh.surface_set_color(Color.WHITE)
-		immediate_mesh.surface_add_vertex(line[0])
-		immediate_mesh.surface_add_vertex(line[1])
-	immediate_mesh.surface_end()
+	if lines_mesh_instance.visible:
+		lines_immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES)
+		for line in lines_to_draw:
+			if line.size() > 2:
+				lines_immediate_mesh.surface_set_color(line[2])
+			else:
+				lines_immediate_mesh.surface_set_color(Color.WHITE)
+			lines_immediate_mesh.surface_add_vertex(line[0])
+			lines_immediate_mesh.surface_add_vertex(line[1])
+		lines_immediate_mesh.surface_end()
 	lines_to_draw.clear()
 
-func _on_CanvasItem_draw():
+func _on_texts_canvasitem_draw():
 	# Draw debug texts:
 	if texts_draw_mode:
 		var draw_pos: Vector2 = Vector2()
@@ -264,10 +260,10 @@ func _on_CanvasItem_draw():
 		var font_height: float = texts_font.get_height() + texts_ypad
 		for string in texts_to_draw:
 			if texts_do_back:
-				canvas_item.draw_rect(Rect2(
+				texts_canvas_item.draw_rect(Rect2(
 					draw_pos, Vector2(texts_font.get_string_size(string).x, font_height)
 				), texts_back_color)
-			canvas_item.draw_string(
+			texts_canvas_item.draw_string(
 				texts_font, draw_pos + font_ascent, string, 
 				HORIZONTAL_ALIGNMENT_LEFT, -1, ThemeDB.fallback_font_size, texts_color,
 			)
