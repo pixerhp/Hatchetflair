@@ -18,6 +18,7 @@ var metringrid_move_with_cam: bool = false
 # Expects each outer element to be in the form [Vector3, Vector3, Color (optional)]
 var lines_to_draw: Array[Array] = []
 
+var texts_draw_mode: bool = false
 var texts_to_draw: PackedStringArray = []
 var texts_font: Font = ThemeDB.fallback_font
 var texts_color: Color = Color.WHITE
@@ -206,6 +207,8 @@ func _process(_delta):
 		draw_lines()
 	canvas_item.queue_redraw()
 	
+	if Input.is_action_just_pressed("debug_info"):
+		texts_draw_mode = not texts_draw_mode
 	if Input.is_action_just_pressed("debug_borders"):
 		borders_draw_mode = posmod(borders_draw_mode + 1, 4)
 		match borders_draw_mode:
@@ -255,17 +258,18 @@ func draw_lines():
 
 func _on_CanvasItem_draw():
 	# Draw debug texts:
-	var draw_pos: Vector2 = Vector2()
-	var font_ascent: Vector2 = Vector2(0, texts_font.get_ascent())
-	var font_height: float = texts_font.get_height() + texts_ypad
-	for string in texts_to_draw:
-		if texts_do_back:
-			canvas_item.draw_rect(Rect2(
-				draw_pos, Vector2(texts_font.get_string_size(string).x, font_height)
-			), texts_back_color)
-		canvas_item.draw_string(
-			texts_font, draw_pos + font_ascent, string, 
-			HORIZONTAL_ALIGNMENT_LEFT, -1, ThemeDB.fallback_font_size, texts_color,
-		)
-		draw_pos.y += font_height
+	if texts_draw_mode:
+		var draw_pos: Vector2 = Vector2()
+		var font_ascent: Vector2 = Vector2(0, texts_font.get_ascent())
+		var font_height: float = texts_font.get_height() + texts_ypad
+		for string in texts_to_draw:
+			if texts_do_back:
+				canvas_item.draw_rect(Rect2(
+					draw_pos, Vector2(texts_font.get_string_size(string).x, font_height)
+				), texts_back_color)
+			canvas_item.draw_string(
+				texts_font, draw_pos + font_ascent, string, 
+				HORIZONTAL_ALIGNMENT_LEFT, -1, ThemeDB.fallback_font_size, texts_color,
+			)
+			draw_pos.y += font_height
 	texts_to_draw.clear()
