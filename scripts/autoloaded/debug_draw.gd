@@ -108,11 +108,11 @@ func initialize_chunkborders_arraymesh():
 			for j in range(chunk_length - 1):
 				match posmod(j, 4):
 					0, 2:
-						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.25, 0.25)
+						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.2, 0.2)
 					1:
-						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.5, 0.5)
+						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.4, 0.4)
 					3:
-						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.75, 0.75)
+						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.8, 0.8)
 			if (i == 0) or (i == 3) or (i == 8) or (i == 11): # x row
 				for j in range(1, chunk_length, 1):
 					verts[vert_i] = Vector3(
