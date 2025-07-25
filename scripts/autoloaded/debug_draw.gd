@@ -5,12 +5,15 @@ var general_mesh_instance: MeshInstance3D = MeshInstance3D.new()
 var immediate_mesh: ImmediateMesh = ImmediateMesh.new()
 var line_material: StandardMaterial3D = StandardMaterial3D.new()
 
-var chunkborders_arraymesh: ArrayMesh = ArrayMesh.new()
+var borders_draw_mode: int = 0
 var chunkborders_mesh_instance: MeshInstance3D = MeshInstance3D.new()
+var chunkborders_arraymesh: ArrayMesh = ArrayMesh.new()
+var chunkborders_move_with_cam: bool = false
+var metringrid_mesh_instance: MeshInstance3D = MeshInstance3D.new()
+var metringrid_arraymesh: ArrayMesh = ArrayMesh.new()
+var metringrid_move_with_cam: bool = false
 
-#var chunkborders_verts: PackedVector3Array = PackedVector3Array()
-#var chunkborders_indices: PackedInt32Array = PackedInt32Array()
-#var chunkborders_colors: PackedColorArray = PackedColorArray()
+
 
 # Expects each outer element to be in the form [Vector3, Vector3, Color (optional)]
 var lines_to_draw: Array[Array] = []
@@ -42,14 +45,20 @@ func _ready():
 	initialize_chunkborders_arraymesh()
 	chunkborders_mesh_instance.mesh = chunkborders_arraymesh
 	chunkborders_mesh_instance.material_override = line_material
+	chunkborders_mesh_instance.visible = false
 	add_child(chunkborders_mesh_instance)
+	
+	initialize_metringrid_arraymesh()
+	metringrid_mesh_instance.mesh = metringrid_arraymesh
+	metringrid_mesh_instance.material_override = line_material
+	metringrid_mesh_instance.visible = false
+	add_child(metringrid_mesh_instance)
 
 const chunk_length: int = 16 # (assumes a metrin is length 1.)
 func initialize_chunkborders_arraymesh():
 	const layers: int = 3
 	const grid_close_hue: float = 3.5 / 6.0
 	const grid_color_range: float = 0.5 / 6.0
-	const metrin_lines_color: Color = Color.SPRING_GREEN
 	
 	var verts: PackedVector3Array = []
 	verts.resize((layers*2)**3)
@@ -90,114 +99,7 @@ func initialize_chunkborders_arraymesh():
 			indices[ind_i + 1] = i + ((layers*2)**2)
 			ind_i += 2
 	
-	# !!! (divide the center chunk borders into metrin lines at the walls)
-	if chunk_length > 1:
-		
-		var vert_i: int = verts.size()
-		verts.resize(verts.size() + (12 * (chunk_length - 1)))
-		colors.resize(colors.size() + (12 * (chunk_length - 1)))
-		indices.resize(indices.size() + (6 * (chunk_length - 1) * 2))
-		
-		var x_state: bool = false
-		var y_state: bool = false
-		var z_state: bool = false
-		for i in range(12):
-			x_state = int((i == 2) or (i == 5) or (i == 7) or (i == 10))
-			y_state = int((i == 3) or (i == 6) or (i == 7) or (i == 11))
-			z_state = int((i == 8) or (i == 9) or (i == 10) or (i == 11))
-			for j in range(chunk_length - 1):
-				match posmod(j, 4):
-					0, 2:
-						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.2, 0.2)
-					1:
-						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.4, 0.4)
-					3:
-						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.8, 0.8)
-			if (i == 0) or (i == 3) or (i == 8) or (i == 11): # x row
-				for j in range(1, chunk_length, 1):
-					verts[vert_i] = Vector3(
-						float(j) - (float(chunk_length) / 2.0),
-						float(int(y_state) * chunk_length) - (float(chunk_length) / 2.0),
-						float(int(z_state) * chunk_length) - (float(chunk_length) / 2.0),
-					)
-					if y_state == false:
-						indices.append_array([vert_i, vert_i + 
-						(3 * (chunk_length - 1))])
-						ind_i += 1
-					if z_state == false:
-						indices.append_array([vert_i, vert_i + 
-						(8 * (chunk_length - 1))])
-						ind_i += 1
-					vert_i += 1
-			elif (i == 1) or (i == 2) or (i == 9) or (i == 10): # y row
-				for j in range(1, chunk_length, 1):
-					verts[vert_i] = Vector3(
-						float(int(x_state) * chunk_length) - (float(chunk_length) / 2.0),
-						float(j) - (float(chunk_length) / 2.0),
-						float(int(z_state) * chunk_length) - (float(chunk_length) / 2.0),
-					)
-					if x_state == false:
-						indices.append_array([vert_i, vert_i + 
-						(1 * (chunk_length - 1))])
-						ind_i += 1
-					if z_state == false:
-						indices.append_array([vert_i, vert_i + 
-						(8 * (chunk_length - 1))])
-						ind_i += 1
-					vert_i += 1
-			elif (i == 4) or (i == 5) or (i == 6) or (i == 7): # z row
-				for j in range(1, chunk_length, 1):
-					verts[vert_i] = Vector3(
-						float(int(x_state) * chunk_length) - (float(chunk_length) / 2.0),
-						float(int(y_state) * chunk_length) - (float(chunk_length) / 2.0),
-						float(j) - (float(chunk_length) / 2.0),
-					)
-					if x_state == false:
-						indices.append_array([vert_i, vert_i + 
-						(1 * (chunk_length - 1))])
-						ind_i += 1
-					if y_state == false:
-						indices.append_array([vert_i, vert_i + 
-						(2 * (chunk_length - 1))])
-						ind_i += 1
-					vert_i += 1
-			
-			
-			
-			#cnn
-			#ncn
-			#pcn
-			#cpn
-			#
-			#nnc
-			#pnc
-			#npc
-			#ppc
-			#
-			#cnp
-			#ncp
-			#pcp
-			#cpp
-			pass
-		
-		#for z in range(chunk_length + 1):
-			#for y in range(chunk_length + 1):
-				#for x in range(chunk_length + 1):
-					#if ((y == 0) or (y == chunk_length)) and ((z == 0) or (z == chunk_length)):
-						#verts[ind] = Vector3(
-							#float(x) - (float(chunk_length) / 2.0),
-							#float(y) - (float(chunk_length) / 2.0),
-							#float(z) - (float(chunk_length) / 2.0),
-						#)
-						#print(verts[ind])
-						#colors[ind] = Color.from_hsv(grid_close_hue, 1, 1)
-						#indices.append_array([ind, ind + chunk_length])
-						#ind += 1
-		
-		# !!! ...
-	
-	
-	# !!! (add center chunk highlight stuff like in the original, around here.)
+	# !!! (add center chunk highlight stuff like in the original, around here?)
 	
 	var surface: Array = []
 	surface.resize(Mesh.ARRAY_MAX)
@@ -209,9 +111,93 @@ func initialize_chunkborders_arraymesh():
 		Mesh.PRIMITIVE_LINES,
 		surface,
 	)
+func initialize_metringrid_arraymesh():
+	const metrin_lines_color: Color = Color.SPRING_GREEN
 	
+	var verts: PackedVector3Array = []
+	verts.resize(12 * (chunk_length - 1))
+	var colors: PackedColorArray = []
+	colors.resize(12 * (chunk_length - 1))
+	var indices: PackedInt32Array = []
+	indices.resize(12 * (chunk_length - 1))
 	
-	pass
+	var vert_i: int = 0
+	var ind_i: int = 0
+	
+	var x_state: bool = false
+	var y_state: bool = false
+	var z_state: bool = false
+	for i in range(12):
+		x_state = int((i == 2) or (i == 5) or (i == 7) or (i == 10))
+		y_state = int((i == 3) or (i == 6) or (i == 7) or (i == 11))
+		z_state = int((i == 8) or (i == 9) or (i == 10) or (i == 11))
+		for j in range(chunk_length - 1):
+			match posmod(j, 4):
+				0, 2:
+					colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.2, 0.2)
+				1:
+					colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.4, 0.4)
+				3:
+					colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.8, 0.8)
+		if (i == 0) or (i == 3) or (i == 8) or (i == 11): # x row
+			for j in range(1, chunk_length, 1):
+				verts[vert_i] = Vector3(
+					float(j) - (float(chunk_length) / 2.0),
+					float(int(y_state) * chunk_length) - (float(chunk_length) / 2.0),
+					float(int(z_state) * chunk_length) - (float(chunk_length) / 2.0),
+				)
+				if y_state == false:
+					indices.append_array([vert_i, vert_i + 
+					(3 * (chunk_length - 1))])
+					ind_i += 1
+				if z_state == false:
+					indices.append_array([vert_i, vert_i + 
+					(8 * (chunk_length - 1))])
+					ind_i += 1
+				vert_i += 1
+		elif (i == 1) or (i == 2) or (i == 9) or (i == 10): # y row
+			for j in range(1, chunk_length, 1):
+				verts[vert_i] = Vector3(
+					float(int(x_state) * chunk_length) - (float(chunk_length) / 2.0),
+					float(j) - (float(chunk_length) / 2.0),
+					float(int(z_state) * chunk_length) - (float(chunk_length) / 2.0),
+				)
+				if x_state == false:
+					indices.append_array([vert_i, vert_i + 
+					(1 * (chunk_length - 1))])
+					ind_i += 1
+				if z_state == false:
+					indices.append_array([vert_i, vert_i + 
+					(8 * (chunk_length - 1))])
+					ind_i += 1
+				vert_i += 1
+		elif (i == 4) or (i == 5) or (i == 6) or (i == 7): # z row
+			for j in range(1, chunk_length, 1):
+				verts[vert_i] = Vector3(
+					float(int(x_state) * chunk_length) - (float(chunk_length) / 2.0),
+					float(int(y_state) * chunk_length) - (float(chunk_length) / 2.0),
+					float(j) - (float(chunk_length) / 2.0),
+				)
+				if x_state == false:
+					indices.append_array([vert_i, vert_i + 
+					(1 * (chunk_length - 1))])
+					ind_i += 1
+				if y_state == false:
+					indices.append_array([vert_i, vert_i + 
+					(2 * (chunk_length - 1))])
+					ind_i += 1
+				vert_i += 1
+	
+	var surface: Array = []
+	surface.resize(Mesh.ARRAY_MAX)
+	surface[Mesh.ARRAY_VERTEX] = verts
+	surface[Mesh.ARRAY_COLOR] = colors
+	surface[Mesh.ARRAY_INDEX] = indices
+	
+	metringrid_arraymesh.add_surface_from_arrays(
+		Mesh.PRIMITIVE_LINES,
+		surface,
+	)
 
 func _process(_delta):
 	immediate_mesh.clear_surfaces()
@@ -219,15 +205,33 @@ func _process(_delta):
 	if not lines_to_draw.is_empty():
 		draw_lines()
 	canvas_item.queue_redraw()
+	
+	if Input.is_action_just_pressed("debug_borders"):
+		borders_draw_mode = posmod(borders_draw_mode + 1, 4)
+		match borders_draw_mode:
+			0:
+				metringrid_mesh_instance.visible = false
+				metringrid_move_with_cam = false
+			1:
+				chunkborders_mesh_instance.visible = true
+				chunkborders_move_with_cam = true
+			2:
+				metringrid_mesh_instance.visible = true
+				metringrid_move_with_cam = true
+			3:
+				chunkborders_mesh_instance.visible = false
+				chunkborders_move_with_cam = false
 
-var move_chunkborders_with_cam: bool = true
 func _physics_process(_delta):
-	if move_chunkborders_with_cam:
-		chunkborders_mesh_instance.position = (
-			floor((cam_node.position + 
+	if not borders_draw_mode == 0:
+		var updated_position: Vector3 = (floor((cam_node.position + 
 			Vector3(float(chunk_length)/2.0, float(chunk_length)/2.0, float(chunk_length)/2.0)) / 
 			float(chunk_length)) * float(chunk_length)
 		)
+		if chunkborders_move_with_cam:
+			chunkborders_mesh_instance.position = updated_position
+		if metringrid_move_with_cam:
+			metringrid_mesh_instance.position = updated_position
 
 func draw_chunk_borders():
 	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES)
