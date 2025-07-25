@@ -43,10 +43,11 @@ func _ready():
 	add_child(chunkborders_mesh_instance)
 
 func initialize_chunkborders_arraymesh():
-	const layers: int = 2
+	const layers: int = 3
 	const chunk_length: int = 16 # (assumes a metrin is length 1.)
 	const grid_close_hue: float = 3.5 / 6.0
 	const grid_color_range: float = 0.5 / 6.0
+	const metrin_lines_color: Color = Color.SPRING_GREEN
 	
 	var verts: PackedVector3Array = []
 	verts.resize((layers*2)**3)
@@ -62,7 +63,7 @@ func initialize_chunkborders_arraymesh():
 	var near_vert_dist: float = pow(3*((0.5 * float(chunk_length)) ** 2), 0.5)
 	var far_vert_dist: float = pow(3*(((float(layers) - 0.5) * float(chunk_length)) ** 2), 0.5)
 	
-	var ind_count: int = 0
+	var ind_i: int = 0
 	for i in range((layers*2)**3):
 		verts[i] = Vector3(
 			float(chunk_length) * (posmod(i, layers*2) - (layers - 0.5)), 
@@ -72,29 +73,126 @@ func initialize_chunkborders_arraymesh():
 		colors[i] = Color.from_hsv(
 			fposmod(grid_close_hue + ((verts[i].length() - near_vert_dist) * 
 			(grid_color_range / (far_vert_dist - near_vert_dist))), 1),
-			1, 1, 1,
+			1, 1,
 		)
 		if not posmod(i, layers*2) == (layers*2) - 1:
-			indices[ind_count] = i
-			indices[ind_count + 1] = i + 1
-			ind_count += 2
+			indices[ind_i] = i
+			indices[ind_i + 1] = i + 1
+			ind_i += 2
 		if not posmod(i/(layers*2), layers*2) == (layers*2) - 1:
-			indices[ind_count] = i
-			indices[ind_count + 1] = i + (layers*2)
-			ind_count += 2
+			indices[ind_i] = i
+			indices[ind_i + 1] = i + (layers*2)
+			ind_i += 2
 		if not posmod(i/((layers*2)**2), layers*2) == (layers*2) - 1:
-			indices[ind_count] = i
-			indices[ind_count + 1] = i + ((layers*2)**2)
-			ind_count += 2
+			indices[ind_i] = i
+			indices[ind_i + 1] = i + ((layers*2)**2)
+			ind_i += 2
 	
 	# !!! (divide the center chunk borders into metrin lines at the walls)
 	if chunk_length > 1:
+		
+		var vert_i: int = verts.size()
 		verts.resize(verts.size() + (12 * (chunk_length - 1)))
 		colors.resize(colors.size() + (12 * (chunk_length - 1)))
 		indices.resize(indices.size() + (6 * (chunk_length - 1) * 2))
 		
-		for i in range(12 * (chunk_length - 1)):
+		var x_state: bool = false
+		var y_state: bool = false
+		var z_state: bool = false
+		for i in range(12):
+			x_state = int((i == 2) or (i == 5) or (i == 7) or (i == 10))
+			y_state = int((i == 3) or (i == 6) or (i == 7) or (i == 11))
+			z_state = int((i == 8) or (i == 9) or (i == 10) or (i == 11))
+			for j in range(chunk_length - 1):
+				match posmod(j, 4):
+					0, 2:
+						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.25, 0.25)
+					1:
+						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.5, 0.5)
+					3:
+						colors[vert_i + j] = Color.from_hsv(metrin_lines_color.h, 0.75, 0.75)
+			if (i == 0) or (i == 3) or (i == 8) or (i == 11): # x row
+				for j in range(1, chunk_length, 1):
+					verts[vert_i] = Vector3(
+						float(j) - (float(chunk_length) / 2.0),
+						float(int(y_state) * chunk_length) - (float(chunk_length) / 2.0),
+						float(int(z_state) * chunk_length) - (float(chunk_length) / 2.0),
+					)
+					if y_state == false:
+						indices.append_array([vert_i, vert_i + 
+						(3 * (chunk_length - 1))])
+						ind_i += 1
+					if z_state == false:
+						indices.append_array([vert_i, vert_i + 
+						(8 * (chunk_length - 1))])
+						ind_i += 1
+					vert_i += 1
+			elif (i == 1) or (i == 2) or (i == 9) or (i == 10): # y row
+				for j in range(1, chunk_length, 1):
+					verts[vert_i] = Vector3(
+						float(int(x_state) * chunk_length) - (float(chunk_length) / 2.0),
+						float(j) - (float(chunk_length) / 2.0),
+						float(int(z_state) * chunk_length) - (float(chunk_length) / 2.0),
+					)
+					if x_state == false:
+						indices.append_array([vert_i, vert_i + 
+						(1 * (chunk_length - 1))])
+						ind_i += 1
+					if z_state == false:
+						indices.append_array([vert_i, vert_i + 
+						(8 * (chunk_length - 1))])
+						ind_i += 1
+					vert_i += 1
+				print("y: ", verts[vert_i])
+			elif (i == 4) or (i == 5) or (i == 6) or (i == 7): # z row
+				for j in range(1, chunk_length, 1):
+					verts[vert_i] = Vector3(
+						float(int(x_state) * chunk_length) - (float(chunk_length) / 2.0),
+						float(int(y_state) * chunk_length) - (float(chunk_length) / 2.0),
+						float(j) - (float(chunk_length) / 2.0),
+					)
+					if x_state == false:
+						indices.append_array([vert_i, vert_i + 
+						(1 * (chunk_length - 1))])
+						ind_i += 1
+					if y_state == false:
+						indices.append_array([vert_i, vert_i + 
+						(2 * (chunk_length - 1))])
+						ind_i += 1
+					vert_i += 1
+				print("z: ", verts[vert_i])
+			
+			
+			
+			#cnn
+			#ncn
+			#pcn
+			#cpn
+			#
+			#nnc
+			#pnc
+			#npc
+			#ppc
+			#
+			#cnp
+			#ncp
+			#pcp
+			#cpp
 			pass
+		
+		#for z in range(chunk_length + 1):
+			#for y in range(chunk_length + 1):
+				#for x in range(chunk_length + 1):
+					#if ((y == 0) or (y == chunk_length)) and ((z == 0) or (z == chunk_length)):
+						#verts[ind] = Vector3(
+							#float(x) - (float(chunk_length) / 2.0),
+							#float(y) - (float(chunk_length) / 2.0),
+							#float(z) - (float(chunk_length) / 2.0),
+						#)
+						#print(verts[ind])
+						#colors[ind] = Color.from_hsv(grid_close_hue, 1, 1)
+						#indices.append_array([ind, ind + chunk_length])
+						#ind += 1
 		
 		# !!! ...
 	
