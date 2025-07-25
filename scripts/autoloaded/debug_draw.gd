@@ -122,7 +122,7 @@ func initialize_metringrid_arraymesh():
 	var colors: PackedColorArray = []
 	colors.resize(12 * (chunk_length - 1))
 	var indices: PackedInt32Array = []
-	indices.resize(12 * (chunk_length - 1))
+	indices.resize(24 * (chunk_length - 1))
 	
 	var vert_i: int = 0
 	var ind_i: int = 0
@@ -150,13 +150,13 @@ func initialize_metringrid_arraymesh():
 					float(int(z_state) * chunk_length) - (float(chunk_length) / 2.0),
 				)
 				if y_state == false:
-					indices.append_array([vert_i, vert_i + 
-					(3 * (chunk_length - 1))])
-					ind_i += 1
+					indices[ind_i] = vert_i
+					indices[ind_i + 1] = vert_i + (3 * (chunk_length - 1))
+					ind_i += 2
 				if z_state == false:
-					indices.append_array([vert_i, vert_i + 
-					(8 * (chunk_length - 1))])
-					ind_i += 1
+					indices[ind_i] = vert_i
+					indices[ind_i + 1] = vert_i + (8 * (chunk_length - 1))
+					ind_i += 2
 				vert_i += 1
 		elif (i == 1) or (i == 2) or (i == 9) or (i == 10): # y row
 			for j in range(1, chunk_length, 1):
@@ -166,13 +166,13 @@ func initialize_metringrid_arraymesh():
 					float(int(z_state) * chunk_length) - (float(chunk_length) / 2.0),
 				)
 				if x_state == false:
-					indices.append_array([vert_i, vert_i + 
-					(1 * (chunk_length - 1))])
-					ind_i += 1
+					indices[ind_i] = vert_i
+					indices[ind_i + 1] = vert_i + (1 * (chunk_length - 1))
+					ind_i += 2
 				if z_state == false:
-					indices.append_array([vert_i, vert_i + 
-					(8 * (chunk_length - 1))])
-					ind_i += 1
+					indices[ind_i] = vert_i
+					indices[ind_i + 1] = vert_i + (8 * (chunk_length - 1))
+					ind_i += 2
 				vert_i += 1
 		elif (i == 4) or (i == 5) or (i == 6) or (i == 7): # z row
 			for j in range(1, chunk_length, 1):
@@ -182,13 +182,13 @@ func initialize_metringrid_arraymesh():
 					float(j) - (float(chunk_length) / 2.0),
 				)
 				if x_state == false:
-					indices.append_array([vert_i, vert_i + 
-					(1 * (chunk_length - 1))])
-					ind_i += 1
+					indices[ind_i] = vert_i
+					indices[ind_i + 1] = vert_i + (1 * (chunk_length - 1))
+					ind_i += 2
 				if y_state == false:
-					indices.append_array([vert_i, vert_i + 
-					(2 * (chunk_length - 1))])
-					ind_i += 1
+					indices[ind_i] = vert_i
+					indices[ind_i + 1] = vert_i + (2 * (chunk_length - 1))
+					ind_i += 2
 				vert_i += 1
 	
 	var surface: Array = []
