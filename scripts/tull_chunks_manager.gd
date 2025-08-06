@@ -8,6 +8,7 @@ enum TILE_SHAPE {
 	EMPTY, TESS_CUBE,
 }
 
+
 class TChunk:
 	var tile_shapes: PackedByteArray = []
 	var mesh_instance_node: MeshInstance3D = MeshInstance3D.new()
@@ -31,6 +32,9 @@ class TChunk:
 	func randomize_tiles():
 		for i in range(TCHUNK_LENGTH ** 3):
 			tile_shapes[i] = randi_range(0, 1)
+	func unmesh():
+		mesh_instance_node = MeshInstance3D.new()
+		array_mesh = ArrayMesh.new()
 	func generate_mesh():
 		# Get all of the information needed, including data related to surrounding chunks.
 		# For now though, all needed surrounding chunk tile shapes are simply assumed to be empty.
@@ -68,8 +72,8 @@ class TChunk:
 									surf_verts.size() - 3,
 									surf_verts.size() - 2,
 									surf_verts.size() - 1,
-									surf_verts.size() - 3,
 									surf_verts.size() - 2,
+									surf_verts.size() - 3,
 								])
 							#if padded_shapes[
 								#t_i_from_xyz(Vector3i(x + 1, y, z), PADDED_CHUNK_SIZE)
