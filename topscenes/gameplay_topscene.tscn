@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://caemtw2ni7cl6"]
+[gd_scene load_steps=8 format=3 uid="uid://caemtw2ni7cl6"]
 
 [ext_resource type="Script" uid="uid://dprqbtapra60j" path="res://scripts/flycam.gd" id="1_3dqie"]
+[ext_resource type="Script" uid="uid://cgeksujr8ktbf" path="res://scripts/tull_chunks_manager.gd" id="2_yy87l"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hoxm8"]
 sky_top_color = Color(0.797499, 0.834473, 0.886126, 1)
@@ -33,3 +34,7 @@ script = ExtResource("1_3dqie")
 [node name="CenterSphere" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_3dqie")
 surface_material_override/0 = SubResource("StandardMaterial3D_yy87l")
+
+[node name="ChunksContainer" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_yy87l")
