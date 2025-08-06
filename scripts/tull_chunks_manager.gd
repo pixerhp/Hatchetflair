@@ -1,11 +1,18 @@
 extends Node
 
-const TCHUNK_LENGTH: int = 16
-const PADDED_CHUNK_SIZE: Vector3i = Vector3i(TCHUNK_LENGTH + 1, TCHUNK_LENGTH + 1, TCHUNK_LENGTH + 1)
 @onready var chunks_container_node: Node = self
 
+# Lengths, totals, and sizes of chunk stuff in metrins.
+const TCHUNK_L: int = 16
+const TCHUNK_T: int = 16 ** 3
+const TCHUNK_S: Vector3i = Vector3i(TCHUNK_L, TCHUNK_L, TCHUNK_L)
+const TCHUNK_PAD_L: int = 1
+const TCHUNK_PAD_T: int = (TCHUNK_L + TCHUNK_PAD_L) ** 3
+const TCHUNK_PAD_S: Vector3i = Vector3i(
+	TCHUNK_L + TCHUNK_PAD_L, TCHUNK_L + TCHUNK_PAD_L, TCHUNK_L + TCHUNK_PAD_L,)
+
 enum TILE_SHAPE {
-	EMPTY, TESS_CUBE,
+	EMPTY, TESS_CUBE, TESS_RHOMBDO, MARCH_CUBE,
 }
 
 
@@ -15,11 +22,11 @@ class TChunk:
 	var array_mesh: ArrayMesh = ArrayMesh.new()
 	
 	func t_i_from_xyz(
-		xyz: Vector3i, lengths: Vector3i = Vector3i(TCHUNK_LENGTH, TCHUNK_LENGTH, TCHUNK_LENGTH)
+		xyz: Vector3i, lengths: Vector3i = Vector3i(TCHUNK_L, TCHUNK_L, TCHUNK_L)
 	) -> int:
 		return xyz.x + (xyz.y * lengths.y) + (xyz.z * lengths.z * lengths.z)
 	func t_xyz_from_i(
-		i: int, lengths: Vector3i = Vector3i(TCHUNK_LENGTH, TCHUNK_LENGTH, TCHUNK_LENGTH),
+		i: int, lengths: Vector3i = Vector3i(TCHUNK_L, TCHUNK_L, TCHUNK_L),
 	) -> Vector3i:
 		return Vector3i(
 			posmod(i, lengths.x),
@@ -28,9 +35,9 @@ class TChunk:
 		)
 	
 	func _init():
-		tile_shapes.resize(TCHUNK_LENGTH ** 3)
+		tile_shapes.resize(TCHUNK_L ** 3)
 	func randomize_tiles():
-		for i in range(TCHUNK_LENGTH ** 3):
+		for i in range(TCHUNK_L ** 3):
 			tile_shapes[i] = randi_range(0, 1)
 	func unmesh():
 		mesh_instance_node = MeshInstance3D.new()
@@ -39,11 +46,11 @@ class TChunk:
 		# Get all of the information needed, including data related to surrounding chunks.
 		# For now though, all needed surrounding chunk tile shapes are simply assumed to be empty.
 		var padded_shapes: PackedByteArray = []
-		padded_shapes.resize((TCHUNK_LENGTH + 1) ** 3)
+		padded_shapes.resize((TCHUNK_L + 1) ** 3)
 		padded_shapes.fill(TILE_SHAPE.EMPTY)
-		for i in range(TCHUNK_LENGTH ** 3):
+		for i in range(TCHUNK_L ** 3):
 			padded_shapes[
-				t_i_from_xyz(t_xyz_from_i(i) + Vector3i(1, 1, 1), PADDED_CHUNK_SIZE)
+				t_i_from_xyz(t_xyz_from_i(i) + Vector3i(1, 1, 1), TCHUNK_PAD_S)
 			] = tile_shapes[i]
 		
 		var surf_verts: PackedVector3Array = []
@@ -52,16 +59,16 @@ class TChunk:
 		# !!! (break stuff down into more functions?)
 		
 		var j: int = 0
-		for z in range(1, TCHUNK_LENGTH + 1):
-			for y in range(1, TCHUNK_LENGTH + 1):
-				for x in range(1, TCHUNK_LENGTH + 1):
-					j = t_i_from_xyz(Vector3i(x, y, z), PADDED_CHUNK_SIZE)
+		for z in range(1, TCHUNK_L + 1):
+			for y in range(1, TCHUNK_L + 1):
+				for x in range(1, TCHUNK_L + 1):
+					j = t_i_from_xyz(Vector3i(x, y, z), TCHUNK_PAD_S)
 					match padded_shapes[j]:
 						TILE_SHAPE.EMPTY:
 							continue
 						TILE_SHAPE.TESS_CUBE:
 							if padded_shapes[
-								t_i_from_xyz(Vector3i(x - 1, y, z), PADDED_CHUNK_SIZE)
+								t_i_from_xyz(Vector3i(x - 1, y, z), TCHUNK_PAD_S)
 							] == TILE_SHAPE.EMPTY:
 								surf_verts.append(Vector3(x-1, y-1, z-1))
 								surf_verts.append(Vector3(x-1, y-1, z-2))
@@ -80,7 +87,7 @@ class TChunk:
 							#] == TILE_SHAPE.EMPTY:
 								#pass
 							if padded_shapes[
-								t_i_from_xyz(Vector3i(x, y - 1, z), PADDED_CHUNK_SIZE)
+								t_i_from_xyz(Vector3i(x, y - 1, z), TCHUNK_PAD_S)
 							] == TILE_SHAPE.EMPTY:
 								pass
 							#if padded_shapes[
@@ -88,7 +95,7 @@ class TChunk:
 							#] == TILE_SHAPE.EMPTY:
 								#pass
 							if padded_shapes[
-								t_i_from_xyz(Vector3i(x, y, z - 1), PADDED_CHUNK_SIZE)
+								t_i_from_xyz(Vector3i(x, y, z - 1), TCHUNK_PAD_S)
 							] == TILE_SHAPE.EMPTY:
 								pass
 							#if padded_shapes[
