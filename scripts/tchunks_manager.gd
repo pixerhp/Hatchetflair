@@ -6,6 +6,7 @@ extends Node
 const TCHUNK_L: int = 16
 const TCHUNK_T: int = TCHUNK_L ** 3
 const TCHUNK_S: Vector3i = Vector3i(TCHUNK_L, TCHUNK_L, TCHUNK_L)
+const TCHUNK_HALF_S: Vector3 = Vector3(TCHUNK_S) / 2.0
 const TCHUNK_PAD_L: int = 1
 const TCHUNK_PAD_T: int = (TCHUNK_L + TCHUNK_PAD_L) ** 3
 const TCHUNK_PAD_S: Vector3i = Vector3i(
@@ -29,7 +30,8 @@ class TChunk:
 			(new_pos.y/TCHUNK_L) if (new_pos.y >= 0) else ((new_pos.y-(TCHUNK_L-1))/TCHUNK_L),
 			(new_pos.z/TCHUNK_L) if (new_pos.z >= 0) else ((new_pos.z-(TCHUNK_L-1))/TCHUNK_L),
 		)
-		return chunk_xyz.x + (TCHUNK_L * chunk_xyz.y) + (TCHUNK_L * TCHUNK_L * chunk_xyz.z)
+		chunk_xyz += Vector3i(1, 1, 1)
+		return chunk_xyz.x + (3 * chunk_xyz.y) + (9 * chunk_xyz.z)
 	static func get_tc27_tile_i(cen_pos: Vector3i, rel_pos: Vector3i) -> int:
 		return (
 			posmod(cen_pos.x + rel_pos.x, TCHUNK_L) +
@@ -37,13 +39,11 @@ class TChunk:
 			posmod(cen_pos.z + rel_pos.z, TCHUNK_L) * TCHUNK_L * TCHUNK_L
 		)
 	
-	func t_i_from_xyz(xyz: Vector3i, lengths: Vector3i = TCHUNK_S) -> int:
-		return xyz.x + (xyz.y * lengths.y) + (xyz.z * lengths.z * lengths.z)
-	func t_xyz_from_i(i: int, lengths: Vector3i = TCHUNK_S,) -> Vector3i:
+	func t_i_from_xyz(xyz: Vector3i) -> int:
+		return xyz.x + (xyz.y * TCHUNK_L) + (xyz.z * TCHUNK_L * TCHUNK_L)
+	func t_xyz_from_i(i: int) -> Vector3i:
 		return Vector3i(
-			posmod(i, lengths.x),
-			posmod(i/lengths.x, lengths.y),
-			posmod(i/(lengths.x * lengths.y), lengths.z),
+			posmod(i, TCHUNK_L), posmod(i / TCHUNK_L, TCHUNK_L), posmod(i / (TCHUNK_L * TCHUNK_L), TCHUNK_L),
 		)
 	
 	func _init():
@@ -51,7 +51,7 @@ class TChunk:
 		tile_shapes.fill(TILE_SHAPE.NO_DATA)
 	func randomize_tiles():
 		for i in range(TCHUNK_T):
-			tile_shapes[i] = randi_range(0, 1)
+			tile_shapes[i] = randi_range(1, 2)
 	
 	func unmesh():
 		mesh_instance_node.queue_free()
@@ -60,10 +60,18 @@ class TChunk:
 	
 	func generate_mesh(tc_27: Array[TChunk] = blank_tc27):
 		tc_27[13] = self # Set self as center of the 3x3x3 chunks.
-		print(tc_27)
+		
+		var surf_verts: PackedVector3Array = []
+		var surf_inds: PackedInt32Array = []
 		
 		for i in range(TCHUNK_T):
-			pass
+			match tile_shapes[i]:
+				TILE_SHAPE.NO_DATA:
+					push_error("Tried to mesh an unloaded tile shape.")
+				TILE_SHAPE.EMPTY:
+					continue
+				TILE_SHAPE.TESS_CUBE:
+					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_inds)
 		
 		
 		
@@ -74,58 +82,58 @@ class TChunk:
 		padded_shapes.fill(TILE_SHAPE.EMPTY)
 		for i in range(TCHUNK_T):
 			padded_shapes[
-				t_i_from_xyz(t_xyz_from_i(i) + Vector3i(1, 1, 1), TCHUNK_PAD_S)
+				t_i_from_xyz(t_xyz_from_i(i) + Vector3i(1, 1, 1))
 			] = tile_shapes[i]
 		
-		var surf_verts: PackedVector3Array = []
-		var surf_inds: PackedInt32Array = []
+		#var surf_verts: PackedVector3Array = []
+		#var surf_inds: PackedInt32Array = []
 		
 		# !!! (break stuff down into more functions?)
 		
-		var j: int = 0
-		for z in range(1, TCHUNK_L + 1):
-			for y in range(1, TCHUNK_L + 1):
-				for x in range(1, TCHUNK_L + 1):
-					j = t_i_from_xyz(Vector3i(x, y, z), TCHUNK_PAD_S)
-					match padded_shapes[j]:
-						TILE_SHAPE.EMPTY:
-							continue
-						TILE_SHAPE.TESS_CUBE:
-							if padded_shapes[
-								t_i_from_xyz(Vector3i(x - 1, y, z), TCHUNK_PAD_S)
-							] == TILE_SHAPE.EMPTY:
-								surf_verts.append(Vector3(x-1, y-1, z-0))
-								surf_verts.append(Vector3(x-1, y-1, z-1))
-								surf_verts.append(Vector3(x-1, y+0, z-0))
-								surf_verts.append(Vector3(x-1, y+0, z-1))
-								surf_inds.append_array([
-									surf_verts.size() - 4,
-									surf_verts.size() - 3,
-									surf_verts.size() - 2,
-									surf_verts.size() - 1,
-									surf_verts.size() - 2,
-									surf_verts.size() - 3,
-								])
+		#var j: int = 0
+		#for z in range(1, TCHUNK_L + 1):
+			#for y in range(1, TCHUNK_L + 1):
+				#for x in range(1, TCHUNK_L + 1):
+					#j = t_i_from_xyz(Vector3i(x, y, z))
+					#match padded_shapes[j]:
+						#TILE_SHAPE.EMPTY:
+							#continue
+						#TILE_SHAPE.TESS_CUBE:
 							#if padded_shapes[
-								#t_i_from_xyz(Vector3i(x + 1, y, z), PADDED_CHUNK_SIZE)
+								#t_i_from_xyz(Vector3i(x - 1, y, z))
+							#] == TILE_SHAPE.EMPTY:
+								#surf_verts.append(Vector3(x-1, y-1, z-0))
+								#surf_verts.append(Vector3(x-1, y-1, z-1))
+								#surf_verts.append(Vector3(x-1, y+0, z-0))
+								#surf_verts.append(Vector3(x-1, y+0, z-1))
+								#surf_inds.append_array([
+									#surf_verts.size() - 4,
+									#surf_verts.size() - 3,
+									#surf_verts.size() - 2,
+									#surf_verts.size() - 1,
+									#surf_verts.size() - 2,
+									#surf_verts.size() - 3,
+								#])
+							##if padded_shapes[
+								##t_i_from_xyz(Vector3i(x + 1, y, z), PADDED_CHUNK_SIZE)
+							##] == TILE_SHAPE.EMPTY:
+								##pass
+							#if padded_shapes[
+								#t_i_from_xyz(Vector3i(x, y - 1, z))
 							#] == TILE_SHAPE.EMPTY:
 								#pass
-							if padded_shapes[
-								t_i_from_xyz(Vector3i(x, y - 1, z), TCHUNK_PAD_S)
-							] == TILE_SHAPE.EMPTY:
-								pass
+							##if padded_shapes[
+								##t_i_from_xyz(Vector3i(x, y + 1, z), PADDED_CHUNK_SIZE)
+							##] == TILE_SHAPE.EMPTY:
+								##pass
 							#if padded_shapes[
-								#t_i_from_xyz(Vector3i(x, y + 1, z), PADDED_CHUNK_SIZE)
+								#t_i_from_xyz(Vector3i(x, y, z - 1), TCHUNK_PAD_S)
 							#] == TILE_SHAPE.EMPTY:
 								#pass
-							if padded_shapes[
-								t_i_from_xyz(Vector3i(x, y, z - 1), TCHUNK_PAD_S)
-							] == TILE_SHAPE.EMPTY:
-								pass
-							#if padded_shapes[
-								#t_i_from_xyz(Vector3i(x, y, z + 1), PADDED_CHUNK_SIZE)
-							#] == TILE_SHAPE.EMPTY:
-								#pass
+							##if padded_shapes[
+								##t_i_from_xyz(Vector3i(x, y, z + 1), PADDED_CHUNK_SIZE)
+							##] == TILE_SHAPE.EMPTY:
+								##pass
 		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
@@ -137,6 +145,31 @@ class TChunk:
 			mesh_surface,
 		)
 		mesh_instance_node.mesh = array_mesh
+	
+	func mesh_tess_cube(
+		pos: Vector3i, tc_27: Array[TChunk], 
+		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array,
+	):
+		#for move: Vector3i in [
+			#Vector3i(-1, 0, 0), Vector3i(1, 0, 0),
+			#Vector3i(0, -1, 0), Vector3i(0, 1, 0),
+			#Vector3i(0, 0, -1), Vector3i(0, 0, 1),
+		#]:
+			if tc_27[get_tc27_tchunk_i(pos, Vector3i(-1, 0, 0))
+			].tile_shapes[get_tc27_tile_i(pos, Vector3i(-1, 0, 0))
+			] in [TILE_SHAPE.NO_DATA, TILE_SHAPE.EMPTY]:
+				verts_ref.append_array([
+					Vector3(Vector3(pos) + Vector3(0, 0, 0) - TCHUNK_HALF_S),
+					Vector3(Vector3(pos) + Vector3(0, 1, 0) - TCHUNK_HALF_S),
+					Vector3(Vector3(pos) + Vector3(0, 0, 1) - TCHUNK_HALF_S),
+					Vector3(Vector3(pos) + Vector3(0, 1, 1) - TCHUNK_HALF_S),
+				])
+				inds_ref.append_array([
+					verts_ref.size() - 4, verts_ref.size() - 3, verts_ref.size() - 2,
+					verts_ref.size() - 3, verts_ref.size() - 1, verts_ref.size() - 2,
+				])
+				return #temp
+		
 
 func _init():
 	assert(TCHUNK_PAD_L <= TCHUNK_L)
@@ -145,8 +178,14 @@ func _init():
 
 func _ready():
 	var test_chunk: TChunk = TChunk.new()
-	test_chunk.randomize_tiles()
+	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
+	#test_chunk.randomize_tiles()
 	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[1] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[3] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[6] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[8] = TILE_SHAPE.TESS_CUBE
 	test_chunk.generate_mesh()
-	test_chunk.mesh_instance_node.position += Vector3(-8, -8, -8)
+	#test_chunk.mesh_instance_node.position += Vector3(-8, -8, -8)
 	add_child(test_chunk.mesh_instance_node)
