@@ -90,8 +90,8 @@ class TChunk:
 	):
 		for j: int in range(6):
 			
-			# temp, makes only -x <- side get meshed
-			if j > 0:
+			# temp
+			if j > 1:
 				break
 			
 			match tc_27[get_tc27_tchunk_i(pos, WU.mesh_tess_cube_move[j])
