@@ -73,68 +73,6 @@ class TChunk:
 				TILE_SHAPE.TESS_CUBE:
 					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_inds)
 		
-		
-		
-		# Get all of the information needed, including data related to surrounding chunks.
-		# For now though, all needed surrounding chunk tile shapes are simply assumed to be empty.
-		var padded_shapes: PackedByteArray = []
-		padded_shapes.resize((TCHUNK_L + 1) ** 3)
-		padded_shapes.fill(TILE_SHAPE.EMPTY)
-		for i in range(TCHUNK_T):
-			padded_shapes[
-				t_i_from_xyz(t_xyz_from_i(i) + Vector3i(1, 1, 1))
-			] = tile_shapes[i]
-		
-		#var surf_verts: PackedVector3Array = []
-		#var surf_inds: PackedInt32Array = []
-		
-		# !!! (break stuff down into more functions?)
-		
-		#var j: int = 0
-		#for z in range(1, TCHUNK_L + 1):
-			#for y in range(1, TCHUNK_L + 1):
-				#for x in range(1, TCHUNK_L + 1):
-					#j = t_i_from_xyz(Vector3i(x, y, z))
-					#match padded_shapes[j]:
-						#TILE_SHAPE.EMPTY:
-							#continue
-						#TILE_SHAPE.TESS_CUBE:
-							#if padded_shapes[
-								#t_i_from_xyz(Vector3i(x - 1, y, z))
-							#] == TILE_SHAPE.EMPTY:
-								#surf_verts.append(Vector3(x-1, y-1, z-0))
-								#surf_verts.append(Vector3(x-1, y-1, z-1))
-								#surf_verts.append(Vector3(x-1, y+0, z-0))
-								#surf_verts.append(Vector3(x-1, y+0, z-1))
-								#surf_inds.append_array([
-									#surf_verts.size() - 4,
-									#surf_verts.size() - 3,
-									#surf_verts.size() - 2,
-									#surf_verts.size() - 1,
-									#surf_verts.size() - 2,
-									#surf_verts.size() - 3,
-								#])
-							##if padded_shapes[
-								##t_i_from_xyz(Vector3i(x + 1, y, z), PADDED_CHUNK_SIZE)
-							##] == TILE_SHAPE.EMPTY:
-								##pass
-							#if padded_shapes[
-								#t_i_from_xyz(Vector3i(x, y - 1, z))
-							#] == TILE_SHAPE.EMPTY:
-								#pass
-							##if padded_shapes[
-								##t_i_from_xyz(Vector3i(x, y + 1, z), PADDED_CHUNK_SIZE)
-							##] == TILE_SHAPE.EMPTY:
-								##pass
-							#if padded_shapes[
-								#t_i_from_xyz(Vector3i(x, y, z - 1), TCHUNK_PAD_S)
-							#] == TILE_SHAPE.EMPTY:
-								#pass
-							##if padded_shapes[
-								##t_i_from_xyz(Vector3i(x, y, z + 1), PADDED_CHUNK_SIZE)
-							##] == TILE_SHAPE.EMPTY:
-								##pass
-		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
 		mesh_surface[Mesh.ARRAY_VERTEX] = surf_verts
