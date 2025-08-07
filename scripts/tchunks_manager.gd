@@ -12,14 +12,30 @@ const TCHUNK_PAD_S: Vector3i = Vector3i(
 	TCHUNK_L + TCHUNK_PAD_L, TCHUNK_L + TCHUNK_PAD_L, TCHUNK_L + TCHUNK_PAD_L,)
 
 enum TILE_SHAPE {
-	EMPTY, TESS_CUBE, TESS_RHOMBDO, MARCH_CUBE,
+	NO_DATA, EMPTY, TESS_CUBE, TESS_RHOMBDO, MARCH_CUBE,
 }
 
 class TChunk:
-	var tile_shapes: PackedByteArray = []
+	static var blank_tc27: Array[TChunk] = []
 	
+	var tile_shapes: PackedByteArray = []
 	var mesh_instance_node: MeshInstance3D = MeshInstance3D.new()
 	var array_mesh: ArrayMesh = ArrayMesh.new()
+	
+	static func get_tc27_tchunk_i(cen_pos: Vector3i, rel_pos: Vector3i) -> int:
+		var new_pos: Vector3i = Vector3i(cen_pos + rel_pos)
+		var chunk_xyz: Vector3i = Vector3i(
+			(new_pos.x/TCHUNK_L) if (new_pos.x >= 0) else ((new_pos.x-(TCHUNK_L-1))/TCHUNK_L),
+			(new_pos.y/TCHUNK_L) if (new_pos.y >= 0) else ((new_pos.y-(TCHUNK_L-1))/TCHUNK_L),
+			(new_pos.z/TCHUNK_L) if (new_pos.z >= 0) else ((new_pos.z-(TCHUNK_L-1))/TCHUNK_L),
+		)
+		return chunk_xyz.x + (TCHUNK_L * chunk_xyz.y) + (TCHUNK_L * TCHUNK_L * chunk_xyz.z)
+	static func get_tc27_tile_i(cen_pos: Vector3i, rel_pos: Vector3i) -> int:
+		return (
+			posmod(cen_pos.x + rel_pos.x, TCHUNK_L) +
+			posmod(cen_pos.y + rel_pos.y, TCHUNK_L) * TCHUNK_L +
+			posmod(cen_pos.z + rel_pos.z, TCHUNK_L) * TCHUNK_L * TCHUNK_L
+		)
 	
 	func t_i_from_xyz(xyz: Vector3i, lengths: Vector3i = TCHUNK_S) -> int:
 		return xyz.x + (xyz.y * lengths.y) + (xyz.z * lengths.z * lengths.z)
@@ -32,14 +48,25 @@ class TChunk:
 	
 	func _init():
 		tile_shapes.resize(TCHUNK_T)
+		tile_shapes.fill(TILE_SHAPE.NO_DATA)
 	func randomize_tiles():
 		for i in range(TCHUNK_T):
 			tile_shapes[i] = randi_range(0, 1)
+	
 	func unmesh():
 		mesh_instance_node.queue_free()
 		mesh_instance_node = MeshInstance3D.new()
 		array_mesh = ArrayMesh.new()
-	func generate_mesh(surr_tchunks: Array[TChunk] = [TChunk.new(), TChunk.new() ,TChunk.new()]):
+	
+	func generate_mesh(tc_27: Array[TChunk] = blank_tc27):
+		tc_27[13] = self # Set self as center of the 3x3x3 chunks.
+		print(tc_27)
+		
+		for i in range(TCHUNK_T):
+			pass
+		
+		
+		
 		# Get all of the information needed, including data related to surrounding chunks.
 		# For now though, all needed surrounding chunk tile shapes are simply assumed to be empty.
 		var padded_shapes: PackedByteArray = []
@@ -111,12 +138,15 @@ class TChunk:
 		)
 		mesh_instance_node.mesh = array_mesh
 
-func _ready():
+func _init():
 	assert(TCHUNK_PAD_L <= TCHUNK_L)
-	
-	var new_chunk: TChunk = TChunk.new()
-	#new_chunk.randomize_tiles()
-	new_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
-	new_chunk.generate_mesh()
-	new_chunk.mesh_instance_node.position += Vector3(-8, -8, -8)
-	add_child(new_chunk.mesh_instance_node)
+	TChunk.blank_tc27.resize(27)
+	TChunk.blank_tc27.fill(TChunk.new())
+
+func _ready():
+	var test_chunk: TChunk = TChunk.new()
+	test_chunk.randomize_tiles()
+	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
+	test_chunk.generate_mesh()
+	test_chunk.mesh_instance_node.position += Vector3(-8, -8, -8)
+	add_child(test_chunk.mesh_instance_node)

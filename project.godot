@@ -26,6 +26,7 @@ Globals="*res://scripts/autoloaded/general_globals.gd"
 
 [debug]
 
+gdscript/warnings/assert_always_true=0
 gdscript/warnings/integer_division=0
 
 [input]
