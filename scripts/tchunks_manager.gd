@@ -88,25 +88,27 @@ class TChunk:
 		pos: Vector3i, tc_27: Array[TChunk], 
 		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array,
 	):
-		#for move: Vector3i in [
-			#Vector3i(-1, 0, 0), Vector3i(1, 0, 0),
-			#Vector3i(0, -1, 0), Vector3i(0, 1, 0),
-			#Vector3i(0, 0, -1), Vector3i(0, 0, 1),
-		#]:
-			if tc_27[get_tc27_tchunk_i(pos, Vector3i(-1, 0, 0))
-			].tile_shapes[get_tc27_tile_i(pos, Vector3i(-1, 0, 0))
-			] in [TILE_SHAPE.NO_DATA, TILE_SHAPE.EMPTY]:
-				verts_ref.append_array([
-					Vector3(Vector3(pos) + Vector3(0, 0, 0) - TCHUNK_HALF_S),
-					Vector3(Vector3(pos) + Vector3(0, 1, 0) - TCHUNK_HALF_S),
-					Vector3(Vector3(pos) + Vector3(0, 0, 1) - TCHUNK_HALF_S),
-					Vector3(Vector3(pos) + Vector3(0, 1, 1) - TCHUNK_HALF_S),
-				])
-				inds_ref.append_array([
-					verts_ref.size() - 4, verts_ref.size() - 3, verts_ref.size() - 2,
-					verts_ref.size() - 3, verts_ref.size() - 1, verts_ref.size() - 2,
-				])
-				return #temp
+		for j: int in range(6):
+			
+			# temp, makes only -x <- side get meshed
+			if j > 0:
+				break
+			
+			match tc_27[get_tc27_tchunk_i(pos, WU.mesh_tess_cube_move[j])
+			].tile_shapes[get_tc27_tile_i(pos, WU.mesh_tess_cube_move[j])
+			]:
+				TILE_SHAPE.NO_DATA, TILE_SHAPE.EMPTY: pass
+				TILE_SHAPE.MARCH_CUBE:
+					# if {known that the cube would be covered} then 'continue'
+					pass
+				_: continue
+			for k: int in range(4):
+				verts_ref.append(Vector3(pos) + WU.mesh_tess_cube_verts[(4*j)+k])
+			var verts_size: int = verts_ref.size()
+			inds_ref.append_array([
+				verts_ref.size()-4, verts_ref.size()-3, verts_ref.size()-2,
+				verts_ref.size()-3, verts_ref.size()-1, verts_ref.size()-2,
+			])
 		
 
 func _init():
