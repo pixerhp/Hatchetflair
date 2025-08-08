@@ -65,6 +65,7 @@ class TChunk:
 		
 		var surf_verts: PackedVector3Array = []
 		var surf_inds: PackedInt32Array = []
+		var surf_norms: PackedVector3Array = []
 		
 		for i in range(TCHUNK_T):
 			match tile_shapes[i]:
@@ -73,12 +74,13 @@ class TChunk:
 				TILE_SHAPE.EMPTY:
 					continue
 				TILE_SHAPE.TESS_CUBE:
-					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_inds)
+					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
 		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
 		mesh_surface[Mesh.ARRAY_VERTEX] = surf_verts
 		mesh_surface[Mesh.ARRAY_INDEX] = surf_inds
+		mesh_surface[Mesh.ARRAY_NORMAL] = surf_norms
 		
 		array_mesh.add_surface_from_arrays(
 			Mesh.PRIMITIVE_TRIANGLES,
@@ -91,7 +93,7 @@ class TChunk:
 	
 	func mesh_tess_cube(
 		pos: Vector3i, tc_27: Array[TChunk], 
-		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array,
+		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array, norms_ref: PackedVector3Array,
 	):
 		for j: int in range(6):
 			match tc_27[get_tc27_tchunk_i(pos, WU.mesh_tess_cube_move[j])
@@ -104,7 +106,7 @@ class TChunk:
 				_: continue
 			for k: int in range(4):
 				verts_ref.append(Vector3(pos) + WU.mesh_tess_cube_verts[(4*j)+k])
-			var verts_size: int = verts_ref.size()
+				norms_ref.append(Vector3(WU.mesh_tess_cube_move[j]))
 			inds_ref.append_array([
 				verts_ref.size()-4, verts_ref.size()-3, verts_ref.size()-2,
 				verts_ref.size()-3, verts_ref.size()-1, verts_ref.size()-2,
