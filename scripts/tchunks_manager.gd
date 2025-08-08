@@ -52,7 +52,7 @@ class TChunk:
 	func randomize_tiles():
 		tile_shapes.fill(TILE_SHAPE.EMPTY)
 		for i in range(TCHUNK_T):
-			if randi_range(0, 6) == 0:
+			if randi_range(0, 36) == 0:
 				tile_shapes[i] = TILE_SHAPE.TESS_CUBE
 	
 	func unmesh():
