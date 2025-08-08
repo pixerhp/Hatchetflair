@@ -50,8 +50,10 @@ class TChunk:
 		tile_shapes.resize(TCHUNK_T)
 		tile_shapes.fill(TILE_SHAPE.NO_DATA)
 	func randomize_tiles():
+		tile_shapes.fill(TILE_SHAPE.EMPTY)
 		for i in range(TCHUNK_T):
-			tile_shapes[i] = randi_range(1, 2)
+			if randi_range(0, 6) == 0:
+				tile_shapes[i] = TILE_SHAPE.TESS_CUBE
 	
 	func unmesh():
 		mesh_instance_node.queue_free()
@@ -113,14 +115,7 @@ func _init():
 
 func _ready():
 	var test_chunk: TChunk = TChunk.new()
-	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
-	#test_chunk.randomize_tiles()
-	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[1] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[3] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[6] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[8] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
+	test_chunk.randomize_tiles()
 	test_chunk.generate_mesh()
-	#test_chunk.mesh_instance_node.position += Vector3(-8, -8, -8)
 	add_child(test_chunk.mesh_instance_node)
