@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://caemtw2ni7cl6"]
+[gd_scene load_steps=9 format=3 uid="uid://caemtw2ni7cl6"]
 
 [ext_resource type="Script" uid="uid://dprqbtapra60j" path="res://scripts/flycam.gd" id="1_3dqie"]
+[ext_resource type="Script" uid="uid://cspicyqlp7atk" path="res://scripts/sun.gd" id="1_08y4y"]
 [ext_resource type="Script" uid="uid://cgeksujr8ktbf" path="res://scripts/tchunks_manager.gd" id="2_yy87l"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hoxm8"]
@@ -25,7 +26,10 @@ albedo_color = Color(1, 0, 0, 1)
 environment = SubResource("Environment_yy87l")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(-4.37114e-08, -0.841511, 0.54024, 0, 0.54024, 0.841511, -1, 3.67836e-08, -2.36147e-08, 0, 0, 0)
+transform = Transform3D(0.866025, 0.1235, -0.484508, 0, 0.969016, 0.246999, 0.5, -0.213907, 0.839192, 0, 0, 0)
+light_color = Color(1, 0.937667, 0.83, 1)
+shadow_enabled = true
+script = ExtResource("1_08y4y")
 
 [node name="FlyCam" type="Camera3D" parent="."]
 unique_name_in_owner = true

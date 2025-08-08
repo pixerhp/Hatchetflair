@@ -84,6 +84,9 @@ class TChunk:
 			Mesh.PRIMITIVE_TRIANGLES,
 			mesh_surface,
 		)
+		var test_mat: StandardMaterial3D = StandardMaterial3D.new()
+		test_mat.albedo_color = Color.WHITE
+		array_mesh.surface_set_material(0, test_mat)
 		mesh_instance_node.mesh = array_mesh
 	
 	func mesh_tess_cube(
