@@ -1,14 +1,17 @@
 extends Node
 
-func _process(_delta):
+var fly_speed: float = 0
+var fly_direction_vector: Vector3 = Vector3()
+
+func _ready():
+	self.top_level = true # Makes cam position/movement not affected by its parent.
+
+# Camera movement done in process rather than physics_process to avoid visible jittering.
+func _process(delta):
 	DebugDraw.texts_to_draw.append("cam x: " + str(self.position.x))
 	DebugDraw.texts_to_draw.append("cam y: " + str(self.position.y))
 	DebugDraw.texts_to_draw.append("cam z: " + str(self.position.z))
-	#DebugDraw.lines_to_draw.append([Vector3(-5,-5,-5),Vector3(-5,-5,50),Color(0,1,0.5)])
-
-var fly_speed: float = 0
-var fly_direction_vector: Vector3 = Vector3()
-func _physics_process(delta):
+	
 	# Determine fly speed:
 	if Input.is_action_pressed("speed_faster"):
 		fly_speed = 32 if fly_speed < 32 else (fly_speed * (1 + delta/4))
