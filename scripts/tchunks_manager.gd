@@ -89,11 +89,6 @@ class TChunk:
 		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array,
 	):
 		for j: int in range(6):
-			
-			# temp
-			if j > 1:
-				break
-			
 			match tc_27[get_tc27_tchunk_i(pos, WU.mesh_tess_cube_move[j])
 			].tile_shapes[get_tc27_tile_i(pos, WU.mesh_tess_cube_move[j])
 			]:
@@ -121,11 +116,11 @@ func _ready():
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	#test_chunk.randomize_tiles()
 	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[1] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[3] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[6] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[8] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[1] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[3] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[6] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[8] = TILE_SHAPE.TESS_CUBE
 	test_chunk.generate_mesh()
 	#test_chunk.mesh_instance_node.position += Vector3(-8, -8, -8)
 	add_child(test_chunk.mesh_instance_node)
