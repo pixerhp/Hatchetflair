@@ -6,7 +6,7 @@ var lines_mesh_instance: MeshInstance3D = MeshInstance3D.new()
 var lines_immediate_mesh: ImmediateMesh = ImmediateMesh.new()
 var lines_to_draw: Array[Array] = [] # Expects each line as: [Vector3, Vector3, Color (optional)]
 
-@onready var cam_node: Node = %FlyCam
+@onready var cam_node: Node = get_tree().current_scene.find_child("FlyCam")
 var borders_draw_mode: int = 0
 var chunkborders_mesh_instance: MeshInstance3D = MeshInstance3D.new()
 var chunkborders_arraymesh: ArrayMesh = ArrayMesh.new()
