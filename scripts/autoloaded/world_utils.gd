@@ -21,3 +21,14 @@ const mesh_tess_cube_verts: Array[Vector3] = [
 	Vector3(1, 0, 0)-TCHUNK_HS,Vector3(1, 1, 0)-TCHUNK_HS,Vector3(0, 0, 0)-TCHUNK_HS,Vector3(0, 1, 0)-TCHUNK_HS,
 	Vector3(0, 0, 1)-TCHUNK_HS,Vector3(0, 1, 1)-TCHUNK_HS,Vector3(1, 0, 1)-TCHUNK_HS,Vector3(1, 1, 1)-TCHUNK_HS,
 ]
+# (Tesselated cube doesn't have norms because we can reuse 'move' for them.)
+
+const mesh_tess_rhombdo_move: Array[Vector3i] = [
+	Vector3i(0, -1, -1), Vector3i(-1, 0, -1), Vector3i(1, 0, -1), Vector3i(0, 1, -1), 
+	Vector3i(-1, -1, 0), Vector3i(1, -1, 0), Vector3i(-1, 1, 0), Vector3i(1, 1, 0), 
+	Vector3i(0, -1, 1), Vector3i(-1, 0, 1), Vector3i(1, 0, 1), Vector3i(0, 1, 1), 
+]
+const mesh_tess_rhombdo_verts: Array[Vector3] = [
+]
+const mesh_tess_rhombdo_norms: Array[Vector3] = [
+]

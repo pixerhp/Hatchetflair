@@ -62,11 +62,14 @@ class TChunk:
 		for i in range(WU.TCHUNK_T):
 			match tile_shapes[i]:
 				TILE_SHAPE.NO_DATA:
-					push_error("Tried to mesh an unloaded tile shape.")
+					push_error("Attempted to mesh an unloaded tile shape.")
+					continue
 				TILE_SHAPE.EMPTY:
 					continue
 				TILE_SHAPE.TESS_CUBE:
 					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
+				TILE_SHAPE.TESS_RHOMBDO:
+					mesh_tess_rhombdo(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
 		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
