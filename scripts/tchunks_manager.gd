@@ -3,14 +3,6 @@ extends Node
 @onready var chunks_container_node: Node = self
 
 # Lengths, totals, and sizes of chunk stuff in metrins.
-const TCHUNK_L: int = 16
-const TCHUNK_T: int = TCHUNK_L ** 3
-const TCHUNK_S: Vector3i = Vector3i(TCHUNK_L, TCHUNK_L, TCHUNK_L)
-const TCHUNK_HALF_S: Vector3 = Vector3(TCHUNK_S) / 2.0
-const TCHUNK_PAD_L: int = 1
-const TCHUNK_PAD_T: int = (TCHUNK_L + TCHUNK_PAD_L) ** 3
-const TCHUNK_PAD_S: Vector3i = Vector3i(
-	TCHUNK_L + TCHUNK_PAD_L, TCHUNK_L + TCHUNK_PAD_L, TCHUNK_L + TCHUNK_PAD_L,)
 
 enum TILE_SHAPE {
 	NO_DATA, EMPTY, TESS_CUBE, TESS_RHOMBDO, MARCH_CUBE,
@@ -26,32 +18,32 @@ class TChunk:
 	static func get_tc27_tchunk_i(cen_pos: Vector3i, rel_pos: Vector3i) -> int:
 		var new_pos: Vector3i = Vector3i(cen_pos + rel_pos)
 		var chunk_xyz: Vector3i = Vector3i(
-			(new_pos.x/TCHUNK_L) if (new_pos.x >= 0) else ((new_pos.x-(TCHUNK_L-1))/TCHUNK_L),
-			(new_pos.y/TCHUNK_L) if (new_pos.y >= 0) else ((new_pos.y-(TCHUNK_L-1))/TCHUNK_L),
-			(new_pos.z/TCHUNK_L) if (new_pos.z >= 0) else ((new_pos.z-(TCHUNK_L-1))/TCHUNK_L),
+			(new_pos.x/WU.TCHUNK_L) if (new_pos.x >= 0) else ((new_pos.x-(WU.TCHUNK_L-1))/WU.TCHUNK_L),
+			(new_pos.y/WU.TCHUNK_L) if (new_pos.y >= 0) else ((new_pos.y-(WU.TCHUNK_L-1))/WU.TCHUNK_L),
+			(new_pos.z/WU.TCHUNK_L) if (new_pos.z >= 0) else ((new_pos.z-(WU.TCHUNK_L-1))/WU.TCHUNK_L),
 		)
 		chunk_xyz += Vector3i(1, 1, 1)
 		return chunk_xyz.x + (3 * chunk_xyz.y) + (9 * chunk_xyz.z)
 	static func get_tc27_tile_i(cen_pos: Vector3i, rel_pos: Vector3i) -> int:
 		return (
-			posmod(cen_pos.x + rel_pos.x, TCHUNK_L) +
-			posmod(cen_pos.y + rel_pos.y, TCHUNK_L) * TCHUNK_L +
-			posmod(cen_pos.z + rel_pos.z, TCHUNK_L) * TCHUNK_L * TCHUNK_L
+			posmod(cen_pos.x + rel_pos.x, WU.TCHUNK_L) +
+			posmod(cen_pos.y + rel_pos.y, WU.TCHUNK_L) * WU.TCHUNK_L +
+			posmod(cen_pos.z + rel_pos.z, WU.TCHUNK_L) * WU.TCHUNK_L * WU.TCHUNK_L
 		)
 	
 	func t_i_from_xyz(xyz: Vector3i) -> int:
-		return xyz.x + (xyz.y * TCHUNK_L) + (xyz.z * TCHUNK_L * TCHUNK_L)
+		return xyz.x + (xyz.y * WU.TCHUNK_L) + (xyz.z * WU.TCHUNK_L * WU.TCHUNK_L)
 	func t_xyz_from_i(i: int) -> Vector3i:
 		return Vector3i(
-			posmod(i, TCHUNK_L), posmod(i / TCHUNK_L, TCHUNK_L), posmod(i / (TCHUNK_L * TCHUNK_L), TCHUNK_L),
+			posmod(i, WU.TCHUNK_L), posmod(i / WU.TCHUNK_L, WU.TCHUNK_L), posmod(i / (WU.TCHUNK_L * WU.TCHUNK_L), WU.TCHUNK_L),
 		)
 	
 	func _init():
-		tile_shapes.resize(TCHUNK_T)
+		tile_shapes.resize(WU.TCHUNK_T)
 		tile_shapes.fill(TILE_SHAPE.NO_DATA)
 	func randomize_tiles():
 		tile_shapes.fill(TILE_SHAPE.EMPTY)
-		for i in range(TCHUNK_T):
+		for i in range(WU.TCHUNK_T):
 			if randi_range(0, 36) == 0:
 				tile_shapes[i] = TILE_SHAPE.TESS_CUBE
 	
@@ -67,7 +59,7 @@ class TChunk:
 		var surf_inds: PackedInt32Array = []
 		var surf_norms: PackedVector3Array = []
 		
-		for i in range(TCHUNK_T):
+		for i in range(WU.TCHUNK_T):
 			match tile_shapes[i]:
 				TILE_SHAPE.NO_DATA:
 					push_error("Tried to mesh an unloaded tile shape.")
@@ -119,7 +111,6 @@ class TChunk:
 		pass
 
 func _init():
-	assert(TCHUNK_PAD_L <= TCHUNK_L)
 	TChunk.blank_tc27.resize(27)
 	TChunk.blank_tc27.fill(TChunk.new())
 
@@ -128,5 +119,5 @@ func _ready():
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_RHOMBDO
 	#test_chunk.randomize_tiles()
-	#test_chunk.generate_mesh()
+	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
