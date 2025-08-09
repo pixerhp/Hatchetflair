@@ -96,7 +96,7 @@ class TChunk:
 			]:
 				TILE_SHAPE.NO_DATA, TILE_SHAPE.EMPTY: pass
 				TILE_SHAPE.MARCH_CUBE:
-					# if {known that the cube would be covered} then 'continue'
+					# if {known that the cube would be covered} then 'continue' else pass to face meshing
 					pass
 				TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO, _: continue
 			for k: int in range(4):
@@ -111,18 +111,27 @@ class TChunk:
 		pos: Vector3i, tc_27: Array[TChunk], 
 		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array, norms_ref: PackedVector3Array,
 	):
-		for i in range(12):
+		
+		# cull order idea:
+		# check whole faces culled first, then do half-face checks
+		
+		for j in range(12):
+			match tc_27[get_tc27_tchunk_i(pos, WU.mesh_tess_rhombdo_move[j])
+			].tile_shapes[get_tc27_tile_i(pos, WU.mesh_tess_rhombdo_move[j])
+			]:
+				TILE_SHAPE.TESS_RHOMBDO:
+					continue
 			verts_ref.append_array([
-				WU.mesh_tess_rhombdo_verts[(i * 4)],
-				WU.mesh_tess_rhombdo_verts[(i * 4) + 1],
-				WU.mesh_tess_rhombdo_verts[(i * 4) + 2],
-				WU.mesh_tess_rhombdo_verts[(i * 4) + 3],
+				Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4)],
+				Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 1],
+				Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 2],
+				Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 3],
 			])
 			norms_ref.append_array([
-				WU.mesh_tess_rhombdo_norms[i],
-				WU.mesh_tess_rhombdo_norms[i],
-				WU.mesh_tess_rhombdo_norms[i],
-				WU.mesh_tess_rhombdo_norms[i],
+				WU.mesh_tess_rhombdo_norms[j],
+				WU.mesh_tess_rhombdo_norms[j],
+				WU.mesh_tess_rhombdo_norms[j],
+				WU.mesh_tess_rhombdo_norms[j],
 			])
 			inds_ref.append_array([
 				verts_ref.size()-4, verts_ref.size()-3, verts_ref.size()-2,
@@ -136,8 +145,21 @@ func _init():
 func _ready():
 	var test_chunk: TChunk = TChunk.new()
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
-	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_RHOMBDO
-	test_chunk.tile_shapes[3] = TILE_SHAPE.TESS_CUBE
 	#test_chunk.randomize_tiles()
+	
+	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_RHOMBDO
+	test_chunk.tile_shapes[1] = TILE_SHAPE.TESS_CUBE
+	
+	test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_RHOMBDO
+	test_chunk.tile_shapes[5] = TILE_SHAPE.TESS_RHOMBDO
+	
+	test_chunk.tile_shapes[7] = TILE_SHAPE.TESS_RHOMBDO
+	test_chunk.tile_shapes[24] = TILE_SHAPE.TESS_RHOMBDO
+	test_chunk.tile_shapes[9] = TILE_SHAPE.TESS_RHOMBDO
+	test_chunk.tile_shapes[26] = TILE_SHAPE.TESS_RHOMBDO
+	
+	test_chunk.tile_shapes[32] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[49] = TILE_SHAPE.TESS_RHOMBDO
+	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)

@@ -50,7 +50,6 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_yy87l")
 
 [node name="RedCube" type="MeshInstance3D" parent="CenterMarker"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("BoxMesh_08y4y")
 surface_material_override/0 = SubResource("StandardMaterial3D_tgdfa")
 
