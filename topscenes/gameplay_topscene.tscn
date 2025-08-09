@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://caemtw2ni7cl6"]
+[gd_scene load_steps=11 format=3 uid="uid://caemtw2ni7cl6"]
 
 [ext_resource type="Script" uid="uid://dprqbtapra60j" path="res://scripts/flycam.gd" id="1_3dqie"]
 [ext_resource type="Script" uid="uid://cspicyqlp7atk" path="res://scripts/sun.gd" id="1_08y4y"]
@@ -20,6 +20,12 @@ sky = SubResource("Sky_3dqie")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yy87l"]
 albedo_color = Color(1, 0, 0, 1)
 
+[sub_resource type="BoxMesh" id="BoxMesh_08y4y"]
+size = Vector3(0.707, 0.707, 0.707)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tgdfa"]
+albedo_color = Color(1, 0, 0, 1)
+
 [node name="GameplayTopscene" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -35,9 +41,17 @@ script = ExtResource("1_08y4y")
 unique_name_in_owner = true
 script = ExtResource("1_3dqie")
 
-[node name="CenterSphere" type="MeshInstance3D" parent="."]
+[node name="CenterMarker" type="Node3D" parent="."]
+
+[node name="RedSphere" type="MeshInstance3D" parent="CenterMarker"]
 mesh = SubResource("SphereMesh_3dqie")
+skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_yy87l")
+
+[node name="RedCube" type="MeshInstance3D" parent="CenterMarker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_08y4y")
+surface_material_override/0 = SubResource("StandardMaterial3D_tgdfa")
 
 [node name="TChunksContainer" type="Node3D" parent="."]
 unique_name_in_owner = true
