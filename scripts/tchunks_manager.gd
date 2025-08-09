@@ -98,7 +98,7 @@ class TChunk:
 				TILE_SHAPE.MARCH_CUBE:
 					# if {known that the cube would be covered} then 'continue'
 					pass
-				_: continue
+				TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO, _: continue
 			for k: int in range(4):
 				verts_ref.append(Vector3(pos) + WU.mesh_tess_cube_verts[(4*j)+k])
 				norms_ref.append(Vector3(WU.mesh_tess_cube_move[j]))
