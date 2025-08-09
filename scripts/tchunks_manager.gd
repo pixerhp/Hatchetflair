@@ -111,7 +111,12 @@ class TChunk:
 				verts_ref.size()-4, verts_ref.size()-3, verts_ref.size()-2,
 				verts_ref.size()-3, verts_ref.size()-1, verts_ref.size()-2,
 			])
-		
+	
+	func mesh_tess_rhombdo(
+		pos: Vector3i, tc_27: Array[TChunk], 
+		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array, norms_ref: PackedVector3Array,
+	):
+		pass
 
 func _init():
 	assert(TCHUNK_PAD_L <= TCHUNK_L)
@@ -120,7 +125,8 @@ func _init():
 
 func _ready():
 	var test_chunk: TChunk = TChunk.new()
-	#test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
-	test_chunk.randomize_tiles()
-	test_chunk.generate_mesh()
+	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
+	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_RHOMBDO
+	#test_chunk.randomize_tiles()
+	#test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
