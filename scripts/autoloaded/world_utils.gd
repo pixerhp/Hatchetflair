@@ -21,7 +21,7 @@ const mesh_tess_cube_verts: Array[Vector3] = [
 	Vector3(1, 0, 0)-TCHUNK_HS,Vector3(1, 1, 0)-TCHUNK_HS,Vector3(0, 0, 0)-TCHUNK_HS,Vector3(0, 1, 0)-TCHUNK_HS,
 	Vector3(0, 0, 1)-TCHUNK_HS,Vector3(0, 1, 1)-TCHUNK_HS,Vector3(1, 0, 1)-TCHUNK_HS,Vector3(1, 1, 1)-TCHUNK_HS,
 ]
-# (Tesselated cube doesn't have norms because we can reuse 'move' for them.)
+# (Tesselated cube doesn't have norms because we can reuse indices 0-5 of 'move' for them.)
 
 const mesh_tess_rhombdo_move: Array[Vector3i] = [
 	Vector3i(0, -1, -1), Vector3i(-1, 0, -1), Vector3i(1, 0, -1), Vector3i(0, 1, -1), 
@@ -31,4 +31,21 @@ const mesh_tess_rhombdo_move: Array[Vector3i] = [
 const mesh_tess_rhombdo_verts: Array[Vector3] = [
 ]
 const mesh_tess_rhombdo_norms: Array[Vector3] = [
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[0]),
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[1]),
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[2]),
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[3]),
+	
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[4]),
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[5]),
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[6]),
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[7]),
+	
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[8]),
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[9]),
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[10]),
+	0.70710678 * Vector3(mesh_tess_rhombdo_move[11]),
 ]
+
+func _ready():
+	print(mesh_tess_rhombdo_norms)
