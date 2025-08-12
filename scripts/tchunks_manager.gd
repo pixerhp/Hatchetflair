@@ -44,8 +44,13 @@ class TChunk:
 	func randomize_tiles():
 		tile_shapes.fill(TILE_SHAPE.EMPTY)
 		for i in range(WU.TCHUNK_T):
-			if randi_range(0, 36) == 0:
-				tile_shapes[i] = TILE_SHAPE.TESS_CUBE
+			match randi_range(0, 6):
+				0:
+					tile_shapes[i] = TILE_SHAPE.TESS_CUBE
+				1:
+					tile_shapes[i] = TILE_SHAPE.TESS_RHOMBDO
+				_:
+					tile_shapes[i] = TILE_SHAPE.EMPTY
 	
 	func unmesh():
 		mesh_instance_node.queue_free()
@@ -174,22 +179,7 @@ func _init():
 
 func _ready():
 	var test_chunk: TChunk = TChunk.new()
-	test_chunk.tile_shapes.fill(TILE_SHAPE.TESS_RHOMBDO)
-	#test_chunk.randomize_tiles()
-	
-	#test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_RHOMBDO
-	#test_chunk.tile_shapes[1] = TILE_SHAPE.TESS_CUBE
-	#
-	#test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_RHOMBDO
-	#test_chunk.tile_shapes[5] = TILE_SHAPE.TESS_RHOMBDO
-	#
-	#test_chunk.tile_shapes[7] = TILE_SHAPE.TESS_RHOMBDO
-	#test_chunk.tile_shapes[24] = TILE_SHAPE.TESS_RHOMBDO
-	#test_chunk.tile_shapes[9] = TILE_SHAPE.TESS_RHOMBDO
-	#test_chunk.tile_shapes[26] = TILE_SHAPE.TESS_RHOMBDO
-	#
-	#test_chunk.tile_shapes[32] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[49] = TILE_SHAPE.TESS_RHOMBDO
+	test_chunk.randomize_tiles()
 	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
