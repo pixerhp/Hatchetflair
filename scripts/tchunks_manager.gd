@@ -5,7 +5,7 @@ extends Node
 # Lengths, totals, and sizes of chunk stuff in metrins.
 
 enum TILE_SHAPE {
-	NO_DATA, EMPTY, TESS_CUBE, TESS_RHOMBDO, MARCH_CUBE,
+	NO_DATA, EMPTY, ANG_MARCH, SMO_MARCH, TESS_CUBE, TESS_RHOMBDO, CLIFF,
 }
 
 class TChunk:
@@ -100,7 +100,7 @@ class TChunk:
 			].tile_shapes[get_tc27_tile_i(pos, WU.mesh_tess_cube_move[j])
 			]:
 				TILE_SHAPE.NO_DATA, TILE_SHAPE.EMPTY: pass
-				TILE_SHAPE.MARCH_CUBE:
+				TILE_SHAPE.ANG_MARCH:
 					# if {known that the cube would be covered} then 'continue' else pass to face meshing
 					pass
 				TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO, _: continue
