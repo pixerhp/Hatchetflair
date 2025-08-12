@@ -12,7 +12,7 @@ const mesh_tess_cube_move: Array[Vector3i] = [
 	Vector3i(0, -1, 0), Vector3i(0, 1, 0),
 	Vector3i(0, 0, -1), Vector3i(0, 0, 1),
 ]
-const mesh_tess_cube_verts: Array[Vector3] = [
+const mesh_tess_cube_verts: PackedVector3Array = [
 	Vector3(0, 0, 0)-TCHUNK_HS,Vector3(0, 1, 0)-TCHUNK_HS,Vector3(0, 0, 1)-TCHUNK_HS,Vector3(0, 1, 1)-TCHUNK_HS,
 	Vector3(1, 0, 1)-TCHUNK_HS,Vector3(1, 1, 1)-TCHUNK_HS,Vector3(1, 0, 0)-TCHUNK_HS,Vector3(1, 1, 0)-TCHUNK_HS,
 	
@@ -36,7 +36,7 @@ const mesh_tess_rhombdo_move: Array[Vector3i] = [
 	Vector3i(0, -1, 0), Vector3i(0, 0, 1), Vector3i(-1, 0, 0), Vector3i(0, 0, 1), 
 	Vector3i(0, 0, 1), Vector3i(1, 0, 0), Vector3i(0, 0, 1), Vector3i(0, 1, 0), 
 ]
-const mesh_tess_rhombdo_verts: Array[Vector3] = [
+const mesh_tess_rhombdo_verts: PackedVector3Array = [
 	Vector3(0, -1, 0) - TCHUNK_HS2, Vector3(0.5, -0.5, -0.5) - TCHUNK_HS2, 
 		Vector3(-0.5, -0.5, -0.5) - TCHUNK_HS2, Vector3(0, 0, -1) - TCHUNK_HS2,
 	Vector3(0, 0, -1) - TCHUNK_HS2, Vector3(-0.5, 0.5, -0.5) - TCHUNK_HS2, 
@@ -64,7 +64,7 @@ const mesh_tess_rhombdo_verts: Array[Vector3] = [
 	Vector3(0, 0, 1) - TCHUNK_HS2, Vector3(-0.5, 0.5, 0.5) - TCHUNK_HS2, 
 		Vector3(0.5, 0.5, 0.5) - TCHUNK_HS2, Vector3(0, 1, 0) - TCHUNK_HS2,
 ]
-const mesh_tess_rhombdo_norms: Array[Vector3] = [
+const mesh_tess_rhombdo_norms: PackedVector3Array = [
 	0.70710678 * Vector3(mesh_tess_rhombdo_move[0]),
 	0.70710678 * Vector3(mesh_tess_rhombdo_move[1]),
 	0.70710678 * Vector3(mesh_tess_rhombdo_move[2]),
