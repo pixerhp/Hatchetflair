@@ -96,8 +96,8 @@ class TChunk:
 		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array, norms_ref: PackedVector3Array,
 	):
 		for j: int in range(6):
-			match tc_27[get_tc27_tchunk_i(pos, WU.mesh_tess_cube_move[j])
-			].tile_shapes[get_tc27_tile_i(pos, WU.mesh_tess_cube_move[j])
+			match tc_27[get_tc27_tchunk_i(pos, WU.ts_tess_cube_move[j])
+			].tile_shapes[get_tc27_tile_i(pos, WU.ts_tess_cube_move[j])
 			]:
 				TILE_SHAPE.NO_DATA, TILE_SHAPE.EMPTY: pass
 				TILE_SHAPE.ANG_MARCH:
@@ -105,8 +105,8 @@ class TChunk:
 					pass
 				TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO, _: continue
 			for k: int in range(4):
-				verts_ref.append(Vector3(pos) + WU.mesh_tess_cube_verts[(4*j)+k])
-				norms_ref.append(Vector3(WU.mesh_tess_cube_move[j]))
+				verts_ref.append(Vector3(pos) + WU.ts_tess_cube_verts[(4*j)+k])
+				norms_ref.append(Vector3(WU.ts_tess_cube_move[j]))
 			inds_ref.append_array([
 				verts_ref.size()-4, verts_ref.size()-3, verts_ref.size()-2,
 				verts_ref.size()-3, verts_ref.size()-1, verts_ref.size()-2,
@@ -118,15 +118,15 @@ class TChunk:
 	):
 		var tri_cull_data: int = 3
 		for j in range(12): # Check whether whole face should be culled:
-			match tc_27[get_tc27_tchunk_i(pos, WU.mesh_tess_rhombdo_move[j])
-			].tile_shapes[get_tc27_tile_i(pos, WU.mesh_tess_rhombdo_move[j])
+			match tc_27[get_tc27_tchunk_i(pos, WU.ts_tess_rhombdo_move[j])
+			].tile_shapes[get_tc27_tile_i(pos, WU.ts_tess_rhombdo_move[j])
 			]:
 				TILE_SHAPE.TESS_RHOMBDO:
 					continue
 			tri_cull_data = 3 # Individually check whether the 2 face-triangles should be culled:
 			for k in range(2):
-				if tc_27[get_tc27_tchunk_i(pos, WU.mesh_tess_rhombdo_move[(2 * j) + k + 12])
-				].tile_shapes[get_tc27_tile_i(pos, WU.mesh_tess_rhombdo_move[(2 * j) + k + 12])
+				if tc_27[get_tc27_tchunk_i(pos, WU.ts_tess_rhombdo_move[(2 * j) + k + 12])
+				].tile_shapes[get_tc27_tile_i(pos, WU.ts_tess_rhombdo_move[(2 * j) + k + 12])
 				] in PackedInt32Array([TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO]):
 					tri_cull_data -= (k + 1)
 			match tri_cull_data:
@@ -134,39 +134,39 @@ class TChunk:
 					continue
 				1:
 					verts_ref.append_array([
-						Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4)],
-						Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 1],
-						Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 2],
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4)],
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 1],
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 2],
 					])
 				2:
 					verts_ref.append_array([
-						Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 1],
-						Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 3],
-						Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 2],
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 1],
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 3],
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 2],
 					])
 				3:
 					verts_ref.append_array([
-						Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4)],
-						Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 1],
-						Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 2],
-						Vector3(pos) + WU.mesh_tess_rhombdo_verts[(j * 4) + 3],
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4)],
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 1],
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 2],
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 3],
 					])
 			match tri_cull_data:
 				1, 2:
 					norms_ref.append_array([
-						WU.mesh_tess_rhombdo_norms[j],
-						WU.mesh_tess_rhombdo_norms[j],
-						WU.mesh_tess_rhombdo_norms[j],
+						WU.ts_tess_rhombdo_norms[j],
+						WU.ts_tess_rhombdo_norms[j],
+						WU.ts_tess_rhombdo_norms[j],
 					])
 					inds_ref.append_array([
 						verts_ref.size()-3, verts_ref.size()-2, verts_ref.size()-1,
 					])
 				3:
 					norms_ref.append_array([
-						WU.mesh_tess_rhombdo_norms[j],
-						WU.mesh_tess_rhombdo_norms[j],
-						WU.mesh_tess_rhombdo_norms[j],
-						WU.mesh_tess_rhombdo_norms[j],
+						WU.ts_tess_rhombdo_norms[j],
+						WU.ts_tess_rhombdo_norms[j],
+						WU.ts_tess_rhombdo_norms[j],
+						WU.ts_tess_rhombdo_norms[j],
 					])
 					inds_ref.append_array([
 						verts_ref.size()-4, verts_ref.size()-3, verts_ref.size()-2,
