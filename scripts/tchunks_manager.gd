@@ -68,6 +68,8 @@ class TChunk:
 		march_strengths.resize(8)
 		
 		for i in range(WU.TCHUNK_T):
+			if should_mesh_march(i, tc_27):
+				mesh_march(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
 			match tile_shapes[i]:
 				TILE_SHAPE.NO_DATA:
 					push_error("Attempted to mesh an unloaded tile shape.")
@@ -78,8 +80,6 @@ class TChunk:
 					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
 				TILE_SHAPE.TESS_RHOMBDO:
 					mesh_tess_rhombdo(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
-			if should_mesh_march(i, tc_27):
-				mesh_march(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
 		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
@@ -200,16 +200,12 @@ func _init():
 
 func _ready():
 	var test_chunk: TChunk = TChunk.new()
-	test_chunk.randomize_tiles()
+	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
+	#test_chunk.randomize_tiles()
 	
-	#test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[1] = TILE_SHAPE.TESS_CUBE
-	#
-	#test_chunk.tile_shapes[3] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_RHOMBDO
-	#
-	#test_chunk.tile_shapes[6] = TILE_SHAPE.TESS_RHOMBDO
-	#test_chunk.tile_shapes[23] = TILE_SHAPE.TESS_RHOMBDO
+	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
+	
+	test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.ANG_MARCH
 	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
