@@ -12,6 +12,8 @@ class TChunk:
 	static var blank_tc27: Array[TChunk] = []
 	
 	var tile_shapes: PackedByteArray = []
+	var march_weights: PackedFloat32Array = []
+	
 	var mesh_instance_node: MeshInstance3D = MeshInstance3D.new()
 	var array_mesh: ArrayMesh = ArrayMesh.new()
 	
@@ -41,6 +43,9 @@ class TChunk:
 	func _init():
 		tile_shapes.resize(WU.TCHUNK_T)
 		tile_shapes.fill(TILE_SHAPE.NO_DATA)
+		march_weights.resize(WU.TCHUNK_T * 6)
+		march_weights.fill(1.0)
+	
 	func randomize_tiles():
 		tile_shapes.fill(TILE_SHAPE.EMPTY)
 		for i in range(WU.TCHUNK_T):
@@ -184,7 +189,7 @@ class TChunk:
 			Vector3i(posmod(j, 2), posmod(j/2, 2), posmod(j/4, 2),))
 			].tile_shapes[get_tc27_tile_i(t_xyz_from_i(i), 
 			Vector3i(posmod(j, 2), posmod(j/2, 2), posmod(j/4, 2),))
-			] in [TILE_SHAPE.ANG_MARCH, TILE_SHAPE.SMO_MARCH]:
+			] in PackedInt32Array([TILE_SHAPE.ANG_MARCH, TILE_SHAPE.SMO_MARCH]):
 				return true
 		return false
 	
@@ -204,6 +209,10 @@ func _ready():
 	#test_chunk.randomize_tiles()
 	
 	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[16] = TILE_SHAPE.ANG_MARCH
+	
+	test_chunk.tile_shapes[3] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[20] = TILE_SHAPE.ANG_MARCH
 	
 	test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.ANG_MARCH
 	
