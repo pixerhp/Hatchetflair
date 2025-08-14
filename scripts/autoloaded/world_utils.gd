@@ -81,13 +81,21 @@ const ts_tess_rhombdo_norms: PackedVector3Array = [
 	0.70710678 * Vector3(ts_tess_rhombdo_move[11]),
 ]
 
-const ts_angular_march_pattern_states: PackedByteArray = [
-	0b00000000,
+# (can use rotations of these patterns to get all of the other shapes,
+# and can invert bit-states but flip vertex order and normal vectors,
+# to generate every marching cube combination.)
+const ts_march_pattern_states: PackedByteArray = [
+	0b00000000, 0b00000001, 0b00000011, 0b00001001, 0b10000001,
+	0b00000111, 0b01000011, 0b01001001, 0b00001111, 0b00010111,
+	0b00100111, 0b11000011, 0b10000111, 0b01101001, 0b01000111,
 ]
 
 const ts_angular_march_pattern_verts: PackedVector3Array = [
 	
 ]
+
+func print_march_data_from_patterns():
+	print() # !!!
 
 const ts_angular_march_combinations_verts: PackedVector3Array = [
 	

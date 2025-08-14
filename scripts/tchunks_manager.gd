@@ -181,5 +181,14 @@ func _ready():
 	var test_chunk: TChunk = TChunk.new()
 	test_chunk.randomize_tiles()
 	
+	#test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[1] = TILE_SHAPE.TESS_CUBE
+	#
+	#test_chunk.tile_shapes[3] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_RHOMBDO
+	#
+	#test_chunk.tile_shapes[6] = TILE_SHAPE.TESS_RHOMBDO
+	#test_chunk.tile_shapes[23] = TILE_SHAPE.TESS_RHOMBDO
+	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
