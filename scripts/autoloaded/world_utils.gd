@@ -90,15 +90,20 @@ const ts_march_pattern_states: PackedByteArray = [
 	0b00100111, 0b11000011, 0b10000111, 0b01101001, 0b01000111,
 ]
 const ts_march_pattern_verts: PackedVector3Array = [
+	# Edge midpoints:
 	Vector3(0,-0.5,-0.5)-TCHUNK_HS, Vector3(-0.5,0,-0.5)-TCHUNK_HS, 
 	Vector3(0.5,0,-0.5)-TCHUNK_HS, Vector3(0,0.5,-0.5)-TCHUNK_HS,
-	Vector3(0,0,0)-TCHUNK_HS, # (special ambiguity central point)
+	Vector3(-0.5,-0.5,0)-TCHUNK_HS, Vector3(0.5,-0.5,0)-TCHUNK_HS,
+	Vector3(-0.5,-0.5,0)-TCHUNK_HS, Vector3(0.5,0.5,0)-TCHUNK_HS,
 	Vector3(0,-0.5,0.5)-TCHUNK_HS, Vector3(-0.5,0,0.5)-TCHUNK_HS, 
 	Vector3(0.5,0,0.5)-TCHUNK_HS, Vector3(0,0.5,0.5)-TCHUNK_HS,
+	# Face ambiguity center-points:
+	Vector3(0,0,-0.5)-TCHUNK_HS, Vector3(0,-0.5,0)-TCHUNK_HS,
+	Vector3(-0.5,0,0)-TCHUNK_HS, Vector3(0.5,0,0)-TCHUNK_HS,
+	Vector3(0,0.5,0)-TCHUNK_HS, Vector3(0,0,0.5)-TCHUNK_HS,
 ]
-# [[ponder accounting for combinations of ambiguities?]] maybe not just have a single inds data?
-const ts_march_pattern_inds: PackedByteArray = [ 
-	
+const ts_march_pattern_inds: Array[PackedByteArray] = [ 
+	[],
 ]
 
 
