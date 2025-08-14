@@ -64,6 +64,9 @@ class TChunk:
 		var surf_inds: PackedInt32Array = []
 		var surf_norms: PackedVector3Array = []
 		
+		var march_strengths: PackedVector3Array = []
+		march_strengths.resize(8)
+		
 		for i in range(WU.TCHUNK_T):
 			match tile_shapes[i]:
 				TILE_SHAPE.NO_DATA:
@@ -75,6 +78,8 @@ class TChunk:
 					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
 				TILE_SHAPE.TESS_RHOMBDO:
 					mesh_tess_rhombdo(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
+			if should_mesh_march(i, tc_27):
+				mesh_march(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
 		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
@@ -172,6 +177,22 @@ class TChunk:
 						verts_ref.size()-4, verts_ref.size()-3, verts_ref.size()-2,
 						verts_ref.size()-3, verts_ref.size()-1, verts_ref.size()-2,
 					])
+	
+	func should_mesh_march(i: int, tc_27: Array[TChunk]) -> bool:
+		for j in range(8):
+			if tc_27[get_tc27_tchunk_i(t_xyz_from_i(i), 
+			Vector3i(posmod(j, 2), posmod(j/2, 2), posmod(j/4, 2),))
+			].tile_shapes[get_tc27_tile_i(t_xyz_from_i(i), 
+			Vector3i(posmod(j, 2), posmod(j/2, 2), posmod(j/4, 2),))
+			] in [TILE_SHAPE.ANG_MARCH, TILE_SHAPE.SMO_MARCH]:
+				return true
+		return false
+	
+	func mesh_march(
+		pos: Vector3i, tc_27: Array[TChunk], 
+		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array, norms_ref: PackedVector3Array,
+	):
+		pass
 
 func _init():
 	TChunk.blank_tc27.resize(27)
