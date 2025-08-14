@@ -87,7 +87,7 @@ const ts_tess_rhombdo_norms: PackedVector3Array = [
 const ts_march_pattern_states: PackedByteArray = [
 	0b00000000, 0b00000001, 0b00000011, 0b00001001, 0b10000001,
 	0b00000111, 0b01000011, 0b01001001, 0b00001111, 0b00010111,
-	0b00100111, 0b11000011, 0b10000111,    0b01101001,
+	0b00100111, 0b11000011, 0b10000111, 0b01101001,
 ]
 const ts_march_pattern_verts: PackedVector3Array = [
 	# Edge midpoints:
@@ -125,10 +125,12 @@ const ts_march_pattern_inds: Array[PackedByteArray] = [
 		18,16,12, 3,12,16,  18,14,16, 6,16,14,  18,16,17, 11,17,16,  18,15,16, 7,16,15],
 ]
 
-
 func print_march_data_from_patterns():
 	print() # !!!
 
-const ts_angular_march_combinations_verts: PackedVector3Array = [
+const ts_march_verts: PackedVector3Array = [
+	
+]
+const ts_march_inds: PackedByteArray = [
 	
 ]
