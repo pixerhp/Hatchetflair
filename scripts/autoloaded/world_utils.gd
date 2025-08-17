@@ -162,7 +162,10 @@ func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
 	for i in range(0, rot_y):
 		pass
 	for i in range(0, rot_x):
-		pass
+		comb = (
+			(comb & 0b00110000 >> 4) | (comb & 0b00000011 << 2) | 
+			(comb & 0b11000000 >> 2) | (comb & 0b00001100 << 4)
+		)
 	if flip_x:
 		comb = ((comb & 0b10101010) >> 1) | ((comb & 0b01010101) << 1)
 	if inv_state:
