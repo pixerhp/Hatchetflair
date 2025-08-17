@@ -91,18 +91,18 @@ const ts_march_pattern_states: PackedByteArray = [
 ]
 const ts_march_pattern_verts: PackedVector3Array = [
 	# Edge midpoints:
-	Vector3(0,-0.5,-0.5)-TCHUNK_HS, Vector3(-0.5,0,-0.5)-TCHUNK_HS, 
-	Vector3(0.5,0,-0.5)-TCHUNK_HS, Vector3(0,0.5,-0.5)-TCHUNK_HS,
-	Vector3(-0.5,-0.5,0)-TCHUNK_HS, Vector3(0.5,-0.5,0)-TCHUNK_HS,
-	Vector3(-0.5,-0.5,0)-TCHUNK_HS, Vector3(0.5,0.5,0)-TCHUNK_HS,
-	Vector3(0,-0.5,0.5)-TCHUNK_HS, Vector3(-0.5,0,0.5)-TCHUNK_HS, 
-	Vector3(0.5,0,0.5)-TCHUNK_HS, Vector3(0,0.5,0.5)-TCHUNK_HS,
+	Vector3(0,-0.5,-0.5), Vector3(-0.5,0,-0.5), 
+	Vector3(0.5,0,-0.5), Vector3(0,0.5,-0.5),
+	Vector3(-0.5,-0.5,0), Vector3(0.5,-0.5,0),
+	Vector3(-0.5,-0.5,0), Vector3(0.5,0.5,0),
+	Vector3(0,-0.5,0.5), Vector3(-0.5,0,0.5), 
+	Vector3(0.5,0,0.5), Vector3(0,0.5,0.5),
 	# Face ambiguity center-points:
-	Vector3(0,0,-0.5)-TCHUNK_HS, Vector3(0,-0.5,0)-TCHUNK_HS,
-	Vector3(-0.5,0,0)-TCHUNK_HS, Vector3(0.5,0,0)-TCHUNK_HS,
-	Vector3(0,0.5,0)-TCHUNK_HS, Vector3(0,0,0.5)-TCHUNK_HS,
+	Vector3(0,0,-0.5), Vector3(0,-0.5,0),
+	Vector3(-0.5,0,0), Vector3(0.5,0,0),
+	Vector3(0,0.5,0), Vector3(0,0,0.5),
 	# Volume center-point:
-	Vector3(0,0,0)-TCHUNK_HS,
+	Vector3(0,0,0),
 ]
 const ts_march_pattern_inds: Array[PackedByteArray] = [ 
 	[],
@@ -125,8 +125,46 @@ const ts_march_pattern_inds: Array[PackedByteArray] = [
 		18,16,12, 3,12,16,  18,14,16, 6,16,14,  18,16,17, 11,17,16,  18,15,16, 7,16,15],
 ]
 
+# inneficient brute-forcing, but that's OK because it's just a dev tool.
 func print_march_data_from_patterns():
-	print() # !!!
+	var verts_string: String = ""
+	var inds_string: String = ""
+	
+	var break_chain: bool = false
+	for comb in range(0, 256):
+		break_chain = false
+		for rot_z: int in range(0,4):
+			if break_chain == true: break
+			for rot_y: int in range(0,4):
+				if break_chain == true: break
+				for rot_x: int in range(0,4):
+					if break_chain == true: break
+					for flip_x: bool in [false, true]:
+						if break_chain == true: break
+						for inv_state: bool in [false, true]:
+							if break_chain == true: break
+							for patt_i: int in range(0, ts_march_pattern_states.size()):
+								if ts_march_pattern_states[patt_i] == transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state):
+									verts_string += "["
+									for vert: Vector3 in transform_verts(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state):
+										verts_string += str(vert - TCHUNK_HS) + ","
+									verts_string += "],\n"
+									break_chain = true
+									break
+								push_error("NO PATTERN FOUND")
+	
+	print(verts_string)
+	print("\n\n\n\n")
+	print(inds_string)
+	print("\n\n\n\n")
+func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
+	
+	
+	return 0b00000000
+func transform_verts(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> PackedVector3Array:
+	
+	
+	return PackedVector3Array()
 
 const ts_march_verts: PackedVector3Array = [
 	
