@@ -130,37 +130,37 @@ func print_march_data_from_patterns():
 	var verts_string: String = ""
 	var inds_string: String = ""
 	
-	var break_chain: bool = false
+	var patt_i: int = 0
+	var rot_z: int = 0
+	var rot_y: int = 0
+	var rot_x: int = 0
+	var flip_x: bool = false
+	var inv_state: bool = false
 	for comb in range(0, 256):
-		break_chain = false
-		for rot_z: int in range(0,4):
-			if break_chain == true: break
-			for rot_y: int in range(0,4):
-				if break_chain == true: break
-				for rot_x: int in range(0,4):
-					if break_chain == true: break
-					for flip_x: bool in [false, true]:
-						if break_chain == true: break
-						for inv_state: bool in [false, true]:
-							if break_chain == true: break
-							for patt_i: int in range(0, ts_march_pattern_states.size()):
-								if ts_march_pattern_states[patt_i] == transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state):
-									verts_string += "["
-									for vert: Vector3 in transform_verts(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state):
-										verts_string += str(vert - TCHUNK_HS) + ","
-									verts_string += "],\n"
-									break_chain = true
-									break
-								push_error("NO PATTERN FOUND")
+		for i in range(0, 4*4*4*2*2*ts_march_pattern_states.size()):
+			inv_state = bool(posmod(i, 2))
+			flip_x = bool(posmod(i/2, 2))
+			rot_x = posmod(i/4, 4)
+			rot_y = posmod(i/16, 4)
+			rot_z = posmod(i/64, 4)
+			patt_i = i/256
+			if (transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == 
+			ts_march_pattern_states[patt_i]):
+				
+				pass
+				
+				break
 	
 	print(verts_string)
 	print("\n\n\n\n")
 	print(inds_string)
 	print("\n\n\n\n")
+
 func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
 	
 	
 	return 0b00000000
+
 func transform_verts(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> PackedVector3Array:
 	
 	
