@@ -157,9 +157,17 @@ func print_march_data_from_patterns():
 	print("\n\n\n\n")
 
 func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
-	
-	
-	return 0b00000000
+	for i in range(0, rot_z):
+		pass
+	for i in range(0, rot_y):
+		pass
+	for i in range(0, rot_x):
+		pass
+	if flip_x:
+		comb = ((comb & 0b10101010) >> 1) | ((comb & 0b01010101) << 1)
+	if inv_state:
+		comb = ~ comb
+	return comb
 
 func transform_verts(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> PackedVector3Array:
 	
