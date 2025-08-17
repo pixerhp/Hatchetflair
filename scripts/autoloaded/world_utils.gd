@@ -129,6 +129,7 @@ const ts_march_pattern_inds: Array[PackedByteArray] = [
 func print_march_data_from_patterns():
 	var verts_string: String = ""
 	var inds_string: String = ""
+	var norms_string: String = ""
 	
 	var patt_i: int = 0
 	var rot_z: int = 0
@@ -147,6 +148,8 @@ func print_march_data_from_patterns():
 			if (transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == 
 			ts_march_pattern_states[patt_i]):
 				
+				# !!! use inv_state here also to flip normals, and eventually, weight directions
+				
 				pass
 				
 				break
@@ -158,30 +161,50 @@ func print_march_data_from_patterns():
 
 func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
 	for i in range(0, rot_z):
-		comb = (
-			((comb & 0b00010001) << 1) | ((comb & 0b00100010) << 2) | 
-			((comb & 0b10001000) >> 1) | ((comb & 0b01000100) >> 2)
-		)
+		comb = (((comb & 0b00010001) << 1) | ((comb & 0b00100010) << 2) | 
+				((comb & 0b10001000) >> 1) | ((comb & 0b01000100) >> 2))
 	for i in range(0, rot_y):
-		comb = (
-			((comb & 0b00000101) << 4) | ((comb & 0b01010000) << 1) | 
-			((comb & 0b00001010) >> 1) | ((comb & 0b10100000) >> 4)
-		)
+		comb = (((comb & 0b00000101) << 4) | ((comb & 0b01010000) << 1) | 
+				((comb & 0b00001010) >> 1) | ((comb & 0b10100000) >> 4))
 	for i in range(0, rot_x):
-		comb = (
-			((comb & 0b00110000) >> 4) | ((comb & 0b00000011) << 2) | 
-			((comb & 0b11000000) >> 2) | ((comb & 0b00001100) << 4)
-		)
+		comb = (((comb & 0b00110000) >> 4) | ((comb & 0b00000011) << 2) | 
+				((comb & 0b11000000) >> 2) | ((comb & 0b00001100) << 4))
 	if flip_x:
 		comb = ((comb & 0b10101010) >> 1) | ((comb & 0b01010101) << 1)
 	if inv_state:
 		comb = ~ comb
 	return comb
 
-func transform_verts(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> PackedVector3Array:
-	
-	
-	return PackedVector3Array()
+func detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> PackedByteArray:
+	var inds: PackedByteArray = ts_march_pattern_inds[patt_i].duplicate()
+	for _r in range(0, rot_z):
+		pass
+	for _r in range(0, rot_y):
+		pass
+	for _r in range(0, rot_x):
+		for i in range(0, inds.size()):
+			match inds[i]:
+				0: inds[i] = 8
+				4, 5: inds[i] += 5
+				1, 2, 8: inds[i] += 3
+				3, 9, 10: inds[i] -= 3
+				6, 7: inds[i] -= 5
+				11: inds[i] = 3
+				12: inds[i] = 13
+				13: inds[i] = 17
+				17: inds[i] = 16
+				16: inds[i] = 12
+	if flip_x:
+		for i in range(0, inds.size()):
+			if inds[i] in [1,4,6,9,14]:
+				inds[i] += 1
+			elif inds[i] in [2,5,7,10,15]:
+				inds[i] -= 1
+		inds.reverse()
+	return inds
+
+func triangle_normal_vector(verts: PackedVector3Array) -> Vector3:
+	return ((verts[2] - verts[0]).cross((verts[1] - verts[0]))).normalized()
 
 const ts_march_verts: PackedVector3Array = [
 	
@@ -189,3 +212,8 @@ const ts_march_verts: PackedVector3Array = [
 const ts_march_inds: PackedByteArray = [
 	
 ]
+
+func _ready():
+	print(triangle_normal_vector(PackedVector3Array(
+		[Vector3(0,0,0), Vector3(1,0,0), Vector3(0,0,1), ]
+	)))
