@@ -158,13 +158,19 @@ func print_march_data_from_patterns():
 
 func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
 	for i in range(0, rot_z):
-		pass
+		comb = (
+			((comb & 0b00010001) << 1) | ((comb & 0b00100010) << 2) | 
+			((comb & 0b10001000) >> 1) | ((comb & 0b01000100) >> 2)
+		)
 	for i in range(0, rot_y):
-		pass
+		comb = (
+			((comb & 0b00000101) << 4) | ((comb & 0b01010000) << 1) | 
+			((comb & 0b00001010) >> 1) | ((comb & 0b10100000) >> 4)
+		)
 	for i in range(0, rot_x):
 		comb = (
-			(comb & 0b00110000 >> 4) | (comb & 0b00000011 << 2) | 
-			(comb & 0b11000000 >> 2) | (comb & 0b00001100 << 4)
+			((comb & 0b00110000) >> 4) | ((comb & 0b00000011) << 2) | 
+			((comb & 0b11000000) >> 2) | ((comb & 0b00001100) << 4)
 		)
 	if flip_x:
 		comb = ((comb & 0b10101010) >> 1) | ((comb & 0b01010101) << 1)
