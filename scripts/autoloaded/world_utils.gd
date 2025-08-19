@@ -148,7 +148,7 @@ func print_march_data_from_patterns():
 			if (transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == 
 			ts_march_pattern_states[patt_i]):
 				
-				# !!! use inv_state here also to flip normals, and eventually, weight directions
+				# !!! use inv_state here also to flip normals, and eventually also weight directions
 				
 				pass
 				
@@ -180,7 +180,20 @@ func detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> P
 	for _r in range(0, rot_z):
 		pass
 	for _r in range(0, rot_y):
-		pass
+		for i in range(0, inds.size()):
+			match inds[i]:
+				2: inds[i] += 8
+				0: inds[i] += 5
+				3, 7: inds[i] += 4
+				5, 12: inds[i] += 3
+				15: inds[i] += 2
+				1: inds[i] += 1
+				10: inds[i] -= 1
+				14: inds[i] -= 2
+				6, 17: inds[i] -= 3
+				4, 8: inds[i] -= 4
+				11: inds[i] -= 5
+				9: inds[i] -= 8
 	for _r in range(0, rot_x):
 		for i in range(0, inds.size()):
 			match inds[i]:
