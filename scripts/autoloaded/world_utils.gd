@@ -182,18 +182,18 @@ func detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> P
 	for _r in range(0, rot_y):
 		for i in range(0, inds.size()):
 			match inds[i]:
-				2: inds[i] += 8
-				0: inds[i] += 5
+				2: inds[i] = 10
+				0: inds[i] = 5
 				3, 7: inds[i] += 4
 				5, 12: inds[i] += 3
-				15: inds[i] += 2
-				1: inds[i] += 1
-				10: inds[i] -= 1
-				14: inds[i] -= 2
+				15: inds[i] = 17
+				1: inds[i] = 2
+				10: inds[i] = 9
+				14: inds[i] = 12
 				6, 17: inds[i] -= 3
 				4, 8: inds[i] -= 4
-				11: inds[i] -= 5
-				9: inds[i] -= 8
+				11: inds[i] = 6
+				9: inds[i] = 1
 	for _r in range(0, rot_x):
 		for i in range(0, inds.size()):
 			match inds[i]:
