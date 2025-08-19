@@ -178,7 +178,12 @@ func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
 func detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> PackedByteArray:
 	var inds: PackedByteArray = ts_march_pattern_inds[patt_i].duplicate()
 	for _r in range(0, rot_z):
-		pass
+		for i in range(0, inds.size()):
+			match inds[i]:
+				1, 4, 9, 14: inds[i] += 2
+				0, 6, 8, 13: inds[i] += 1
+				3, 5, 11, 16: inds[i] -= 1
+				2, 7, 10, 15: inds[i] -= 2
 	for _r in range(0, rot_y):
 		for i in range(0, inds.size()):
 			match inds[i]:
