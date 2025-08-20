@@ -84,7 +84,7 @@ const ts_tess_rhombdo_norms: PackedVector3Array = [
 # (can use rotations of these patterns to get all of the other shapes,
 # and can invert bit-states but flip vertex order and normal vectors,
 # to generate every marching cube combination.)
-const ts_march_pattern_states: PackedByteArray = [
+var ts_march_pattern_states: PackedByteArray = [
 	0b00000000, 0b00000001, 0b00000011, 0b00001001, 0b10000001,
 	0b00000111, 0b01000011, 0b01001001, 0b00001111, 0b00010111,
 	0b00100111, 0b11000011, 0b10000111, 0b01101001,
@@ -104,7 +104,7 @@ const ts_march_pattern_verts: PackedVector3Array = [
 	# Volume center-point:
 	Vector3(0,0,0),
 ]
-const ts_march_pattern_inds: Array[PackedByteArray] = [ 
+var ts_march_pattern_inds: Array[PackedByteArray] = [ 
 	[],
 	[0,1,4],
 	[2,1,4, 4,5,2],
@@ -151,22 +151,22 @@ func print_march_data_from_patterns():
 			ts_march_pattern_states[patt_i]):
 				temp_inds = detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)
 				inds_string += str(temp_inds) + ",\n"
-				temp_norms.clear()
-				for j in (temp_inds.size() / 3):
-					temp_norms.append(triangle_normal_vector(PackedVector3Array([
-						ts_march_pattern_verts[temp_inds[(3*j)]],
-						ts_march_pattern_verts[temp_inds[(3*j) + 1]],
-						ts_march_pattern_verts[temp_inds[(3*j) + 2]],
-					])))
-				norms_string += str(temp_norms) + ",\n"
+				#temp_norms.clear()
+				#for j in (temp_inds.size() / 3):
+					#temp_norms.append(triangle_normal_vector(PackedVector3Array([
+						#ts_march_pattern_verts[temp_inds[(3*j)]],
+						#ts_march_pattern_verts[temp_inds[(3*j) + 1]],
+						#ts_march_pattern_verts[temp_inds[(3*j) + 2]],
+					#])))
+				#norms_string += str(temp_norms) + ",\n"
 				break
 	
 	print("//////// MARCHING CUBES INDICES TABLE: ////////\n")
 	print(inds_string)
 	print("\n\n\n\n")
-	print("//////// MARCHING CUBES NORMALS TABLE: ////////\n")
-	print(norms_string)
-	print("\n\n\n\n")
+	#print("//////// MARCHING CUBES NORMALS TABLE: ////////\n")
+	#print(norms_string)
+	#print("\n\n\n\n")
 
 func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
 	for i in range(0, rot_z):
@@ -235,12 +235,8 @@ func detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> P
 func triangle_normal_vector(verts: PackedVector3Array) -> Vector3:
 	return ((verts[2]-verts[0]).cross((verts[1]-verts[0]))).normalized()
 
-const ts_march_verts: PackedVector3Array = [
-	
-]
-const ts_march_inds: PackedByteArray = [
-	
-]
+
 
 func _ready():
-	print_march_data_from_patterns()
+	#print_march_data_from_patterns()
+	pass
