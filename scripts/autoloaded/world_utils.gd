@@ -127,7 +127,6 @@ const ts_march_pattern_inds: Array[PackedByteArray] = [
 
 # inneficient brute-forcing, but that's OK because it's just a dev tool.
 func print_march_data_from_patterns():
-	var verts_string: String = ""
 	var inds_string: String = ""
 	var norms_string: String = ""
 	
@@ -137,7 +136,12 @@ func print_march_data_from_patterns():
 	var rot_x: int = 0
 	var flip_x: bool = false
 	var inv_state: bool = false
+	
+	var temp_inds: PackedByteArray = []
+	var temp_norms: PackedVector3Array = []
 	for comb in range(0, 256):
+		print(comb)
+		print("A", comb, ": ", String.num_int64(comb, 2))
 		for i in range(0, 4*4*4*2*2*ts_march_pattern_states.size()):
 			inv_state = bool(posmod(i, 2))
 			flip_x = bool(posmod(i/2, 2))
@@ -147,16 +151,24 @@ func print_march_data_from_patterns():
 			patt_i = i/256
 			if (transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == 
 			ts_march_pattern_states[patt_i]):
-				
-				# !!! use inv_state here also to flip normals, and eventually also weight directions
-				
-				pass
-				
+				print("B", comb, ": ", String.num_int64(ts_march_pattern_states[patt_i], 2))
+				temp_inds = detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)
+				inds_string += str(temp_inds) + ",\n"
+				temp_norms.clear()
+				for j in (temp_inds.size() / 3):
+					temp_norms.append(triangle_normal_vector(PackedVector3Array([
+						ts_march_pattern_verts[temp_inds[(3*j)]],
+						ts_march_pattern_verts[temp_inds[(3*j) + 1]],
+						ts_march_pattern_verts[temp_inds[(3*j) + 2]],
+					])))
+				norms_string += str(temp_norms) + ",\n"
 				break
 	
-	print(verts_string)
-	print("\n\n\n\n")
+	print("//////// MARCHING CUBES INDICES TABLE: ////////\n")
 	print(inds_string)
+	print("\n\n\n\n")
+	print("//////// MARCHING CUBES NORMALS TABLE: ////////\n")
+	print(norms_string)
 	print("\n\n\n\n")
 
 func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
@@ -219,10 +231,12 @@ func detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> P
 			elif inds[i] in [2,5,7,10,15]:
 				inds[i] -= 1
 		inds.reverse()
+	if inv_state:
+		inds.reverse()
 	return inds
 
 func triangle_normal_vector(verts: PackedVector3Array) -> Vector3:
-	return ((verts[2] - verts[0]).cross((verts[1] - verts[0]))).normalized()
+	return ((verts[2]-verts[0]).cross((verts[1]-verts[0]))).normalized()
 
 const ts_march_verts: PackedVector3Array = [
 	
@@ -232,6 +246,4 @@ const ts_march_inds: PackedByteArray = [
 ]
 
 func _ready():
-	print(triangle_normal_vector(PackedVector3Array(
-		[Vector3(0,0,0), Vector3(1,0,0), Vector3(0,0,1), ]
-	)))
+	print_march_data_from_patterns()
