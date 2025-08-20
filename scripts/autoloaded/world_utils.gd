@@ -94,7 +94,7 @@ const ts_march_pattern_verts: PackedVector3Array = [
 	Vector3(0,-0.5,-0.5), Vector3(-0.5,0,-0.5), 
 	Vector3(0.5,0,-0.5), Vector3(0,0.5,-0.5),
 	Vector3(-0.5,-0.5,0), Vector3(0.5,-0.5,0),
-	Vector3(-0.5,-0.5,0), Vector3(0.5,0.5,0),
+	Vector3(-0.5,0.5,0), Vector3(0.5,0.5,0),
 	Vector3(0,-0.5,0.5), Vector3(-0.5,0,0.5), 
 	Vector3(0.5,0,0.5), Vector3(0,0.5,0.5),
 	# Face ambiguity center-points:
