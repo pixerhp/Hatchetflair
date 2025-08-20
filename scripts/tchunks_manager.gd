@@ -127,8 +127,8 @@ class TChunk:
 			(0b10000000 * int(not shapes[7] <= TILE_SHAPE.EMPTY))
 		)
 		
-		if not state == 0b01000000:
-			return
+		#if not state == 0b01000000:
+			#return
 		
 		print("pos: ", pos)
 		
@@ -141,16 +141,17 @@ class TChunk:
 		for i in range(WU.ts_march_inds[state].size()):
 			print("vert pre-move: ", WU.ts_march_pattern_verts[WU.ts_march_inds[state][i]])
 			verts_ref.append(WU.ts_march_pattern_verts[WU.ts_march_inds[state][i]] + 
-				(Vector3(pos) + Vector3(0.5,0.5,0.5) + Vector3(-8,-8,-8)))
+				(Vector3(pos) - WU.TCHUNK_HS3))
 			print("vert: ", verts_ref[verts_ref.size() - 1])
 			print("ind: ", verts_ref.size() - 1)
 			inds_ref.append(verts_ref.size() - 1)
 			if i%3 == 2:
 				norms_ref.append(WU.triangle_normal_vector(PackedVector3Array([
-					verts_ref.size() - 3, verts_ref.size() - 2, verts_ref.size() - 1, 
+					verts_ref[verts_ref.size()-3], verts_ref[verts_ref.size()-2], verts_ref[verts_ref.size()-1], 
 				])))
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
+				print("norms: ", norms_ref[norms_ref.size()-3],norms_ref[norms_ref.size()-2],norms_ref[norms_ref.size()-1])
 		print()
 	
 	func mesh_tess_cube(
