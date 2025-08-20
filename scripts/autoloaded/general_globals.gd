@@ -2,6 +2,9 @@ extends Node
 
 var draw_debug_chunkborders: bool = true
 
+func byte_as_string(num: int) -> String:
+	return ("%08s" % String.num_int64(num, 2)).replace(" ", "0")
+
 func _process(_delta):
 	# Process inputs that should work regardless of game state:
 	if Input.is_action_just_pressed("escape"):

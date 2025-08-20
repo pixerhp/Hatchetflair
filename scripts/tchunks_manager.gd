@@ -73,8 +73,7 @@ class TChunk:
 		march_strengths.resize(8)
 		
 		for i in range(WU.TCHUNK_T):
-			if should_mesh_march(i, tc_27):
-				mesh_march(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
+			mesh_march(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
 			match tile_shapes[i]:
 				TILE_SHAPE.NO_DATA:
 					push_error("Attempted to mesh an unloaded tile shape.")
@@ -85,6 +84,11 @@ class TChunk:
 					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
 				TILE_SHAPE.TESS_RHOMBDO:
 					mesh_tess_rhombdo(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
+		
+		print("VERTS:", surf_verts)
+		print("VERTS SIZE:", surf_verts.size())
+		print("INDS:", surf_inds)
+		print("INDS SIZE:", surf_inds.size())
 		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
@@ -100,6 +104,54 @@ class TChunk:
 		test_mat.albedo_color = Color.WHITE
 		array_mesh.surface_set_material(0, test_mat)
 		mesh_instance_node.mesh = array_mesh
+	
+	func mesh_march(
+		pos: Vector3i, tc_27: Array[TChunk], 
+		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array, norms_ref: PackedVector3Array,
+	):
+		var shapes: PackedByteArray = []
+		shapes.resize(8)
+		for i in range(8):
+			shapes[i] = tc_27[get_tc27_tchunk_i(pos, Vector3i(i%2, (i/2)%2, (i/4)%2,))
+				].tile_shapes[get_tc27_tile_i(pos, Vector3i(i%2, (i/2)%2, (i/4)%2,))]
+		if (not TILE_SHAPE.ANG_MARCH in shapes) and (not TILE_SHAPE.SMO_MARCH in shapes):
+			return
+		var state: int = (
+			(0b00000001 * int(not shapes[0] <= TILE_SHAPE.EMPTY)) +
+			(0b00000010 * int(not shapes[1] <= TILE_SHAPE.EMPTY)) +
+			(0b00000100 * int(not shapes[2] <= TILE_SHAPE.EMPTY)) +
+			(0b00001000 * int(not shapes[3] <= TILE_SHAPE.EMPTY)) +
+			(0b00010000 * int(not shapes[4] <= TILE_SHAPE.EMPTY)) +
+			(0b00100000 * int(not shapes[5] <= TILE_SHAPE.EMPTY)) +
+			(0b01000000 * int(not shapes[6] <= TILE_SHAPE.EMPTY)) +
+			(0b10000000 * int(not shapes[7] <= TILE_SHAPE.EMPTY))
+		)
+		
+		if not state == 0b01000000:
+			return
+		
+		print("pos: ", pos)
+		
+		print("State: ", Globals.byte_as_string(state))
+		#var weights: PackedFloat32Array = []
+		#weights.resize(8)
+		#for i in range(8):
+			#pass # !!! (weights are not yet implemented)
+		print("Indices: ", WU.ts_march_inds[state])
+		for i in range(WU.ts_march_inds[state].size()):
+			print("vert pre-move: ", WU.ts_march_pattern_verts[WU.ts_march_inds[state][i]])
+			verts_ref.append(WU.ts_march_pattern_verts[WU.ts_march_inds[state][i]] + 
+				(Vector3(pos) + Vector3(0.5,0.5,0.5) + Vector3(-8,-8,-8)))
+			print("vert: ", verts_ref[verts_ref.size() - 1])
+			print("ind: ", verts_ref.size() - 1)
+			inds_ref.append(verts_ref.size() - 1)
+			if i%3 == 2:
+				norms_ref.append(WU.triangle_normal_vector(PackedVector3Array([
+					verts_ref.size() - 3, verts_ref.size() - 2, verts_ref.size() - 1, 
+				])))
+				norms_ref.append(norms_ref[norms_ref.size() - 1])
+				norms_ref.append(norms_ref[norms_ref.size() - 1])
+		print()
 	
 	func mesh_tess_cube(
 		pos: Vector3i, tc_27: Array[TChunk], 
@@ -182,22 +234,6 @@ class TChunk:
 						verts_ref.size()-4, verts_ref.size()-3, verts_ref.size()-2,
 						verts_ref.size()-3, verts_ref.size()-1, verts_ref.size()-2,
 					])
-	
-	func should_mesh_march(i: int, tc_27: Array[TChunk]) -> bool:
-		for j in range(8):
-			if tc_27[get_tc27_tchunk_i(t_xyz_from_i(i), 
-			Vector3i(posmod(j, 2), posmod(j/2, 2), posmod(j/4, 2),))
-			].tile_shapes[get_tc27_tile_i(t_xyz_from_i(i), 
-			Vector3i(posmod(j, 2), posmod(j/2, 2), posmod(j/4, 2),))
-			] in PackedInt32Array([TILE_SHAPE.ANG_MARCH, TILE_SHAPE.SMO_MARCH]):
-				return true
-		return false
-	
-	func mesh_march(
-		pos: Vector3i, tc_27: Array[TChunk], 
-		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array, norms_ref: PackedVector3Array,
-	):
-		pass
 
 func _init():
 	TChunk.blank_tc27.resize(27)
@@ -208,13 +244,15 @@ func _ready():
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	#test_chunk.randomize_tiles()
 	
-	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[16] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[273] = TILE_SHAPE.ANG_MARCH
 	
-	test_chunk.tile_shapes[3] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[20] = TILE_SHAPE.ANG_MARCH
-	
-	test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.ANG_MARCH
+	#test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[16] = TILE_SHAPE.ANG_MARCH
+	#
+	#test_chunk.tile_shapes[3] = TILE_SHAPE.ANG_MARCH
+	#test_chunk.tile_shapes[20] = TILE_SHAPE.ANG_MARCH
+	#
+	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.ANG_MARCH
 	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
