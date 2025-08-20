@@ -140,8 +140,6 @@ func print_march_data_from_patterns():
 	var temp_inds: PackedByteArray = []
 	var temp_norms: PackedVector3Array = []
 	for comb in range(0, 256):
-		print(comb)
-		print("A", comb, ": ", String.num_int64(comb, 2))
 		for i in range(0, 4*4*4*2*2*ts_march_pattern_states.size()):
 			inv_state = bool(posmod(i, 2))
 			flip_x = bool(posmod(i/2, 2))
@@ -151,7 +149,6 @@ func print_march_data_from_patterns():
 			patt_i = i/256
 			if (transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == 
 			ts_march_pattern_states[patt_i]):
-				print("B", comb, ": ", String.num_int64(ts_march_pattern_states[patt_i], 2))
 				temp_inds = detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)
 				inds_string += str(temp_inds) + ",\n"
 				temp_norms.clear()
@@ -185,7 +182,7 @@ func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
 		comb = ((comb & 0b10101010) >> 1) | ((comb & 0b01010101) << 1)
 	if inv_state:
 		comb = ~ comb
-	return comb
+	return PackedByteArray([comb])[0]
 
 func detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> PackedByteArray:
 	var inds: PackedByteArray = ts_march_pattern_inds[patt_i].duplicate()
