@@ -151,7 +151,7 @@ class TChunk:
 				])))
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
-				print("norms: ", norms_ref[norms_ref.size()-3],norms_ref[norms_ref.size()-2],norms_ref[norms_ref.size()-1])
+				#print("norms: ", norms_ref[norms_ref.size()-3],norms_ref[norms_ref.size()-2],norms_ref[norms_ref.size()-1])
 		print()
 	
 	func mesh_tess_cube(
@@ -245,14 +245,16 @@ func _ready():
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	#test_chunk.randomize_tiles()
 	
-	test_chunk.tile_shapes[273] = TILE_SHAPE.ANG_MARCH
+	#test_chunk.tile_shapes[273] = TILE_SHAPE.ANG_MARCH
+	#
+	#test_chunk.tile_shapes[275] = TILE_SHAPE.ANG_MARCH
+	#test_chunk.tile_shapes[276] = TILE_SHAPE.ANG_MARCH
 	
-	#test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[16] = TILE_SHAPE.ANG_MARCH
-	#
-	#test_chunk.tile_shapes[3] = TILE_SHAPE.ANG_MARCH
-	#test_chunk.tile_shapes[20] = TILE_SHAPE.ANG_MARCH
-	#
+	#test_chunk.tile_shapes[278] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[279] = TILE_SHAPE.ANG_MARCH
+	#test_chunk.tile_shapes[294] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[295] = TILE_SHAPE.ANG_MARCH
+	
 	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.ANG_MARCH
 	
 	test_chunk.generate_mesh()

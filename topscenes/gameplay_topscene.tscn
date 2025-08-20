@@ -54,11 +54,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_yy87l")
 mesh = SubResource("BoxMesh_08y4y")
 surface_material_override/0 = SubResource("StandardMaterial3D_tgdfa")
 
-[node name="RedSphere2" type="MeshInstance3D" parent="CenterMarker"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, -6.5, -6.5)
-mesh = SubResource("SphereMesh_3dqie")
-surface_material_override/0 = SubResource("StandardMaterial3D_yy87l")
-
 [node name="TChunksContainer" type="Node3D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_yy87l")
