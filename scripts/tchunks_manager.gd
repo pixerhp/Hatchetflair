@@ -49,11 +49,9 @@ class TChunk:
 	func randomize_tiles():
 		tile_shapes.fill(TILE_SHAPE.EMPTY)
 		for i in range(WU.TCHUNK_T):
-			match randi_range(0, 6):
+			match randi_range(0, 2):
 				0:
-					tile_shapes[i] = TILE_SHAPE.TESS_CUBE
-				1:
-					tile_shapes[i] = TILE_SHAPE.TESS_RHOMBDO
+					tile_shapes[i] = TILE_SHAPE.ANG_MARCH
 				_:
 					tile_shapes[i] = TILE_SHAPE.EMPTY
 	
@@ -84,11 +82,6 @@ class TChunk:
 					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
 				TILE_SHAPE.TESS_RHOMBDO:
 					mesh_tess_rhombdo(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
-		
-		print("VERTS:", surf_verts)
-		print("VERTS SIZE:", surf_verts.size())
-		print("INDS:", surf_inds)
-		print("INDS SIZE:", surf_inds.size())
 		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
@@ -126,21 +119,13 @@ class TChunk:
 			(0b01000000 * int(not shapes[6] <= TILE_SHAPE.EMPTY)) +
 			(0b10000000 * int(not shapes[7] <= TILE_SHAPE.EMPTY))
 		)
-		
-		print("pos: ", pos)
-		
-		print("State: ", Globals.byte_as_string(state))
 		#var weights: PackedFloat32Array = []
 		#weights.resize(8)
 		#for i in range(8):
 			#pass # !!! (weights are not yet implemented)
-		print("Indices: ", WU.ts_march_inds[state])
 		for i in range(WU.ts_march_inds[state].size()):
-			print("vert pre-move: ", WU.ts_march_pattern_verts[WU.ts_march_inds[state][i]])
 			verts_ref.append(WU.ts_march_pattern_verts[WU.ts_march_inds[state][i]] + 
 				(Vector3(pos) - WU.TCHUNK_HS3))
-			print("vert: ", verts_ref[verts_ref.size() - 1])
-			print("ind: ", verts_ref.size() - 1)
 			inds_ref.append(verts_ref.size() - 1)
 			if i%3 == 2:
 				norms_ref.append(WU.triangle_normal_vector(PackedVector3Array([
@@ -149,7 +134,6 @@ class TChunk:
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
 				#print("norms: ", norms_ref[norms_ref.size()-3],norms_ref[norms_ref.size()-2],norms_ref[norms_ref.size()-1])
-		print()
 	
 	func mesh_tess_cube(
 		pos: Vector3i, tc_27: Array[TChunk], 
@@ -240,27 +224,7 @@ func _init():
 func _ready():
 	var test_chunk: TChunk = TChunk.new()
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
-	#test_chunk.randomize_tiles()
-	
-	test_chunk.tile_shapes[273] = TILE_SHAPE.ANG_MARCH
-	
-	test_chunk.tile_shapes[275] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[276] = TILE_SHAPE.ANG_MARCH
-	
-	test_chunk.tile_shapes[278] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[279] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[294] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[295] = TILE_SHAPE.ANG_MARCH
-	
-	test_chunk.tile_shapes[281] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[297] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[537] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[553] = TILE_SHAPE.ANG_MARCH
-	
-	test_chunk.tile_shapes[283] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[284] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[539] = TILE_SHAPE.ANG_MARCH
-	test_chunk.tile_shapes[540] = TILE_SHAPE.ANG_MARCH
+	test_chunk.randomize_tiles()
 	
 	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.ANG_MARCH
 	
