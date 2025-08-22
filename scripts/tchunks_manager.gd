@@ -127,9 +127,6 @@ class TChunk:
 			(0b10000000 * int(not shapes[7] <= TILE_SHAPE.EMPTY))
 		)
 		
-		#if not state == 0b01000000:
-			#return
-		
 		print("pos: ", pos)
 		
 		print("State: ", Globals.byte_as_string(state))
@@ -245,21 +242,25 @@ func _ready():
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	#test_chunk.randomize_tiles()
 	
-	#test_chunk.tile_shapes[273] = TILE_SHAPE.ANG_MARCH
-	#
-	#test_chunk.tile_shapes[275] = TILE_SHAPE.ANG_MARCH
-	#test_chunk.tile_shapes[276] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[273] = TILE_SHAPE.ANG_MARCH
 	
-	#test_chunk.tile_shapes[278] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[275] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[276] = TILE_SHAPE.ANG_MARCH
+	
+	test_chunk.tile_shapes[278] = TILE_SHAPE.ANG_MARCH
 	test_chunk.tile_shapes[279] = TILE_SHAPE.ANG_MARCH
-	#test_chunk.tile_shapes[294] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[294] = TILE_SHAPE.ANG_MARCH
 	test_chunk.tile_shapes[295] = TILE_SHAPE.ANG_MARCH
 	
 	test_chunk.tile_shapes[281] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[297] = TILE_SHAPE.ANG_MARCH
 	test_chunk.tile_shapes[537] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[553] = TILE_SHAPE.ANG_MARCH
 	
 	test_chunk.tile_shapes[283] = TILE_SHAPE.ANG_MARCH
 	test_chunk.tile_shapes[284] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[539] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[540] = TILE_SHAPE.ANG_MARCH
 	
 	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.ANG_MARCH
 	
