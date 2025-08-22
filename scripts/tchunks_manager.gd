@@ -255,6 +255,12 @@ func _ready():
 	#test_chunk.tile_shapes[294] = TILE_SHAPE.ANG_MARCH
 	test_chunk.tile_shapes[295] = TILE_SHAPE.ANG_MARCH
 	
+	test_chunk.tile_shapes[281] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[537] = TILE_SHAPE.ANG_MARCH
+	
+	test_chunk.tile_shapes[283] = TILE_SHAPE.ANG_MARCH
+	test_chunk.tile_shapes[284] = TILE_SHAPE.ANG_MARCH
+	
 	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.ANG_MARCH
 	
 	test_chunk.generate_mesh()
