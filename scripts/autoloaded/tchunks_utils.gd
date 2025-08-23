@@ -82,15 +82,14 @@ const ts_tess_rhombdo_norms: PackedVector3Array = [
 	0.70710678 * Vector3(ts_tess_rhombdo_move[11]),
 ]
 
-# (can use rotations of these patterns to get all of the other shapes,
-# and can invert bit-states but flip vertex order and normal vectors,
-# to generate every marching cube combination.)
+# A list of unique vertex states, analogous to all others using rotations, flipping and state inversion.
 var ts_march_pattern_states: PackedByteArray = [
 	0b00000000, 0b00000001, 0b00000011, 0b00001001, 0b10000001,
 	0b00000111, 0b01000011, 0b01001001, 0b00001111, 0b00010111,
-	0b00100111, 0b11000011, 0b10000111, 0b01101001,
-]
-const ts_march_pattern_verts: PackedVector3Array = [
+	0b00100111, 0b11000011, 0b10000111, 0b01101001, ]
+
+# Body-centered (regular) marching cubes patterns data:
+const ts_bc_march_pattern_verts: PackedVector3Array = [
 	# Edge midpoints:
 	Vector3(0,-0.5,-0.5), Vector3(-0.5,0,-0.5), 
 	Vector3(0.5,0,-0.5), Vector3(0,0.5,-0.5),
@@ -105,7 +104,7 @@ const ts_march_pattern_verts: PackedVector3Array = [
 	# Volume center-point:
 	Vector3(0,0,0),
 ]
-var ts_march_pattern_inds: Array[PackedByteArray] = [ 
+var ts_bc_march_pattern_inds: Array[PackedByteArray] = [ 
 	[],
 	[0,1,4],
 	[2,1,4, 4,5,2],
@@ -126,8 +125,18 @@ var ts_march_pattern_inds: Array[PackedByteArray] = [
 		18,16,12, 3,12,16,  18,14,16, 6,16,14,  18,16,17, 11,17,16,  18,15,16, 7,16,15],
 ]
 
+# Vertex-centered marching cubes patterns data:
+const ts_vc_march_pattern_verts: PackedVector3Array = [
+	
+]
+var ts_vc_march_pattern_inds: Array = [ # !!! consider how to implement three weight-based ambiguity solutions?
+	[[], [], [], [], [], [], [], [],],
+	
+]
+
+
 # inneficient brute-forcing, but that's OK because it's just a dev tool.
-func print_march_data_from_patterns():
+func print_bc_march_table():
 	var inds_string: String = ""
 	
 	var patt_i: int = 0
@@ -145,10 +154,10 @@ func print_march_data_from_patterns():
 			rot_y = posmod(i/16, 4)
 			rot_z = posmod(i/64, 4)
 			patt_i = i/256
-			if (transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == 
+			if (transform_bc_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == 
 			ts_march_pattern_states[patt_i]):
 				inds_string += str(
-					detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)
+					detransform_bc_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)
 				) + ",\n"
 				break
 	
@@ -156,7 +165,7 @@ func print_march_data_from_patterns():
 	print(inds_string)
 	print("\n\n\n\n")
 
-func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
+func transform_bc_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
 	for i in range(0, rot_z):
 		comb = (((comb & 0b00010001) << 1) | ((comb & 0b00100010) << 2) | 
 				((comb & 0b10001000) >> 1) | ((comb & 0b01000100) >> 2))
@@ -172,8 +181,8 @@ func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
 		comb = ~ comb
 	return PackedByteArray([comb])[0]
 
-func detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> PackedByteArray:
-	var inds: PackedByteArray = ts_march_pattern_inds[patt_i].duplicate()
+func detransform_bc_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state) -> PackedByteArray:
+	var inds: PackedByteArray = ts_bc_march_pattern_inds[patt_i].duplicate()
 	if inv_state:
 		inds.reverse()
 	if flip_x:
@@ -484,5 +493,5 @@ var ts_march_inds: Array[PackedByteArray] = [
 ]
 
 func _ready():
-	#print_march_data_from_patterns()
+	print_bc_march_table()
 	pass

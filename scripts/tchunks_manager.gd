@@ -127,7 +127,7 @@ class TChunk:
 		#for i in range(8):
 			#pass # !!! (weights are not yet implemented)
 		for i in range(TCU.ts_march_inds[state].size()):
-			verts_ref.append(TCU.ts_march_pattern_verts[TCU.ts_march_inds[state][i]] + 
+			verts_ref.append(TCU.ts_bc_march_pattern_verts[TCU.ts_march_inds[state][i]] + 
 				(Vector3(pos) - TCU.TCHUNK_HS3))
 			if i%3 == 2:
 				norms_ref.append(TCU.triangle_normal_vector(PackedVector3Array([
