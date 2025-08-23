@@ -129,7 +129,6 @@ var ts_march_pattern_inds: Array[PackedByteArray] = [
 # inneficient brute-forcing, but that's OK because it's just a dev tool.
 func print_march_data_from_patterns():
 	var inds_string: String = ""
-	var norms_string: String = ""
 	
 	var patt_i: int = 0
 	var rot_z: int = 0
@@ -138,8 +137,6 @@ func print_march_data_from_patterns():
 	var flip_x: bool = false
 	var inv_state: bool = false
 	
-	var temp_inds: PackedByteArray = []
-	var temp_norms: PackedVector3Array = []
 	for comb in range(0, 256):
 		for i in range(0, 4*4*4*2*2*ts_march_pattern_states.size()):
 			inv_state = bool(posmod(i, 2))
@@ -150,29 +147,14 @@ func print_march_data_from_patterns():
 			patt_i = i/256
 			if (transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == 
 			ts_march_pattern_states[patt_i]):
-				temp_inds = detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)
-				if comb == 0b10100000:
-					print(Globals.byte_as_string(comb))
-					print(Globals.byte_as_string(ts_march_pattern_states[patt_i]))
-					print(rot_z,";",rot_y,";",rot_x,";",flip_x,";",inv_state)
-					print(temp_inds)
-				inds_string += str(temp_inds) + ",\n"
-				#temp_norms.clear()
-				#for j in (temp_inds.size() / 3):
-					#temp_norms.append(triangle_normal_vector(PackedVector3Array([
-						#ts_march_pattern_verts[temp_inds[(3*j)]],
-						#ts_march_pattern_verts[temp_inds[(3*j) + 1]],
-						#ts_march_pattern_verts[temp_inds[(3*j) + 2]],
-					#])))
-				#norms_string += str(temp_norms) + ",\n"
+				inds_string += str(
+					detransform_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)
+				) + ",\n"
 				break
 	
 	print("//////// MARCHING CUBES INDICES TABLE: ////////\n")
 	print(inds_string)
 	print("\n\n\n\n")
-	#print("//////// MARCHING CUBES NORMALS TABLE: ////////\n")
-	#print(norms_string)
-	#print("\n\n\n\n")
 
 func transform_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) -> int:
 	for i in range(0, rot_z):
