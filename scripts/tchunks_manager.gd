@@ -68,14 +68,13 @@ class TChunk:
 		tc_27[13] = self # Set self as center of the 3x3x3 chunks.
 		
 		var surf_verts: PackedVector3Array = []
-		var surf_inds: PackedInt32Array = []
 		var surf_norms: PackedVector3Array = []
 		
 		var march_strengths: PackedVector3Array = []
 		march_strengths.resize(8)
 		
 		for i in range(WU.TCHUNK_T):
-			mesh_march(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
+			mesh_march(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
 			match tile_shapes[i]:
 				TILE_SHAPE.NO_DATA:
 					push_error("Attempted to mesh an unloaded tile shape.")
@@ -83,9 +82,9 @@ class TChunk:
 				TILE_SHAPE.EMPTY:
 					continue
 				TILE_SHAPE.TESS_CUBE:
-					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
+					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
 				TILE_SHAPE.TESS_RHOMBDO:
-					mesh_tess_rhombdo(t_xyz_from_i(i), tc_27, surf_verts, surf_inds, surf_norms)
+					mesh_tess_rhombdo(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
 		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
@@ -101,13 +100,10 @@ class TChunk:
 		test_mat.albedo_color = Color.WHITE
 		array_mesh.surface_set_material(0, test_mat)
 		mesh_instance_node.mesh = array_mesh
-		
-		print(surf_verts.size())
-		print(surf_norms.size())
 	
 	func mesh_march(
 		pos: Vector3i, tc_27: Array[TChunk], 
-		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array, norms_ref: PackedVector3Array,
+		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
 	):
 		var shapes: PackedByteArray = []
 		shapes.resize(8)
@@ -133,18 +129,16 @@ class TChunk:
 		for i in range(WU.ts_march_inds[state].size()):
 			verts_ref.append(WU.ts_march_pattern_verts[WU.ts_march_inds[state][i]] + 
 				(Vector3(pos) - WU.TCHUNK_HS3))
-			#inds_ref.append(verts_ref.size() - 1)
 			if i%3 == 2:
 				norms_ref.append(WU.triangle_normal_vector(PackedVector3Array([
 					verts_ref[verts_ref.size()-3], verts_ref[verts_ref.size()-2], verts_ref[verts_ref.size()-1], 
 				])))
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
-				#print("norms: ", norms_ref[norms_ref.size()-3],norms_ref[norms_ref.size()-2],norms_ref[norms_ref.size()-1])
 	
 	func mesh_tess_cube(
 		pos: Vector3i, tc_27: Array[TChunk], 
-		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array, norms_ref: PackedVector3Array,
+		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
 	):
 		for j: int in range(6):
 			match tc_27[get_tc27_tchunk_i(pos, WU.ts_tess_cube_move[j])
@@ -155,93 +149,63 @@ class TChunk:
 					# if {known that the cube would be covered} then 'continue' else pass to face meshing
 					pass
 				TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO, _: continue
-			for k: int in range(1):
-				#verts_ref.append(Vector3(pos) + WU.ts_tess_cube_verts[(4*j)+k])
-				
-				verts_ref.append(Vector3(pos) + WU.ts_tess_cube_verts[(4*j)+0])
-				verts_ref.append(Vector3(pos) + WU.ts_tess_cube_verts[(4*j)+1])
-				verts_ref.append(Vector3(pos) + WU.ts_tess_cube_verts[(4*j)+2])
-				
-				verts_ref.append(Vector3(pos) + WU.ts_tess_cube_verts[(4*j)+1])
-				verts_ref.append(Vector3(pos) + WU.ts_tess_cube_verts[(4*j)+3])
-				verts_ref.append(Vector3(pos) + WU.ts_tess_cube_verts[(4*j)+2])
-				
-				norms_ref.append(Vector3(WU.ts_tess_cube_move[j]))
-				norms_ref.append(Vector3(WU.ts_tess_cube_move[j]))
-				norms_ref.append(Vector3(WU.ts_tess_cube_move[j]))
-				norms_ref.append(Vector3(WU.ts_tess_cube_move[j]))
-				norms_ref.append(Vector3(WU.ts_tess_cube_move[j]))
-				norms_ref.append(Vector3(WU.ts_tess_cube_move[j]))
-			#inds_ref.append_array([
-				#verts_ref.size()-4, verts_ref.size()-3, verts_ref.size()-2,
-				#verts_ref.size()-3, verts_ref.size()-1, verts_ref.size()-2,
-			#])
+			verts_ref.append_array([
+				WU.ts_tess_cube_verts[(4*j)+0] + Vector3(pos), WU.ts_tess_cube_verts[(4*j)+1] + Vector3(pos),
+				WU.ts_tess_cube_verts[(4*j)+2] + Vector3(pos), WU.ts_tess_cube_verts[(4*j)+1] + Vector3(pos),
+				WU.ts_tess_cube_verts[(4*j)+3] + Vector3(pos), WU.ts_tess_cube_verts[(4*j)+2] + Vector3(pos),])
+			norms_ref.append_array([
+				Vector3(WU.ts_tess_cube_move[j]), Vector3(WU.ts_tess_cube_move[j]),
+				Vector3(WU.ts_tess_cube_move[j]), Vector3(WU.ts_tess_cube_move[j]),
+				Vector3(WU.ts_tess_cube_move[j]), Vector3(WU.ts_tess_cube_move[j]),])
 	
 	func mesh_tess_rhombdo(
 		pos: Vector3i, tc_27: Array[TChunk], 
-		verts_ref: PackedVector3Array, inds_ref: PackedInt32Array, norms_ref: PackedVector3Array,
+		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
 	):
-		var tri_cull_data: int = 3
+		var tri_cull_bits: int = 0b11
 		for j in range(12): # Check whether whole face should be culled:
 			match tc_27[get_tc27_tchunk_i(pos, WU.ts_tess_rhombdo_move[j])
 			].tile_shapes[get_tc27_tile_i(pos, WU.ts_tess_rhombdo_move[j])
 			]:
 				TILE_SHAPE.TESS_RHOMBDO:
 					continue
-			tri_cull_data = 3 # Individually check whether the 2 face-triangles should be culled:
+			tri_cull_bits = 0b11 # Individually check whether the 2 face-triangles should be culled:
 			for k in range(2):
 				if tc_27[get_tc27_tchunk_i(pos, WU.ts_tess_rhombdo_move[(2 * j) + k + 12])
 				].tile_shapes[get_tc27_tile_i(pos, WU.ts_tess_rhombdo_move[(2 * j) + k + 12])
 				] in PackedInt32Array([TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO]):
-					tri_cull_data -= (k + 1)
-			match tri_cull_data:
+					tri_cull_bits -= 0b01 << k
+			match tri_cull_bits:
 				0b00:
 					continue
 				0b01:
 					verts_ref.append_array([
 						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4)],
 						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 1],
-						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 2],
-					])
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 2],])
 				0b10:
 					verts_ref.append_array([
 						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 1],
 						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 3],
-						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 2],
-					])
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 2],])
 				0b11:
 					verts_ref.append_array([
 						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4)],
 						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 1],
 						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 2],
-						
 						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 1],
 						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 3],
-						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 2],
-					])
-			match tri_cull_data:
+						Vector3(pos) + WU.ts_tess_rhombdo_verts[(j * 4) + 2],])
+			match tri_cull_bits:
 				0b01, 0b10:
 					norms_ref.append_array([
-						WU.ts_tess_rhombdo_norms[j],
-						WU.ts_tess_rhombdo_norms[j],
-						WU.ts_tess_rhombdo_norms[j],
-					])
-					#inds_ref.append_array([
-						#verts_ref.size()-3, verts_ref.size()-2, verts_ref.size()-1,
-					#])
+						WU.ts_tess_rhombdo_norms[j], WU.ts_tess_rhombdo_norms[j],
+						WU.ts_tess_rhombdo_norms[j],])
 				0b11:
 					norms_ref.append_array([
-						WU.ts_tess_rhombdo_norms[j],
-						WU.ts_tess_rhombdo_norms[j],
-						WU.ts_tess_rhombdo_norms[j],
-						WU.ts_tess_rhombdo_norms[j],
-						WU.ts_tess_rhombdo_norms[j],
-						WU.ts_tess_rhombdo_norms[j],
-					])
-					#inds_ref.append_array([
-						#verts_ref.size()-4, verts_ref.size()-3, verts_ref.size()-2,
-						#verts_ref.size()-3, verts_ref.size()-1, verts_ref.size()-2,
-					#])
+						WU.ts_tess_rhombdo_norms[j], WU.ts_tess_rhombdo_norms[j],
+						WU.ts_tess_rhombdo_norms[j], WU.ts_tess_rhombdo_norms[j],
+						WU.ts_tess_rhombdo_norms[j], WU.ts_tess_rhombdo_norms[j],])
 
 func _init():
 	TChunk.blank_tc27.resize(27)
@@ -251,7 +215,9 @@ func _ready():
 	var test_chunk: TChunk = TChunk.new()
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	#test_chunk.randomize_tiles()
-	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_RHOMBDO
+	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[2] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[18] = TILE_SHAPE.TESS_CUBE
 	
 	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.ANG_MARCH
 	
