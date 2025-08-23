@@ -23,7 +23,7 @@ config/icon="uid://cugbxqpgcuar1"
 
 DebugDraw="*res://scripts/autoloaded/debug_draw.gd"
 Globals="*res://scripts/autoloaded/general_globals.gd"
-WU="*res://scripts/autoloaded/world_utils.gd"
+TCU="*res://scripts/autoloaded/tchunks_utils.gd"
 
 [debug]
 
