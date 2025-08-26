@@ -2,10 +2,8 @@ extends Node
 
 @onready var chunks_container_node: Node = self
 
-# Lengths, totals, and sizes of chunk stuff in metrins.
-
 enum TILE_SHAPE {
-	NO_DATA, EMPTY, ANG_MARCH, SMO_MARCH, TESS_CUBE, TESS_RHOMBDO, CLIFF,
+	NO_DATA, EMPTY, MARCH_ANG, MARCH_WEIGH, TESS_CUBE, TESS_RHOMBDO, CLIFF, POWDER,
 }
 
 class TChunk:
@@ -51,7 +49,7 @@ class TChunk:
 		for i in range(TCU.TCHUNK_T):
 			match randi_range(0, 16):
 				0, 1:
-					tile_shapes[i] = TILE_SHAPE.ANG_MARCH
+					tile_shapes[i] = TILE_SHAPE.MARCH_ANG
 				2:
 					tile_shapes[i] = TILE_SHAPE.TESS_CUBE
 				3:
@@ -110,7 +108,7 @@ class TChunk:
 		for i in range(8):
 			shapes[i] = tc_27[get_tc27_tchunk_i(pos, Vector3i(i%2, (i/2)%2, (i/4)%2,))
 				].tile_shapes[get_tc27_tile_i(pos, Vector3i(i%2, (i/2)%2, (i/4)%2,))]
-		if (not TILE_SHAPE.ANG_MARCH in shapes) and (not TILE_SHAPE.SMO_MARCH in shapes):
+		if (not TILE_SHAPE.MARCH_ANG in shapes) and (not TILE_SHAPE.MARCH_WEIGH in shapes):
 			return
 		var state: int = (
 			(0b00000001 * int(not shapes[0] <= TILE_SHAPE.EMPTY)) +
@@ -145,7 +143,7 @@ class TChunk:
 			].tile_shapes[get_tc27_tile_i(pos, TCU.ts_tess_cube_move[j])
 			]:
 				TILE_SHAPE.NO_DATA, TILE_SHAPE.EMPTY: pass
-				TILE_SHAPE.ANG_MARCH:
+				TILE_SHAPE.MARCH_ANG:
 					# if {known that the cube would be covered} then 'continue' else pass to face meshing
 					pass
 				TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO, _: continue
@@ -219,13 +217,13 @@ func _ready():
 	test_chunk.tile_shapes[2] = TILE_SHAPE.TESS_CUBE
 	test_chunk.tile_shapes[18] = TILE_SHAPE.TESS_CUBE
 	
-	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.ANG_MARCH
+	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.MARCH_ANG
 	
 	
-	#test_chunk.tile_shapes[273] = TILE_SHAPE.SMO_MARCH
+	#test_chunk.tile_shapes[273] = TILE_SHAPE.MARCH_WEIGH
 	#
-	#test_chunk.tile_shapes[275] = TILE_SHAPE.SMO_MARCH
-	#test_chunk.tile_shapes[276] = TILE_SHAPE.SMO_MARCH
+	#test_chunk.tile_shapes[275] = TILE_SHAPE.MARCH_WEIGH
+	#test_chunk.tile_shapes[276] = TILE_SHAPE.MARCH_WEIGH
 	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)

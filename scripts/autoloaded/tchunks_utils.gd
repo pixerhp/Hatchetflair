@@ -493,5 +493,5 @@ var ts_march_inds: Array[PackedByteArray] = [
 ]
 
 func _ready():
-	print_bc_march_table()
+	#print_bc_march_table()
 	pass
