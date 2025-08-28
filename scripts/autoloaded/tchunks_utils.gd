@@ -83,10 +83,54 @@ const ts_tess_rhombdo_norms: PackedVector3Array = [
 ]
 
 # A list of unique vertex states, analogous to all others using rotations, flipping and state inversion.
-var ts_march_pattern_states: PackedByteArray = [
+var ts_march_patt_states: PackedByteArray = [
 	0b00000000, 0b00000001, 0b00000011, 0b00001001, 0b10000001,
 	0b00000111, 0b01000011, 0b01001001, 0b00001111, 0b00010111,
 	0b00100111, 0b11000011, 0b10000111, 0b01101001, ]
+
+var ts_march_ang_patt_verts: PackedVector3Array = PackedVector3Array([
+	# Edge midpoints: (0-11)
+	Vector3(0,-0.5,-0.5), Vector3(-0.5,0,-0.5), 
+	Vector3(0.5,0,-0.5), Vector3(0,0.5,-0.5),
+	Vector3(-0.5,-0.5,0), Vector3(0.5,-0.5,0),
+	Vector3(-0.5,0.5,0), Vector3(0.5,0.5,0),
+	Vector3(0,-0.5,0.5), Vector3(-0.5,0,0.5), 
+	Vector3(0.5,0,0.5), Vector3(0,0.5,0.5),
+	# Face ambiguity center-points: (12-17)
+	Vector3(0,0,-0.5), Vector3(0,-0.5,0),
+	Vector3(-0.5,0,0), Vector3(0.5,0,0),
+	Vector3(0,0.5,0), Vector3(0,0,0.5),
+	# Volume center-point: (18)
+	Vector3(0,0,0),
+])
+
+var ts_march_ang_patt_inds: Array = [
+	[[], [], [], [], [], [], [], []],
+	[[0,1,4], [], [], [], [], [], [], []],
+	[[4,12,1, 12,1,13], [13,2,12, 2,13,5], [], [], [], [], [], []],
+	[[], [], [], [], [], [], [], []],
+	[[], [], [], [], [], [], [], []],
+	
+	[[], [], [], [], [], [], [], []],
+	[[], [], [], [], [], [], [], []],
+	[[], [], [], [], [], [], [], []],
+	[[], [], [], [], [], [], [], []],
+	[[], [], [], [], [], [], [], []],
+	
+	[[], [], [], [], [], [], [], []],
+	[[], [], [], [], [], [], [], []],
+	[[], [], [], [], [], [], [], []],
+	[[], [], [], [], [], [], [], []],
+]
+
+var ts_march_ang_inds: Array = [
+	
+]
+var ts_march_ang_norms: Array = [
+	
+]
+
+
 
 # Body-centered (regular) marching cubes patterns data:
 const ts_bc_march_pattern_verts: PackedVector3Array = [
@@ -147,7 +191,7 @@ func print_bc_march_table():
 	var inv_state: bool = false
 	
 	for comb in range(0, 256):
-		for i in range(0, 4*4*4*2*2*ts_march_pattern_states.size()):
+		for i in range(0, 4*4*4*2*2*ts_march_patt_states.size()):
 			inv_state = bool(posmod(i, 2))
 			flip_x = bool(posmod(i/2, 2))
 			rot_x = posmod(i/4, 4)
@@ -155,7 +199,7 @@ func print_bc_march_table():
 			rot_z = posmod(i/64, 4)
 			patt_i = i/256
 			if (transform_bc_march_state(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == 
-			ts_march_pattern_states[patt_i]):
+			ts_march_patt_states[patt_i]):
 				inds_string += str(
 					detransform_bc_march_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)
 				) + ",\n"

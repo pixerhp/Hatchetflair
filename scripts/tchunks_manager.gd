@@ -3,7 +3,7 @@ extends Node
 @onready var chunks_container_node: Node = self
 
 enum TILE_SHAPE {
-	NO_DATA, EMPTY, MARCH_ANG, MARCH_WEIGH, TESS_CUBE, TESS_RHOMBDO, CLIFF, POWDER,
+	NO_DATA, EMPTY, MARCH_ANG, MARCH_WEI, TESS_CUBE, TESS_RHOMBDO, CLIFF, POWDER,
 }
 
 class TChunk:
@@ -108,7 +108,7 @@ class TChunk:
 		for i in range(8):
 			shapes[i] = tc_27[get_tc27_tchunk_i(pos, Vector3i(i%2, (i/2)%2, (i/4)%2,))
 				].tile_shapes[get_tc27_tile_i(pos, Vector3i(i%2, (i/2)%2, (i/4)%2,))]
-		if (not TILE_SHAPE.MARCH_ANG in shapes) and (not TILE_SHAPE.MARCH_WEIGH in shapes):
+		if (not TILE_SHAPE.MARCH_ANG in shapes) and (not TILE_SHAPE.MARCH_WEI in shapes):
 			return
 		var state: int = (
 			(0b00000001 * int(not shapes[0] <= TILE_SHAPE.EMPTY)) +
