@@ -213,9 +213,9 @@ func _ready():
 	var test_chunk: TChunk = TChunk.new()
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	#test_chunk.randomize_tiles()
-	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[2] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[18] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[273] = TILE_SHAPE.MARCH_ANG
+	test_chunk.tile_shapes[530] = TILE_SHAPE.MARCH_ANG
+	test_chunk.tile_shapes[545] = TILE_SHAPE.MARCH_ANG
 	
 	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.MARCH_ANG
 	
