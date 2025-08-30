@@ -141,29 +141,51 @@ func generate_march_ang_tables() -> void:
 	
 	for comb: int in range(0, 256):
 		for i: int in range(0, ts_march_patt_states.size()*4*4*4*2*2):
-			inv_state = bool(posmod(i, 2)); flip_x = bool(posmod(i/2, 2))
-			rot_x = posmod(i/4, 4); rot_y = posmod(i/16, 4); rot_z = posmod(i/64, 4)
+			inv_state = bool(i%2); flip_x = bool((i/2)%2)
+			rot_x = (i/4)%4; rot_y = (i/16)%4; rot_z = (i/64)%4
 			patt_i = i/256
 			if tranform_march_states(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == ts_march_patt_states[patt_i]:
 				inds_string += str(detransform_march_ang_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)).dedent() + ",\n"
 				break
 	
-	print("[[][][]] MARCHING CUBES INDICES TABLE:: [[][][]]\n")
+	print("[////]   MARCHING CUBES INDICES TABLE : [////]\n")
 	print(inds_string)
-	print("[[][][]] ::MARCHING CUBES INDICES TABLE [[][][]]\n")
+	print("[////] : MARCHING CUBES INDICES TABLE   [////]\n")
 
 func tranform_march_states(comb: int, rot_z: int, rot_y: int, rot_x: int, flip_x: bool, inv_state: bool) -> int:
-	
-	
-	
-	return 0
+	for i in range(0, rot_z):
+		comb = (((comb & 0b00010001) << 1) | ((comb & 0b00100010) << 2) | 
+				((comb & 0b10001000) >> 1) | ((comb & 0b01000100) >> 2))
+	for i in range(0, rot_y):
+		comb = (((comb & 0b00000101) << 4) | ((comb & 0b01010000) << 1) | 
+				((comb & 0b00001010) >> 1) | ((comb & 0b10100000) >> 4))
+	for i in range(0, rot_x):
+		comb = (((comb & 0b00110000) >> 4) | ((comb & 0b00000011) << 2) | 
+				((comb & 0b11000000) >> 2) | ((comb & 0b00001100) << 4))
+	if flip_x:
+		comb = ((comb & 0b10101010) >> 1) | ((comb & 0b01010101) << 1)
+	if inv_state:
+		comb = ~ comb
+	return PackedByteArray([comb])[0] # (casts int into a byte)
 
-func detransform_march_ang_inds(comb: int, rot_z: int, rot_y: int, rot_x: int, flip_x: bool, inv_state: bool) -> Array[PackedByteArray]:
-	
-	
-	
-	
-	return []
+func detransform_march_ang_inds(patt_i: int, rot_z: int, rot_y: int, rot_x: int, flip_x: bool, inv_state: bool) -> Array[PackedByteArray]:
+	var inds: Array[PackedByteArray] = ts_march_ang_patt_inds[patt_i].duplicate()
+	if not (inv_state != flip_x): # outer 'not' accounts for coordinate system chirality flipping.
+		for i in range(8):
+			inds[i].reverse()
+	if flip_x:
+		for i in range(8): for j in range(inds[i].size()):
+			inds[i][j] = PackedByteArray([0,2,1,3,5,4,7,6,8,10,9,11,12,13,15,14,16,17,18,20,19,22,21,24,23,26,25])[j]
+		inds = [inds[1],inds[0],inds[3],inds[2],inds[5],inds[4],inds[7],inds[6]]
+	for _r in range(0, rot_x):
+		for i in range(8): for j in range(inds[i].size()):
+			inds[i][j] = PackedByteArray([8,4,5,0,9,10,1,2,11,6,7,3,13,17,14,15,12,16,18,23,24,19,20,25,26,21,22,])[j]
+		inds = [inds[2],inds[3],inds[6],inds[7],inds[0],inds[1],inds[4],inds[5]]
+	for _r in range(0, rot_y):
+		pass
+	for _r in range(0, rot_z):
+		pass
+	return inds
 
 
 # Body-centered (regular) marching cubes patterns data:
@@ -572,4 +594,5 @@ var ts_march_inds: Array[PackedByteArray] = [
 
 func _ready():
 	#print_bc_march_table()
+	
 	pass
