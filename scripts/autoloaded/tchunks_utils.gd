@@ -131,10 +131,39 @@ var ts_march_ang_patt_inds: Array = [
 var ts_march_ang_inds: Array = [
 	
 ]
-var ts_march_ang_norms: Array = [
-	
-]
 
+func generate_march_ang_tables() -> void:
+	var inds_string: String = ""
+	
+	var patt_i: int = 0; 
+	var rot_z: int = 0; var rot_y: int = 0; var rot_x: int = 0; 
+	var flip_x: bool = false; var inv_state: bool = false
+	
+	for comb: int in range(0, 256):
+		for i: int in range(0, ts_march_patt_states.size()*4*4*4*2*2):
+			inv_state = bool(posmod(i, 2)); flip_x = bool(posmod(i/2, 2))
+			rot_x = posmod(i/4, 4); rot_y = posmod(i/16, 4); rot_z = posmod(i/64, 4)
+			patt_i = i/256
+			if tranform_march_states(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == ts_march_patt_states[patt_i]:
+				inds_string += str(detransform_march_ang_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)).dedent() + ",\n"
+				break
+	
+	print("[[][][]] MARCHING CUBES INDICES TABLE:: [[][][]]\n")
+	print(inds_string)
+	print("[[][][]] ::MARCHING CUBES INDICES TABLE [[][][]]\n")
+
+func tranform_march_states(comb: int, rot_z: int, rot_y: int, rot_x: int, flip_x: bool, inv_state: bool) -> int:
+	
+	
+	
+	return 0
+
+func detransform_march_ang_inds(comb: int, rot_z: int, rot_y: int, rot_x: int, flip_x: bool, inv_state: bool) -> Array[PackedByteArray]:
+	
+	
+	
+	
+	return []
 
 
 # Body-centered (regular) marching cubes patterns data:
