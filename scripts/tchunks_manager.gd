@@ -9,6 +9,7 @@ enum TILE_SHAPE {
 class TChunk:
 	static var blank_tc27: Array[TChunk] = []
 	
+	var tc_coords: Vector3i = Vector3i(0,0,0)
 	var tile_shapes: PackedByteArray = []
 	var march_weights: PackedFloat32Array = []
 	
@@ -72,13 +73,17 @@ class TChunk:
 		march_strengths.resize(8)
 		
 		for i in range(TCU.TCHUNK_T):
-			mesh_march(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
+			#mesh_march(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
 			match tile_shapes[i]:
 				TILE_SHAPE.NO_DATA:
-					push_error("Attempted to mesh an unloaded tile shape.")
+					push_error("Attempted to mesh an unloaded tile shape at chunk: ",
+						str(tc_coords), " tile coords: ", t_xyz_from_i(i))
 					continue
 				TILE_SHAPE.EMPTY:
+					# !!! mesh march check
 					continue
+				TILE_SHAPE.MARCH_ANG:
+					pass
 				TILE_SHAPE.TESS_CUBE:
 					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
 				TILE_SHAPE.TESS_RHOMBDO:
@@ -87,16 +92,16 @@ class TChunk:
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
 		mesh_surface[Mesh.ARRAY_VERTEX] = surf_verts
-		#mesh_surface[Mesh.ARRAY_INDEX] = surf_inds
 		mesh_surface[Mesh.ARRAY_NORMAL] = surf_norms
 		
-		array_mesh.add_surface_from_arrays(
-			Mesh.PRIMITIVE_TRIANGLES,
-			mesh_surface,
-		)
 		var test_mat: StandardMaterial3D = StandardMaterial3D.new()
 		test_mat.albedo_color = Color.WHITE
-		array_mesh.surface_set_material(0, test_mat)
+		if surf_verts.size() > 0:
+			array_mesh.add_surface_from_arrays(
+				Mesh.PRIMITIVE_TRIANGLES,
+				mesh_surface,
+			)
+			array_mesh.surface_set_material(0, test_mat)
 		mesh_instance_node.mesh = array_mesh
 	
 	func mesh_march(
