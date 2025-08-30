@@ -132,13 +132,13 @@ var ts_march_ang_inds: Array = [
 	
 ]
 
+
 func generate_march_ang_tables() -> void:
 	var inds_string: String = ""
-	
 	var patt_i: int = 0; 
 	var rot_z: int = 0; var rot_y: int = 0; var rot_x: int = 0; 
 	var flip_x: bool = false; var inv_state: bool = false
-	
+	# Note: This uses brute-force and is slow, but that's ok because this is just a dev-tool function.) 
 	for comb: int in range(0, 256):
 		for i: int in range(0, ts_march_patt_states.size()*4*4*4*2*2):
 			inv_state = bool(i%2); flip_x = bool((i/2)%2)
@@ -147,11 +147,11 @@ func generate_march_ang_tables() -> void:
 			if tranform_march_states(comb, rot_z, rot_y, rot_x, flip_x, inv_state) == ts_march_patt_states[patt_i]:
 				inds_string += str(detransform_march_ang_inds(patt_i, rot_z, rot_y, rot_x, flip_x, inv_state)).dedent() + ",\n"
 				break
-	
 	print("[////]   MARCHING CUBES INDICES TABLE : [////]\n")
 	print(inds_string)
 	print("[////] : MARCHING CUBES INDICES TABLE   [////]\n")
 
+# Note: Has common usability across all marching cubes variants (angular, weighted, b-centered, v-centered...)
 func tranform_march_states(comb: int, rot_z: int, rot_y: int, rot_x: int, flip_x: bool, inv_state: bool) -> int:
 	for i in range(0, rot_z):
 		comb = (((comb & 0b00010001) << 1) | ((comb & 0b00100010) << 2) | 
@@ -175,16 +175,20 @@ func detransform_march_ang_inds(patt_i: int, rot_z: int, rot_y: int, rot_x: int,
 			inds[i].reverse()
 	if flip_x:
 		for i in range(8): for j in range(inds[i].size()):
-			inds[i][j] = PackedByteArray([0,2,1,3,5,4,7,6,8,10,9,11,12,13,15,14,16,17,18,20,19,22,21,24,23,26,25])[j]
+			inds[i][j] = PackedByteArray([0,2,1,3,5,4,7,6,8,10,9,11,12,13,15,14,16,17,18,20,19,22,21,24,23,26,25])[inds[i][j]]
 		inds = [inds[1],inds[0],inds[3],inds[2],inds[5],inds[4],inds[7],inds[6]]
 	for _r in range(0, rot_x):
 		for i in range(8): for j in range(inds[i].size()):
-			inds[i][j] = PackedByteArray([8,4,5,0,9,10,1,2,11,6,7,3,13,17,14,15,12,16,18,23,24,19,20,25,26,21,22,])[j]
+			inds[i][j] = PackedByteArray([8,4,5,0,9,10,1,2,11,6,7,3,13,17,14,15,12,16,18,23,24,19,20,25,26,21,22])[inds[i][j]]
 		inds = [inds[2],inds[3],inds[6],inds[7],inds[0],inds[1],inds[4],inds[5]]
 	for _r in range(0, rot_y):
-		pass
+		for i in range(8): for j in range(inds[i].size()):
+			inds[i][j] = PackedByteArray([5,2,10,7,0,8,3,11,4,1,9,6,15,13,12,17,16,14,18,20,24,22,26,19,23,21,25])[inds[i][j]]
+		inds = [inds[4],inds[0],inds[6],inds[2],inds[5],inds[1],inds[7],inds[3]]
 	for _r in range(0, rot_z):
-		pass
+		for i in range(8): for j in range(inds[i].size()):
+			inds[i][j] = PackedByteArray([1,3,0,2,6,4,7,5,9,11,8,10,12,14,16,13,15,17,18,21,19,22,20,25,23,26,24])[inds[i][j]]
+		inds = [inds[1],inds[3],inds[0],inds[2],inds[5],inds[7],inds[4],inds[6]]
 	return inds
 
 
