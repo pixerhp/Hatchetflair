@@ -97,7 +97,7 @@ class TChunk:
 		#var color: Color
 		#for i in surf_verts.size():
 			#if i%3 == 0:
-				#color = Color.from_hsv(randf_range(0,1), 1, 1)
+				#color = Color.from_hsv(randf_range(0,1), 0.75, 1)
 			#surf_colors.append(color)
 		#mesh_surface[Mesh.ARRAY_COLOR] = surf_colors
 		
@@ -278,14 +278,10 @@ func _ready():
 	var test_chunk: TChunk = TChunk.new()
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	#test_chunk.randomize_tiles()
+	
 	test_chunk.tile_shapes[0] = TILE_SHAPE.MARCH_ANG
 	test_chunk.tile_shapes[1] = TILE_SHAPE.MARCH_ANG
-	test_chunk.tile_shapes[16] = TILE_SHAPE.MARCH_ANG
-	test_chunk.tile_shapes[256] = TILE_SHAPE.MARCH_ANG
-	
-	#test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[64] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[1024] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[272] = TILE_SHAPE.MARCH_ANG
 	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
