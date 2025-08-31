@@ -93,8 +93,17 @@ class TChunk:
 		mesh_surface[Mesh.ARRAY_VERTEX] = surf_verts
 		mesh_surface[Mesh.ARRAY_NORMAL] = surf_norms
 		
+		#var surf_colors: PackedColorArray = []
+		#var color: Color
+		#for i in surf_verts.size():
+			#if i%3 == 0:
+				#color = Color.from_hsv(randf_range(0,1), 1, 1)
+			#surf_colors.append(color)
+		#mesh_surface[Mesh.ARRAY_COLOR] = surf_colors
+		
 		var test_mat: StandardMaterial3D = StandardMaterial3D.new()
 		test_mat.albedo_color = Color.WHITE
+		test_mat.vertex_color_use_as_albedo = true
 		if surf_verts.size() > 0:
 			array_mesh.add_surface_from_arrays(
 				Mesh.PRIMITIVE_TRIANGLES,
@@ -274,22 +283,9 @@ func _ready():
 	test_chunk.tile_shapes[16] = TILE_SHAPE.MARCH_ANG
 	test_chunk.tile_shapes[256] = TILE_SHAPE.MARCH_ANG
 	
-	test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[64] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[1024] = TILE_SHAPE.TESS_CUBE
-	
-	#test_chunk.tile_shapes[290] = TILE_SHAPE.MARCH_ANG
-	#test_chunk.tile_shapes[530] = TILE_SHAPE.MARCH_ANG
-	#test_chunk.tile_shapes[545] = TILE_SHAPE.MARCH_ANG
-	
-	
-	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.MARCH_ANG
-	
-	
-	#test_chunk.tile_shapes[273] = TILE_SHAPE.MARCH_WEIGH
-	#
-	#test_chunk.tile_shapes[275] = TILE_SHAPE.MARCH_WEIGH
-	#test_chunk.tile_shapes[276] = TILE_SHAPE.MARCH_WEIGH
+	#test_chunk.tile_shapes[4] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[64] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[1024] = TILE_SHAPE.TESS_CUBE
 	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
