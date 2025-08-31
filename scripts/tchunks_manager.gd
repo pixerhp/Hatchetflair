@@ -11,7 +11,6 @@ class TChunk:
 	
 	var tc_coords: Vector3i = Vector3i(0,0,0)
 	var tile_shapes: PackedByteArray = []
-	var march_weights: PackedFloat32Array = []
 	
 	var mesh_instance_node: MeshInstance3D = MeshInstance3D.new()
 	var array_mesh: ArrayMesh = ArrayMesh.new()
@@ -42,8 +41,6 @@ class TChunk:
 	func _init():
 		tile_shapes.resize(TCU.TCHUNK_T)
 		tile_shapes.fill(TILE_SHAPE.NO_DATA)
-		march_weights.resize(TCU.TCHUNK_T * 6)
-		march_weights.fill(1.0)
 	
 	func randomize_tiles():
 		tile_shapes.fill(TILE_SHAPE.EMPTY)
@@ -65,15 +62,9 @@ class TChunk:
 	
 	func generate_mesh(tc_27: Array[TChunk] = blank_tc27):
 		tc_27[13] = self # Set self as center of the 3x3x3 chunks.
-		
 		var surf_verts: PackedVector3Array = []
 		var surf_norms: PackedVector3Array = []
-		
-		var march_strengths: PackedVector3Array = []
-		march_strengths.resize(8)
-		
 		for i in range(TCU.TCHUNK_T):
-			#mesh_march(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
 			match tile_shapes[i]:
 				TILE_SHAPE.NO_DATA:
 					push_error("Attempted to mesh an unloaded tile shape at chunk: ",
@@ -93,6 +84,7 @@ class TChunk:
 		mesh_surface[Mesh.ARRAY_VERTEX] = surf_verts
 		mesh_surface[Mesh.ARRAY_NORMAL] = surf_norms
 		
+		## Give each triangle a random color, for testing/debug purposes.
 		#var surf_colors: PackedColorArray = []
 		#var color: Color
 		#for i in surf_verts.size():
@@ -111,42 +103,6 @@ class TChunk:
 			)
 			array_mesh.surface_set_material(0, test_mat)
 		mesh_instance_node.mesh = array_mesh
-	
-	func mesh_march(
-		pos: Vector3i, tc_27: Array[TChunk], 
-		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
-	):
-		var shapes: PackedByteArray = []
-		shapes.resize(8)
-		for i in range(8):
-			shapes[i] = tc_27[get_tc27_tchunk_i(pos, Vector3i(i%2, (i/2)%2, (i/4)%2,))
-				].tile_shapes[get_tc27_tile_i(pos, Vector3i(i%2, (i/2)%2, (i/4)%2,))]
-		if (not TILE_SHAPE.MARCH_ANG in shapes) and (not TILE_SHAPE.MARCH_WEI in shapes):
-			return
-		var state: int = (
-			(0b00000001 * int(not shapes[0] <= TILE_SHAPE.EMPTY)) +
-			(0b00000010 * int(not shapes[1] <= TILE_SHAPE.EMPTY)) +
-			(0b00000100 * int(not shapes[2] <= TILE_SHAPE.EMPTY)) +
-			(0b00001000 * int(not shapes[3] <= TILE_SHAPE.EMPTY)) +
-			(0b00010000 * int(not shapes[4] <= TILE_SHAPE.EMPTY)) +
-			(0b00100000 * int(not shapes[5] <= TILE_SHAPE.EMPTY)) +
-			(0b01000000 * int(not shapes[6] <= TILE_SHAPE.EMPTY)) +
-			(0b10000000 * int(not shapes[7] <= TILE_SHAPE.EMPTY))
-		)
-		#var weights: PackedFloat32Array = []
-		#weights.resize(8)
-		#for i in range(8):
-			#pass # !!! (weights are not yet implemented)
-		for i in range(TCU.ts_march_inds[state].size()):
-			verts_ref.append(TCU.ts_bc_march_pattern_verts[TCU.ts_march_inds[state][i]] + 
-				(Vector3(pos) - TCU.TCHUNK_HS3))
-			if i%3 == 2:
-				norms_ref.append(TCU.triangle_normal_vector(PackedVector3Array([
-					verts_ref[verts_ref.size()-3], verts_ref[verts_ref.size()-2], verts_ref[verts_ref.size()-1], 
-				])))
-				norms_ref.append(norms_ref[norms_ref.size() - 1])
-				norms_ref.append(norms_ref[norms_ref.size() - 1])
-	
 	
 	func mesh_empty(
 		pos: Vector3i, tc_27: Array[TChunk], 
@@ -279,9 +235,11 @@ func _ready():
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	#test_chunk.randomize_tiles()
 	
-	test_chunk.tile_shapes[0] = TILE_SHAPE.MARCH_ANG
-	test_chunk.tile_shapes[1] = TILE_SHAPE.MARCH_ANG
-	test_chunk.tile_shapes[272] = TILE_SHAPE.MARCH_ANG
+	var test_placements: Array[Vector3i] = [
+		Vector3i(1,1,1),
+	]
+	for pos in test_placements:
+		test_chunk.tile_shapes[pos.x + (16*pos.y) + (256*pos.z)] = TILE_SHAPE.MARCH_ANG
 	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
