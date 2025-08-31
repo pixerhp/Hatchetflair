@@ -80,10 +80,9 @@ class TChunk:
 						str(tc_coords), " tile coords: ", t_xyz_from_i(i))
 					continue
 				TILE_SHAPE.EMPTY:
-					# !!! mesh march check
-					continue
+					mesh_empty(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
 				TILE_SHAPE.MARCH_ANG:
-					pass
+					mesh_march_ang(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
 				TILE_SHAPE.TESS_CUBE:
 					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
 				TILE_SHAPE.TESS_RHOMBDO:
@@ -138,6 +137,43 @@ class TChunk:
 				])))
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
+	
+	
+	func mesh_empty(
+		pos: Vector3i, tc_27: Array[TChunk], 
+		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
+	):
+		# !!! check for doing march_ang meshing
+		pass
+	
+	func mesh_march_ang(
+		pos: Vector3i, tc_27: Array[TChunk], 
+		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
+	):
+		var comb: int = 0b00000000
+		var move: Vector3i = Vector3i()
+		for section in range(8):
+			comb = 0b00000000
+			for state_i in range(8):
+				move = Vector3i(((section%2)-1)+(state_i%2), 
+					(((section/2)%2)-1)+((state_i/2)%2), 
+					(((section/4)%2)-1)+((state_i/4)%2))
+				comb |= int( # cast false/true to 0/1
+					tc_27[get_tc27_tchunk_i(pos, move)
+					].tile_shapes[get_tc27_tile_i(pos, move)] > TILE_SHAPE.EMPTY # "is solid?"
+					) << state_i # bitshift
+			for i in range(TCU.ts_march_ang_inds[comb][7-section].size()):
+				verts_ref.append(TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[comb][7-section][i]]
+					+ Vector3(section%2,(section/2)%2,(section/4)%2) + (Vector3(pos) - TCU.TCHUNK_HS))
+				if i%3 == 0:
+					norms_ref.append(TCU.triangle_normal_vector(PackedVector3Array([
+						TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[comb][7-section][i]], 
+						TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[comb][7-section][i+1]], 
+						TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[comb][7-section][i+2]], 
+					])))
+					norms_ref.append(norms_ref[norms_ref.size() - 1])
+					norms_ref.append(norms_ref[norms_ref.size() - 2])
+		pass
 	
 	func mesh_tess_cube(
 		pos: Vector3i, tc_27: Array[TChunk], 
@@ -218,10 +254,15 @@ func _ready():
 	var test_chunk: TChunk = TChunk.new()
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	#test_chunk.randomize_tiles()
-	test_chunk.tile_shapes[273] = TILE_SHAPE.MARCH_ANG
-	test_chunk.tile_shapes[290] = TILE_SHAPE.MARCH_ANG
-	test_chunk.tile_shapes[530] = TILE_SHAPE.MARCH_ANG
-	test_chunk.tile_shapes[545] = TILE_SHAPE.MARCH_ANG
+	test_chunk.tile_shapes[0] = TILE_SHAPE.MARCH_ANG
+	
+	test_chunk.tile_shapes[2] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[32] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[512] = TILE_SHAPE.TESS_CUBE
+	
+	#test_chunk.tile_shapes[290] = TILE_SHAPE.MARCH_ANG
+	#test_chunk.tile_shapes[530] = TILE_SHAPE.MARCH_ANG
+	#test_chunk.tile_shapes[545] = TILE_SHAPE.MARCH_ANG
 	
 	
 	#test_chunk.tile_shapes[test_chunk.tile_shapes.size() - 1] = TILE_SHAPE.MARCH_ANG
