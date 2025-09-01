@@ -93,9 +93,9 @@ class TChunk:
 			#surf_colors.append(color)
 		#mesh_surface[Mesh.ARRAY_COLOR] = surf_colors
 		
-		var test_mat: StandardMaterial3D = StandardMaterial3D.new()
-		test_mat.albedo_color = Color.WHITE
-		test_mat.vertex_color_use_as_albedo = true
+		var test_mat: StandardMaterial3D = load("res://assets/render_materials/subs_met_dull.tres")
+		#test_mat.albedo_color = Color.WHITE
+		#test_mat.vertex_color_use_as_albedo = true
 		if surf_verts.size() > 0:
 			array_mesh.add_surface_from_arrays(
 				Mesh.PRIMITIVE_TRIANGLES,
@@ -236,7 +236,8 @@ func _ready():
 	#test_chunk.randomize_tiles()
 	
 	var test_placements: Array[Vector3i] = [
-		Vector3i(1,1,1),
+		Vector3i(2,1,1), Vector3i(3,1,1), Vector3i(2,2,1), Vector3i(3,2,1),
+		Vector3i(1,1,1), Vector3i(1,2,1), Vector3i(1,1,2), Vector3i(1,2,2),
 	]
 	for pos in test_placements:
 		test_chunk.tile_shapes[pos.x + (16*pos.y) + (256*pos.z)] = TILE_SHAPE.MARCH_ANG
