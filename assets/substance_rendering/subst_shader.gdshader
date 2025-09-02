@@ -1,0 +1,13 @@
+shader_type spatial;
+
+uniform sampler2DArray albedo_textures;
+uniform sampler2DArray normal_map_textures;
+uniform sampler2DArray specials_textures;
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	// Called for every pixel the material is visible on.
+}
