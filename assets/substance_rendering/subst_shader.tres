@@ -1,7 +1,0 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://576y2a7goha"]
-
-[ext_resource type="Shader" uid="uid://15th2p6byx81" path="res://assets/substance_rendering/subst_shader.gdshader" id="1_upthd"]
-
-[resource]
-render_priority = 0
-shader = ExtResource("1_upthd")
