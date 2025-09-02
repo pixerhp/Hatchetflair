@@ -3,7 +3,7 @@ extends Node
 @onready var chunks_container_node: Node = self
 
 enum TILE_SHAPE {
-	NO_DATA, EMPTY, MARCH_ANG, MARCH_WEI, TESS_CUBE, TESS_RHOMBDO, CLIFF, POWDER,
+	NO_DATA, EMPTY, MARCH_ANG, MARCH_WEI, TESS_CUBE, TESS_RHOMBDO, CLIFF, POWDER, # BUBBLES? LIQUID?
 }
 
 class TChunk:
