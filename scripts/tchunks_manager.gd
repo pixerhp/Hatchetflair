@@ -98,7 +98,7 @@ class TChunk:
 		#test_mat.vertex_color_use_as_albedo = true
 		test_mat.set_shader_parameter("albedo_textures", SubstanceUtils.albedos_texarray)
 		test_mat.set_shader_parameter("normal_map_textures", SubstanceUtils.normals_texarray)
-		test_mat.set_shader_parameter("albedo_textures", SubstanceUtils.specials_texarray)
+		test_mat.set_shader_parameter("specials_textures", SubstanceUtils.specials_texarray)
 		if surf_verts.size() > 0:
 			array_mesh.add_surface_from_arrays(
 				Mesh.PRIMITIVE_TRIANGLES, 
