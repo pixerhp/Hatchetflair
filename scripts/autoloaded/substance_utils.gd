@@ -27,9 +27,9 @@ func _ready():
 
 
 func initialize_texture_arrays():
-	var albedos_array: Array[Image] = [load("res://unknown.png").get_image()]
-	var normals_array: Array[Image] = [load("res://unknown.png").get_image()]
-	var specials_array: Array[Image] = [load("res://unknown.png").get_image()]
+	var albedos_array: Array[Image] = []
+	var normals_array: Array[Image] = []
+	var specials_array: Array[Image] = []
 	var dir: DirAccess
 	
 	# Albedos
@@ -38,9 +38,11 @@ func initialize_texture_arrays():
 		push_error("Failed to access substance rendering assets albedo textures folder.")
 	for file: String in dir.get_files():
 		if not file.get_extension() == "png": continue
-		albedos_array.append(load(subst_rend_assets_location + albedos_folder_name + file).get_image())
-		if albedos_array[albedos_array.size()-1] == null: albedos_array.pop_back()
-		else: albedos_name_to_i[file.get_basename()] = albedos_array.size()-1
+		var img: Image = load(subst_rend_assets_location + albedos_folder_name + file).get_image()
+		if img == null: continue
+		img.convert(Image.FORMAT_RGBA8)
+		albedos_array.append(img)
+		albedos_name_to_i[file.get_basename()] = albedos_array.size()-1
 	albedos_texarray.create_from_images(albedos_array)
 	
 	# Normals
@@ -49,9 +51,11 @@ func initialize_texture_arrays():
 		push_error("Failed to access substance rendering assets normal map textures folder.")
 	for file: String in dir.get_files():
 		if not file.get_extension() == "png": continue
-		normals_array.append(load(subst_rend_assets_location + normals_folder_name + file).get_image())
-		if normals_array[normals_array.size()-1] == null: normals_array.pop_back()
-		else: normals_name_to_i[file.get_basename()] = normals_array.size()-1
+		var img: Image = load(subst_rend_assets_location + normals_folder_name + file).get_image()
+		if img == null: continue
+		img.convert(Image.FORMAT_RGB8)
+		normals_array.append(img)
+		normals_name_to_i[file.get_basename()] = normals_array.size()-1
 	normals_texarray.create_from_images(normals_array)
 	
 	# Specials
@@ -60,7 +64,9 @@ func initialize_texture_arrays():
 		push_error("Failed to access substance rendering assets specials textures folder.")
 	for file: String in dir.get_files():
 		if not file.get_extension() == "png": continue
-		specials_array.append(load(subst_rend_assets_location + specials_folder_name + file).get_image())
-		if specials_array[specials_array.size()-1] == null: specials_array.pop_back()
-		else: specials_name_to_i[file.get_basename()] = specials_array.size()-1
+		var img: Image = load(subst_rend_assets_location + specials_folder_name + file).get_image()
+		if img == null: continue
+		img.convert(Image.FORMAT_RGB8)
+		specials_array.append(img)
+		specials_name_to_i[file.get_basename()] = specials_array.size()-1
 	specials_texarray.create_from_images(specials_array)
