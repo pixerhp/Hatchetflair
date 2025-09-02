@@ -234,18 +234,66 @@ func _init():
 	TChunk.blank_tc27.fill(TChunk.new())
 
 func _ready():
-	var test_chunk: TChunk = TChunk.new()
-	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
+	#var test_chunk: TChunk = TChunk.new()
+	#test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	#test_chunk.randomize_tiles()
 	
-	var test_placements: Array[Vector3i] = [
-		Vector3i(2,1,1), Vector3i(3,1,1), Vector3i(2,2,1), Vector3i(3,2,1),
-		Vector3i(1,1,1), Vector3i(1,2,1), Vector3i(1,1,2), Vector3i(1,2,2),
-	]
-	for pos in test_placements:
-		test_chunk.tile_shapes[pos.x + (16*pos.y) + (256*pos.z)] = TILE_SHAPE.MARCH_ANG
+	#var test_placements: Array[Vector3i] = [
+		##Vector3i(2,1,1), Vector3i(3,1,1), Vector3i(2,2,1), Vector3i(3,2,1),
+		##Vector3i(1,1,1), Vector3i(1,2,1), Vector3i(1,1,2), Vector3i(1,2,2),
+		#Vector3i(1,1,1), Vector3i(2,1,1), Vector3i(3,1,1), Vector3i(4,1,1),
+		#Vector3i(1,1,2), Vector3i(2,1,2), Vector3i(3,1,2), Vector3i(4,1,2),
+		#Vector3i(1,1,3), Vector3i(2,1,3), Vector3i(3,1,3), Vector3i(4,1,3),
+		#Vector3i(1,1,4), Vector3i(2,1,4), Vector3i(3,1,4), Vector3i(4,1,4),
+	#]
+	#for pos in test_placements:
+		#test_chunk.tile_shapes[pos.x + (16*pos.y) + (256*pos.z)] = TILE_SHAPE.MARCH_ANG
 	
-	print()
 	
-	test_chunk.generate_mesh()
-	add_child(test_chunk.mesh_instance_node)
+	#test_chunk.generate_mesh()
+	#add_child(test_chunk.mesh_instance_node)
+	
+	generate_test_mesh()
+	pass
+
+func generate_test_mesh():
+	var mesh_instance_node: MeshInstance3D = MeshInstance3D.new()
+	var array_mesh: ArrayMesh = ArrayMesh.new()
+	
+	var mesh_surface: Array = []
+	mesh_surface.resize(Mesh.ARRAY_MAX)
+	mesh_surface[Mesh.ARRAY_VERTEX] = PackedVector3Array([
+		Vector3(-16,0,16), Vector3(-16,0,-16), Vector3(16,0,16),
+		Vector3(16,0,-16), Vector3(16,0,16), Vector3(-16,0,-16),
+	])
+	mesh_surface[Mesh.ARRAY_NORMAL] = PackedVector3Array([
+		Vector3(0,1,0), Vector3(0,1,0), Vector3(0,1,0), 
+		Vector3(0,1,0), Vector3(0,1,0), Vector3(0,1,0), 
+	])
+	mesh_surface[Mesh.ARRAY_TEX_UV] = PackedVector2Array([
+		Vector2(0,0), Vector2(0,1), Vector2(1,0), 
+		Vector2(1,1), Vector2(1,0), Vector2(0,1), 
+	])
+	mesh_surface[Mesh.ARRAY_CUSTOM0] = PackedByteArray([
+		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
+		0b00000000, 0b00000000, 0b00000000, 0b00000001, 
+		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
+		
+		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
+		0b00000000, 0b00000000, 0b00000000, 0b00000001, 
+		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
+	])
+	
+	var test_mat: ShaderMaterial = load("res://assets/substance_rendering/subst_mat.tres")
+	test_mat.set_shader_parameter("albedo_textures", SubstanceUtils.albedos_texarray)
+	test_mat.set_shader_parameter("normal_map_textures", SubstanceUtils.normals_texarray)
+	test_mat.set_shader_parameter("specials_textures", SubstanceUtils.specials_texarray)
+	
+	array_mesh.add_surface_from_arrays(
+		Mesh.PRIMITIVE_TRIANGLES, 
+		mesh_surface,
+	)
+	array_mesh.surface_set_material(0, test_mat)
+	mesh_instance_node.mesh = array_mesh
+	
+	add_child(mesh_instance_node)
