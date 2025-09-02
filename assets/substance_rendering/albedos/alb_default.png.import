@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1qxojx7yx3p2"
-path="res://.godot/imported/norm_flat.png-35a28f5174fe4564831271d4a7e903c9.ctex"
+uid="uid://mkegqm4348i3"
+path="res://.godot/imported/alb_default.png-5253aad246e5d4379732aae9030f49c1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/substance_rendering/normals/norm_flat.png"
-dest_files=["res://.godot/imported/norm_flat.png-35a28f5174fe4564831271d4a7e903c9.ctex"]
+source_file="res://assets/substance_rendering/albedos/alb_default.png"
+dest_files=["res://.godot/imported/alb_default.png-5253aad246e5d4379732aae9030f49c1.ctex"]
 
 [params]
 
