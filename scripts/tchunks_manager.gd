@@ -98,7 +98,7 @@ class TChunk:
 		#test_mat.vertex_color_use_as_albedo = true
 		if surf_verts.size() > 0:
 			array_mesh.add_surface_from_arrays(
-				Mesh.PRIMITIVE_TRIANGLES,
+				Mesh.PRIMITIVE_TRIANGLES, 
 				mesh_surface,
 			)
 			array_mesh.surface_set_material(0, test_mat)
@@ -241,6 +241,8 @@ func _ready():
 	]
 	for pos in test_placements:
 		test_chunk.tile_shapes[pos.x + (16*pos.y) + (256*pos.z)] = TILE_SHAPE.MARCH_ANG
+	
+	print()
 	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
