@@ -34,7 +34,7 @@ func initialize_texture_arrays():
 	
 	# Albedos
 	dir = DirAccess.open(subst_rend_assets_location + albedos_folder_name)
-	if not dir:
+	if not DirAccess.get_open_error() == OK:
 		push_error("Failed to access substance rendering assets albedo textures folder.")
 	for file: String in dir.get_files():
 		if not file.get_extension() == "png": continue
@@ -45,22 +45,22 @@ func initialize_texture_arrays():
 	
 	# Normals
 	dir = DirAccess.open(subst_rend_assets_location + normals_folder_name)
-	if not dir:
+	if not DirAccess.get_open_error() == OK:
 		push_error("Failed to access substance rendering assets normal map textures folder.")
 	for file: String in dir.get_files():
 		if not file.get_extension() == "png": continue
 		normals_array.append(load(subst_rend_assets_location + normals_folder_name + file).get_image())
 		if normals_array[normals_array.size()-1] == null: normals_array.pop_back()
 		else: normals_name_to_i[file.get_basename()] = normals_array.size()-1
-	albedos_texarray.create_from_images(normals_array)
+	normals_texarray.create_from_images(normals_array)
 	
 	# Specials
 	dir = DirAccess.open(subst_rend_assets_location + specials_folder_name)
-	if not dir:
+	if not DirAccess.get_open_error() == OK:
 		push_error("Failed to access substance rendering assets specials textures folder.")
 	for file: String in dir.get_files():
 		if not file.get_extension() == "png": continue
 		specials_array.append(load(subst_rend_assets_location + specials_folder_name + file).get_image())
 		if specials_array[specials_array.size()-1] == null: specials_array.pop_back()
 		else: specials_name_to_i[file.get_basename()] = specials_array.size()-1
-	albedos_texarray.create_from_images(specials_array)
+	specials_texarray.create_from_images(specials_array)
