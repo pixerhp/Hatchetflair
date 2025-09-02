@@ -10,4 +10,5 @@ void vertex() {
 
 void fragment() {
 	// Called for every pixel the material is visible on.
+	ALBEDO = texture(albedo_textures, vec3(SCREEN_UV.xy, 0)).rgb;
 }

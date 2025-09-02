@@ -93,9 +93,12 @@ class TChunk:
 			#surf_colors.append(color)
 		#mesh_surface[Mesh.ARRAY_COLOR] = surf_colors
 		
-		var test_mat: StandardMaterial3D = StandardMaterial3D.new() #load("res://assets/render_materials/subs_met_dull.tres")
-		test_mat.albedo_color = Color.WHITE
-		test_mat.vertex_color_use_as_albedo = true
+		var test_mat: ShaderMaterial = load("res://assets/substance_rendering/subst_mat.tres")
+		#test_mat.albedo_color = Color.WHITE
+		#test_mat.vertex_color_use_as_albedo = true
+		test_mat.set_shader_parameter("albedo_textures", SubstanceUtils.albedos_texarray)
+		test_mat.set_shader_parameter("normal_map_textures", SubstanceUtils.normals_texarray)
+		test_mat.set_shader_parameter("albedo_textures", SubstanceUtils.specials_texarray)
 		if surf_verts.size() > 0:
 			array_mesh.add_surface_from_arrays(
 				Mesh.PRIMITIVE_TRIANGLES, 
