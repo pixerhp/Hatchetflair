@@ -275,23 +275,31 @@ func generate_test_mesh():
 		Vector2(1,0), Vector2(1,1), Vector2(0,0), 
 	])
 	mesh_surface[Mesh.ARRAY_CUSTOM0] = PackedByteArray([
-		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
 		0b00000000, 0b00000000, 0b00000000, 0b00000001, 
-		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
+		0b00000001, 0b00000000, 0b00000000, 0b00000000, 
+		0b00000010, 0b00000000, 0b00000000, 0b00000000, 
 		
-		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
 		0b00000000, 0b00000000, 0b00000000, 0b00000001, 
-		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
+		0b00000001, 0b00000000, 0b00000000, 0b00000000, 
+		0b00000010, 0b00000000, 0b00000000, 0b00000000, 
 	])
 	
 	var test_mat: ShaderMaterial = load("res://assets/substance_rendering/subst_mat.tres")
-	test_mat.set_shader_parameter("albedo_textures", SubstanceUtils.albedos_texarray)
-	test_mat.set_shader_parameter("normal_map_textures", SubstanceUtils.normals_texarray)
+	test_mat.set_shader_parameter("albedos_textures", SubstanceUtils.albedos_texarray)
+	test_mat.set_shader_parameter("normals_textures", SubstanceUtils.normals_texarray)
 	test_mat.set_shader_parameter("specials_textures", SubstanceUtils.specials_texarray)
+	
+	var format = (
+		Mesh.ARRAY_CUSTOM0 | Mesh.ARRAY_CUSTOM_RGBA8_UNORM |
+		Mesh.ARRAY_CUSTOM1 | Mesh.ARRAY_CUSTOM_RGBA8_UNORM
+	)
 	
 	array_mesh.add_surface_from_arrays(
 		Mesh.PRIMITIVE_TRIANGLES, 
 		mesh_surface,
+		[],
+		{},
+		format,
 	)
 	array_mesh.surface_set_material(0, test_mat)
 	mesh_instance_node.mesh = array_mesh
