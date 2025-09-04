@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ba7jbkcahbu2l"
-path="res://.godot/imported/alb_test.png-3979204424917da5110fa24c41847e30.ctex"
+uid="uid://mkegqm4348i3"
+path="res://.godot/imported/alb_default.png-34425784b9af61f796f6d8ae57fe7f79.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/substance_rendering/albedos/alb_test.png"
-dest_files=["res://.godot/imported/alb_test.png-3979204424917da5110fa24c41847e30.ctex"]
+source_file="res://assets/substance_assets/albedos/alb_default.png"
+dest_files=["res://.godot/imported/alb_default.png-34425784b9af61f796f6d8ae57fe7f79.ctex"]
 
 [params]
 

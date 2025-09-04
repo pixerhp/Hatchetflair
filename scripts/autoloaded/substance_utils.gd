@@ -1,6 +1,6 @@
 extends Node
 
-var subst_rend_assets_location: String = "res://assets/substance_rendering/"
+var subst_rend_assets_location: String = "res://assets/substance_assets/"
 var albedos_folder_name: String = "albedos/"
 var normals_folder_name: String = "normals/"
 var specials_folder_name: String = "specials/"

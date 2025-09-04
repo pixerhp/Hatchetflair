@@ -1,0 +1,4 @@
+plainite,alb_default,1.0,1.0,1.0,norm_default,spec_default
+tincium,alb_default,0.5921,0.6,0.5294,norm_default,spec_metal_shiny
+zirium_treadplate,
+hive,

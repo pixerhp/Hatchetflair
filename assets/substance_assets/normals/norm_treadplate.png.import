@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6qqmb7de24tx"
-path="res://.godot/imported/norm_test.png-e093480bdfcfefd0fa821de8a7e467ff.ctex"
+uid="uid://bc023xvi5osyy"
+path="res://.godot/imported/norm_treadplate.png-c6bf637a19ef6bdec876e7993e1e7365.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/substance_rendering/normals/norm_test.png"
-dest_files=["res://.godot/imported/norm_test.png-e093480bdfcfefd0fa821de8a7e467ff.ctex"]
+source_file="res://assets/substance_assets/normals/norm_treadplate.png"
+dest_files=["res://.godot/imported/norm_treadplate.png-c6bf637a19ef6bdec876e7993e1e7365.ctex"]
 
 [params]
 

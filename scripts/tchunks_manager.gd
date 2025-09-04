@@ -11,6 +11,7 @@ class TChunk:
 	
 	var tc_coords: Vector3i = Vector3i(0,0,0)
 	var tile_shapes: PackedByteArray = []
+	var tile_substs: PackedInt32Array = []
 	
 	var mesh_instance_node: MeshInstance3D = MeshInstance3D.new()
 	var array_mesh: ArrayMesh = ArrayMesh.new()
@@ -41,6 +42,8 @@ class TChunk:
 	func _init():
 		tile_shapes.resize(TCU.TCHUNK_T)
 		tile_shapes.fill(TILE_SHAPE.NO_DATA)
+		tile_substs.resize(TCU.TCHUNK_T)
+		tile_shapes.fill(0)
 	
 	func randomize_tiles():
 		tile_shapes.fill(TILE_SHAPE.EMPTY)
