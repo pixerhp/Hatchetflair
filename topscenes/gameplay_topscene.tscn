@@ -18,7 +18,7 @@ sky = SubResource("Sky_3dqie")
 [sub_resource type="SphereMesh" id="SphereMesh_3dqie"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yy87l"]
-albedo_color = Color(1, 0, 0, 1)
+albedo_color = Color(0.982736, 0.124261, 1.92523e-07, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_08y4y"]
 size = Vector3(0.707, 0.707, 0.707)
