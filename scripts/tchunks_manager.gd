@@ -256,7 +256,7 @@ func _ready():
 	#test_chunk.generate_mesh()
 	#add_child(test_chunk.mesh_instance_node)
 	
-	generate_test_mesh()
+	#generate_test_mesh()
 	pass
 
 func generate_test_mesh():
