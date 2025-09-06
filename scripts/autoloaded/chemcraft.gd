@@ -12,12 +12,12 @@ class Subst:
 	# var value: float ?
 	var default_albedo_tex: int = -1
 	var default_vert_color: Color = Color.WHITE
-	var alt_albedo_tex: int = -1
-	var alt_vert_color: Color = Color.WHITE
+	#var alt_albedo_tex: int = -1
+	#var alt_vert_color: Color = Color.WHITE
 	var default_normal_tex: int = -1
-	var alt_normal_tex: int = -1
+	#var alt_normal_tex: int = -1
 	var default_special_tex: int = -1
-	var alt_special_tex: int = -1
+	#var alt_special_tex: int = -1
 
 var SUBSTANCES: Array[Subst] = []
 var subst_name_to_i: Dictionary[String,Subst] = {}
