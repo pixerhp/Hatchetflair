@@ -1,10 +1,11 @@
 plainite_white,alb_default,1.0,1.0,1.0,norm_default,spec_default
 plainite_black,alb_default,0.0,0.0,0.0,norm_default,spec_default
-grassy
+mossy
+doradium_polished
 werium_polished,alb_default,0.983,0.124,0.0,norm_default,spec_metal_shiny
 tincium_polished,alb_default,0.5921,0.6,0.5294,norm_default,spec_metal_shiny
-ferrium_treadplate,alb_default,NUM,NUM,NUM,norm_treadplate,spec_metal_semishiny
-zirium_treadplate,alb_default,NUM,NUM,NUM,norm_treadplate,spec_metal_dull
+ferrium_treadplate,
+zirium_treadplate,
 hive_yellow
 hive_blue
 salt
