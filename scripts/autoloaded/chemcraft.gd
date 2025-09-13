@@ -33,10 +33,30 @@ var specials_name_to_i: Dictionary[String,int] = {}
 func _ready():
 	initialize_substance_textures()
 	initialize_substances()
-	# intialize crafting? determine substance values?
+	# !!! intialize crafting? determine substance values?
 
 func initialize_substance_textures():
-	pass
+	var temp_imagearray: Array[Image] = []
+	var textures_folder_path: String = ""
+	var dir: DirAccess
+	for i in range(3):
+		temp_imagearray.clear()
+		textures_folder_path = [PATHS.albedos_textures, PATHS.normals_textures, PATHS.specials_textures][i]
+		dir = DirAccess.open(textures_folder_path)
+		if not DirAccess.get_open_error() == OK:
+			push_error("Failed to access a substance rendering texture assets folder.")
+		for filename: String in dir.get_files():
+			if not filename.get_extension() == "png": continue
+			var img: Image = load(textures_folder_path + filename).get_image()
+			if img == null: continue
+			img.convert(Image.FORMAT_RGBA8)
+			if img.get_size() != Vector2i(256, 256):
+				push_warning("Texture: \"", filename, "\" is not 256x256, thus will be resized before use.")
+				img.resize(256, 256)
+			temp_imagearray.append(img)
+			[albedos_name_to_i,normals_name_to_i,specials_name_to_i][i][filename.get_basename()] = (
+				temp_imagearray.size() - 1)
+		[albedos_texarray,normals_texarray,specials_texarray][i].create_from_images(temp_imagearray.duplicate())
 
 func initialize_substances():
 	pass
