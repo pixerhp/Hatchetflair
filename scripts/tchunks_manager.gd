@@ -92,8 +92,6 @@ class TChunk:
 					mesh_tess_rhombdo(t_xyz_from_i(i), tc_27, 
 					surf_verts, surf_norms, surf_uvs, surf_colors, surf_texinds_a, surf_texinds_b)
 		
-		print(surf_colors)
-		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
 		mesh_surface[Mesh.ARRAY_VERTEX] = surf_verts
@@ -242,11 +240,13 @@ class TChunk:
 						Vector3(pos) + TCU.ts_tess_rhombdo_verts[(j * 4)],
 						Vector3(pos) + TCU.ts_tess_rhombdo_verts[(j * 4) + 1],
 						Vector3(pos) + TCU.ts_tess_rhombdo_verts[(j * 4) + 2],])
+					uvs_ref.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
 				0b10:
 					verts_ref.append_array([
 						Vector3(pos) + TCU.ts_tess_rhombdo_verts[(j * 4) + 1],
 						Vector3(pos) + TCU.ts_tess_rhombdo_verts[(j * 4) + 3],
 						Vector3(pos) + TCU.ts_tess_rhombdo_verts[(j * 4) + 2],])
+					uvs_ref.append_array([Vector2(1,0), Vector2(1,1), Vector2(0,1)])
 				0b11:
 					verts_ref.append_array([
 						Vector3(pos) + TCU.ts_tess_rhombdo_verts[(j * 4)],
@@ -255,12 +255,13 @@ class TChunk:
 						Vector3(pos) + TCU.ts_tess_rhombdo_verts[(j * 4) + 1],
 						Vector3(pos) + TCU.ts_tess_rhombdo_verts[(j * 4) + 3],
 						Vector3(pos) + TCU.ts_tess_rhombdo_verts[(j * 4) + 2],])
+					uvs_ref.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1),
+						Vector2(1,0), Vector2(1,1), Vector2(0,1)])
 			match tri_cull_bits:
 				0b01, 0b10:
 					norms_ref.append_array([
 						TCU.ts_tess_rhombdo_norms[j], TCU.ts_tess_rhombdo_norms[j],
 						TCU.ts_tess_rhombdo_norms[j],])
-					uvs_ref.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
 					mesh_append_substance_data(tc_27[13].tile_substs[t_i_from_xyz(pos)], 3,
 						colors_ref, texinds_a_ref, texinds_b_ref)
 				0b11:
@@ -268,8 +269,6 @@ class TChunk:
 						TCU.ts_tess_rhombdo_norms[j], TCU.ts_tess_rhombdo_norms[j],
 						TCU.ts_tess_rhombdo_norms[j], TCU.ts_tess_rhombdo_norms[j],
 						TCU.ts_tess_rhombdo_norms[j], TCU.ts_tess_rhombdo_norms[j],])
-					uvs_ref.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
-					uvs_ref.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
 					mesh_append_substance_data(tc_27[13].tile_substs[t_i_from_xyz(pos)], 6,
 						colors_ref, texinds_a_ref, texinds_b_ref)
 	
@@ -306,12 +305,16 @@ func _ready():
 	var test_chunk: TChunk = TChunk.new()
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
 	test_chunk.tile_substs.fill(ChemCraft.subst_name_to_i.get("test", 0))
+	#test_chunk.randomize_tiles()
 	
 	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[32] = TILE_SHAPE.TESS_RHOMBDO
-	test_chunk.tile_shapes[64] = TILE_SHAPE.MARCH_ANG
+	test_chunk.tile_shapes[16] = TILE_SHAPE.TESS_RHOMBDO
+	test_chunk.tile_shapes[32] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[528] = TILE_SHAPE.TESS_RHOMBDO
 	
-	#test_chunk.randomize_tiles()
+	#test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
+	#test_chunk.tile_shapes[32] = TILE_SHAPE.TESS_RHOMBDO
+	#test_chunk.tile_shapes[64] = TILE_SHAPE.MARCH_ANG
 	
 	#var test_placements: Array[Vector3i] = [
 		##Vector3i(2,1,1), Vector3i(3,1,1), Vector3i(2,2,1), Vector3i(3,2,1),
