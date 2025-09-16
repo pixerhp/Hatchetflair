@@ -117,7 +117,7 @@ class TChunk:
 		mesh_surface[Mesh.ARRAY_CUSTOM0] = surf_texinds_a
 		mesh_surface[Mesh.ARRAY_CUSTOM1] = surf_texinds_b
 		
-		var shader_material: ShaderMaterial = load("res://assets/substance_assets/subst_mat.tres")
+		var shader_material: ShaderMaterial = load("res://assets/substance_assets/opaq_subst_mat.tres")
 		#shader_material.vertex_color_use_as_albedo = true
 		shader_material.set_shader_parameter("albedos_textures", ChemCraft.albedos_texarray)
 		shader_material.set_shader_parameter("normals_textures", ChemCraft.normals_texarray)
@@ -374,7 +374,7 @@ func generate_test_mesh():
 		0b00000000, 0b00000000, 0b00000000, 0b00000001, 
 	])
 	
-	var test_mat: ShaderMaterial = load("res://assets/substance_assets/subst_mat.tres")
+	var test_mat: ShaderMaterial = load("res://assets/substance_assets/opaq_subst_mat.tres")
 	test_mat.set_shader_parameter("albedos_textures", ChemCraft.albedos_texarray)
 	test_mat.set_shader_parameter("normals_textures", ChemCraft.normals_texarray)
 	test_mat.set_shader_parameter("specials_textures", ChemCraft.specials_texarray)

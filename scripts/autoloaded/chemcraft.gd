@@ -52,7 +52,7 @@ func initialize_substance_textures():
 			if not filename.get_extension() == "png": continue
 			var img: Image = load(textures_folder_path + filename).get_image()
 			if img == null: continue
-			img.convert(Image.FORMAT_RGBA8)
+			img.convert(Image.FORMAT_RGB8)
 			if img.get_size() != Vector2i(256, 256):
 				push_warning("Texture: \"", filename, "\" is not 256x256, thus will be resized before use.")
 				img.resize(256, 256)
