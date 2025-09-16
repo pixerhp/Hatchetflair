@@ -1,6 +1,6 @@
 The Hatchetflair License
 
-Copyright (c) 2025 Pixer H. P.
+Copyright © 2025 Pixer H. P.
 
 You may view and learn from this source code, and may suggest edits and development ideas to the developers of the project. 
 You may compile this source code for personal use, and may run the resulting compiled program for personal use.
