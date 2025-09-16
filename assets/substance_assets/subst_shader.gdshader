@@ -17,9 +17,9 @@ void vertex() { // Called for every vertex the material is visible on.
 }
 
 void fragment() { // Called for every pixel the material is visible on.
-	vec4 color = texture(albedos_textures, vec3(UV.xy, albedos_index));
-	ALPHA = color.a;
-	ALBEDO = color.rgb;
+	vec4 albtex_color = texture(albedos_textures, vec3(UV.xy, albedos_index));
+	ALPHA = albtex_color.a;
+	ALBEDO = albtex_color.rgb * COLOR.rgb;
 	NORMAL_MAP = texture(normals_textures, vec3(-UV.xy, normals_index)).rgb;
 	vec4 special = texture(specials_textures, vec3(UV.xy, specials_index));
 	METALLIC = special.r;

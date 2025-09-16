@@ -17,14 +17,14 @@ const ts_tess_cube_move: Array[Vector3i] = [
 	Vector3i(0, 0, -1), Vector3i(0, 0, 1),
 ]
 const ts_tess_cube_verts: PackedVector3Array = [
-	Vector3(0, 0, 0)-TCHUNK_HS,Vector3(0, 1, 0)-TCHUNK_HS,Vector3(0, 0, 1)-TCHUNK_HS,Vector3(0, 1, 1)-TCHUNK_HS,
-	Vector3(1, 0, 1)-TCHUNK_HS,Vector3(1, 1, 1)-TCHUNK_HS,Vector3(1, 0, 0)-TCHUNK_HS,Vector3(1, 1, 0)-TCHUNK_HS,
+	Vector3(0, 0, 0)-TCHUNK_HS, Vector3(0, 1, 0)-TCHUNK_HS, Vector3(0, 0, 1)-TCHUNK_HS, Vector3(0, 1, 1)-TCHUNK_HS,
+	Vector3(1, 0, 1)-TCHUNK_HS, Vector3(1, 1, 1)-TCHUNK_HS, Vector3(1, 0, 0)-TCHUNK_HS, Vector3(1, 1, 0)-TCHUNK_HS,
 	
-	Vector3(1, 0, 0)-TCHUNK_HS,Vector3(0, 0, 0)-TCHUNK_HS,Vector3(1, 0, 1)-TCHUNK_HS,Vector3(0, 0, 1)-TCHUNK_HS,
-	Vector3(0, 1, 0)-TCHUNK_HS,Vector3(1, 1, 0)-TCHUNK_HS,Vector3(0, 1, 1)-TCHUNK_HS,Vector3(1, 1, 1)-TCHUNK_HS,
+	Vector3(1, 0, 0)-TCHUNK_HS, Vector3(0, 0, 0)-TCHUNK_HS, Vector3(1, 0, 1)-TCHUNK_HS, Vector3(0, 0, 1)-TCHUNK_HS,
+	Vector3(0, 1, 0)-TCHUNK_HS, Vector3(1, 1, 0)-TCHUNK_HS, Vector3(0, 1, 1)-TCHUNK_HS, Vector3(1, 1, 1)-TCHUNK_HS,
 	
-	Vector3(1, 0, 0)-TCHUNK_HS,Vector3(1, 1, 0)-TCHUNK_HS,Vector3(0, 0, 0)-TCHUNK_HS,Vector3(0, 1, 0)-TCHUNK_HS,
-	Vector3(0, 0, 1)-TCHUNK_HS,Vector3(0, 1, 1)-TCHUNK_HS,Vector3(1, 0, 1)-TCHUNK_HS,Vector3(1, 1, 1)-TCHUNK_HS,
+	Vector3(1, 0, 0)-TCHUNK_HS, Vector3(1, 1, 0)-TCHUNK_HS, Vector3(0, 0, 0)-TCHUNK_HS, Vector3(0, 1, 0)-TCHUNK_HS,
+	Vector3(0, 0, 1)-TCHUNK_HS, Vector3(0, 1, 1)-TCHUNK_HS, Vector3(1, 0, 1)-TCHUNK_HS, Vector3(1, 1, 1)-TCHUNK_HS,
 ]
 # (Tesselated cube doesn't have norms because we can reuse index 0-5 of 'move' as them.)
 

@@ -1,8 +1,11 @@
+nothing,alb_default,1.0,0.0,0.6235,norm_default,spec_default
+test,alb_test,1.0,1.0,1.0,norm_test,spec_test
+
 plainite_white,alb_default,1.0,1.0,1.0,norm_default,spec_default
 plainite_black,alb_default,0.0,0.0,0.0,norm_default,spec_default
 mossy
 doradium_polished
-werium_polished,alb_default,0.983,0.124,0.0,norm_default,spec_metal_shiny
+werium_polished,alb_default,1.0,0.0,0.0,norm_default,spec_metal_shiny
 tincium_polished,alb_default,0.5921,0.6,0.5294,norm_default,spec_metal_shiny
 ferrium_treadplate
 zirium_treadplate

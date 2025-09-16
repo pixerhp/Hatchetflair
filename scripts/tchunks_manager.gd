@@ -10,6 +10,7 @@ class TChunk:
 	static var blank_tc27: Array[TChunk] = []
 	
 	var tc_coords: Vector3i = Vector3i(0,0,0)
+	# var local_biome_data ?
 	var tile_shapes: PackedByteArray = []
 	var tile_substs: PackedInt32Array = []
 	
@@ -67,6 +68,11 @@ class TChunk:
 		tc_27[13] = self # Set self as center of the 3x3x3 chunks.
 		var surf_verts: PackedVector3Array = []
 		var surf_norms: PackedVector3Array = []
+		var surf_uvs: PackedVector2Array = []
+		var surf_colors: PackedColorArray = []
+		var surf_texinds_a: PackedByteArray = []
+		var surf_texinds_b: PackedByteArray = []
+		
 		for i in range(TCU.TCHUNK_T):
 			match tile_shapes[i]:
 				TILE_SHAPE.NO_DATA:
@@ -74,45 +80,56 @@ class TChunk:
 						str(tc_coords), " tile coords: ", t_xyz_from_i(i))
 					continue
 				TILE_SHAPE.EMPTY:
-					mesh_empty(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
+					mesh_empty(t_xyz_from_i(i), tc_27, 
+					surf_verts, surf_norms, surf_uvs, surf_colors, surf_texinds_a, surf_texinds_b)
 				TILE_SHAPE.MARCH_ANG:
-					mesh_march_ang(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
+					mesh_march_ang(t_xyz_from_i(i), tc_27, 
+					surf_verts, surf_norms, surf_uvs, surf_colors, surf_texinds_a, surf_texinds_b)
 				TILE_SHAPE.TESS_CUBE:
-					mesh_tess_cube(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
+					mesh_tess_cube(t_xyz_from_i(i), tc_27, 
+					surf_verts, surf_norms, surf_uvs, surf_colors, surf_texinds_a, surf_texinds_b)
 				TILE_SHAPE.TESS_RHOMBDO:
-					mesh_tess_rhombdo(t_xyz_from_i(i), tc_27, surf_verts, surf_norms)
+					mesh_tess_rhombdo(t_xyz_from_i(i), tc_27, 
+					surf_verts, surf_norms, surf_uvs, surf_colors, surf_texinds_a, surf_texinds_b)
+		
+		print(surf_colors)
 		
 		var mesh_surface: Array = []
 		mesh_surface.resize(Mesh.ARRAY_MAX)
 		mesh_surface[Mesh.ARRAY_VERTEX] = surf_verts
 		mesh_surface[Mesh.ARRAY_NORMAL] = surf_norms
+		mesh_surface[Mesh.ARRAY_TEX_UV] = surf_uvs
+		mesh_surface[Mesh.ARRAY_COLOR] = surf_colors
+		mesh_surface[Mesh.ARRAY_CUSTOM0] = surf_texinds_a
+		mesh_surface[Mesh.ARRAY_CUSTOM1] = surf_texinds_b
 		
-		## Give each triangle a random color, for testing/debug purposes.
-		#var surf_colors: PackedColorArray = []
-		#var color: Color
-		#for i in surf_verts.size():
-			#if i%3 == 0:
-				#color = Color.from_hsv(randf_range(0,1), 0.75, 1)
-			#surf_colors.append(color)
-		#mesh_surface[Mesh.ARRAY_COLOR] = surf_colors
+		var shader_material: ShaderMaterial = load("res://assets/substance_assets/subst_mat.tres")
+		#shader_material.vertex_color_use_as_albedo = true
+		shader_material.set_shader_parameter("albedos_textures", ChemCraft.albedos_texarray)
+		shader_material.set_shader_parameter("normals_textures", ChemCraft.normals_texarray)
+		shader_material.set_shader_parameter("specials_textures", ChemCraft.specials_texarray)
 		
-		var test_mat: ShaderMaterial = load("res://assets/substance_rendering/subst_mat.tres")
-		#test_mat.albedo_color = Color.WHITE
-		#test_mat.vertex_color_use_as_albedo = true
-		test_mat.set_shader_parameter("albedo_textures", ChemCraft.albedos_texarray)
-		test_mat.set_shader_parameter("normal_map_textures", ChemCraft.normals_texarray)
-		test_mat.set_shader_parameter("specials_textures", ChemCraft.specials_texarray)
-		if surf_verts.size() > 0:
+		var format = (
+			Mesh.ARRAY_CUSTOM0 | Mesh.ARRAY_CUSTOM_RGBA8_UNORM |
+			Mesh.ARRAY_CUSTOM1 | Mesh.ARRAY_CUSTOM_RGBA8_UNORM
+		)
+		
+		if not surf_verts.is_empty():
 			array_mesh.add_surface_from_arrays(
 				Mesh.PRIMITIVE_TRIANGLES, 
 				mesh_surface,
-			)
-			array_mesh.surface_set_material(0, test_mat)
+				[],
+				{},
+				format,)
+			array_mesh.surface_set_material(0, shader_material)
+		
 		mesh_instance_node.mesh = array_mesh
 	
 	func mesh_empty(
 		pos: Vector3i, tc_27: Array[TChunk], 
 		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
+		uvs_ref: PackedVector2Array, colors_ref: PackedColorArray,
+		texinds_a_ref: PackedByteArray, texinds_b_ref: PackedByteArray, 
 	):
 		# Check for and conditionally attempt to mesh marching cube sections.
 		var neighbor_shapes: PackedByteArray = []
@@ -126,18 +143,24 @@ class TChunk:
 				(neighbor_shapes[((i/2)%2)+2] == TILE_SHAPE.MARCH_ANG) or
 				(neighbor_shapes[((i/4)%2)+4] == TILE_SHAPE.MARCH_ANG)
 			):
-				mesh_march_ang_sect(pos, i, tc_27, verts_ref, norms_ref)
+				mesh_march_ang_sect(pos, i, tc_27, 
+			verts_ref, norms_ref, uvs_ref, colors_ref, texinds_a_ref, texinds_b_ref)
 	
 	func mesh_march_ang(
 		pos: Vector3i, tc_27: Array[TChunk], 
 		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
+		uvs_ref: PackedVector2Array, colors_ref: PackedColorArray,
+		texinds_a_ref: PackedByteArray, texinds_b_ref: PackedByteArray, 
 	):
 		for section in range(8):
-			mesh_march_ang_sect(pos, section, tc_27, verts_ref, norms_ref)
+			mesh_march_ang_sect(pos, section, tc_27, 
+			verts_ref, norms_ref, uvs_ref, colors_ref, texinds_a_ref, texinds_b_ref)
 	
 	func mesh_march_ang_sect(
 		pos: Vector3i, sect: int, tc_27: Array[TChunk], 
 		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
+		uvs_ref: PackedVector2Array, colors_ref: PackedColorArray,
+		texinds_a_ref: PackedByteArray, texinds_b_ref: PackedByteArray, 
 	):
 		var comb: int = 0b00000000
 		var move: Vector3i = Vector3i()
@@ -160,10 +183,15 @@ class TChunk:
 				])))
 				norms_ref.append(norms_ref[norms_ref.size() - 1])
 				norms_ref.append(norms_ref[norms_ref.size() - 2])
+				uvs_ref.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
+				mesh_append_substance_data(tc_27[13].tile_substs[t_i_from_xyz(pos)], 3,
+					colors_ref, texinds_a_ref, texinds_b_ref)
 	
 	func mesh_tess_cube(
 		pos: Vector3i, tc_27: Array[TChunk], 
 		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
+		uvs_ref: PackedVector2Array, colors_ref: PackedColorArray,
+		texinds_a_ref: PackedByteArray, texinds_b_ref: PackedByteArray, 
 	):
 		for j: int in range(6):
 			match tc_27[get_tc27_tchunk_i(pos, TCU.ts_tess_cube_move[j])
@@ -182,10 +210,16 @@ class TChunk:
 				Vector3(TCU.ts_tess_cube_move[j]), Vector3(TCU.ts_tess_cube_move[j]),
 				Vector3(TCU.ts_tess_cube_move[j]), Vector3(TCU.ts_tess_cube_move[j]),
 				Vector3(TCU.ts_tess_cube_move[j]), Vector3(TCU.ts_tess_cube_move[j]),])
+			uvs_ref.append_array([Vector2(0,1), Vector2(0,0), Vector2(1,1),
+				Vector2(0,0), Vector2(1,0), Vector2(1,1)])
+			mesh_append_substance_data(tc_27[13].tile_substs[t_i_from_xyz(pos)], 6,
+				colors_ref, texinds_a_ref, texinds_b_ref)
 	
 	func mesh_tess_rhombdo(
 		pos: Vector3i, tc_27: Array[TChunk], 
 		verts_ref: PackedVector3Array, norms_ref: PackedVector3Array,
+		uvs_ref: PackedVector2Array, colors_ref: PackedColorArray,
+		texinds_a_ref: PackedByteArray, texinds_b_ref: PackedByteArray, 
 	):
 		var tri_cull_bits: int = 0b11
 		for j in range(12): # Check whether whole face should be culled:
@@ -226,19 +260,57 @@ class TChunk:
 					norms_ref.append_array([
 						TCU.ts_tess_rhombdo_norms[j], TCU.ts_tess_rhombdo_norms[j],
 						TCU.ts_tess_rhombdo_norms[j],])
+					uvs_ref.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
+					mesh_append_substance_data(tc_27[13].tile_substs[t_i_from_xyz(pos)], 3,
+						colors_ref, texinds_a_ref, texinds_b_ref)
 				0b11:
 					norms_ref.append_array([
 						TCU.ts_tess_rhombdo_norms[j], TCU.ts_tess_rhombdo_norms[j],
 						TCU.ts_tess_rhombdo_norms[j], TCU.ts_tess_rhombdo_norms[j],
 						TCU.ts_tess_rhombdo_norms[j], TCU.ts_tess_rhombdo_norms[j],])
+					uvs_ref.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
+					uvs_ref.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
+					mesh_append_substance_data(tc_27[13].tile_substs[t_i_from_xyz(pos)], 6,
+						colors_ref, texinds_a_ref, texinds_b_ref)
+	
+	func mesh_append_substance_data(
+		subst_ind: int, num_of_verts_with_same_data: int,
+		colors_ref: PackedColorArray,
+		texinds_a_ref: PackedByteArray, texinds_b_ref: PackedByteArray,
+	):
+		colors_ref.append(ChemCraft.SUBSTANCES[subst_ind].vert_color)
+		texinds_a_ref.append((ChemCraft.SUBSTANCES[subst_ind].albedo_ind & 0b111111110000000000000000) >> 16)
+		texinds_a_ref.append((ChemCraft.SUBSTANCES[subst_ind].albedo_ind & 0b000000001111111100000000) >> 8)
+		texinds_a_ref.append(ChemCraft.SUBSTANCES[subst_ind].albedo_ind & 0b000000000000000011111111)
+		texinds_b_ref.append((ChemCraft.SUBSTANCES[subst_ind].normal_ind & 0b111111110000000000000000) >> 16)
+		texinds_b_ref.append((ChemCraft.SUBSTANCES[subst_ind].normal_ind & 0b000000001111111100000000) >> 8)
+		texinds_b_ref.append(ChemCraft.SUBSTANCES[subst_ind].normal_ind & 0b000000000000000011111111)
+		texinds_a_ref.append((ChemCraft.SUBSTANCES[subst_ind].special_ind & 0b000000001111111100000000) >> 8)
+		texinds_b_ref.append(ChemCraft.SUBSTANCES[subst_ind].special_ind & 0b000000000000000011111111)
+		
+		# Copy the data for each additional vertex which needs to use the same data:
+		for i in range(0, num_of_verts_with_same_data - 1, 1):
+			colors_ref.append(colors_ref[colors_ref.size() - 1])
+			texinds_a_ref.append_array([
+				texinds_a_ref[texinds_a_ref.size() - 4], texinds_a_ref[texinds_a_ref.size() - 3],
+				texinds_a_ref[texinds_a_ref.size() - 2], texinds_a_ref[texinds_a_ref.size() - 1]])
+			texinds_b_ref.append_array([
+				texinds_b_ref[texinds_b_ref.size() - 4], texinds_b_ref[texinds_b_ref.size() - 3],
+				texinds_b_ref[texinds_b_ref.size() - 2], texinds_b_ref[texinds_b_ref.size() - 1]])
 
 func _init():
 	TChunk.blank_tc27.resize(27)
 	TChunk.blank_tc27.fill(TChunk.new())
 
 func _ready():
-	#var test_chunk: TChunk = TChunk.new()
-	#test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
+	var test_chunk: TChunk = TChunk.new()
+	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
+	test_chunk.tile_substs.fill(ChemCraft.subst_name_to_i.get("test", 0))
+	
+	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
+	test_chunk.tile_shapes[32] = TILE_SHAPE.TESS_RHOMBDO
+	test_chunk.tile_shapes[64] = TILE_SHAPE.MARCH_ANG
+	
 	#test_chunk.randomize_tiles()
 	
 	#var test_placements: Array[Vector3i] = [
@@ -253,8 +325,8 @@ func _ready():
 		#test_chunk.tile_shapes[pos.x + (16*pos.y) + (256*pos.z)] = TILE_SHAPE.MARCH_ANG
 	
 	
-	#test_chunk.generate_mesh()
-	#add_child(test_chunk.mesh_instance_node)
+	test_chunk.generate_mesh()
+	add_child(test_chunk.mesh_instance_node)
 	
 	#generate_test_mesh()
 	pass
@@ -272,6 +344,10 @@ func generate_test_mesh():
 	mesh_surface[Mesh.ARRAY_NORMAL] = PackedVector3Array([
 		Vector3(0,1,0), Vector3(0,1,0), Vector3(0,1,0), 
 		Vector3(0,1,0), Vector3(0,1,0), Vector3(0,1,0), 
+	])
+	mesh_surface[Mesh.ARRAY_COLOR] = PackedColorArray([
+		Color.BLUE, Color.BLUE, Color.BLUE, 
+		Color.YELLOW, Color.YELLOW, Color.YELLOW, 
 	])
 	mesh_surface[Mesh.ARRAY_TEX_UV] = PackedVector2Array([
 		Vector2(0,1), Vector2(0,0), Vector2(1,1), 
@@ -296,7 +372,7 @@ func generate_test_mesh():
 		0b00000000, 0b00000000, 0b00000000, 0b00000001, 
 	])
 	
-	var test_mat: ShaderMaterial = load("res://assets/substance_rendering/subst_mat.tres")
+	var test_mat: ShaderMaterial = load("res://assets/substance_assets/subst_mat.tres")
 	test_mat.set_shader_parameter("albedos_textures", ChemCraft.albedos_texarray)
 	test_mat.set_shader_parameter("normals_textures", ChemCraft.normals_texarray)
 	test_mat.set_shader_parameter("specials_textures", ChemCraft.specials_texarray)
