@@ -17,7 +17,7 @@ void vertex() { // Called for every vertex the material is visible on.
 }
 
 void fragment() { // Called for every pixel the material is visible on.
-	ALPHA_SCISSOR_THRESHOLD = 0.5;
+	//ALPHA_SCISSOR_THRESHOLD = 0.5;
 	vec4 albtex_color = texture(albedos_textures, vec3(UV.xy, albedos_index));
 	ALBEDO = albtex_color.rgb * COLOR.rgb;
 	NORMAL_MAP = texture(normals_textures, vec3(UV.xy, normals_index)).rgb;
