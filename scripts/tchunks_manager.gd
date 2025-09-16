@@ -99,9 +99,9 @@ class TChunk:
 		var test_mat: ShaderMaterial = load("res://assets/substance_rendering/subst_mat.tres")
 		#test_mat.albedo_color = Color.WHITE
 		#test_mat.vertex_color_use_as_albedo = true
-		test_mat.set_shader_parameter("albedo_textures", SubstanceUtils.albedos_texarray)
-		test_mat.set_shader_parameter("normal_map_textures", SubstanceUtils.normals_texarray)
-		test_mat.set_shader_parameter("specials_textures", SubstanceUtils.specials_texarray)
+		test_mat.set_shader_parameter("albedo_textures", ChemCraft.albedos_texarray)
+		test_mat.set_shader_parameter("normal_map_textures", ChemCraft.normals_texarray)
+		test_mat.set_shader_parameter("specials_textures", ChemCraft.specials_texarray)
 		if surf_verts.size() > 0:
 			array_mesh.add_surface_from_arrays(
 				Mesh.PRIMITIVE_TRIANGLES, 
@@ -297,9 +297,9 @@ func generate_test_mesh():
 	])
 	
 	var test_mat: ShaderMaterial = load("res://assets/substance_rendering/subst_mat.tres")
-	test_mat.set_shader_parameter("albedos_textures", SubstanceUtils.albedos_texarray)
-	test_mat.set_shader_parameter("normals_textures", SubstanceUtils.normals_texarray)
-	test_mat.set_shader_parameter("specials_textures", SubstanceUtils.specials_texarray)
+	test_mat.set_shader_parameter("albedos_textures", ChemCraft.albedos_texarray)
+	test_mat.set_shader_parameter("normals_textures", ChemCraft.normals_texarray)
+	test_mat.set_shader_parameter("specials_textures", ChemCraft.specials_texarray)
 	
 	var format = (
 		Mesh.ARRAY_CUSTOM0 | Mesh.ARRAY_CUSTOM_RGBA8_UNORM |

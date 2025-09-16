@@ -24,8 +24,7 @@ config/icon="uid://cugbxqpgcuar1"
 DebugDraw="*res://scripts/autoloaded/debug_draw.gd"
 Globals="*res://scripts/autoloaded/general_globals.gd"
 TCU="*res://scripts/autoloaded/tchunks_utils.gd"
-SubstanceUtils="*res://scripts/autoloaded/substance_utils.gd"
-CC="*res://scripts/autoloaded/chemcraft.gd"
+ChemCraft="*res://scripts/autoloaded/chemcraft.gd"
 
 [debug]
 
