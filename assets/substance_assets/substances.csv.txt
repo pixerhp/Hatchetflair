@@ -1,3 +1,4 @@
+error,alb_error,1.0,1.0,1.0,norm_error,spec_error
 nothing,alb_default,1.0,0.0,0.6235,norm_default,spec_default
 test,alb_test,1.0,1.0,1.0,norm_test,spec_test
 

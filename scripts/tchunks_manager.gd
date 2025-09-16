@@ -320,13 +320,13 @@ func _init():
 func _ready():
 	var test_chunk: TChunk = TChunk.new()
 	test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
-	test_chunk.tile_substs.fill(ChemCraft.subst_name_to_i.get("test", 0))
+	test_chunk.tile_substs.fill(ChemCraft.subst_name_to_i.get("nothing", 0))
 	#test_chunk.randomize_tiles()
 	
 	test_chunk.set_tile(Vector3i(0,0,0), TILE_SHAPE.TESS_CUBE, "plainite_black")
 	test_chunk.set_tile(Vector3i(0,1,0), TILE_SHAPE.TESS_RHOMBDO, "test")
 	test_chunk.set_tile(Vector3i(0,2,0), TILE_SHAPE.TESS_CUBE, "plainite_white")
-	test_chunk.set_tile(Vector3i(2,1,0), TILE_SHAPE.TESS_RHOMBDO, "test")
+	test_chunk.set_tile(Vector3i(2,1,0), TILE_SHAPE.TESS_RHOMBDO, "error")
 	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
