@@ -14,6 +14,8 @@ class TChunk:
 	var tile_shapes: PackedByteArray = []
 	var tile_substs: PackedInt32Array = []
 	
+	var is_mesh_accurate: bool = false
+		# Does the mesh accurately reflect current data, or does it need to be remeshed?
 	var mesh_instance_node: MeshInstance3D = MeshInstance3D.new()
 	var array_mesh: ArrayMesh = ArrayMesh.new()
 	
@@ -45,6 +47,20 @@ class TChunk:
 		tile_shapes.fill(TILE_SHAPE.NO_DATA)
 		tile_substs.resize(TCU.TCHUNK_T)
 		tile_shapes.fill(0)
+	
+	# !!! note that in the future, setting a tile in a chunk should make some surrounding chunks have to remesh.
+	func set_tile(pos: Vector3i, shape: int, subst: Variant):
+		var tile_index: int = t_i_from_xyz(pos)
+		self.tile_shapes[tile_index] = shape
+		match typeof(subst):
+			TYPE_INT:
+				self.tile_substs[tile_index] = subst
+			TYPE_STRING:
+				self.tile_substs[tile_index] = ChemCraft.subst_name_to_i.get(subst, 0)
+			_:
+				push_error("Bad subst parameter, int (subst index) or String (subst name) expected.")
+				self.tile_substs[tile_index] = 0
+		self.is_mesh_accurate = false
 	
 	func randomize_tiles():
 		tile_shapes.fill(TILE_SHAPE.EMPTY)
@@ -307,32 +323,15 @@ func _ready():
 	test_chunk.tile_substs.fill(ChemCraft.subst_name_to_i.get("test", 0))
 	#test_chunk.randomize_tiles()
 	
-	test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[16] = TILE_SHAPE.TESS_RHOMBDO
-	test_chunk.tile_shapes[32] = TILE_SHAPE.TESS_CUBE
-	test_chunk.tile_shapes[528] = TILE_SHAPE.TESS_RHOMBDO
-	
-	#test_chunk.tile_shapes[0] = TILE_SHAPE.TESS_CUBE
-	#test_chunk.tile_shapes[32] = TILE_SHAPE.TESS_RHOMBDO
-	#test_chunk.tile_shapes[64] = TILE_SHAPE.MARCH_ANG
-	
-	#var test_placements: Array[Vector3i] = [
-		##Vector3i(2,1,1), Vector3i(3,1,1), Vector3i(2,2,1), Vector3i(3,2,1),
-		##Vector3i(1,1,1), Vector3i(1,2,1), Vector3i(1,1,2), Vector3i(1,2,2),
-		#Vector3i(1,1,1), Vector3i(2,1,1), Vector3i(3,1,1), Vector3i(4,1,1),
-		#Vector3i(1,1,2), Vector3i(2,1,2), Vector3i(3,1,2), Vector3i(4,1,2),
-		#Vector3i(1,1,3), Vector3i(2,1,3), Vector3i(3,1,3), Vector3i(4,1,3),
-		#Vector3i(1,1,4), Vector3i(2,1,4), Vector3i(3,1,4), Vector3i(4,1,4),
-	#]
-	#for pos in test_placements:
-		#test_chunk.tile_shapes[pos.x + (16*pos.y) + (256*pos.z)] = TILE_SHAPE.MARCH_ANG
-	
+	test_chunk.set_tile(Vector3i(0,0,0), TILE_SHAPE.TESS_CUBE, "plainite_black")
+	test_chunk.set_tile(Vector3i(0,1,0), TILE_SHAPE.TESS_RHOMBDO, "test")
+	test_chunk.set_tile(Vector3i(0,2,0), TILE_SHAPE.TESS_CUBE, "plainite_white")
+	test_chunk.set_tile(Vector3i(2,1,0), TILE_SHAPE.TESS_RHOMBDO, "test")
 	
 	test_chunk.generate_mesh()
 	add_child(test_chunk.mesh_instance_node)
 	
 	#generate_test_mesh()
-	pass
 
 func generate_test_mesh():
 	var mesh_instance_node: MeshInstance3D = MeshInstance3D.new()
