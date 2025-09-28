@@ -367,28 +367,58 @@ func meshify_append_substance_data(
 var world_tchunks: Array[TChunk] = []
 var world_tc_xyz_to_i: Dictionary[Vector3i, int] = {}
 
-# !!! WIP FUNCTIONS
-func load_tchunk(xyz: Vector3i, reload_if_existing: bool = false):
-	if reload_if_existing:
-		unload_tchunk(xyz)
+func xyz_to_name(xyz: Vector3i) -> String:
+	return str(xyz.x) + "_" + str(xyz.y) + "_" + str(xyz.z)
+
+func name_to_xyz(node_name: String) -> Vector3i:
+	var split_name: PackedStringArray = node_name.split("_", true, 3)
+	if split_name.size() >= 3:
+		return Vector3i(int(split_name[0]), int(split_name[1]), int(split_name[2]))
+	else:
+		return Vector3i(0,0,0)
+
+func refresh_world_tc_xyz_to_i():
+	world_tc_xyz_to_i.clear()
+	for i in range(world_tchunks.size()):
+		world_tc_xyz_to_i[world_tchunks[i].coords] = i
+	if not world_tc_xyz_to_i.size() == world_tchunks.size():
+		push_error("Some world tchunks have duplicate coords, which is unintended behavior.")
+
+func load_tchunk(xyz: Vector3i, reload_if_existing: bool):
+	if world_tc_xyz_to_i.has(xyz):
+		if reload_if_existing: unload_tchunk(xyz)
+		else: return
 	world_tchunks.append(TChunk.new())
 	world_tc_xyz_to_i[xyz] = world_tchunks.size() - 1
 
 func unload_tchunk(xyz: Vector3i):
-	if world_tc_xyz_to_i.get(xyz, -1) == -1:
+	if not world_tc_xyz_to_i.has(xyz): 
 		return
-	world_tchunks.remove_at(world_tc_xyz_to_i[xyz])
 	remove_tchunk_mesh_node(xyz)
+	world_tchunks.remove_at(world_tc_xyz_to_i[xyz])
 	world_tc_xyz_to_i.erase(xyz)
 
 func remesh_tchunk(xyz: Vector3i):
-	pass
+	if not world_tc_xyz_to_i.has(xyz):
+		return
+	remove_tchunk_mesh_node(xyz)
+	tc_meshify(world_tchunks[world_tc_xyz_to_i[xyz]])
+	add_tchunk_mesh_node(xyz)
 
 func add_tchunk_mesh_node(xyz: Vector3i):
-	pass
+	if not world_tc_xyz_to_i.has(xyz):
+		return
+	if world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node == null:
+		return
+	chunks_container_node.add_child(world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node)
+	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.name = xyz_to_name(xyz) + "_tiles_rend_mesh"
 
 func remove_tchunk_mesh_node(xyz: Vector3i):
-	pass
+	if not world_tc_xyz_to_i.has(xyz):
+		return
+	if world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node == null:
+		return
+	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.queue_free()
 
 
 
