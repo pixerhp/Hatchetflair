@@ -85,7 +85,7 @@ func tc_set_tile(tchunk_xyz: Vector3i, tile_xyz: Vector3i, tile_shape: int, tile
 	const THRESH: int = 1 
 		# The effective range in tile pos of tile-changing causing meshes to be ood, max is chunk length.
 	tchunk.are_tiles_meshes_utd = false
-	# A balance between efficiency and code length; it could actually be made more egregious for speed.
+	# (A balance between efficiency and code length; it could actually be made more egregious for speed.)
 	if tile_xyz.x < THRESH: 
 		tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(-1,0,0))
 		if tile_xyz.y < THRESH:
@@ -130,6 +130,24 @@ func tc_set_tile(tchunk_xyz: Vector3i, tile_xyz: Vector3i, tile_shape: int, tile
 		tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(0,0,-1))
 	if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
 		tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(0,0,1))
+	return OK
+
+func tc_fill_tile(tchunk_xyz: Vector3i, tile_shape: int, tile_subst: Variant) -> Error:
+	if not world_tc_xyz_to_i.has(tchunk_xyz):
+		return FAILED
+	var tchunk: TChunk = world_tchunks[world_tc_xyz_to_i[tchunk_xyz]]
+	tchunk.tiles_shapes.fill(tile_shape)
+	match typeof(tile_subst):
+		TYPE_INT: 
+			tchunk.tiles_substs.fill(tile_subst)
+		TYPE_STRING:
+			tchunk.tiles_substs.fill(ChemCraft.subst_name_to_i.get(tile_subst, 0))
+		_:
+			push_error("Bad tile_subst param type, expected int (subst index) or String (subst name).")
+			tchunk.tiles_substs.fill(0)
+	# Update meshes utd bool:
+	for i in 27:
+		tc_set_tiles_meshes_ood(Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1)))
 	return OK
 
 func tc_unmesh(tchunk: TChunk):
@@ -213,7 +231,7 @@ func meshify_tile_empty(tile_pos: Vector3i, tc27: Array[TChunk], surface_ref: Di
 	for neighbor_i in range(6):
 		neighbor_shapes[neighbor_i] = (
 			tc27[get_tc27_c_i(tile_pos, TCU.ts_tess_cube_move[neighbor_i])
-			].tile_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_cube_move[neighbor_i])])
+			].tiles_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_cube_move[neighbor_i])])
 	for sect_i in range(8):
 		if ((neighbor_shapes[sect_i%2] == TILE_SHAPE.MARCH_ANG) or
 			(neighbor_shapes[((sect_i/2)%2)+2] == TILE_SHAPE.MARCH_ANG) or
@@ -238,7 +256,7 @@ func meshify_tile_march_ang_section(
 			(((sect/4)%2)-1)+((state_i/4)%2))
 		comb |= int( # cast false/true to 0/1
 			tc27[get_tc27_c_i(tile_pos, move)
-			].tile_shapes[get_tc27_t_i(tile_pos, move)] > TILE_SHAPE.EMPTY # "is solid?"
+			].tiles_shapes[get_tc27_t_i(tile_pos, move)] > TILE_SHAPE.EMPTY # "is solid?"
 			) << state_i # bitshift
 	for i in range(TCU.ts_march_ang_inds[comb][7-sect].size()):
 		surface_ref.verts.append(TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[comb][7-sect][i]]
@@ -253,12 +271,12 @@ func meshify_tile_march_ang_section(
 			surface_ref.norms.append(surface_ref.norms[surface_ref.norms.size() - 2]) #  of the same thing.)
 			surface_ref.uvs.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
 				# !!! This way of doing uvs for march_ang is temporary and should be replaced later.
-			meshify_append_substance_data(tc27[13].tile_substs[t_i_from_pos(tile_pos)], 3, surface_ref)
+			meshify_append_substance_data(tc27[13].tiles_substs[t_i_from_pos(tile_pos)], 3, surface_ref)
 
 func meshify_tile_tess_cube(tile_pos: Vector3i, tc27: Array[TChunk], surface_ref: Dictionary):
 	for face_i: int in range(6):
 		match tc27[get_tc27_c_i(tile_pos, TCU.ts_tess_cube_move[face_i])
-		].tile_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_cube_move[face_i])]:
+		].tiles_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_cube_move[face_i])]:
 			TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO: continue # skip meshing if face is covered.
 			TILE_SHAPE.NO_DATA, TILE_SHAPE.EMPTY, TILE_SHAPE.MARCH_ANG, _: pass
 				# !!! check for cube face-covering from neighboring march_ang tiles later?
@@ -278,21 +296,21 @@ func meshify_tile_tess_cube(tile_pos: Vector3i, tc27: Array[TChunk], surface_ref
 			Vector3(TCU.ts_tess_cube_move[face_i]),])
 		surface_ref.uvs.append_array([
 			Vector2(0,1), Vector2(0,0), Vector2(1,1),Vector2(0,0), Vector2(1,0), Vector2(1,1)])
-		meshify_append_substance_data(tc27[13].tile_substs[t_i_from_pos(tile_pos)], 6, surface_ref)
+		meshify_append_substance_data(tc27[13].tiles_substs[t_i_from_pos(tile_pos)], 6, surface_ref)
 
 func meshify_tile_tess_rhombdo(tile_pos: Vector3i, tc27: Array[TChunk], surface_ref: Dictionary):
 	var tri_cull_bits: int = 0b11
 	for face_i in range(12):
 		# Check whether the whole face should be culled:
 		match tc27[get_tc27_c_i(tile_pos, TCU.ts_tess_rhombdo_move[face_i])
-		].tile_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_rhombdo_move[face_i])]:
+		].tiles_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_rhombdo_move[face_i])]:
 			TILE_SHAPE.TESS_RHOMBDO:
 				continue
 		# Check whether either of the 2 face-triangles should be culled, stored as bits:
 		tri_cull_bits = 0b11 
 		for tri_i in range(2):
 			if tc27[get_tc27_c_i(tile_pos, TCU.ts_tess_rhombdo_move[(2 * face_i) + tri_i + 12])
-			].tile_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_rhombdo_move[(2 * face_i) + tri_i + 12])
+			].tiles_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_rhombdo_move[(2 * face_i) + tri_i + 12])
 			] in PackedInt32Array([TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO]):
 				tri_cull_bits -= 0b01 << tri_i
 		match tri_cull_bits:
@@ -325,13 +343,13 @@ func meshify_tile_tess_rhombdo(tile_pos: Vector3i, tc27: Array[TChunk], surface_
 				surface_ref.norms.append_array([
 					TCU.ts_tess_rhombdo_norms[face_i], TCU.ts_tess_rhombdo_norms[face_i],
 					TCU.ts_tess_rhombdo_norms[face_i],])
-				meshify_append_substance_data(tc27[13].tile_substs[t_i_from_pos(tile_pos)], 3, surface_ref)
+				meshify_append_substance_data(tc27[13].tiles_substs[t_i_from_pos(tile_pos)], 3, surface_ref)
 			0b11:
 				surface_ref.norms.append_array([
 					TCU.ts_tess_rhombdo_norms[face_i], TCU.ts_tess_rhombdo_norms[face_i],
 					TCU.ts_tess_rhombdo_norms[face_i], TCU.ts_tess_rhombdo_norms[face_i],
 					TCU.ts_tess_rhombdo_norms[face_i], TCU.ts_tess_rhombdo_norms[face_i],])
-				meshify_append_substance_data(tc27[13].tile_substs[t_i_from_pos(tile_pos)], 6, surface_ref)
+				meshify_append_substance_data(tc27[13].tiles_substs[t_i_from_pos(tile_pos)], 6, surface_ref)
 
 func meshify_append_substance_data(
 	subst_ind: int, num_verts_with_shared_subst: int,
@@ -384,7 +402,7 @@ func refresh_world_tc_xyz_to_i():
 	if not world_tc_xyz_to_i.size() == world_tchunks.size():
 		push_error("Some world tchunks have duplicate coords, which is unintended behavior.")
 
-func load_tchunk(xyz: Vector3i, reload_if_existing: bool):
+func load_tchunk(xyz: Vector3i, reload_if_existing: bool = true):
 	if world_tc_xyz_to_i.has(xyz):
 		if reload_if_existing: unload_tchunk(xyz)
 		else: return
@@ -401,9 +419,9 @@ func unload_tchunk(xyz: Vector3i):
 func remesh_tchunk(xyz: Vector3i):
 	if not world_tc_xyz_to_i.has(xyz):
 		return
-	remove_tchunk_mesh_node(xyz)
 	tc_meshify(world_tchunks[world_tc_xyz_to_i[xyz]])
-	add_tchunk_mesh_node(xyz)
+	if not world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.name == xyz_to_name(xyz) + "_tiles_rend_mesh":
+		add_tchunk_mesh_node(xyz)
 
 func add_tchunk_mesh_node(xyz: Vector3i):
 	if not world_tc_xyz_to_i.has(xyz):
@@ -423,21 +441,18 @@ func remove_tchunk_mesh_node(xyz: Vector3i):
 
 
 func _ready():
-	pass
-	#var test_chunk: TChunk = TChunk.new()
-	#test_chunk.tile_shapes.fill(TILE_SHAPE.EMPTY)
-	#test_chunk.tile_substs.fill(ChemCraft.subst_name_to_i.get("nothing", 0))
-	##test_chunk.randomize_tiles()
-	#
-	#test_chunk.set_tile(Vector3i(0,0,0), TILE_SHAPE.TESS_CUBE, "plainite_black")
-	#test_chunk.set_tile(Vector3i(0,1,0), TILE_SHAPE.TESS_RHOMBDO, "test")
-	#test_chunk.set_tile(Vector3i(0,2,0), TILE_SHAPE.TESS_CUBE, "plainite_white")
-	#test_chunk.set_tile(Vector3i(2,1,0), TILE_SHAPE.TESS_RHOMBDO, "error")
-	#
-	#test_chunk.generate_mesh()
-	#add_child(test_chunk.mesh_instance_node)
-	#
-	##generate_test_mesh()
+	load_tchunk(Vector3i(0,0,0))
+	tc_fill_tile(Vector3i(0,0,0), TILE_SHAPE.EMPTY, "nothing")
+	tc_set_tile(Vector3i(0,0,0), Vector3i(0,0,0), TILE_SHAPE.TESS_CUBE, "plainite_black")
+	tc_set_tile(Vector3i(0,0,0), Vector3i(0,1,0), TILE_SHAPE.TESS_RHOMBDO, "test")
+	tc_set_tile(Vector3i(0,0,0), Vector3i(0,2,0), TILE_SHAPE.TESS_CUBE, "plainite_white")
+	tc_set_tile(Vector3i(0,0,0), Vector3i(2,1,0), TILE_SHAPE.TESS_RHOMBDO, "error")
+	remesh_tchunk(Vector3i(0,0,0))
+	
+	print(world_tchunks[world_tc_xyz_to_i[Vector3i(0,0,0)]].tiles_rend_arraymesh.get_surface_count())
+	print(chunks_container_node.get_children()[0])
+	
+	#generate_test_mesh()
 
 func generate_test_mesh():
 	var mesh_instance_node: MeshInstance3D = MeshInstance3D.new()
