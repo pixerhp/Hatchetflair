@@ -382,6 +382,7 @@ func meshify_append_substance_data(
 
 func tc_generate(tchunk: TChunk):
 	tc_fill_tile(tchunk, TILE_SHAPE.EMPTY, "nothing")
+	
 	tc_set_tile(tchunk, Vector3i(0,0,0), TILE_SHAPE.MARCH_ANG, "plainite_white")
 	
 	# Update meshes utd bool:
@@ -456,9 +457,14 @@ func remove_tchunk_mesh_node(xyz: Vector3i):
 
 
 func _ready():
-	load_tchunk(Vector3i(0,0,0))
-	load_tchunk(Vector3i(-1,0,0))
-	load_tchunk(Vector3i(1,0,0))
+	var start_a = Time.get_ticks_msec()
+	for i in 5**3:
+		load_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
+	var start_b = Time.get_ticks_msec()
+	for i in 5**3:
+		remesh_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
+	print(start_b - start_a)
+	print(Time.get_ticks_msec() - start_b)
 	
 	
 	#tc_fill_tile(Vector3i(0,0,0), TILE_SHAPE.EMPTY, "nothing")
@@ -466,10 +472,6 @@ func _ready():
 	#tc_set_tile(Vector3i(0,0,0), Vector3i(0,1,0), TILE_SHAPE.TESS_RHOMBDO, "test")
 	#tc_set_tile(Vector3i(0,0,0), Vector3i(0,2,0), TILE_SHAPE.TESS_CUBE, "plainite_white")
 	#tc_set_tile(Vector3i(0,0,0), Vector3i(2,1,0), TILE_SHAPE.TESS_RHOMBDO, "error")
-	
-	remesh_tchunk(Vector3i(0,0,0))
-	remesh_tchunk(Vector3i(-1,0,0))
-	remesh_tchunk(Vector3i(1,0,0))
 	
 	#generate_test_mesh()
 
