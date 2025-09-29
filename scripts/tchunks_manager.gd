@@ -181,16 +181,22 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 		"texinds_b": PackedByteArray(),
 	}
 	
+	#if tchunk.tiles_shapes.count(TILE_SHAPE.EMPTY) == TCU.TCHUNK_T:
+		#pass
+	
 	for i in range(TCU.TCHUNK_T):
 		match tc27[13].tiles_shapes[i]:
+			# NOTE: lots of manual get_tc27_t_i() inline-ing here with Vector3i(i%16,(i/16)%16,(i/256)%16)
 			TILE_SHAPE.NO_DATA:
 				push_error("Attempted to mesh an unloaded tile shape at chunk: ",
-					str(tchunk.coords), " tile coords: ", t_pos_from_i(i))
+					str(tchunk.coords), " tile coords: ", Vector3i(i%16,(i/16)%16,(i/256)%16))
 				continue
-			TILE_SHAPE.EMPTY: meshify_tile_empty(t_pos_from_i(i), tc27, surface)
-			TILE_SHAPE.MARCH_ANG: meshify_tile_march_ang(t_pos_from_i(i), tc27, surface)
-			TILE_SHAPE.TESS_CUBE: meshify_tile_tess_cube(t_pos_from_i(i), tc27, surface)
-			TILE_SHAPE.TESS_RHOMBDO: meshify_tile_tess_rhombdo(t_pos_from_i(i), tc27, surface)
+			TILE_SHAPE.EMPTY: meshify_tile_empty(Vector3i(i%16,(i/16)%16,(i/256)%16), tc27, surface)
+			TILE_SHAPE.MARCH_ANG: meshify_tile_march_ang(Vector3i(i%16,(i/16)%16,(i/256)%16), tc27, surface)
+			TILE_SHAPE.TESS_CUBE: meshify_tile_tess_cube(Vector3i(i%16,(i/16)%16,(i/256)%16), tc27, surface)
+			TILE_SHAPE.TESS_RHOMBDO: meshify_tile_tess_rhombdo(Vector3i(i%16,(i/16)%16,(i/256)%16), tc27, surface)
+	
+	
 	
 	var mesh_surface: Array = []
 	mesh_surface.resize(Mesh.ARRAY_MAX)
@@ -237,6 +243,10 @@ func meshify_tile_empty(tile_pos: Vector3i, tc27: Array[TChunk], surface_ref: Di
 			(neighbor_shapes[((sect_i/4)%2)+4] == TILE_SHAPE.MARCH_ANG)
 		):
 			meshify_tile_march_ang_section(tile_pos, sect_i, tc27, surface_ref)
+	
+	## Just attempt meshing everything all of the time?
+	#for sect_i in range(8):
+		#meshify_tile_march_ang_section(tile_pos, sect_i, tc27, surface_ref)
 
 func meshify_tile_march_ang(tile_pos: Vector3i, tc27: Array[TChunk], surface_ref: Dictionary):
 	# No neighboring-tile-shapes check necessary, simply mesh all 8 associated marching cubes sections.
@@ -453,7 +463,6 @@ func remove_tchunk_mesh_node(xyz: Vector3i):
 	if world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node == null:
 		return
 	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.queue_free()
-
 
 
 func _ready():
