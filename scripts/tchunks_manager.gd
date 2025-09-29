@@ -8,7 +8,7 @@ enum TILE_SHAPE {
 
 class TChunk:
 	var coords: Vector3i = Vector3i(0,0,0)
-	var seed: int = 0
+	var gen_seed: int = 0 # (typically the same for all chunks in a world.)
 	
 	var tiles_shapes: PackedByteArray = []
 	var tiles_substs: PackedInt32Array = []
@@ -66,12 +66,9 @@ func tc_set_tiles_meshes_ood(tchunk_xyz: Vector3i) -> Error:
 	else:
 		return FAILED
 
-func tc_set_tile(tchunk_xyz: Vector3i, tile_xyz: Vector3i, tile_shape: int, tile_subst: Variant) -> Error:
-	if not world_tc_xyz_to_i.has(tchunk_xyz):
-		return FAILED
+func tc_set_tile(tchunk: TChunk, tile_xyz: Vector3i, tile_shape: int, tile_subst: Variant) -> Error:
 	# Update tiles data:
 	var tile_i: int = t_i_from_pos(tile_xyz)
-	var tchunk: TChunk = world_tchunks[world_tc_xyz_to_i[tchunk_xyz]]
 	tchunk.tiles_shapes[tile_i] = tile_shape
 	match typeof(tile_subst):
 		TYPE_INT: 
@@ -84,58 +81,57 @@ func tc_set_tile(tchunk_xyz: Vector3i, tile_xyz: Vector3i, tile_shape: int, tile
 	# Update meshes utd bool:
 	const THRESH: int = 1 
 		# The effective range in tile pos of tile-changing causing meshes to be ood, max is chunk length.
-	tchunk.are_tiles_meshes_utd = false
+	if not world_tc_xyz_to_i.has(tchunk.coords):
+		tchunk.are_tiles_meshes_utd = false
+		return OK
 	# (A balance between efficiency and code length; it could actually be made more egregious for speed.)
 	if tile_xyz.x < THRESH: 
-		tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(-1,0,0))
+		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,0,0))
 		if tile_xyz.y < THRESH:
-			tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(-1,-1,0))
+			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,-1,0))
 			if tile_xyz.z < THRESH:
-				tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(-1,-1,-1))
+				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,-1,-1))
 			if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
-				tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(-1,-1,1))
+				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,-1,1))
 		if tile_xyz.y > TCU.TCHUNK_L - THRESH: 
-			tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(-1,1,0))
+			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,1,0))
 			if tile_xyz.z < THRESH:
-				tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(-1,1,-1))
+				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,1,-1))
 			if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
-				tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(-1,1,1))
+				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,1,1))
 	if tile_xyz.x > TCU.TCHUNK_L - THRESH:
-		tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(1,0,0))
+		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,0,0))
 		if tile_xyz.y < THRESH:
-			tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(1,-1,0))
+			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,-1,0))
 			if tile_xyz.z < THRESH:
-				tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(1,-1,-1))
+				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,-1,-1))
 			if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
-				tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(1,-1,1))
+				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,-1,1))
 		if tile_xyz.y > TCU.TCHUNK_L - THRESH: 
-			tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(1,1,0))
+			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,1,0))
 			if tile_xyz.z < THRESH:
-				tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(1,1,-1))
+				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,1,-1))
 			if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
-				tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(1,1,1))
+				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,1,1))
 	if tile_xyz.y < THRESH: 
-		tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(0,-1,0))
+		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,-1,0))
 		if tile_xyz.z < THRESH:
-			tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(0,-1,-1))
+			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,-1,-1))
 		if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
-			tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(0,-1,1))
+			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,-1,1))
 	if tile_xyz.y > TCU.TCHUNK_L - THRESH:  
-		tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(0,1,0))
+		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,1,0))
 		if tile_xyz.z < THRESH:
-			tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(0,1,-1))
+			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,1,-1))
 		if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
-			tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(0,1,1))
+			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,1,1))
 	if tile_xyz.z < THRESH:
-		tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(0,0,-1))
+		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,0,-1))
 	if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
-		tc_set_tiles_meshes_ood(tchunk_xyz + Vector3i(0,0,1))
+		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,0,1))
 	return OK
 
-func tc_fill_tile(tchunk_xyz: Vector3i, tile_shape: int, tile_subst: Variant) -> Error:
-	if not world_tc_xyz_to_i.has(tchunk_xyz):
-		return FAILED
-	var tchunk: TChunk = world_tchunks[world_tc_xyz_to_i[tchunk_xyz]]
+func tc_fill_tile(tchunk: TChunk, tile_shape: int, tile_subst: Variant) -> Error:
 	tchunk.tiles_shapes.fill(tile_shape)
 	match typeof(tile_subst):
 		TYPE_INT: 
@@ -146,8 +142,11 @@ func tc_fill_tile(tchunk_xyz: Vector3i, tile_shape: int, tile_subst: Variant) ->
 			push_error("Bad tile_subst param type, expected int (subst index) or String (subst name).")
 			tchunk.tiles_substs.fill(0)
 	# Update meshes utd bool:
-	for i in 27:
-		tc_set_tiles_meshes_ood(Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1)))
+	if world_tc_xyz_to_i.has(tchunk.coords):
+		for i in 27:
+			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1)))
+	else:
+		tchunk.are_tiles_meshes_utd = false
 	return OK
 
 func tc_unmesh(tchunk: TChunk):
@@ -381,6 +380,17 @@ func meshify_append_substance_data(
 			surface_ref.texinds_b[surface_ref.texinds_b.size() - 2], 
 			surface_ref.texinds_b[surface_ref.texinds_b.size() - 1]])
 
+func tc_generate(tchunk: TChunk):
+	tc_fill_tile(tchunk, TILE_SHAPE.EMPTY, "nothing")
+	tc_set_tile(tchunk, Vector3i(0,0,0), TILE_SHAPE.MARCH_ANG, "plainite_white")
+	
+	# Update meshes utd bool:
+	if world_tc_xyz_to_i.has(tchunk.coords):
+		for i in 27:
+			tc_set_tiles_meshes_ood(Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1)))
+	else:
+		tchunk.are_tiles_meshes_utd = false
+
 # All currently loaded world terrain chunks.
 var world_tchunks: Array[TChunk] = []
 var world_tc_xyz_to_i: Dictionary[Vector3i, int] = {}
@@ -402,12 +412,16 @@ func refresh_world_tc_xyz_to_i():
 	if not world_tc_xyz_to_i.size() == world_tchunks.size():
 		push_error("Some world tchunks have duplicate coords, which is unintended behavior.")
 
-func load_tchunk(xyz: Vector3i, reload_if_existing: bool = true):
-	if world_tc_xyz_to_i.has(xyz):
-		if reload_if_existing: unload_tchunk(xyz)
+func load_tchunk(tchunk_xyz: Vector3i, load_data: bool = true, reload_if_existing: bool = true):
+	if world_tc_xyz_to_i.has(tchunk_xyz):
+		if reload_if_existing: unload_tchunk(tchunk_xyz)
 		else: return
 	world_tchunks.append(TChunk.new())
-	world_tc_xyz_to_i[xyz] = world_tchunks.size() - 1
+	world_tchunks[-1].coords = tchunk_xyz
+	world_tc_xyz_to_i[tchunk_xyz] = world_tchunks.size() - 1
+	if load_data:
+		# !!! check if chunk is saved in files and load that instead of generating if so.
+		tc_generate(world_tchunks[-1])
 
 func unload_tchunk(xyz: Vector3i):
 	if not world_tc_xyz_to_i.has(xyz): 
@@ -429,6 +443,7 @@ func add_tchunk_mesh_node(xyz: Vector3i):
 	if world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node == null:
 		return
 	chunks_container_node.add_child(world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node)
+	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.position = Vector3(xyz * 16)
 	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.name = xyz_to_name(xyz) + "_tiles_rend_mesh"
 
 func remove_tchunk_mesh_node(xyz: Vector3i):
@@ -442,15 +457,19 @@ func remove_tchunk_mesh_node(xyz: Vector3i):
 
 func _ready():
 	load_tchunk(Vector3i(0,0,0))
-	tc_fill_tile(Vector3i(0,0,0), TILE_SHAPE.EMPTY, "nothing")
-	tc_set_tile(Vector3i(0,0,0), Vector3i(0,0,0), TILE_SHAPE.TESS_CUBE, "plainite_black")
-	tc_set_tile(Vector3i(0,0,0), Vector3i(0,1,0), TILE_SHAPE.TESS_RHOMBDO, "test")
-	tc_set_tile(Vector3i(0,0,0), Vector3i(0,2,0), TILE_SHAPE.TESS_CUBE, "plainite_white")
-	tc_set_tile(Vector3i(0,0,0), Vector3i(2,1,0), TILE_SHAPE.TESS_RHOMBDO, "error")
-	remesh_tchunk(Vector3i(0,0,0))
+	load_tchunk(Vector3i(-1,0,0))
+	load_tchunk(Vector3i(1,0,0))
 	
-	print(world_tchunks[world_tc_xyz_to_i[Vector3i(0,0,0)]].tiles_rend_arraymesh.get_surface_count())
-	print(chunks_container_node.get_children()[0])
+	
+	#tc_fill_tile(Vector3i(0,0,0), TILE_SHAPE.EMPTY, "nothing")
+	#tc_set_tile(Vector3i(0,0,0), Vector3i(0,0,0), TILE_SHAPE.TESS_CUBE, "plainite_black")
+	#tc_set_tile(Vector3i(0,0,0), Vector3i(0,1,0), TILE_SHAPE.TESS_RHOMBDO, "test")
+	#tc_set_tile(Vector3i(0,0,0), Vector3i(0,2,0), TILE_SHAPE.TESS_CUBE, "plainite_white")
+	#tc_set_tile(Vector3i(0,0,0), Vector3i(2,1,0), TILE_SHAPE.TESS_RHOMBDO, "error")
+	
+	remesh_tchunk(Vector3i(0,0,0))
+	remesh_tchunk(Vector3i(-1,0,0))
+	remesh_tchunk(Vector3i(1,0,0))
 	
 	#generate_test_mesh()
 
