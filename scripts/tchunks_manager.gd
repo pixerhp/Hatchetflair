@@ -185,6 +185,9 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 	tile_shape_indices.resize(TILE_SHAPE.size())
 	for i in range(TCU.TCHUNK_T):
 		tile_shape_indices[tc27[13].tiles_shapes[i]].append(i)
+		
+		# !!! do cull checks here sortof, and then send that culling data into shape meshifys?
+		
 	
 	if not tile_shape_indices[TILE_SHAPE.NO_DATA].is_empty():
 		push_error("Found ", tile_shape_indices[TILE_SHAPE.NO_DATA].size(),
@@ -270,8 +273,7 @@ func get_tc27_c_i_bulk(tile_indices: PackedInt32Array, movements: Array[Vector3i
 		result[i] = (
 			(0 if (new_tile_pos.x < 0) else (1 if (new_tile_pos.x < TCU.TCHUNK_L) else 2)) +
 			(0 if (new_tile_pos.y < 0) else (3 if (new_tile_pos.y < TCU.TCHUNK_L) else 6)) +
-			(0 if (new_tile_pos.z < 0) else (9 if (new_tile_pos.z < TCU.TCHUNK_L) else 18))
-		)
+			(0 if (new_tile_pos.z < 0) else (9 if (new_tile_pos.z < TCU.TCHUNK_L) else 18)) )
 	return result
 
 # Calculates movewment-relative tc27 tile indices in bulk:
@@ -285,8 +287,7 @@ func get_tc27_t_i_bulk(tile_indices: PackedInt32Array, movements: Array[Vector3i
 			posmod(((tile_indices[i] / TCU.TCHUNK_L) % TCU.TCHUNK_L) + 
 				movements[i].y, TCU.TCHUNK_L) * TCU.TCHUNK_L +
 			posmod(((tile_indices[i] / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L) + 
-				movements[i].z, TCU.TCHUNK_L) * TCU.TCHUNK_L * TCU.TCHUNK_L
-		)
+				movements[i].z, TCU.TCHUNK_L) * TCU.TCHUNK_L * TCU.TCHUNK_L)
 	return result
 
 func meshify_append_substance_data_bulk(
