@@ -181,22 +181,23 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 		"texinds_b": PackedByteArray(),
 	}
 	
-	#if tchunk.tiles_shapes.count(TILE_SHAPE.EMPTY) == TCU.TCHUNK_T:
-		#pass
-	
+	var tile_shape_indices: Array[PackedInt32Array] = []
+	tile_shape_indices.resize(TILE_SHAPE.size())
 	for i in range(TCU.TCHUNK_T):
-		match tc27[13].tiles_shapes[i]:
-			# NOTE: lots of manual get_tc27_t_i() inline-ing here with Vector3i(i%16,(i/16)%16,(i/256)%16)
-			TILE_SHAPE.NO_DATA:
-				push_error("Attempted to mesh an unloaded tile shape at chunk: ",
-					str(tchunk.coords), " tile coords: ", Vector3i(i%16,(i/16)%16,(i/256)%16))
-				continue
-			TILE_SHAPE.EMPTY: meshify_tile_empty(Vector3i(i%16,(i/16)%16,(i/256)%16), tc27, surface)
-			TILE_SHAPE.MARCH_ANG: meshify_tile_march_ang(Vector3i(i%16,(i/16)%16,(i/256)%16), tc27, surface)
-			TILE_SHAPE.TESS_CUBE: meshify_tile_tess_cube(Vector3i(i%16,(i/16)%16,(i/256)%16), tc27, surface)
-			TILE_SHAPE.TESS_RHOMBDO: meshify_tile_tess_rhombdo(Vector3i(i%16,(i/16)%16,(i/256)%16), tc27, surface)
+		tile_shape_indices[tc27[13].tiles_shapes[i]].append(i)
 	
+	if not tile_shape_indices[TILE_SHAPE.NO_DATA].is_empty():
+		push_error("Found ", tile_shape_indices[TILE_SHAPE.NO_DATA].size(),
+		" NO_DATA tiles_shapes while meshifying tchunk ", tchunk.coords)
+	if tile_shape_indices[TILE_SHAPE.EMPTY].size() == TCU.TCHUNK_T:
+		# !!! "whole chunk is air" optimization potential
+		# note that you still have to march check on corners, edges(?), (and probably not but maybe faces?)
+		pass
 	
+	meshify_tiles_empty(surface, tc27, tile_shape_indices[TILE_SHAPE.EMPTY])
+	meshify_march_ang_sections(surface, tc27, tile_shape_indices[TILE_SHAPE.MARCH_ANG])
+	meshify_tiles_tess_cube(surface, tc27, tile_shape_indices[TILE_SHAPE.TESS_CUBE])
+	meshify_tiles_tess_rhombdo(surface, tc27, tile_shape_indices[TILE_SHAPE.TESS_RHOMBDO])
 	
 	var mesh_surface: Array = []
 	mesh_surface.resize(Mesh.ARRAY_MAX)
@@ -229,166 +230,301 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 	
 	tchunk.tiles_rend_node.mesh = tchunk.tiles_rend_arraymesh
 
-func meshify_tile_empty(tile_pos: Vector3i, tc27: Array[TChunk], surface_ref: Dictionary):
-	# Check for and conditionally attempt to mesh marching cube sections.
-	var neighbor_shapes: PackedByteArray = []
-	neighbor_shapes.resize(6)
-	for neighbor_i in range(6):
-		neighbor_shapes[neighbor_i] = (
-			tc27[get_tc27_c_i(tile_pos, TCU.ts_tess_cube_move[neighbor_i])
-			].tiles_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_cube_move[neighbor_i])])
-	for sect_i in range(8):
-		if ((neighbor_shapes[sect_i%2] == TILE_SHAPE.MARCH_ANG) or
-			(neighbor_shapes[((sect_i/2)%2)+2] == TILE_SHAPE.MARCH_ANG) or
-			(neighbor_shapes[((sect_i/4)%2)+4] == TILE_SHAPE.MARCH_ANG)
-		):
-			meshify_tile_march_ang_section(tile_pos, sect_i, tc27, surface_ref)
-	
-	## Just attempt meshing everything all of the time?
-	#for sect_i in range(8):
-		#meshify_tile_march_ang_section(tile_pos, sect_i, tc27, surface_ref)
+# Calculates movewment-relative tc27 chunk indices in bulk:
+func get_tc27_c_i_bulk(tile_indices: PackedInt32Array, movements: Array[Vector3i]) -> PackedInt32Array:
+	var result: PackedInt32Array = []
+	result.resize(tile_indices.size())
+	var new_tile_pos: Vector3i = Vector3i()
+	for i in range(tile_indices.size()):
+		new_tile_pos = Vector3i(
+			tile_indices[i] % TCU.TCHUNK_L,
+			(tile_indices[i] / TCU.TCHUNK_L) % TCU.TCHUNK_L,
+			(tile_indices[i] / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L,
+		) + movements[i]
+		result[i] = (
+			(0 if (new_tile_pos.x < 0) else (1 if (new_tile_pos.x < TCU.TCHUNK_L) else 2)) +
+			(0 if (new_tile_pos.y < 0) else (3 if (new_tile_pos.y < TCU.TCHUNK_L) else 6)) +
+			(0 if (new_tile_pos.z < 0) else (9 if (new_tile_pos.z < TCU.TCHUNK_L) else 18))
+		)
+	return result
 
-func meshify_tile_march_ang(tile_pos: Vector3i, tc27: Array[TChunk], surface_ref: Dictionary):
-	# No neighboring-tile-shapes check necessary, simply mesh all 8 associated marching cubes sections.
-	for section_index in range(8):
-		meshify_tile_march_ang_section(tile_pos, section_index, tc27, surface_ref)
+# Calculates movewment-relative tc27 tile indices in bulk:
+func get_tc27_t_i_bulk(tile_indices: PackedInt32Array, movements: Array[Vector3i]) -> PackedInt32Array:
+	var result: PackedInt32Array = []
+	result.resize(tile_indices.size())
+	for i in range(tile_indices.size()):
+		result[i] = (
+			posmod((tile_indices[i] % TCU.TCHUNK_L) + 
+				movements[i].x, TCU.TCHUNK_L) +
+			posmod(((tile_indices[i] / TCU.TCHUNK_L) % TCU.TCHUNK_L) + 
+				movements[i].y, TCU.TCHUNK_L) * TCU.TCHUNK_L +
+			posmod(((tile_indices[i] / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L) + 
+				movements[i].z, TCU.TCHUNK_L) * TCU.TCHUNK_L * TCU.TCHUNK_L
+		)
+	return result
 
-func meshify_tile_march_ang_section(
-	tile_pos: Vector3i, sect: int, tc27: Array[TChunk], surface_ref: Dictionary
+func meshify_append_substance_data_bulk(
+	surface_ref: Dictionary, subst_inds: PackedInt32Array, share_counts: PackedInt32Array = []
 ):
-	var comb: int = 0b00000000
-	var move: Vector3i = Vector3i()
-	for state_i in range(8):
-		move = Vector3i(
-			((sect%2)-1)+(state_i%2), 
-			(((sect/2)%2)-1)+((state_i/2)%2), 
-			(((sect/4)%2)-1)+((state_i/4)%2))
-		comb |= int( # cast false/true to 0/1
-			tc27[get_tc27_c_i(tile_pos, move)
-			].tiles_shapes[get_tc27_t_i(tile_pos, move)] > TILE_SHAPE.EMPTY # "is solid?"
-			) << state_i # bitshift
-	for i in range(TCU.ts_march_ang_inds[comb][7-sect].size()):
-		surface_ref.verts.append(TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[comb][7-sect][i]]
-			+ Vector3(sect%2,(sect/2)%2,(sect/4)%2) + (Vector3(tile_pos) - TCU.TCHUNK_HS))
-		if i%3 == 0:
-			surface_ref.norms.append(TCU.triangle_normal_vector(PackedVector3Array([
-				TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[comb][7-sect][i]], 
-				TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[comb][7-sect][i+1]], 
-				TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[comb][7-sect][i+2]], 
-			])))
-			surface_ref.norms.append(surface_ref.norms[surface_ref.norms.size() - 1]) # (appends 2 more 
-			surface_ref.norms.append(surface_ref.norms[surface_ref.norms.size() - 2]) #  of the same thing.)
-			surface_ref.uvs.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
-				# !!! This way of doing uvs for march_ang is temporary and should be replaced later.
-			meshify_append_substance_data(tc27[13].tiles_substs[t_i_from_pos(tile_pos)], 3, surface_ref)
+	if share_counts.is_empty():
+		share_counts.resize(subst_inds.size())
+		share_counts.fill(1)
+	
+	var texinds_a_group: PackedByteArray = []
+	var texinds_b_group: PackedByteArray = []
+	for i in range(subst_inds.size()):
+		texinds_a_group.clear()
+		texinds_b_group.clear()
+		
+		texinds_a_group.append((ChemCraft.SUBSTANCES[subst_inds[i]].albedo_ind & 0b111111110000000000000000)>>16)
+		texinds_a_group.append((ChemCraft.SUBSTANCES[subst_inds[i]].albedo_ind & 0b000000001111111100000000)>>8)
+		texinds_a_group.append(ChemCraft.SUBSTANCES[subst_inds[i]].albedo_ind & 0b000000000000000011111111)
+		texinds_b_group.append((ChemCraft.SUBSTANCES[subst_inds[i]].normal_ind & 0b111111110000000000000000)>>16)
+		texinds_b_group.append((ChemCraft.SUBSTANCES[subst_inds[i]].normal_ind & 0b000000001111111100000000)>>8)
+		texinds_b_group.append(ChemCraft.SUBSTANCES[subst_inds[i]].normal_ind & 0b000000000000000011111111)
+		texinds_a_group.append((ChemCraft.SUBSTANCES[subst_inds[i]].special_ind & 0b000000001111111100000000)>>8)
+		texinds_b_group.append(ChemCraft.SUBSTANCES[subst_inds[i]].special_ind & 0b000000000000000011111111)
+		
+		for j in range(share_counts[i]):
+			surface_ref.colors.append(ChemCraft.SUBSTANCES[subst_inds[i]].vert_color)
+			surface_ref.texinds_a.append_array(texinds_a_group)
+			surface_ref.texinds_b.append_array(texinds_b_group)
 
-func meshify_tile_tess_cube(tile_pos: Vector3i, tc27: Array[TChunk], surface_ref: Dictionary):
-	for face_i: int in range(6):
-		match tc27[get_tc27_c_i(tile_pos, TCU.ts_tess_cube_move[face_i])
-		].tiles_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_cube_move[face_i])]:
-			TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO: continue # skip meshing if face is covered.
-			TILE_SHAPE.NO_DATA, TILE_SHAPE.EMPTY, TILE_SHAPE.MARCH_ANG, _: pass
-				# !!! check for cube face-covering from neighboring march_ang tiles later?
-		surface_ref.verts.append_array([
-			TCU.ts_tess_cube_verts[(4*face_i)+0] + Vector3(tile_pos), 
-			TCU.ts_tess_cube_verts[(4*face_i)+1] + Vector3(tile_pos),
-			TCU.ts_tess_cube_verts[(4*face_i)+2] + Vector3(tile_pos), 
-			TCU.ts_tess_cube_verts[(4*face_i)+1] + Vector3(tile_pos),
-			TCU.ts_tess_cube_verts[(4*face_i)+3] + Vector3(tile_pos), 
-			TCU.ts_tess_cube_verts[(4*face_i)+2] + Vector3(tile_pos),])
-		surface_ref.norms.append_array([
-			Vector3(TCU.ts_tess_cube_move[face_i]), 
-			Vector3(TCU.ts_tess_cube_move[face_i]),
-			Vector3(TCU.ts_tess_cube_move[face_i]), 
-			Vector3(TCU.ts_tess_cube_move[face_i]),
-			Vector3(TCU.ts_tess_cube_move[face_i]), 
-			Vector3(TCU.ts_tess_cube_move[face_i]),])
-		surface_ref.uvs.append_array([
-			Vector2(0,1), Vector2(0,0), Vector2(1,1),Vector2(0,0), Vector2(1,0), Vector2(1,1)])
-		meshify_append_substance_data(tc27[13].tiles_substs[t_i_from_pos(tile_pos)], 6, surface_ref)
+# (Empty tiles typically don't mesh anything, but situationally might if they neighbor a marching tile.)
+func meshify_tiles_empty(surface_ref: Dictionary, tc27: Array[TChunk], tile_indices: PackedInt32Array):
+	# Precalculate tc27_c_i and tc27_t_i in bulk:
+	var rel_pos_inds: PackedInt32Array = []
+	var rel_pos_moves: Array[Vector3i] = []
+	for direction_i in range(6):
+		rel_pos_inds.append_array(tile_indices)
+		var moves_partial: Array[Vector3i] = []
+		moves_partial.resize(tile_indices.size())
+		moves_partial.fill([
+			Vector3i(-1,0,0), Vector3i(1,0,0),
+			Vector3i(0,-1,0), Vector3i(0,1,0), 
+			Vector3i(0,0,-1), Vector3i(0,0,1),
+		][direction_i])
+		rel_pos_moves.append_array(moves_partial)
+	var tc27_c_inds: PackedInt32Array = get_tc27_c_i_bulk(rel_pos_inds, rel_pos_moves)
+	var tc27_t_inds: PackedInt32Array = get_tc27_t_i_bulk(rel_pos_inds, rel_pos_moves)
+	rel_pos_inds.clear()
+	rel_pos_moves.clear()
+	
+	var ang_sect_tile_indices: PackedInt32Array = []
+	var sections_to_mesh_bits: PackedByteArray = []
+	
+	var neighbor_is_march_bits: int = 0b000000
+	for t_ind_i: int in range(tile_indices.size()):
+		# Get bitstates for whether each of the 6 neighboring tiles is a march shape:
+		neighbor_is_march_bits = 0b000000
+		for neighbor_i in range(6):
+			neighbor_is_march_bits |= (
+				int((tc27[tc27_c_inds[(neighbor_i * tile_indices.size()) + t_ind_i]
+				].tiles_shapes[tc27_t_inds[(neighbor_i * tile_indices.size()) + t_ind_i]]
+				) == TILE_SHAPE.MARCH_ANG) << neighbor_i
+			)
+		# (If no neighboring tiles are march shape, then it's known that there'll be no sections to mesh.)
+		if neighbor_is_march_bits == 0b000000:
+			continue
+		# Get bitstates of which sections touch a neighboring marching tile:
+		ang_sect_tile_indices.append(tile_indices[t_ind_i])
+		sections_to_mesh_bits.append(0b00000000)
+		for sect_i in range(8):
+			sections_to_mesh_bits[-1] |= int(
+				bool(neighbor_is_march_bits & (0b000001 << (sect_i % 2))) or
+				bool(neighbor_is_march_bits & (0b000001 << (((sect_i / 2) % 2) + 2))) or
+				bool(neighbor_is_march_bits & (0b000001 << (((sect_i / 4) % 2) + 4)))
+			) << sect_i
+	meshify_march_ang_sections(surface_ref, tc27, ang_sect_tile_indices, sections_to_mesh_bits)
 
-func meshify_tile_tess_rhombdo(tile_pos: Vector3i, tc27: Array[TChunk], surface_ref: Dictionary):
-	var tri_cull_bits: int = 0b11
-	for face_i in range(12):
-		# Check whether the whole face should be culled:
-		match tc27[get_tc27_c_i(tile_pos, TCU.ts_tess_rhombdo_move[face_i])
-		].tiles_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_rhombdo_move[face_i])]:
-			TILE_SHAPE.TESS_RHOMBDO:
+# (Leave sections_bitstates blank if all sections of all indexed tiles are to be meshed.)
+func meshify_march_ang_sections(
+	surface_ref: Dictionary, tc27: Array[TChunk], 
+	tile_indices: PackedInt32Array, sections_bitstates: PackedByteArray = PackedByteArray([])
+):
+	if sections_bitstates.is_empty():
+		sections_bitstates.resize(tile_indices.size())
+		sections_bitstates.fill(0b11111111)
+	
+	# Precalculate tc27_c_i and tc27_t_i in bulk:
+	var rel_pos_inds: PackedInt32Array = []
+	var rel_pos_moves: Array[Vector3i] = []
+	for t_ind_i: int in range(tile_indices.size()):
+		if sections_bitstates[t_ind_i] == 0b00000000: continue
+		for sect_i: int in range(8):
+			if (sections_bitstates[t_ind_i] & (0b00000001 << sect_i)) == 0:
 				continue
-		# Check whether either of the 2 face-triangles should be culled, stored as bits:
-		tri_cull_bits = 0b11 
-		for tri_i in range(2):
-			if tc27[get_tc27_c_i(tile_pos, TCU.ts_tess_rhombdo_move[(2 * face_i) + tri_i + 12])
-			].tiles_shapes[get_tc27_t_i(tile_pos, TCU.ts_tess_rhombdo_move[(2 * face_i) + tri_i + 12])
-			] in PackedInt32Array([TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO]):
-				tri_cull_bits -= 0b01 << tri_i
-		match tri_cull_bits:
-			0b00:
+			for state_i: int in range(8):
+				rel_pos_inds.append(tile_indices[t_ind_i])
+				rel_pos_moves.append(Vector3i(
+					((sect_i%2)-1) + (state_i%2), 
+					(((sect_i/2)%2)-1) + ((state_i/2)%2), 
+					(((sect_i/4)%2)-1) + ((state_i/4)%2)))
+	var tc27_c_i: PackedInt32Array = get_tc27_c_i_bulk(rel_pos_inds, rel_pos_moves)
+	var tc27_t_i: PackedInt32Array = get_tc27_t_i_bulk(rel_pos_inds, rel_pos_moves)
+	rel_pos_inds.clear()
+	rel_pos_moves.clear()
+	
+	# Calculate each section combination and append associated data to the surface_ref:
+	var precalc_inds_i: int = 0
+	var march_comb: int = 0b00000000
+	var subst_inds: PackedInt32Array = []
+	var subst_shares: PackedInt32Array = []
+	for t_ind_i: int in range(tile_indices.size()):
+		if sections_bitstates[t_ind_i] == 0b00000000:
+			continue
+		for sect_i: int in range(8):
+			if (sections_bitstates[t_ind_i] & (0b00000001 << sect_i)) == 0:
 				continue
-			0b01:
+			march_comb = 0b00000000
+			for state_i: int in range(8):
+				march_comb |= (int(
+					tc27[tc27_c_i[precalc_inds_i]].tiles_shapes[tc27_t_i[precalc_inds_i]] 
+					> TILE_SHAPE.EMPTY # "is solid?"
+				) << state_i)
+				precalc_inds_i += 1
+			# Now that the section's march combination is known, append meshing data:
+			subst_inds.append(tc27[13].tiles_substs[tile_indices[t_ind_i]])
+			subst_shares.append(TCU.ts_march_ang_inds[march_comb][7-sect_i].size())
+			for vert_i: int in range(TCU.ts_march_ang_inds[march_comb][7-sect_i].size()):
+				surface_ref.verts.append(
+					TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[march_comb][7-sect_i][vert_i]] +
+					Vector3(sect_i%2,(sect_i/2)%2,(sect_i/4)%2) + 
+					(Vector3( # (tile position from index)
+						t_ind_i % TCU.TCHUNK_L,
+						(t_ind_i / TCU.TCHUNK_L) % TCU.TCHUNK_L,
+						(t_ind_i / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L,
+					) - TCU.TCHUNK_HS))
+				if (vert_i % 3) == 0:
+					surface_ref.norms.append(TCU.triangle_normal_vector(PackedVector3Array([
+						TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[march_comb][7-sect_i][vert_i]], 
+						TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[march_comb][7-sect_i][vert_i+1]], 
+						TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[march_comb][7-sect_i][vert_i+2]], 
+					])))
+					surface_ref.norms.append(surface_ref.norms[-1]) 
+					surface_ref.norms.append(surface_ref.norms[-2])
+					surface_ref.uvs.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)]) # !!! TEMP
+	meshify_append_substance_data_bulk(surface_ref, subst_inds, subst_shares)
+
+func meshify_tiles_tess_cube(surface_ref: Dictionary, tc27: Array[TChunk], tile_indices: PackedInt32Array):
+	# Precalculate tc27_c_i and tc27_t_i in bulk:
+	var rel_pos_inds: PackedInt32Array = []
+	var rel_pos_moves: Array[Vector3i] = []
+	for direction_i in range(6):
+		rel_pos_inds.append_array(tile_indices)
+		var moves_partial: Array[Vector3i] = []
+		moves_partial.resize(tile_indices.size())
+		moves_partial.fill([
+			Vector3i(-1,0,0), Vector3i(1,0,0),
+			Vector3i(0,-1,0), Vector3i(0,1,0), 
+			Vector3i(0,0,-1), Vector3i(0,0,1),
+		][direction_i])
+		rel_pos_moves.append_array(moves_partial)
+	var tc27_c_inds: PackedInt32Array = get_tc27_c_i_bulk(rel_pos_inds, rel_pos_moves)
+	var tc27_t_inds: PackedInt32Array = get_tc27_t_i_bulk(rel_pos_inds, rel_pos_moves)
+	rel_pos_inds.clear()
+	rel_pos_moves.clear()
+	
+	var subst_inds: PackedInt32Array = []
+	var subst_shares: PackedInt32Array = []
+	var subst_shares_in_tile: int = 0
+	var tile_pos: Vector3 = Vector3()
+	for t_ind_i: int in range(tile_indices.size()):
+		subst_shares_in_tile = 0
+		for face_i: int in range(6):
+			match tc27[tc27_c_inds[t_ind_i + (tile_indices.size() * face_i)] # (Situationally cull face)
+			].tiles_shapes[tc27_t_inds[t_ind_i + (tile_indices.size() * face_i)]]:
+				TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO: continue
+				TILE_SHAPE.MARCH_ANG: pass # !!! do proper culling check later
+			subst_shares_in_tile += 1
+			tile_pos = Vector3(Vector3i(
+				tile_indices[t_ind_i] % TCU.TCHUNK_L,
+				(tile_indices[t_ind_i] / TCU.TCHUNK_L) % TCU.TCHUNK_L,
+				(tile_indices[t_ind_i] / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L,))
+			surface_ref.verts.append_array([
+				TCU.ts_tess_cube_verts[(4*face_i)+0] + tile_pos, 
+				TCU.ts_tess_cube_verts[(4*face_i)+1] + tile_pos,
+				TCU.ts_tess_cube_verts[(4*face_i)+2] + tile_pos, 
+				TCU.ts_tess_cube_verts[(4*face_i)+1] + tile_pos,
+				TCU.ts_tess_cube_verts[(4*face_i)+3] + tile_pos, 
+				TCU.ts_tess_cube_verts[(4*face_i)+2] + tile_pos,])
+			surface_ref.norms.append_array([
+				Vector3(TCU.ts_tess_cube_move[face_i]), 
+				Vector3(TCU.ts_tess_cube_move[face_i]),
+				Vector3(TCU.ts_tess_cube_move[face_i]), 
+				Vector3(TCU.ts_tess_cube_move[face_i]),
+				Vector3(TCU.ts_tess_cube_move[face_i]), 
+				Vector3(TCU.ts_tess_cube_move[face_i]),])
+			surface_ref.uvs.append_array([
+				Vector2(0,1), Vector2(0,0), Vector2(1,1), 
+				Vector2(0,0), Vector2(1,0), Vector2(1,1),])
+		if subst_shares_in_tile > 0:
+			subst_inds.append(tc27[13].tiles_substs[tile_indices[t_ind_i]])
+			subst_shares.append(subst_shares_in_tile * 6)
+	meshify_append_substance_data_bulk(surface_ref, subst_inds, subst_shares)
+
+func meshify_tiles_tess_rhombdo(surface_ref: Dictionary, tc27: Array[TChunk], tile_indices: PackedInt32Array):
+	# Precalculate tc27_c_i and tc27_t_i in bulk:
+	var rel_pos_inds: PackedInt32Array = []
+	var rel_pos_moves: Array[Vector3i] = []
+	for direction_i in range(12):
+		rel_pos_inds.append_array(tile_indices)
+		var moves_partial: Array[Vector3i] = []
+		moves_partial.resize(tile_indices.size())
+		moves_partial.fill(TCU.ts_tess_rhombdo_move[direction_i])
+		rel_pos_moves.append_array(moves_partial)
+	var tc27_c_inds_face: PackedInt32Array = get_tc27_c_i_bulk(rel_pos_inds, rel_pos_moves)
+	var tc27_t_inds_face: PackedInt32Array = get_tc27_t_i_bulk(rel_pos_inds, rel_pos_moves)
+	rel_pos_inds.clear()
+	rel_pos_moves.clear()
+	for direction_i in range(24):
+		rel_pos_inds.append_array(tile_indices)
+		var moves_partial: Array[Vector3i] = []
+		moves_partial.resize(tile_indices.size())
+		moves_partial.fill(TCU.ts_tess_rhombdo_move[direction_i + 12])
+		rel_pos_moves.append_array(moves_partial)
+	var tc27_c_inds_tri: PackedInt32Array = get_tc27_c_i_bulk(rel_pos_inds, rel_pos_moves)
+	var tc27_t_inds_tri: PackedInt32Array = get_tc27_t_i_bulk(rel_pos_inds, rel_pos_moves)
+	rel_pos_inds.clear()
+	rel_pos_moves.clear()
+	
+	var subst_inds: PackedInt32Array = []
+	var subst_shares: PackedInt32Array = []
+	var subst_shares_in_tile: int = 0
+	var tile_pos: Vector3 = Vector3()
+	for t_ind_i: int in range(tile_indices.size()):
+		subst_shares_in_tile = 0
+		for face_i in range(12):
+			match tc27[tc27_c_inds_face[t_ind_i + (face_i * tile_indices.size())]
+			].tiles_shapes[tc27_t_inds_face[t_ind_i + (face_i * tile_indices.size())]]:
+				TILE_SHAPE.TESS_RHOMBDO: continue
+			for tri_i in range(2):
+				if tc27[tc27_c_inds_tri[t_ind_i + (((face_i*2) + tri_i) * tile_indices.size())]
+				].tiles_shapes[tc27_t_inds_tri[t_ind_i + (((face_i*2) + tri_i) * tile_indices.size())]] in (
+				PackedByteArray([TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO])):
+					continue
+				subst_shares_in_tile += 1
+				tile_pos = Vector3(Vector3i(
+					tile_indices[t_ind_i] % TCU.TCHUNK_L,
+					(tile_indices[t_ind_i] / TCU.TCHUNK_L) % TCU.TCHUNK_L,
+					(tile_indices[t_ind_i] / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L,))
 				surface_ref.verts.append_array([
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4)],
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4) + 1],
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4) + 2],])
-				surface_ref.uvs.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1)])
-			0b10:
-				surface_ref.verts.append_array([
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4) + 1],
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4) + 3],
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4) + 2],])
-				surface_ref.uvs.append_array([Vector2(1,0), Vector2(1,1), Vector2(0,1)])
-			0b11:
-				surface_ref.verts.append_array([
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4)],
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4) + 1],
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4) + 2],
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4) + 1],
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4) + 3],
-					Vector3(tile_pos) + TCU.ts_tess_rhombdo_verts[(face_i * 4) + 2],])
-				surface_ref.uvs.append_array([Vector2(0,0), Vector2(1,0), Vector2(0,1),
-					Vector2(1,0), Vector2(1,1), Vector2(0,1)])
-		match tri_cull_bits:
-			0b01, 0b10:
+					[TCU.ts_tess_rhombdo_verts[(face_i * 4)] + tile_pos,
+					TCU.ts_tess_rhombdo_verts[(face_i * 4) + 1] + tile_pos,
+					TCU.ts_tess_rhombdo_verts[(face_i * 4) + 2] + tile_pos],
+					[TCU.ts_tess_rhombdo_verts[(face_i * 4) + 1] + tile_pos,
+					TCU.ts_tess_rhombdo_verts[(face_i * 4) + 3] + tile_pos,
+					TCU.ts_tess_rhombdo_verts[(face_i * 4) + 2] + tile_pos],][tri_i])
+				surface_ref.uvs.append_array([
+					[Vector2(0,0), Vector2(1,0), Vector2(0,1)],
+					[Vector2(1,0), Vector2(1,1), Vector2(0,1)],][tri_i])
 				surface_ref.norms.append_array([
 					TCU.ts_tess_rhombdo_norms[face_i], TCU.ts_tess_rhombdo_norms[face_i],
 					TCU.ts_tess_rhombdo_norms[face_i],])
-				meshify_append_substance_data(tc27[13].tiles_substs[t_i_from_pos(tile_pos)], 3, surface_ref)
-			0b11:
-				surface_ref.norms.append_array([
-					TCU.ts_tess_rhombdo_norms[face_i], TCU.ts_tess_rhombdo_norms[face_i],
-					TCU.ts_tess_rhombdo_norms[face_i], TCU.ts_tess_rhombdo_norms[face_i],
-					TCU.ts_tess_rhombdo_norms[face_i], TCU.ts_tess_rhombdo_norms[face_i],])
-				meshify_append_substance_data(tc27[13].tiles_substs[t_i_from_pos(tile_pos)], 6, surface_ref)
-
-func meshify_append_substance_data(
-	subst_ind: int, num_verts_with_shared_subst: int,
-	surface_ref: Dictionary,
-	#surface_ref.colors: PackedColorArray,
-	#surface_ref.texinds_a: PackedByteArray, surface_ref.texinds_b: PackedByteArray,
-):
-	surface_ref.colors.append(ChemCraft.SUBSTANCES[subst_ind].vert_color)
-	surface_ref.texinds_a.append((ChemCraft.SUBSTANCES[subst_ind].albedo_ind & 0b111111110000000000000000)>>16)
-	surface_ref.texinds_a.append((ChemCraft.SUBSTANCES[subst_ind].albedo_ind & 0b000000001111111100000000)>>8)
-	surface_ref.texinds_a.append(ChemCraft.SUBSTANCES[subst_ind].albedo_ind & 0b000000000000000011111111)
-	surface_ref.texinds_b.append((ChemCraft.SUBSTANCES[subst_ind].normal_ind & 0b111111110000000000000000)>>16)
-	surface_ref.texinds_b.append((ChemCraft.SUBSTANCES[subst_ind].normal_ind & 0b000000001111111100000000)>>8)
-	surface_ref.texinds_b.append(ChemCraft.SUBSTANCES[subst_ind].normal_ind & 0b000000000000000011111111)
-	surface_ref.texinds_a.append((ChemCraft.SUBSTANCES[subst_ind].special_ind & 0b000000001111111100000000)>>8)
-	surface_ref.texinds_b.append(ChemCraft.SUBSTANCES[subst_ind].special_ind & 0b000000000000000011111111)
-	
-	# Duplicate the determined data for each similar vertex, to avoid having to recalculate everything:
-	for i in range(0, num_verts_with_shared_subst - 1, 1):
-		surface_ref.colors.append(surface_ref.colors[surface_ref.colors.size() - 1])
-		surface_ref.texinds_a.append_array([
-			surface_ref.texinds_a[surface_ref.texinds_a.size() - 4], 
-			surface_ref.texinds_a[surface_ref.texinds_a.size() - 3],
-			surface_ref.texinds_a[surface_ref.texinds_a.size() - 2], 
-			surface_ref.texinds_a[surface_ref.texinds_a.size() - 1]])
-		surface_ref.texinds_b.append_array([
-			surface_ref.texinds_b[surface_ref.texinds_b.size() - 4], 
-			surface_ref.texinds_b[surface_ref.texinds_b.size() - 3],
-			surface_ref.texinds_b[surface_ref.texinds_b.size() - 2], 
-			surface_ref.texinds_b[surface_ref.texinds_b.size() - 1]])
+		if subst_shares_in_tile > 0:
+			subst_inds.append(tc27[13].tiles_substs[tile_indices[t_ind_i]])
+			subst_shares.append(subst_shares_in_tile * 3)
+	meshify_append_substance_data_bulk(surface_ref, subst_inds, subst_shares)
 
 func tc_generate(tchunk: TChunk):
 	tc_fill_tile(tchunk, TILE_SHAPE.EMPTY, "nothing")
