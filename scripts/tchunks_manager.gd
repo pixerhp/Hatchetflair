@@ -628,38 +628,30 @@ func generate_test_mesh():
 	mesh_surface.resize(Mesh.ARRAY_MAX)
 	mesh_surface[Mesh.ARRAY_VERTEX] = PackedVector3Array([
 		Vector3(-16,0,16), Vector3(-16,0,-16), Vector3(16,0,16),
-		Vector3(16,0,-16), Vector3(16,0,16), Vector3(-16,0,-16),
-	])
+		Vector3(16,0,-16), Vector3(16,0,16), Vector3(-16,0,-16),])
 	mesh_surface[Mesh.ARRAY_NORMAL] = PackedVector3Array([
 		Vector3(0,1,0), Vector3(0,1,0), Vector3(0,1,0), 
-		Vector3(0,1,0), Vector3(0,1,0), Vector3(0,1,0), 
-	])
+		Vector3(0,1,0), Vector3(0,1,0), Vector3(0,1,0),])
 	mesh_surface[Mesh.ARRAY_COLOR] = PackedColorArray([
-		Color.BLUE, Color.BLUE, Color.BLUE, 
-		Color.YELLOW, Color.YELLOW, Color.YELLOW, 
-	])
+		Color.CYAN, Color.BLUE, Color.MAGENTA, 
+		Color.GREEN, Color.YELLOW, Color.RED,])
 	mesh_surface[Mesh.ARRAY_TEX_UV] = PackedVector2Array([
 		Vector2(0,1), Vector2(0,0), Vector2(1,1), 
-		Vector2(1,0), Vector2(1,1), Vector2(0,0), 
-	])
+		Vector2(1,0), Vector2(1,1), Vector2(0,0),])
 	mesh_surface[Mesh.ARRAY_CUSTOM0] = PackedByteArray([
 		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
 		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
 		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
-		
 		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
 		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
-		0b00000000, 0b00000000, 0b00000000, 0b00000000, 
-	])
+		0b00000000, 0b00000000, 0b00000000, 0b00000000,])
 	mesh_surface[Mesh.ARRAY_CUSTOM1] = PackedByteArray([
 		0b00000000, 0b00000000, 0b00000001, 0b00000000, 
 		0b00000000, 0b00000000, 0b00000001, 0b00000000, 
 		0b00000000, 0b00000000, 0b00000001, 0b00000000, 
-		
 		0b00000000, 0b00000000, 0b00000000, 0b00000001, 
 		0b00000000, 0b00000000, 0b00000000, 0b00000001, 
-		0b00000000, 0b00000000, 0b00000000, 0b00000001, 
-	])
+		0b00000000, 0b00000000, 0b00000000, 0b00000001,])
 	
 	var test_mat: ShaderMaterial = load("res://assets/substance_assets/opaq_subst_mat.tres")
 	test_mat.set_shader_parameter("albedos_textures", ChemCraft.albedos_texarray)
@@ -668,16 +660,14 @@ func generate_test_mesh():
 	
 	var format = (
 		Mesh.ARRAY_CUSTOM0 | Mesh.ARRAY_CUSTOM_RGBA8_UNORM |
-		Mesh.ARRAY_CUSTOM1 | Mesh.ARRAY_CUSTOM_RGBA8_UNORM
-	)
+		Mesh.ARRAY_CUSTOM1 | Mesh.ARRAY_CUSTOM_RGBA8_UNORM )
 	
 	array_mesh.add_surface_from_arrays(
 		Mesh.PRIMITIVE_TRIANGLES, 
 		mesh_surface,
 		[],
 		{},
-		format,
-	)
+		format,)
 	array_mesh.surface_set_material(0, test_mat)
 	mesh_instance_node.mesh = array_mesh
 	
