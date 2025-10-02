@@ -208,7 +208,7 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 	mesh_surface[Mesh.ARRAY_CUSTOM0] = surface.texinds_a
 	mesh_surface[Mesh.ARRAY_CUSTOM1] = surface.texinds_b
 	
-	var shader_material: ShaderMaterial = load("res://assets/substance_assets/opaq_subst_mat.tres")
+	var shader_material: ShaderMaterial = preload("res://assets/substance_assets/opaq_subst_mat.tres")
 	#shader_material.vertex_color_use_as_albedo = true
 	shader_material.set_shader_parameter("albedos_textures", ChemCraft.albedos_texarray)
 	shader_material.set_shader_parameter("normals_textures", ChemCraft.normals_texarray)
@@ -229,6 +229,32 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 		tchunk.tiles_rend_arraymesh.surface_set_material(0, shader_material)
 	
 	tchunk.tiles_rend_node.mesh = tchunk.tiles_rend_arraymesh
+
+#func get_tc27_c_i_3x3x3(tile_index: int) -> PackedInt32Array:
+	#var result: PackedInt32Array = []
+	#result.resize(27)
+	#var new_pos: Vector3i = Vector3i()
+	#for i in range(27):
+		#new_pos = Vector3i(
+			#((tile_index % TCU.TCHUNK_L) + ((i % 3) - 1)),
+			#(((tile_index / TCU.TCHUNK_L) % TCU.TCHUNK_L) + (((i / 3) % 3) - 1)),
+			#(((tile_index / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L) + (((i / 9) % 3) - 1)), )
+		#result[i] = (
+			#(0 if (new_pos.x < 0) else (1 if (new_pos.x < TCU.TCHUNK_L) else 2)) +
+			#(0 if (new_pos.y < 0) else (3 if (new_pos.y < TCU.TCHUNK_L) else 6)) +
+			#(0 if (new_pos.z < 0) else (9 if (new_pos.z < TCU.TCHUNK_L) else 18)) )
+	#return result
+#
+#func get_tc27_t_i_3x3x3(tile_index: int) -> PackedInt32Array:
+	#var result: PackedInt32Array = []
+	#result.resize(27)
+	#for i in range(27):
+		#result[i] = (
+			#posmod((tile_index%TCU.TCHUNK_L)+((i%3)-1), TCU.TCHUNK_L) +
+			#posmod(((tile_index/TCU.TCHUNK_L)%TCU.TCHUNK_L)+(((i/3)%3)-1), TCU.TCHUNK_L) +
+			#posmod(((tile_index/(TCU.TCHUNK_L*TCU.TCHUNK_L))%TCU.TCHUNK_L)+(((i/9)%3)-1), TCU.TCHUNK_L) )
+	#return result
+
 
 # Calculates movewment-relative tc27 chunk indices in bulk:
 func get_tc27_c_i_bulk(tile_indices: PackedInt32Array, movements: Array[Vector3i]) -> PackedInt32Array:
@@ -292,6 +318,8 @@ func meshify_append_substance_data_bulk(
 
 # (Empty tiles typically don't mesh anything, but situationally might if they neighbor a marching tile.)
 func meshify_tiles_empty(surface_ref: Dictionary, tc27: Array[TChunk], tile_indices: PackedInt32Array):
+	if tile_indices.is_empty():
+		return
 	# Precalculate tc27_c_i and tc27_t_i in bulk:
 	var rel_pos_inds: PackedInt32Array = []
 	var rel_pos_moves: Array[Vector3i] = []
@@ -342,6 +370,8 @@ func meshify_march_ang_sections(
 	surface_ref: Dictionary, tc27: Array[TChunk], 
 	tile_indices: PackedInt32Array, sections_bitstates: PackedByteArray = PackedByteArray([])
 ):
+	if tile_indices.is_empty():
+		return
 	if sections_bitstates.is_empty():
 		sections_bitstates.resize(tile_indices.size())
 		sections_bitstates.fill(0b11111111)
@@ -407,6 +437,8 @@ func meshify_march_ang_sections(
 	meshify_append_substance_data_bulk(surface_ref, subst_inds, subst_shares)
 
 func meshify_tiles_tess_cube(surface_ref: Dictionary, tc27: Array[TChunk], tile_indices: PackedInt32Array):
+	if tile_indices.is_empty():
+		return
 	# Precalculate tc27_c_i and tc27_t_i in bulk:
 	var rel_pos_inds: PackedInt32Array = []
 	var rel_pos_moves: Array[Vector3i] = []
@@ -464,6 +496,8 @@ func meshify_tiles_tess_cube(surface_ref: Dictionary, tc27: Array[TChunk], tile_
 	meshify_append_substance_data_bulk(surface_ref, subst_inds, subst_shares)
 
 func meshify_tiles_tess_rhombdo(surface_ref: Dictionary, tc27: Array[TChunk], tile_indices: PackedInt32Array):
+	if tile_indices.is_empty():
+		return
 	# Precalculate tc27_c_i and tc27_t_i in bulk:
 	var rel_pos_inds: PackedInt32Array = []
 	var rel_pos_moves: Array[Vector3i] = []
@@ -530,6 +564,8 @@ func tc_generate(tchunk: TChunk):
 	tc_fill_tile(tchunk, TILE_SHAPE.EMPTY, "nothing")
 	
 	tc_set_tile(tchunk, Vector3i(0,0,0), TILE_SHAPE.MARCH_ANG, "plainite_white")
+	tc_set_tile(tchunk, Vector3i(2,0,0), TILE_SHAPE.TESS_CUBE, "plainite_white")
+	tc_set_tile(tchunk, Vector3i(4,0,0), TILE_SHAPE.TESS_RHOMBDO, "plainite_white")
 	
 	# Update meshes utd bool:
 	if world_tc_xyz_to_i.has(tchunk.coords):
