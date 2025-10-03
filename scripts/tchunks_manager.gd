@@ -640,37 +640,44 @@ func remove_tchunk_mesh_node(xyz: Vector3i):
 
 
 var tcmthread: Thread
-
+var tcmthread_exit: bool = false
+@onready var cam_node: Node = get_tree().current_scene.find_child("FlyCam")
+var main_tcmt_mutex: Mutex
+var cam_pos_main: Vector3 = Vector3(0,0,0)
 
 func _ready():
+	main_tcmt_mutex = Mutex.new()
 	tcmthread = Thread.new()
 	tcmthread.start(tcmthread_func)
-	
-	#var start_a = Time.get_ticks_msec()
-	#for i in 5**3:
-		#load_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
-	#var start_b = Time.get_ticks_msec()
-	#for i in 5**3:
-		#remesh_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
-	#print(start_b - start_a)
-	#print(Time.get_ticks_msec() - start_b)
-	
-	
-	#tc_fill_tile(Vector3i(0,0,0), TILE_SHAPE.EMPTY, "nothing")
-	#tc_set_tile(Vector3i(0,0,0), Vector3i(0,0,0), TILE_SHAPE.TESS_CUBE, "plainite_black")
-	#tc_set_tile(Vector3i(0,0,0), Vector3i(0,1,0), TILE_SHAPE.TESS_RHOMBDO, "test")
-	#tc_set_tile(Vector3i(0,0,0), Vector3i(0,2,0), TILE_SHAPE.TESS_CUBE, "plainite_white")
-	#tc_set_tile(Vector3i(0,0,0), Vector3i(2,1,0), TILE_SHAPE.TESS_RHOMBDO, "error")
-	
-	#generate_test_mesh()
+
+func _physics_process(_delta):
+	main_tcmt_mutex.lock()
+	if not cam_node == null:
+		cam_pos_main = cam_node.position
+	main_tcmt_mutex.unlock()
 
 func tcmthread_func():
-	for i in 5**3:
-		load_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
-	for i in 5**3:
-		remesh_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
+	var load_pos: Vector3 = Vector3(0,0,0)
+	while not tcmthread_exit:
+		main_tcmt_mutex.unlock()
+		
+		main_tcmt_mutex.lock()
+		load_pos = cam_pos_main
+		main_tcmt_mutex.unlock()
+		
+		main_tcmt_mutex.lock()
+	main_tcmt_mutex.unlock()
+	
+	
+	#for i in 5**3:
+		#load_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
+	#for i in 5**3:
+		#remesh_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
 
 func _exit_tree():
+	main_tcmt_mutex.lock()
+	tcmthread_exit = true
+	main_tcmt_mutex.unlock()
 	tcmthread.wait_to_finish()
 
 func generate_test_mesh():
