@@ -626,7 +626,8 @@ func add_tchunk_mesh_node(xyz: Vector3i):
 		return
 	if world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node == null:
 		return
-	chunks_container_node.add_child(world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node)
+	chunks_container_node.call_deferred("add_child", world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node)
+	#chunks_container_node.add_child(world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node)
 	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.position = Vector3(xyz * 16)
 	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.name = xyz_to_name(xyz) + "_tiles_rend_mesh"
 
@@ -638,15 +639,21 @@ func remove_tchunk_mesh_node(xyz: Vector3i):
 	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.queue_free()
 
 
+var tcmthread: Thread
+
+
 func _ready():
-	var start_a = Time.get_ticks_msec()
-	for i in 5**3:
-		load_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
-	var start_b = Time.get_ticks_msec()
-	for i in 5**3:
-		remesh_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
-	print(start_b - start_a)
-	print(Time.get_ticks_msec() - start_b)
+	tcmthread = Thread.new()
+	tcmthread.start(tcmthread_func)
+	
+	#var start_a = Time.get_ticks_msec()
+	#for i in 5**3:
+		#load_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
+	#var start_b = Time.get_ticks_msec()
+	#for i in 5**3:
+		#remesh_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
+	#print(start_b - start_a)
+	#print(Time.get_ticks_msec() - start_b)
 	
 	
 	#tc_fill_tile(Vector3i(0,0,0), TILE_SHAPE.EMPTY, "nothing")
@@ -656,6 +663,15 @@ func _ready():
 	#tc_set_tile(Vector3i(0,0,0), Vector3i(2,1,0), TILE_SHAPE.TESS_RHOMBDO, "error")
 	
 	#generate_test_mesh()
+
+func tcmthread_func():
+	for i in 5**3:
+		load_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
+	for i in 5**3:
+		remesh_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
+
+func _exit_tree():
+	tcmthread.wait_to_finish()
 
 func generate_test_mesh():
 	var mesh_instance_node: MeshInstance3D = MeshInstance3D.new()
