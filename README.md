@@ -11,7 +11,7 @@
   - https://www.youtube.com/@hatchetflair
 
 ## What is Hatchetflair?
-Hatchetflair is a 3D sandbox survival game, currently very early in development.
+Hatchetflair is an ambitious 3D sandbox survival game, currently very early in development.
 
 ### Planned content and feel of the game:
 - A focus on fun character/entity designs, and social interactions between players and with NPCs.
@@ -24,9 +24,13 @@ Hatchetflair is a 3D sandbox survival game, currently very early in development.
   - Liquids preserve their volume, can be stored in various containers, can interact with some machinery and crafting, and can be transported through piping.
   - Some materials are much rarer and/or more valuable than others (such as precious metals, exotic woods and organic materials), and may be fun to collect, accumulate, build with and buy/sell.
 - Moderate-to-high game difficulty.
-  - The game's target audience is roughly young-adults-to-adults that've had experience playing games before, and it should be defaultly difficult comparable to games like *Rain World* or *Hollow Knight: Silksong*.
+  - The game's target audience is roughly young-adults-to-adults that've had experience playing games before, and the game should (defaultly) be difficult comparable to games like *Rain World* or *Hollow Knight: Silksong*.
     - Its difficulty should *not* involve things like button-mashing or other strenuous gameplay.
-    - Regardless of defaults, difficulty can be adjusted via world and character settings.
+    - Regardless of defaults, gameplay difficulty can be adjusted via world and character settings.
   - Surviving on your own in the wild with no starting equipment or infrastructure should be very dangerous, probably resulting in many deaths. Living in a small community (or even with just a friend) though should be comparably less dangerous.
-  - Some biomes/environments may be difficult to settle in but have interesting resources, lending themselves to temporary expeditions where you need to manage your supplies.
   - There will always be at least some critically-dangerous biomes/entities in the world, even by end-game.
+- Other notes:
+  - Some biomes/environments may lend themselves well to temporary expeditions where you need to manage your supplies.
+  - There will be fundamentals like faze (usage comparable to spells in *Secret of Mana* / *Secret of Evermore* or the beams in *Super Metroid*), gamma (associated with space/position/teleportation), digamma (associated with gravity), gray (associated with matter and composition), and mursa.
+    - Some species/technologies may utilize or interact with some fundamentals but not others.
+  - Characters spawning and respawning will probably be canon to how the world of hearth works.
