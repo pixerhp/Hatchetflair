@@ -14,14 +14,19 @@
 Hatchetflair is a 3D sandbox survival game, currently very early in development.
 
 ### Planned content and feel of the game:
-- A focus on fun character/entity designs and social interactions.
-  - You can both play as and interact with NPCs of several sapient species, currently including humans, flerovians, smilies, egrens, amalgamates, jargins, droids, and bonnits.
-  - You can do things like sit, lay down, sleep, dance or act other emotes most anywhere, and also do some emotes in conjunction with others (such as high-fiving, hugging, etc).
-  - Entities in the world inspired from a swath of sources (definitely including from Super Metroid and Secret of Mana), ranging from little bugs to massive behemoths, animals to robots to abstract constructs, just generally as much fun variety as I can muster.
+- A focus on fun character/entity designs, and social interactions between players and with NPCs.
+  - You can both play as and interact with characters of various sapient species, currently planned to include humans, flerovians, smilies, egrens, amalgamates, jargins, droids, and bonnits.
+  - You can sit, lay down, sleep, dance (etc) most anywhere, and can also perform some emotes with others (high-fiving, hugging, etc).
+  - Creatures/entities will take inspiration from various sources, range from little bugs to massive behemoths, be of flesh to robots to abstract constructs, etc.
 - A focus on materials and material science.
-  - Plenty of original elements, substances, woods, organic materials (etc) that you can play and build with (such as inspired by Roblox Lumber Tycoon 2 or Roblox Oaklands), some which are quite rare/exotic and fun to collect.
-  - Lots of tools, machinery and infrastructure that let you turn things into other things. (Wood into woodchips or sawdust, redox reactions between metals, creating fertilizer with sulfuric acid, processing of both solid and liquid foodstuffs, etc etc.)
-- High difficulty and danger in the world.
-  - Surviving on your own in the wild with no starting equipment or infrastructure should be very difficult, and may result in many deaths before your accumulated advancements can help you survive by much. (Note that living in a small community, or even just a friend, is typically much safer than surviving alone.)
-  - Some environments may be very difficult to make settlements but have interesting resources, lending themselves to temporary expeditions where you need to manage your supplies.
-  - The difficulty of environments ranges dramatically, with the rare most dangerous ones being essentially a death sentence to even a group of experienced players with end-game content, and thus there will always be at least some danger and mystery to be had in the world.
+  - An original list of chemical elements, including both more familiar ones (ferrium which similar to iron, carbonium which is similar to carbon, etc) and more original ones (digodium, veronium, collosium, etc).
+  - Lots of tools, machinery and infrastructure that let you turn things into other things, such as turn woods into woodchips or sawdust, do redox reactions between metals, create fertilizer with sulfuric acid, process both solid and liquid foodstuffs, etc.
+  - Liquids preserve their volume, can be stored in various containers, can interact with some machinery and crafting, and can be transported through piping.
+  - Some materials are much rarer and/or more valuable than others (such as precious metals, exotic woods and organic materials), and may be fun to collect, accumulate, build with and buy/sell.
+- Moderate-to-high game difficulty.
+  - The game's target audience is roughly young-adults-to-adults that've had experience playing games before, and it should be defaultly difficult comparable to games like *Rain World* or *Hollow Knight: Silksong*.
+    - Its difficulty should *not* involve things like button-mashing or other strenuous gameplay.
+    - Regardless of defaults, difficulty can be adjusted via world and character settings.
+  - Surviving on your own in the wild with no starting equipment or infrastructure should be very dangerous, probably resulting in many deaths. Living in a small community (or even with just a friend) though should be comparably less dangerous.
+  - Some biomes/environments may be difficult to settle in but have interesting resources, lending themselves to temporary expeditions where you need to manage your supplies.
+  - There will always be at least some critically-dangerous biomes/entities in the world, even by end-game.
