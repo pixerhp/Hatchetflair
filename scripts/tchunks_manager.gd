@@ -636,7 +636,7 @@ func remove_tchunk_mesh_node(xyz: Vector3i):
 		return
 	if world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node == null:
 		return
-	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.queue_free()
+	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.call_deferred("queue_free")
 
 
 var tcmthread: Thread
@@ -644,6 +644,7 @@ var tcmthread_exit: bool = false
 @onready var cam_node: Node = get_tree().current_scene.find_child("FlyCam")
 var main_tcmt_mutex: Mutex
 var cam_pos_main: Vector3 = Vector3(0,0,0)
+var wait_to_unload: bool = false
 
 func _ready():
 	main_tcmt_mutex = Mutex.new()
@@ -654,25 +655,58 @@ func _physics_process(_delta):
 	main_tcmt_mutex.lock()
 	if not cam_node == null:
 		cam_pos_main = cam_node.position
+	wait_to_unload = false
 	main_tcmt_mutex.unlock()
 
 func tcmthread_func():
 	var load_pos: Vector3 = Vector3(0,0,0)
+	var load_closest_tc: Vector3i = Vector3i(0,0,0)
+	
+	
+	#for i in 9**3:
+		#load_tchunk(Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4)))
+	#for i in 9**3:
+		#remesh_tchunk(Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4)))
+	
+	var wait_to_unload_local: bool = false
+	
+	var TEST_last_unload: Vector3i = Vector3i(999,999,999)
+	
 	while not tcmthread_exit:
 		main_tcmt_mutex.unlock()
 		
 		main_tcmt_mutex.lock()
 		load_pos = cam_pos_main
+		wait_to_unload_local = wait_to_unload
 		main_tcmt_mutex.unlock()
+		load_closest_tc = Vector3i(floor((load_pos + TCU.TCHUNK_HS) / Vector3(TCU.TCHUNK_S)))
+		
+		
+		if not world_tc_xyz_to_i.has(load_closest_tc):
+			print("loading: ", load_closest_tc)
+			load_tchunk(load_closest_tc)
+			remesh_tchunk(load_closest_tc)
+		
+		#if not wait_to_unload_local: for i in range(world_tchunks.size()):
+			#if load_pos.distance_to(Vector3(world_tchunks[i].coords) * 16) > 128:
+				#unload_tchunk(world_tchunks[i].coords)
+				#main_tcmt_mutex.lock()
+				#wait_to_unload = true
+				#main_tcmt_mutex.unlock()
+				#break
+		
+		
+		#if world_tc_xyz_to_i.size() == 0:S
+			#for i in 5**3:
+				#load_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
+			#for i in 5**3:
+				#remesh_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
+		
+		#if not world_tc_xyz_to_i.has(load_closest_tc):
+			#load_tchunk(load_closest_tc)
 		
 		main_tcmt_mutex.lock()
 	main_tcmt_mutex.unlock()
-	
-	
-	#for i in 5**3:
-		#load_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
-	#for i in 5**3:
-		#remesh_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
 
 func _exit_tree():
 	main_tcmt_mutex.lock()
