@@ -59,9 +59,9 @@ func t_pos_from_i(index: int) -> Vector3i:
 		posmod(index / (TCU.TCHUNK_L * TCU.TCHUNK_L), TCU.TCHUNK_L),
 	)
 
-func tc_set_tiles_meshes_ood(tchunk_xyz: Vector3i) -> Error:
-	if world_tc_xyz_to_i.has(tchunk_xyz):
-		world_tchunks[world_tc_xyz_to_i[tchunk_xyz]].are_tiles_meshes_utd = false
+func tc_set_tiles_meshes_ood(tc_xyz: Vector3i) -> Error:
+	if world_tchunks.has(tc_xyz):
+		world_tchunks[tc_xyz].are_tiles_meshes_utd = false
 		return OK
 	else:
 		return FAILED
@@ -81,7 +81,7 @@ func tc_set_tile(tchunk: TChunk, tile_xyz: Vector3i, tile_shape: int, tile_subst
 	# Update meshes utd bool:
 	const THRESH: int = 1 
 		# The effective range in tile pos of tile-changing causing meshes to be ood, max is chunk length.
-	if not world_tc_xyz_to_i.has(tchunk.coords):
+	if not world_tchunks.has(tchunk.coords):
 		tchunk.are_tiles_meshes_utd = false
 		return OK
 	# (A balance between efficiency and code length; it could actually be made more egregious for speed.)
@@ -142,7 +142,7 @@ func tc_fill_tile(tchunk: TChunk, tile_shape: int, tile_subst: Variant) -> Error
 			push_error("Bad tile_subst param type, expected int (subst index) or String (subst name).")
 			tchunk.tiles_substs.fill(0)
 	# Update meshes utd bool:
-	if world_tc_xyz_to_i.has(tchunk.coords):
+	if world_tchunks.has(tchunk.coords):
 		for i in 27:
 			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1)))
 	else:
@@ -156,13 +156,13 @@ func tc_unmesh(tchunk: TChunk):
 	tchunk.tiles_rend_mesh = ArrayMesh.new()
 	tchunk.are_tiles_meshes_utd = false
 
-func get_tc27(tchunk_xyz: Vector3i) -> Array[TChunk]:
+func get_tc27(tc_xyz: Vector3i) -> Array[TChunk]:
 	var tc27: Array[TChunk] = []
 	tc27.resize(27)
 	for i in range(27):
-		if world_tc_xyz_to_i.has(tchunk_xyz + Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1))):
-			tc27[i] = world_tchunks[world_tc_xyz_to_i[
-				tchunk_xyz + Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1))]]
+		if world_tchunks.has(tc_xyz + Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1))):
+			tc27[i] = world_tchunks[
+				tc_xyz + Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1))]
 		else:
 			tc27[i] = TChunk.new()
 	return tc27
@@ -232,6 +232,7 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 		tchunk.tiles_rend_arraymesh.surface_set_material(0, shader_material)
 	
 	tchunk.tiles_rend_node.mesh = tchunk.tiles_rend_arraymesh
+	tchunk.are_tiles_meshes_utd = true
 
 #func get_tc27_c_i_3x3x3(tile_index: int) -> PackedInt32Array:
 	#var result: PackedInt32Array = []
@@ -569,15 +570,14 @@ func tc_generate(tchunk: TChunk):
 	tc_set_tile(tchunk, Vector3i(4,0,0), TILE_SHAPE.TESS_RHOMBDO, "plainite_white")
 	
 	# Update meshes utd bool:
-	if world_tc_xyz_to_i.has(tchunk.coords):
+	if world_tchunks.has(tchunk.coords):
 		for i in 27:
 			tc_set_tiles_meshes_ood(Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1)))
 	else:
 		tchunk.are_tiles_meshes_utd = false
 
 # All currently loaded world terrain chunks.
-var world_tchunks: Array[TChunk] = []
-var world_tc_xyz_to_i: Dictionary[Vector3i, int] = {}
+var world_tchunks: Dictionary[Vector3i, TChunk] = {}
 
 func xyz_to_name(xyz: Vector3i) -> String:
 	return str(xyz.x) + "_" + str(xyz.y) + "_" + str(xyz.z)
@@ -589,54 +589,45 @@ func name_to_xyz(node_name: String) -> Vector3i:
 	else:
 		return Vector3i(0,0,0)
 
-func refresh_world_tc_xyz_to_i():
-	world_tc_xyz_to_i.clear()
-	for i in range(world_tchunks.size()):
-		world_tc_xyz_to_i[world_tchunks[i].coords] = i
-	if not world_tc_xyz_to_i.size() == world_tchunks.size():
-		push_error("Some world tchunks have duplicate coords, which is unintended behavior.")
-
 func load_tchunk(tchunk_xyz: Vector3i, load_data: bool = true, reload_if_existing: bool = true):
-	if world_tc_xyz_to_i.has(tchunk_xyz):
-		if reload_if_existing: unload_tchunk(tchunk_xyz)
-		else: return
-	world_tchunks.append(TChunk.new())
-	world_tchunks[-1].coords = tchunk_xyz
-	world_tc_xyz_to_i[tchunk_xyz] = world_tchunks.size() - 1
+	if world_tchunks.has(tchunk_xyz):
+		if reload_if_existing: 
+			unload_tchunk(tchunk_xyz)
+		else: 
+			return
+	world_tchunks[tchunk_xyz] = TChunk.new()
+	world_tchunks[tchunk_xyz].coords = tchunk_xyz
 	if load_data:
 		# !!! check if chunk is saved in files and load that instead of generating if so.
-		tc_generate(world_tchunks[-1])
+		tc_generate(world_tchunks[tchunk_xyz])
 
-func unload_tchunk(xyz: Vector3i):
-	if not world_tc_xyz_to_i.has(xyz): 
+func unload_tchunk(tc_coords: Vector3i):
+	if not world_tchunks.has(tc_coords): 
 		return
-	remove_tchunk_mesh_node(xyz)
-	world_tchunks.remove_at(world_tc_xyz_to_i[xyz])
-	world_tc_xyz_to_i.erase(xyz)
+	remove_tchunk_mesh_node(tc_coords)
+	world_tchunks.erase(tc_coords)
 
 func remesh_tchunk(xyz: Vector3i):
-	if not world_tc_xyz_to_i.has(xyz):
+	if not world_tchunks.has(xyz):
 		return
-	tc_meshify(world_tchunks[world_tc_xyz_to_i[xyz]])
-	if not world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.name == xyz_to_name(xyz) + "_tiles_rend_mesh":
+	tc_meshify(world_tchunks[xyz])
+	if not world_tchunks[xyz].tiles_rend_node.name == xyz_to_name(xyz) + "_tiles_rend_mesh":
 		add_tchunk_mesh_node(xyz)
 
-func add_tchunk_mesh_node(xyz: Vector3i):
-	if not world_tc_xyz_to_i.has(xyz):
+func add_tchunk_mesh_node(tc_xyz: Vector3i):
+	if not world_tchunks.has(tc_xyz):
 		return
-	if world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node == null:
+	if world_tchunks[tc_xyz].tiles_rend_node == null:
 		return
-	chunks_container_node.call_deferred("add_child", world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node)
-	#chunks_container_node.add_child(world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node)
-	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.position = Vector3(xyz * 16)
-	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.name = xyz_to_name(xyz) + "_tiles_rend_mesh"
-
-func remove_tchunk_mesh_node(xyz: Vector3i):
-	if not world_tc_xyz_to_i.has(xyz):
+	chunks_container_node.call_deferred("add_child", world_tchunks[tc_xyz].tiles_rend_node)
+	world_tchunks[tc_xyz].tiles_rend_node.call_deferred("set", "position", Vector3(tc_xyz * 16))
+	world_tchunks[tc_xyz].tiles_rend_node.call_deferred("set", "name", xyz_to_name(tc_xyz)+"_tiles_rend_mesh")
+func remove_tchunk_mesh_node(tc_xyz: Vector3i):
+	if not world_tchunks.has(tc_xyz):
 		return
-	if world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node == null:
+	if world_tchunks[tc_xyz].tiles_rend_node == null:
 		return
-	world_tchunks[world_tc_xyz_to_i[xyz]].tiles_rend_node.call_deferred("queue_free")
+	world_tchunks[tc_xyz].tiles_rend_node.call_deferred("queue_free")
 
 
 var tcmthread: Thread
@@ -663,10 +654,10 @@ func tcmthread_func():
 	var load_closest_tc: Vector3i = Vector3i(0,0,0)
 	
 	
-	#for i in 9**3:
-		#load_tchunk(Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4)))
-	#for i in 9**3:
-		#remesh_tchunk(Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4)))
+	for i in 9**3:
+		load_tchunk(Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4)))
+	for i in 9**3:
+		remesh_tchunk(Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4)))
 	
 	var wait_to_unload_local: bool = false
 	
@@ -682,10 +673,10 @@ func tcmthread_func():
 		load_closest_tc = Vector3i(floor((load_pos + TCU.TCHUNK_HS) / Vector3(TCU.TCHUNK_S)))
 		
 		
-		if not world_tc_xyz_to_i.has(load_closest_tc):
-			print("loading: ", load_closest_tc)
-			load_tchunk(load_closest_tc)
-			remesh_tchunk(load_closest_tc)
+		#if not world_tc_xyz_to_i.has(load_closest_tc):
+			#print("loading: ", load_closest_tc)
+			#load_tchunk(load_closest_tc)
+			#remesh_tchunk(load_closest_tc)
 		
 		#if not wait_to_unload_local: for i in range(world_tchunks.size()):
 			#if load_pos.distance_to(Vector3(world_tchunks[i].coords) * 16) > 128:
