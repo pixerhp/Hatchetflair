@@ -223,15 +223,15 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 	)
 	
 	if not surface.verts.is_empty():
-		tchunk.tiles_rend_arraymesh.add_surface_from_arrays(
+		tchunk.tiles_rend_arraymesh.call_deferred("add_surface_from_arrays", 
 			Mesh.PRIMITIVE_TRIANGLES, 
 			mesh_surface,
 			[],
 			{},
 			format,)
-		tchunk.tiles_rend_arraymesh.surface_set_material(0, shader_material)
+		tchunk.tiles_rend_arraymesh.call_deferred("surface_set_material", 0, shader_material)
 	
-	tchunk.tiles_rend_node.mesh = tchunk.tiles_rend_arraymesh
+	tchunk.tiles_rend_node.call_deferred("set", "mesh", tchunk.tiles_rend_arraymesh)
 	tchunk.are_tiles_meshes_utd = true
 
 #func get_tc27_c_i_3x3x3(tile_index: int) -> PackedInt32Array:
@@ -589,30 +589,36 @@ func name_to_xyz(node_name: String) -> Vector3i:
 	else:
 		return Vector3i(0,0,0)
 
-func load_tchunk(tchunk_xyz: Vector3i, load_data: bool = true, reload_if_existing: bool = true):
-	if world_tchunks.has(tchunk_xyz):
+func load_tchunk(tc_xyz: Vector3i, 
+	reload_if_existing: bool = true, load_data: bool = true, meshify: bool = true,
+):
+	if world_tchunks.has(tc_xyz):
 		if reload_if_existing: 
-			unload_tchunk(tchunk_xyz)
+			unload_tchunk(tc_xyz)
 		else: 
 			return
-	world_tchunks[tchunk_xyz] = TChunk.new()
-	world_tchunks[tchunk_xyz].coords = tchunk_xyz
-	if load_data:
-		# !!! check if chunk is saved in files and load that instead of generating if so.
-		tc_generate(world_tchunks[tchunk_xyz])
-
-func unload_tchunk(tc_coords: Vector3i):
-	if not world_tchunks.has(tc_coords): 
+	world_tchunks[tc_xyz] = TChunk.new()
+	world_tchunks[tc_xyz].coords = tc_xyz
+	if not load_data:
 		return
-	remove_tchunk_mesh_node(tc_coords)
-	world_tchunks.erase(tc_coords)
-
-func remesh_tchunk(xyz: Vector3i):
-	if not world_tchunks.has(xyz):
+	# !!! check if chunk is saved in files and load that instead of generating if so.
+	tc_generate(world_tchunks[tc_xyz])
+	if not meshify:
 		return
-	tc_meshify(world_tchunks[xyz])
-	if not world_tchunks[xyz].tiles_rend_node.name == xyz_to_name(xyz) + "_tiles_rend_mesh":
-		add_tchunk_mesh_node(xyz)
+	remesh_tchunk(tc_xyz)
+
+func unload_tchunk(tc_xyz: Vector3i):
+	if not world_tchunks.has(tc_xyz): 
+		return
+	remove_tchunk_mesh_node(tc_xyz)
+	world_tchunks.erase(tc_xyz)
+
+func remesh_tchunk(tc_xyz: Vector3i):
+	if not world_tchunks.has(tc_xyz):
+		return
+	tc_meshify(world_tchunks[tc_xyz])
+	if not world_tchunks[tc_xyz].tiles_rend_node.name == xyz_to_name(tc_xyz) + "_tiles_rend_mesh":
+		add_tchunk_mesh_node(tc_xyz)
 
 func add_tchunk_mesh_node(tc_xyz: Vector3i):
 	if not world_tchunks.has(tc_xyz):
@@ -622,6 +628,7 @@ func add_tchunk_mesh_node(tc_xyz: Vector3i):
 	chunks_container_node.call_deferred("add_child", world_tchunks[tc_xyz].tiles_rend_node)
 	world_tchunks[tc_xyz].tiles_rend_node.call_deferred("set", "position", Vector3(tc_xyz * 16))
 	world_tchunks[tc_xyz].tiles_rend_node.call_deferred("set", "name", xyz_to_name(tc_xyz)+"_tiles_rend_mesh")
+
 func remove_tchunk_mesh_node(tc_xyz: Vector3i):
 	if not world_tchunks.has(tc_xyz):
 		return
@@ -629,13 +636,41 @@ func remove_tchunk_mesh_node(tc_xyz: Vector3i):
 		return
 	world_tchunks[tc_xyz].tiles_rend_node.call_deferred("queue_free")
 
+func load_tchunks_around(load_tc_xyz: Vector3i, amount: int = 1):
+	var load_count: int = 0
+	# Prioritize loading the chunk that the player is in:
+	if not world_tchunks.has(load_tc_xyz):
+		load_tchunk(load_tc_xyz)
+		load_count += 1
+		if load_count >= amount:
+			return
+	var nearby_tc_xyzs: Array[Vector3i] = []
+	nearby_tc_xyzs.resize(9**3)
+	for i: int in range(9**3):
+		nearby_tc_xyzs[i] = load_tc_xyz + Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4))
+	nearby_tc_xyzs.sort_custom(load_tchunks_around_sort_method.bind(load_tc_xyz))
+	for i in nearby_tc_xyzs.size():
+		if not world_tchunks.has(nearby_tc_xyzs[i]):
+			load_tchunk(nearby_tc_xyzs[i])
+			load_count += 1
+			if load_count >= amount:
+				return
+
+func load_tchunks_around_sort_method(a: Vector3i, b: Vector3i, t: Vector3i) -> bool:
+	return a.distance_squared_to(t) < b.distance_squared_to(t)
+
+func unload_tchunks_around(load_tc_xyz: Vector3i):
+	const TC_UNLOAD_DISTANCE: float = 40
+	for tc_xyz: Vector3i in world_tchunks.keys():
+		if tc_xyz.distance_to(load_tc_xyz) > TC_UNLOAD_DISTANCE:
+			unload_tchunk(tc_xyz)
+
 
 var tcmthread: Thread
 var tcmthread_exit: bool = false
 @onready var cam_node: Node = get_tree().current_scene.find_child("FlyCam")
 var main_tcmt_mutex: Mutex
 var cam_pos_main: Vector3 = Vector3(0,0,0)
-var wait_to_unload: bool = false
 
 func _ready():
 	main_tcmt_mutex = Mutex.new()
@@ -646,55 +681,27 @@ func _physics_process(_delta):
 	main_tcmt_mutex.lock()
 	if not cam_node == null:
 		cam_pos_main = cam_node.position
-	wait_to_unload = false
 	main_tcmt_mutex.unlock()
 
 func tcmthread_func():
 	var load_pos: Vector3 = Vector3(0,0,0)
-	var load_closest_tc: Vector3i = Vector3i(0,0,0)
+	var load_tc_xyz: Vector3i = Vector3i(0,0,0)
 	
-	
-	for i in 9**3:
-		load_tchunk(Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4)))
-	for i in 9**3:
-		remesh_tchunk(Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4)))
-	
-	var wait_to_unload_local: bool = false
-	
-	var TEST_last_unload: Vector3i = Vector3i(999,999,999)
+	#for i in 9**3:
+		#load_tchunk(Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4)))
+	#for i in 9**3:
+		#remesh_tchunk(Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4)))
 	
 	while not tcmthread_exit:
 		main_tcmt_mutex.unlock()
 		
 		main_tcmt_mutex.lock()
 		load_pos = cam_pos_main
-		wait_to_unload_local = wait_to_unload
 		main_tcmt_mutex.unlock()
-		load_closest_tc = Vector3i(floor((load_pos + TCU.TCHUNK_HS) / Vector3(TCU.TCHUNK_S)))
 		
-		
-		#if not world_tc_xyz_to_i.has(load_closest_tc):
-			#print("loading: ", load_closest_tc)
-			#load_tchunk(load_closest_tc)
-			#remesh_tchunk(load_closest_tc)
-		
-		#if not wait_to_unload_local: for i in range(world_tchunks.size()):
-			#if load_pos.distance_to(Vector3(world_tchunks[i].coords) * 16) > 128:
-				#unload_tchunk(world_tchunks[i].coords)
-				#main_tcmt_mutex.lock()
-				#wait_to_unload = true
-				#main_tcmt_mutex.unlock()
-				#break
-		
-		
-		#if world_tc_xyz_to_i.size() == 0:S
-			#for i in 5**3:
-				#load_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
-			#for i in 5**3:
-				#remesh_tchunk(Vector3i(((i%5)-2), (((i/5)%5)-2), (((i/25)%5)-2)))
-		
-		#if not world_tc_xyz_to_i.has(load_closest_tc):
-			#load_tchunk(load_closest_tc)
+		load_tc_xyz = Vector3i(floor((load_pos + TCU.TCHUNK_HS) / Vector3(TCU.TCHUNK_S)))
+		unload_tchunks_around(load_tc_xyz)
+		load_tchunks_around(load_tc_xyz, 8)
 		
 		main_tcmt_mutex.lock()
 	main_tcmt_mutex.unlock()
