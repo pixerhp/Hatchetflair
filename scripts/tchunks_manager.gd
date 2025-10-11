@@ -106,10 +106,10 @@ func tc_set_tiles(
 			((0b1 << 6) if (bxn and byp and bzn) else 0) | 
 			((0b1 << 7) if (byp and bzn) else 0) | 
 			((0b1 << 8) if (bxp and byp and bzn) else 0) | 
-			((0b1 << 9) if (bxn and byn ) else 0) | 
-			((0b1 << 10) if (byn ) else 0) |
+			((0b1 << 9) if (bxn and byn) else 0) | 
+			((0b1 << 10) if (byn) else 0) |
 			((0b1 << 11) if (bxp and byn ) else 0) |
-			((0b1 << 12) if (bxn ) else 0) |
+			((0b1 << 12) if (bxn) else 0) |
 			# (13, the central chunk, is already accounted for with variable initialization)
 			((0b1 << 14) if (bxp) else 0) |
 			((0b1 << 15) if (bxn and byp) else 0) | 
