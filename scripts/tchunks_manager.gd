@@ -123,8 +123,7 @@ func tc_set_tiles(
 			((0b1 << 23) if (bxp and bzp) else 0) |
 			((0b1 << 24) if (bxn and byp and bzp) else 0) | 
 			((0b1 << 25) if (byp and bzp) else 0) | 
-			((0b1 << 26) if (bxp and byp and bzp) else 0)
-		)
+			((0b1 << 26) if (bxp and byp and bzp) else 0) )
 	var tc_coords: Vector3i = Vector3i()
 	for i: int in range(27):
 		if (set_tile_borders_tc_bits & (0b1 << i)) == 0:
