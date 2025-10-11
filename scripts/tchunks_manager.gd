@@ -77,9 +77,12 @@ func tc_set_tiles(
 		tchunk.are_tiles_meshes_utd = false
 		return
 	
-	const THRESH: int = 1
-	var set_tile_borders_tc_bits: int = 0b000000000_000010000_000000000
 	var pos: Vector3i = Vector3i()
+	var set_tile_borders_tc_bits: int = 0b000000000_000010000_000000000
+	const THRESH: int = 1
+	var bxn: bool = false; var bxp: bool = false;
+	var byn: bool = false; var byp: bool = false;
+	var bzn: bool = false; var bzp: bool = false;
 	for i: int in range(t_inds.size()):
 		tchunk.tiles_shapes[t_inds[i]] = t_shapes[i]
 		tchunk.tiles_substs[t_inds[i]] = t_substs[i]
@@ -90,35 +93,37 @@ func tc_set_tiles(
 			i%TCU.TCHUNK_L, 
 			(i/TCU.TCHUNK_L)%TCU.TCHUNK_L, 
 			(i/(TCU.TCHUNK_L*TCU.TCHUNK_L))%TCU.TCHUNK_L,)
+		bxn = pos.x < THRESH; bxp = (pos.x > (TCU.TCHUNK_L-THRESH));
+		byn = pos.y < THRESH; byp = (pos.y > (TCU.TCHUNK_L-THRESH));
+		bzn = pos.z < THRESH; bzp = (pos.z > (TCU.TCHUNK_L-THRESH));
 		set_tile_borders_tc_bits |= int(
-			((0b1 << 0) if ((pos.x<THRESH)and(pos.y<THRESH)and(pos.z<THRESH)) else 0) | 
-			((0b1 << 1) if ((pos.y<THRESH)and(pos.z<THRESH)) else 0) |
-			((0b1 << 2) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y<THRESH)and(pos.z<THRESH)) else 0) |
-			((0b1 << 3) if ((pos.x<THRESH)and(pos.z<THRESH)) else 0) |
-			((0b1 << 4) if ((pos.z<THRESH)) else 0) |
-			((0b1 << 5) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.z<THRESH)) else 0) |
-			((0b1 << 6) if ((pos.x<THRESH)and(pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z<THRESH)) else 0) | 
-			((0b1 << 7) if ((pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z<THRESH)) else 0) | 
-			((0b1 << 8) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z<THRESH)) else 0) | 
-			((0b1 << 9) if ((pos.x<THRESH)and(pos.y<THRESH)) else 0) | 
-			((0b1 << 10) if ((pos.y<THRESH)) else 0) |
-			((0b1 << 11) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y<THRESH)) else 0) |
-			((0b1 << 12) if ((pos.x<THRESH)) else 0) |
-			# (13, the central chunk, is already accounted for with variable initialization)
-			((0b1 << 14) if ((pos.x>(TCU.TCHUNK_L-THRESH))) else 0) |
-			((0b1 << 15) if ((pos.x<THRESH)and(pos.y>(TCU.TCHUNK_L-THRESH))) else 0) | 
-			((0b1 << 16) if ((pos.y>(TCU.TCHUNK_L-THRESH))) else 0) | 
-			((0b1 << 17) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y>(TCU.TCHUNK_L-THRESH))) else 0) | 
-			((0b1 << 18) if ((pos.x<THRESH)and(pos.y<THRESH)and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) | 
-			((0b1 << 19) if ((pos.y<THRESH)and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) |
-			((0b1 << 20) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y<THRESH)and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) |
-			((0b1 << 21) if ((pos.x<THRESH)and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) |
-			((0b1 << 22) if ((pos.z>(TCU.TCHUNK_L-THRESH))) else 0) |
-			((0b1 << 23) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) |
-			((0b1 << 24) if ((pos.x<THRESH)and(pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) | 
-			((0b1 << 25) if ((pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) | 
-			((0b1 << 26) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0)
-		)
+			((0b1 << 0) if (bxn and byn and byn) else 0) | 
+			((0b1 << 1) if (byn and byn) else 0) |
+			((0b1 << 2) if (bxp and byn and byn) else 0) |
+			((0b1 << 3) if (bxn and byn) else 0) |
+			((0b1 << 4) if (byn ) else 0) |
+			((0b1 << 5) if (bxp and byn) else 0) |
+			((0b1 << 6) if (bxn and byp and byn) else 0) | 
+			((0b1 << 7) if (byp and byn) else 0) | 
+			((0b1 << 8) if (bxp and byp and byn) else 0) | 
+			((0b1 << 9) if (bxn and byn) else 0) | 
+			((0b1 << 10) if (byn) else 0) |
+			((0b1 << 11) if (bxp and byn) else 0) |
+			((0b1 << 12) if (bxn) else 0) |
+			# (13, the central chunk, is already accounted for via var initialization)
+			((0b1 << 14) if (bxp) else 0) |
+			((0b1 << 15) if (bxn and byp) else 0) | 
+			((0b1 << 16) if (byp) else 0) | 
+			((0b1 << 17) if (bxp and byp) else 0) | 
+			((0b1 << 18) if (bxn and byn and bzp) else 0) | 
+			((0b1 << 19) if (byn and bzp) else 0) |
+			((0b1 << 20) if (bxp and byn and bzp) else 0) |
+			((0b1 << 21) if (bxn and bzp) else 0) |
+			((0b1 << 22) if (bzp) else 0) |
+			((0b1 << 23) if (bxp and bzp) else 0) |
+			((0b1 << 24) if (bxn and byp and bzp) else 0) | 
+			((0b1 << 25) if (byp and bzp) else 0) | 
+			((0b1 << 26) if (bxp and byp and bzp) else 0) )
 	var tc_coords: Vector3i = Vector3i()
 	for i: int in range(27):
 		if (set_tile_borders_tc_bits & (0b1 << i)) == 0:
