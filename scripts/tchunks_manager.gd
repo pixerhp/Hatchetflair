@@ -193,9 +193,20 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 		push_error("Found ", tile_shape_indices[TILE_SHAPE.NO_DATA].size(),
 		" NO_DATA tiles_shapes while meshifying tchunk ", tchunk.coords)
 	if tile_shape_indices[TILE_SHAPE.EMPTY].size() == TCU.TCHUNK_T:
-		# !!! "whole chunk is air" optimization potential
-		# note that you still have to march check on corners, edges(?), (and probably not but maybe faces?)
+		## !!! "whole chunk is air" optimization potential, revise later
+		## note that you still have to march check on corners, edges(?), (and probably not but maybe faces?)
 		pass
+		#var just_air: int = 1
+		#for i in range(27):
+			#if i == 13:
+				#continue
+			#if tc27[i].tiles_shapes.count(TILE_SHAPE.EMPTY) == TCU.TCHUNK_T:
+				#just_air += 1
+			#else:
+				#break
+		#
+		#if just_air == 27:
+			#pass
 	
 	meshify_tiles_empty(surface, tc27, tile_shape_indices[TILE_SHAPE.EMPTY])
 	meshify_march_ang_sections(surface, tc27, tile_shape_indices[TILE_SHAPE.MARCH_ANG])
