@@ -90,27 +90,27 @@ func tc_set_tiles(
 		if not do_neighbor_tc_utd_checks:
 			continue
 		pos = Vector3i(
-			i%TCU.TCHUNK_L, 
-			(i/TCU.TCHUNK_L)%TCU.TCHUNK_L, 
-			(i/(TCU.TCHUNK_L*TCU.TCHUNK_L))%TCU.TCHUNK_L,)
+			(t_inds[i])%TCU.TCHUNK_L, 
+			(t_inds[i]/TCU.TCHUNK_L)%TCU.TCHUNK_L, 
+			(t_inds[i]/(TCU.TCHUNK_L*TCU.TCHUNK_L))%TCU.TCHUNK_L,)
 		bxn = pos.x < THRESH; bxp = (pos.x > (TCU.TCHUNK_L-THRESH));
 		byn = pos.y < THRESH; byp = (pos.y > (TCU.TCHUNK_L-THRESH));
 		bzn = pos.z < THRESH; bzp = (pos.z > (TCU.TCHUNK_L-THRESH));
 		set_tile_borders_tc_bits |= int(
-			((0b1 << 0) if (bxn and byn and byn) else 0) | 
-			((0b1 << 1) if (byn and byn) else 0) |
-			((0b1 << 2) if (bxp and byn and byn) else 0) |
-			((0b1 << 3) if (bxn and byn) else 0) |
-			((0b1 << 4) if (byn ) else 0) |
-			((0b1 << 5) if (bxp and byn) else 0) |
-			((0b1 << 6) if (bxn and byp and byn) else 0) | 
-			((0b1 << 7) if (byp and byn) else 0) | 
-			((0b1 << 8) if (bxp and byp and byn) else 0) | 
-			((0b1 << 9) if (bxn and byn) else 0) | 
-			((0b1 << 10) if (byn) else 0) |
-			((0b1 << 11) if (bxp and byn) else 0) |
-			((0b1 << 12) if (bxn) else 0) |
-			# (13, the central chunk, is already accounted for via var initialization)
+			((0b1 << 0) if (bxn and byn and bzn) else 0) | 
+			((0b1 << 1) if (byn and bzn) else 0) |
+			((0b1 << 2) if (bxp and byn and bzn) else 0) |
+			((0b1 << 3) if (bxn and bzn) else 0) |
+			((0b1 << 4) if (bzn) else 0) |
+			((0b1 << 5) if (bxp and bzn) else 0) |
+			((0b1 << 6) if (bxn and byp and bzn) else 0) | 
+			((0b1 << 7) if (byp and bzn) else 0) | 
+			((0b1 << 8) if (bxp and byp and bzn) else 0) | 
+			((0b1 << 9) if (bxn and byn ) else 0) | 
+			((0b1 << 10) if (byn ) else 0) |
+			((0b1 << 11) if (bxp and byn ) else 0) |
+			((0b1 << 12) if (bxn ) else 0) |
+			# (13, the central chunk, is already accounted for with variable initialization)
 			((0b1 << 14) if (bxp) else 0) |
 			((0b1 << 15) if (bxn and byp) else 0) | 
 			((0b1 << 16) if (byp) else 0) | 
@@ -123,7 +123,8 @@ func tc_set_tiles(
 			((0b1 << 23) if (bxp and bzp) else 0) |
 			((0b1 << 24) if (bxn and byp and bzp) else 0) | 
 			((0b1 << 25) if (byp and bzp) else 0) | 
-			((0b1 << 26) if (bxp and byp and bzp) else 0) )
+			((0b1 << 26) if (bxp and byp and bzp) else 0)
+		)
 	var tc_coords: Vector3i = Vector3i()
 	for i: int in range(27):
 		if (set_tile_borders_tc_bits & (0b1 << i)) == 0:
