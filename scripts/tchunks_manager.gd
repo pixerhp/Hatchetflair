@@ -59,6 +59,74 @@ func t_pos_from_i(index: int) -> Vector3i:
 		posmod(index / (TCU.TCHUNK_L * TCU.TCHUNK_L), TCU.TCHUNK_L),
 	)
 
+func tc_set_tiles(
+	tchunk: TChunk, t_inds: PackedInt32Array, t_shapes: PackedByteArray, t_substs: PackedInt32Array,
+	do_neighbor_tc_utd_checks: bool = true,
+):
+	if t_inds.is_empty():
+		return
+	if (not t_inds.size() == t_shapes.size()) or (not t_inds.size() == t_substs.size()):
+		push_error("Argument arrays are of different lengths: ",
+			t_inds.size(), " ", t_shapes.size(), " ", t_substs.size())
+		return
+	
+	if not world_tchunks.has(tchunk.coords):
+		for i: int in range(t_inds.size()):
+			tchunk.tiles_shapes[t_inds[i]] = t_shapes[i]
+			tchunk.tiles_substs[t_inds[i]] = t_substs[i]
+		tchunk.are_tiles_meshes_utd = false
+		return
+	
+	const THRESH: int = 1
+	var set_tile_borders_tc_bits: int = 0b000000000_000010000_000000000
+	var pos: Vector3i = Vector3i()
+	for i: int in range(t_inds.size()):
+		tchunk.tiles_shapes[t_inds[i]] = t_shapes[i]
+		tchunk.tiles_substs[t_inds[i]] = t_substs[i]
+		
+		if not do_neighbor_tc_utd_checks:
+			continue
+		pos = Vector3i(
+			i%TCU.TCHUNK_L, 
+			(i/TCU.TCHUNK_L)%TCU.TCHUNK_L, 
+			(i/(TCU.TCHUNK_L*TCU.TCHUNK_L))%TCU.TCHUNK_L,)
+		set_tile_borders_tc_bits |= int(
+			((0b1 << 0) if ((pos.x<THRESH)and(pos.y<THRESH)and(pos.z<THRESH)) else 0) | 
+			((0b1 << 1) if ((pos.y<THRESH)and(pos.z<THRESH)) else 0) |
+			((0b1 << 2) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y<THRESH)and(pos.z<THRESH)) else 0) |
+			((0b1 << 3) if ((pos.x<THRESH)and(pos.z<THRESH)) else 0) |
+			((0b1 << 4) if ((pos.z<THRESH)) else 0) |
+			((0b1 << 5) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.z<THRESH)) else 0) |
+			((0b1 << 6) if ((pos.x<THRESH)and(pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z<THRESH)) else 0) | 
+			((0b1 << 7) if ((pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z<THRESH)) else 0) | 
+			((0b1 << 8) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z<THRESH)) else 0) | 
+			((0b1 << 9) if ((pos.x<THRESH)and(pos.y<THRESH)) else 0) | 
+			((0b1 << 10) if ((pos.y<THRESH)) else 0) |
+			((0b1 << 11) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y<THRESH)) else 0) |
+			((0b1 << 12) if ((pos.x<THRESH)) else 0) |
+			# (13, the central chunk, is already accounted for with variable initialization)
+			((0b1 << 14) if ((pos.x>(TCU.TCHUNK_L-THRESH))) else 0) |
+			((0b1 << 15) if ((pos.x<THRESH)and(pos.y>(TCU.TCHUNK_L-THRESH))) else 0) | 
+			((0b1 << 16) if ((pos.y>(TCU.TCHUNK_L-THRESH))) else 0) | 
+			((0b1 << 17) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y>(TCU.TCHUNK_L-THRESH))) else 0) | 
+			((0b1 << 18) if ((pos.x<THRESH)and(pos.y<THRESH)and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) | 
+			((0b1 << 19) if ((pos.y<THRESH)and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) |
+			((0b1 << 20) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y<THRESH)and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) |
+			((0b1 << 21) if ((pos.x<THRESH)and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) |
+			((0b1 << 22) if ((pos.z>(TCU.TCHUNK_L-THRESH))) else 0) |
+			((0b1 << 23) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) |
+			((0b1 << 24) if ((pos.x<THRESH)and(pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) | 
+			((0b1 << 25) if ((pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0) | 
+			((0b1 << 26) if ((pos.x>(TCU.TCHUNK_L-THRESH))and(pos.y>(TCU.TCHUNK_L-THRESH))and(pos.z>(TCU.TCHUNK_L-THRESH))) else 0)
+		)
+	var tc_coords: Vector3i = Vector3i()
+	for i: int in range(27):
+		if (set_tile_borders_tc_bits & (0b1 << i)) == 0:
+			continue
+		tc_coords = Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1))
+		if world_tchunks.has(tc_coords):
+			world_tchunks[tc_coords].are_tiles_meshes_utd = false
+
 func tc_set_tiles_meshes_ood(tc_xyz: Vector3i) -> Error:
 	if world_tchunks.has(tc_xyz):
 		world_tchunks[tc_xyz].are_tiles_meshes_utd = false
