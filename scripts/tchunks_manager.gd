@@ -683,24 +683,24 @@ func tc_generate(tchunk: TChunk):
 		
 		var set_tiles_shapes: PackedByteArray = [] 
 		set_tiles_shapes.resize(set_tiles_indices.size())
-		set_tiles_shapes.fill(TILE_SHAPE.TESS_CUBE)
+		set_tiles_shapes.fill(TILE_SHAPE.MARCH_ANG)
 		var set_tiles_substs: PackedInt32Array = [] 
 		set_tiles_substs.resize(set_tiles_indices.size())
 		set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_black", 0))
 		tc_set_tiles(tchunk, set_tiles_indices, set_tiles_shapes, set_tiles_substs)
 	
 	
-	var set_tiles_indices: PackedInt32Array = []
-	for i: int in range(TCU.TCHUNK_T):
-		if randf() < 0.2:
-			set_tiles_indices.append(i)
-	var set_tiles_shapes: PackedByteArray = [] 
-	set_tiles_shapes.resize(set_tiles_indices.size())
-	set_tiles_shapes.fill(TILE_SHAPE.MARCH_ANG)
-	var set_tiles_substs: PackedInt32Array = [] 
-	set_tiles_substs.resize(set_tiles_indices.size())
-	set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_white", 0))
-	tc_set_tiles(tchunk, set_tiles_indices, set_tiles_shapes, set_tiles_substs)
+	#var set_tiles_indices: PackedInt32Array = []
+	#for i: int in range(TCU.TCHUNK_T):
+		#if randf() < 0.2:
+			#set_tiles_indices.append(i)
+	#var set_tiles_shapes: PackedByteArray = [] 
+	#set_tiles_shapes.resize(set_tiles_indices.size())
+	#set_tiles_shapes.fill(TILE_SHAPE.MARCH_ANG)
+	#var set_tiles_substs: PackedInt32Array = [] 
+	#set_tiles_substs.resize(set_tiles_indices.size())
+	#set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_white", 0))
+	#tc_set_tiles(tchunk, set_tiles_indices, set_tiles_shapes, set_tiles_substs)
 	
 	# Update tchunks' are meshes utd bool/flag:
 	if world_tchunks.has(tchunk.coords):
