@@ -36,27 +36,27 @@ class TChunk:
 func get_tc27_c_i(init_tile_pos: Vector3i, relative_movement: Vector3i) -> int:
 	var new_pos: Vector3i = Vector3i(init_tile_pos + relative_movement)
 	var chunk_xyz: Vector3i = Vector3i(
-		(new_pos.x/TCU.TCHUNK_L) if (new_pos.x >= 0) else ((new_pos.x-(TCU.TCHUNK_L-1))/TCU.TCHUNK_L),
-		(new_pos.y/TCU.TCHUNK_L) if (new_pos.y >= 0) else ((new_pos.y-(TCU.TCHUNK_L-1))/TCU.TCHUNK_L),
-		(new_pos.z/TCU.TCHUNK_L) if (new_pos.z >= 0) else ((new_pos.z-(TCU.TCHUNK_L-1))/TCU.TCHUNK_L),
+		(new_pos.x/TCU.TC_L) if (new_pos.x >= 0) else ((new_pos.x-(TCU.TC_L-1))/TCU.TC_L),
+		(new_pos.y/TCU.TC_L) if (new_pos.y >= 0) else ((new_pos.y-(TCU.TC_L-1))/TCU.TC_L),
+		(new_pos.z/TCU.TC_L) if (new_pos.z >= 0) else ((new_pos.z-(TCU.TC_L-1))/TCU.TC_L),
 	)
 	chunk_xyz += Vector3i(1, 1, 1)
 	return chunk_xyz.x + (3 * chunk_xyz.y) + (9 * chunk_xyz.z)
 func get_tc27_t_i(init_tile_pos: Vector3i, relative_movement: Vector3i) -> int:
 	return (
-		posmod(init_tile_pos.x + relative_movement.x, TCU.TCHUNK_L) +
-		posmod(init_tile_pos.y + relative_movement.y, TCU.TCHUNK_L) * TCU.TCHUNK_L +
-		posmod(init_tile_pos.z + relative_movement.z, TCU.TCHUNK_L) * TCU.TCHUNK_L * TCU.TCHUNK_L
+		posmod(init_tile_pos.x + relative_movement.x, TCU.TC_L) +
+		posmod(init_tile_pos.y + relative_movement.y, TCU.TC_L) * TCU.TC_L +
+		posmod(init_tile_pos.z + relative_movement.z, TCU.TC_L) * TCU.TC_L * TCU.TC_L
 	)
 
 # Swap between tile position (xyz in chunk, (0,0,0) is negatives corner) and index.
 func t_i_from_pos(xyz: Vector3i) -> int:
-	return xyz.x + (xyz.y * TCU.TCHUNK_L) + (xyz.z * TCU.TCHUNK_L * TCU.TCHUNK_L)
+	return xyz.x + (xyz.y * TCU.TC_L) + (xyz.z * TCU.TC_L * TCU.TC_L)
 func t_pos_from_i(index: int) -> Vector3i:
 	return Vector3i(
-		posmod(index, TCU.TCHUNK_L), 
-		posmod(index / TCU.TCHUNK_L, TCU.TCHUNK_L), 
-		posmod(index / (TCU.TCHUNK_L * TCU.TCHUNK_L), TCU.TCHUNK_L),
+		posmod(index, TCU.TC_L), 
+		posmod(index / TCU.TC_L, TCU.TC_L), 
+		posmod(index / (TCU.TC_L * TCU.TC_L), TCU.TC_L),
 	)
 
 func tc_set_tiles(
@@ -90,12 +90,12 @@ func tc_set_tiles(
 		if not do_neighbor_tc_utd_checks:
 			continue
 		pos = Vector3i(
-			(t_inds[i])%TCU.TCHUNK_L, 
-			(t_inds[i]/TCU.TCHUNK_L)%TCU.TCHUNK_L, 
-			(t_inds[i]/(TCU.TCHUNK_L*TCU.TCHUNK_L))%TCU.TCHUNK_L,)
-		bxn = pos.x < THRESH; bxp = (pos.x > (TCU.TCHUNK_L-THRESH));
-		byn = pos.y < THRESH; byp = (pos.y > (TCU.TCHUNK_L-THRESH));
-		bzn = pos.z < THRESH; bzp = (pos.z > (TCU.TCHUNK_L-THRESH));
+			(t_inds[i])%TCU.TC_L, 
+			(t_inds[i]/TCU.TC_L)%TCU.TC_L, 
+			(t_inds[i]/(TCU.TC_L*TCU.TC_L))%TCU.TC_L,)
+		bxn = pos.x < THRESH; bxp = (pos.x > (TCU.TC_L-THRESH));
+		byn = pos.y < THRESH; byp = (pos.y > (TCU.TC_L-THRESH));
+		bzn = pos.z < THRESH; bzp = (pos.z > (TCU.TC_L-THRESH));
 		set_tile_borders_tc_bits |= int(
 			((0b1 << 0) if (bxn and byn and bzn) else 0) | 
 			((0b1 << 1) if (byn and bzn) else 0) |
@@ -164,43 +164,43 @@ func tc_set_tile(tchunk: TChunk, tile_xyz: Vector3i, tile_shape: int, tile_subst
 			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,-1,0))
 			if tile_xyz.z < THRESH:
 				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,-1,-1))
-			if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
+			if tile_xyz.z > TCU.TC_L - THRESH: 
 				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,-1,1))
-		if tile_xyz.y > TCU.TCHUNK_L - THRESH: 
+		if tile_xyz.y > TCU.TC_L - THRESH: 
 			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,1,0))
 			if tile_xyz.z < THRESH:
 				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,1,-1))
-			if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
+			if tile_xyz.z > TCU.TC_L - THRESH: 
 				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(-1,1,1))
-	if tile_xyz.x > TCU.TCHUNK_L - THRESH:
+	if tile_xyz.x > TCU.TC_L - THRESH:
 		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,0,0))
 		if tile_xyz.y < THRESH:
 			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,-1,0))
 			if tile_xyz.z < THRESH:
 				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,-1,-1))
-			if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
+			if tile_xyz.z > TCU.TC_L - THRESH: 
 				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,-1,1))
-		if tile_xyz.y > TCU.TCHUNK_L - THRESH: 
+		if tile_xyz.y > TCU.TC_L - THRESH: 
 			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,1,0))
 			if tile_xyz.z < THRESH:
 				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,1,-1))
-			if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
+			if tile_xyz.z > TCU.TC_L - THRESH: 
 				tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(1,1,1))
 	if tile_xyz.y < THRESH: 
 		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,-1,0))
 		if tile_xyz.z < THRESH:
 			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,-1,-1))
-		if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
+		if tile_xyz.z > TCU.TC_L - THRESH: 
 			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,-1,1))
-	if tile_xyz.y > TCU.TCHUNK_L - THRESH:  
+	if tile_xyz.y > TCU.TC_L - THRESH:  
 		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,1,0))
 		if tile_xyz.z < THRESH:
 			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,1,-1))
-		if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
+		if tile_xyz.z > TCU.TC_L - THRESH: 
 			tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,1,1))
 	if tile_xyz.z < THRESH:
 		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,0,-1))
-	if tile_xyz.z > TCU.TCHUNK_L - THRESH: 
+	if tile_xyz.z > TCU.TC_L - THRESH: 
 		tc_set_tiles_meshes_ood(tchunk.coords + Vector3i(0,0,1))
 	return OK
 
@@ -324,13 +324,13 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 	#var new_pos: Vector3i = Vector3i()
 	#for i in range(27):
 		#new_pos = Vector3i(
-			#((tile_index % TCU.TCHUNK_L) + ((i % 3) - 1)),
-			#(((tile_index / TCU.TCHUNK_L) % TCU.TCHUNK_L) + (((i / 3) % 3) - 1)),
-			#(((tile_index / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L) + (((i / 9) % 3) - 1)), )
+			#((tile_index % TCU.TC_L) + ((i % 3) - 1)),
+			#(((tile_index / TCU.TC_L) % TCU.TC_L) + (((i / 3) % 3) - 1)),
+			#(((tile_index / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L) + (((i / 9) % 3) - 1)), )
 		#result[i] = (
-			#(0 if (new_pos.x < 0) else (1 if (new_pos.x < TCU.TCHUNK_L) else 2)) +
-			#(0 if (new_pos.y < 0) else (3 if (new_pos.y < TCU.TCHUNK_L) else 6)) +
-			#(0 if (new_pos.z < 0) else (9 if (new_pos.z < TCU.TCHUNK_L) else 18)) )
+			#(0 if (new_pos.x < 0) else (1 if (new_pos.x < TCU.TC_L) else 2)) +
+			#(0 if (new_pos.y < 0) else (3 if (new_pos.y < TCU.TC_L) else 6)) +
+			#(0 if (new_pos.z < 0) else (9 if (new_pos.z < TCU.TC_L) else 18)) )
 	#return result
 #
 #func get_tc27_t_i_3x3x3(tile_index: int) -> PackedInt32Array:
@@ -338,9 +338,9 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 	#result.resize(27)
 	#for i in range(27):
 		#result[i] = (
-			#posmod((tile_index%TCU.TCHUNK_L)+((i%3)-1), TCU.TCHUNK_L) +
-			#posmod(((tile_index/TCU.TCHUNK_L)%TCU.TCHUNK_L)+(((i/3)%3)-1), TCU.TCHUNK_L) +
-			#posmod(((tile_index/(TCU.TCHUNK_L*TCU.TCHUNK_L))%TCU.TCHUNK_L)+(((i/9)%3)-1), TCU.TCHUNK_L) )
+			#posmod((tile_index%TCU.TC_L)+((i%3)-1), TCU.TC_L) +
+			#posmod(((tile_index/TCU.TC_L)%TCU.TC_L)+(((i/3)%3)-1), TCU.TC_L) +
+			#posmod(((tile_index/(TCU.TC_L*TCU.TC_L))%TCU.TC_L)+(((i/9)%3)-1), TCU.TC_L) )
 	#return result
 
 
@@ -351,14 +351,14 @@ func get_tc27_c_i_bulk(tile_indices: PackedInt32Array, movements: Array[Vector3i
 	var new_tile_pos: Vector3i = Vector3i()
 	for i in range(tile_indices.size()):
 		new_tile_pos = Vector3i(
-			tile_indices[i] % TCU.TCHUNK_L,
-			(tile_indices[i] / TCU.TCHUNK_L) % TCU.TCHUNK_L,
-			(tile_indices[i] / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L,
+			tile_indices[i] % TCU.TC_L,
+			(tile_indices[i] / TCU.TC_L) % TCU.TC_L,
+			(tile_indices[i] / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L,
 		) + movements[i]
 		result[i] = (
-			(0 if (new_tile_pos.x < 0) else (1 if (new_tile_pos.x < TCU.TCHUNK_L) else 2)) +
-			(0 if (new_tile_pos.y < 0) else (3 if (new_tile_pos.y < TCU.TCHUNK_L) else 6)) +
-			(0 if (new_tile_pos.z < 0) else (9 if (new_tile_pos.z < TCU.TCHUNK_L) else 18)) )
+			(0 if (new_tile_pos.x < 0) else (1 if (new_tile_pos.x < TCU.TC_L) else 2)) +
+			(0 if (new_tile_pos.y < 0) else (3 if (new_tile_pos.y < TCU.TC_L) else 6)) +
+			(0 if (new_tile_pos.z < 0) else (9 if (new_tile_pos.z < TCU.TC_L) else 18)) )
 	return result
 
 # Calculates movewment-relative tc27 tile indices in bulk:
@@ -367,12 +367,12 @@ func get_tc27_t_i_bulk(tile_indices: PackedInt32Array, movements: Array[Vector3i
 	result.resize(tile_indices.size())
 	for i in range(tile_indices.size()):
 		result[i] = (
-			posmod((tile_indices[i] % TCU.TCHUNK_L) + 
-				movements[i].x, TCU.TCHUNK_L) +
-			posmod(((tile_indices[i] / TCU.TCHUNK_L) % TCU.TCHUNK_L) + 
-				movements[i].y, TCU.TCHUNK_L) * TCU.TCHUNK_L +
-			posmod(((tile_indices[i] / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L) + 
-				movements[i].z, TCU.TCHUNK_L) * TCU.TCHUNK_L * TCU.TCHUNK_L)
+			posmod((tile_indices[i] % TCU.TC_L) + 
+				movements[i].x, TCU.TC_L) +
+			posmod(((tile_indices[i] / TCU.TC_L) % TCU.TC_L) + 
+				movements[i].y, TCU.TC_L) * TCU.TC_L +
+			posmod(((tile_indices[i] / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L) + 
+				movements[i].z, TCU.TC_L) * TCU.TC_L * TCU.TC_L)
 	return result
 
 func meshify_append_substance_data_bulk(
@@ -507,9 +507,9 @@ func meshify_march_ang_sections(
 					TCU.ts_march_ang_patt_verts[TCU.ts_march_ang_inds[march_comb][7-sect_i][vert_i]] +
 					Vector3(sect_i%2,(sect_i/2)%2,(sect_i/4)%2) + 
 					(Vector3( # (tile position from index)
-						t_ind_i % TCU.TCHUNK_L,
-						(t_ind_i / TCU.TCHUNK_L) % TCU.TCHUNK_L,
-						(t_ind_i / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L,
+						tile_indices[t_ind_i] % TCU.TC_L,
+						(tile_indices[t_ind_i] / TCU.TC_L) % TCU.TC_L,
+						(tile_indices[t_ind_i] / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L,
 					) - TCU.TCHUNK_HS))
 				if (vert_i % 3) == 0:
 					surface_ref.norms.append(TCU.triangle_normal_vector(PackedVector3Array([
@@ -556,9 +556,9 @@ func meshify_tiles_tess_cube(surface_ref: Dictionary, tc27: Array[TChunk], tile_
 				TILE_SHAPE.MARCH_ANG: pass # !!! do proper culling check later
 			subst_shares_in_tile += 1
 			tile_pos = Vector3(Vector3i(
-				tile_indices[t_ind_i] % TCU.TCHUNK_L,
-				(tile_indices[t_ind_i] / TCU.TCHUNK_L) % TCU.TCHUNK_L,
-				(tile_indices[t_ind_i] / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L,))
+				tile_indices[t_ind_i] % TCU.TC_L,
+				(tile_indices[t_ind_i] / TCU.TC_L) % TCU.TC_L,
+				(tile_indices[t_ind_i] / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L,))
 			surface_ref.verts.append_array([
 				TCU.ts_tess_cube_verts[(4*face_i)+0] + tile_pos, 
 				TCU.ts_tess_cube_verts[(4*face_i)+1] + tile_pos,
@@ -625,9 +625,9 @@ func meshify_tiles_tess_rhombdo(surface_ref: Dictionary, tc27: Array[TChunk], ti
 					continue
 				subst_shares_in_tile += 1
 				tile_pos = Vector3(Vector3i(
-					tile_indices[t_ind_i] % TCU.TCHUNK_L,
-					(tile_indices[t_ind_i] / TCU.TCHUNK_L) % TCU.TCHUNK_L,
-					(tile_indices[t_ind_i] / (TCU.TCHUNK_L * TCU.TCHUNK_L)) % TCU.TCHUNK_L,))
+					tile_indices[t_ind_i] % TCU.TC_L,
+					(tile_indices[t_ind_i] / TCU.TC_L) % TCU.TC_L,
+					(tile_indices[t_ind_i] / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L,))
 				surface_ref.verts.append_array([
 					[TCU.ts_tess_rhombdo_verts[(face_i * 4)] + tile_pos,
 					TCU.ts_tess_rhombdo_verts[(face_i * 4) + 1] + tile_pos,
@@ -649,11 +649,60 @@ func meshify_tiles_tess_rhombdo(surface_ref: Dictionary, tc27: Array[TChunk], ti
 func tc_generate(tchunk: TChunk):
 	tc_fill_tile(tchunk, TILE_SHAPE.EMPTY, "nothing")
 	
-	tc_set_tile(tchunk, Vector3i(0,0,0), TILE_SHAPE.MARCH_ANG, "plainite_white")
-	tc_set_tile(tchunk, Vector3i(2,0,0), TILE_SHAPE.TESS_CUBE, "plainite_white")
-	tc_set_tile(tchunk, Vector3i(4,0,0), TILE_SHAPE.TESS_RHOMBDO, "plainite_white")
+	var noise: FastNoiseLite = FastNoiseLite.new()
+	noise.seed = tchunk.gen_seed
+	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
 	
-	# Update meshes utd bool:
+	const SURFACE_HEIGHT_VARIATION: float = 40.0
+	var surface_heights: Array[int] = []
+	surface_heights.resize(TCU.TC_L * TCU.TC_L)
+	for i: int in range(TCU.TC_L * TCU.TC_L):
+		surface_heights[i] = int(noise.get_noise_2d(
+			float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
+			float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L)) % TCU.TC_L)),
+		) * SURFACE_HEIGHT_VARIATION)
+	
+	if surface_heights.max() < (tchunk.coords.y * TCU.TC_L):
+		pass # (leave tiles empty)
+	elif surface_heights.min() > ((tchunk.coords.y * TCU.TC_L) + (TCU.TC_L - 1)):
+		tc_fill_tile(tchunk, TILE_SHAPE.MARCH_ANG, "plainite_white")
+	else:
+		var set_tiles_indices: PackedInt32Array = []
+		for i: int in range(TCU.TC_L * TCU.TC_L):
+			if surface_heights[i] < (tchunk.coords.y * TCU.TC_L):
+				pass
+			elif surface_heights[i] > ((tchunk.coords.y * TCU.TC_L) + (TCU.TC_L - 1)):
+				for j in range(TCU.TC_L):
+					set_tiles_indices.append((i%TCU.TC_L) + (j*TCU.TC_L) + 
+						(((i/TCU.TC_L)%TCU.TC_L)*(TCU.TC_L*TCU.TC_L)))
+			else:
+				for j in range(TCU.TC_L):
+					if surface_heights[i] >= ((tchunk.coords.y * TCU.TC_L) + j):
+						set_tiles_indices.append((i%TCU.TC_L) + (j*TCU.TC_L) + 
+							(((i/TCU.TC_L)%TCU.TC_L)*(TCU.TC_L*TCU.TC_L)))
+		
+		var set_tiles_shapes: PackedByteArray = [] 
+		set_tiles_shapes.resize(set_tiles_indices.size())
+		set_tiles_shapes.fill(TILE_SHAPE.TESS_CUBE)
+		var set_tiles_substs: PackedInt32Array = [] 
+		set_tiles_substs.resize(set_tiles_indices.size())
+		set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_black", 0))
+		tc_set_tiles(tchunk, set_tiles_indices, set_tiles_shapes, set_tiles_substs)
+	
+	
+	var set_tiles_indices: PackedInt32Array = []
+	for i: int in range(TCU.TCHUNK_T):
+		if randf() < 0.2:
+			set_tiles_indices.append(i)
+	var set_tiles_shapes: PackedByteArray = [] 
+	set_tiles_shapes.resize(set_tiles_indices.size())
+	set_tiles_shapes.fill(TILE_SHAPE.MARCH_ANG)
+	var set_tiles_substs: PackedInt32Array = [] 
+	set_tiles_substs.resize(set_tiles_indices.size())
+	set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_white", 0))
+	tc_set_tiles(tchunk, set_tiles_indices, set_tiles_shapes, set_tiles_substs)
+	
+	# Update tchunks' are meshes utd bool/flag:
 	if world_tchunks.has(tchunk.coords):
 		for i in 27:
 			tc_set_tiles_meshes_ood(Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1)))
@@ -749,6 +798,11 @@ func unload_tchunks_around(load_tc_xyz: Vector3i):
 		if tc_xyz.distance_to(load_tc_xyz) > TC_UNLOAD_DISTANCE:
 			unload_tchunk(tc_xyz)
 
+func remesh_non_utd_chunks():
+	for tc_xyz: Vector3i in world_tchunks.keys():
+		if world_tchunks[tc_xyz].are_tiles_meshes_utd == false:
+			remesh_tchunk(tc_xyz)
+
 
 var tcmthread: Thread
 var tcmthread_exit: bool = false
@@ -785,6 +839,7 @@ func tcmthread_func():
 		
 		load_tc_xyz = Vector3i(floor((load_pos + TCU.TCHUNK_HS) / Vector3(TCU.TCHUNK_S)))
 		unload_tchunks_around(load_tc_xyz)
+		remesh_non_utd_chunks()
 		load_tchunks_around(load_tc_xyz, 8)
 		
 		main_tcmt_mutex.lock()

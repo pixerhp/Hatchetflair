@@ -1,9 +1,9 @@
 extends Node
 
-const TCHUNK_L: int = 16
-const TCHUNK_T: int = TCHUNK_L ** 3
-const TCHUNK_S: Vector3i = Vector3i(TCHUNK_L, TCHUNK_L, TCHUNK_L)
-const TCHUNK_HL: float = TCHUNK_L / 2.0
+const TC_L: int = 16
+const TCHUNK_T: int = TC_L ** 3
+const TCHUNK_S: Vector3i = Vector3i(TC_L, TC_L, TC_L)
+const TCHUNK_HL: float = TC_L / 2.0
 const TCHUNK_HS: Vector3 = Vector3(TCHUNK_HL, TCHUNK_HL, TCHUNK_HL)
 const TCHUNK_HS2: Vector3 = Vector3(TCHUNK_HL - 0.5, TCHUNK_HL - 0.5, TCHUNK_HL - 0.5)
 const TCHUNK_HS3: Vector3 = Vector3(TCHUNK_HL - 1, TCHUNK_HL - 1, TCHUNK_HL - 1)
