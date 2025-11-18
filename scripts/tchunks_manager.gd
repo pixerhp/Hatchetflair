@@ -774,25 +774,25 @@ func remove_tchunk_mesh_node(tc_xyz: Vector3i):
 		return
 	world_tchunks[tc_xyz].tiles_rend_node.call_deferred("queue_free")
 
-func load_tchunks_around(load_tc_xyz: Vector3i, amount: int = 1):
+func load_tchunks_around(load_tc_xyz: Vector3i, region_cube_length: int = 3, load_max = 1):
+	if region_cube_length % 2 == 0:
+		push_error("Load region cube length parameter must be an odd integer.")
 	var load_count: int = 0
-	# Prioritize loading the chunk that the player is in:
 	if not world_tchunks.has(load_tc_xyz):
 		load_tchunk(load_tc_xyz)
 		load_count += 1
-		if load_count >= amount:
-			return
-	var nearby_tc_xyzs: Array[Vector3i] = []
-	nearby_tc_xyzs.resize(9**3)
-	for i: int in range(9**3):
-		nearby_tc_xyzs[i] = load_tc_xyz + Vector3i(((i%9)-4), (((i/9)%9)-4), (((i/81)%9)-4))
-	nearby_tc_xyzs.sort_custom(load_tchunks_around_sort_method.bind(load_tc_xyz))
-	for i in nearby_tc_xyzs.size():
-		if not world_tchunks.has(nearby_tc_xyzs[i]):
-			load_tchunk(nearby_tc_xyzs[i])
+	var chunk_coords: Vector3i = Vector3i()
+	for i: int in range(region_cube_length ** 3):
+		if load_count >= load_max:
+			break
+		chunk_coords = load_tc_xyz + Vector3i(
+			(i % region_cube_length) - ((region_cube_length - 1) / 2),
+			((i / region_cube_length) % region_cube_length) - ((region_cube_length - 1) / 2),
+			((i / (region_cube_length ** 2)) % region_cube_length) - ((region_cube_length - 1) / 2),
+		)
+		if not world_tchunks.has(chunk_coords):
+			load_tchunk(chunk_coords)
 			load_count += 1
-			if load_count >= amount:
-				return
 
 func load_tchunks_around_sort_method(a: Vector3i, b: Vector3i, t: Vector3i) -> bool:
 	return a.distance_squared_to(t) < b.distance_squared_to(t)
@@ -845,7 +845,7 @@ func tcmthread_func():
 		load_tc_xyz = Vector3i(floor((load_pos + TCU.TCHUNK_HS) / Vector3(TCU.TCHUNK_S)))
 		unload_tchunks_around(load_tc_xyz)
 		remesh_non_utd_chunks()
-		load_tchunks_around(load_tc_xyz, 8)
+		load_tchunks_around(load_tc_xyz, 3, 1)
 		
 		main_tcmt_mutex.lock()
 	main_tcmt_mutex.unlock()
