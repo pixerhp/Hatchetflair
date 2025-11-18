@@ -392,7 +392,7 @@ var ts_march_ang_inds: Array = [
 ]
 
 # inneficient brute-forcing, but that's OK because it's just a dev tool.
-func generate_march_ang_ind_table() -> void:
+func toolfunc_generate_march_ang_ind_table() -> void:
 	var inds_string: String = ""
 	var patt_i: int = 0; 
 	var rot_z: int = 0; var rot_y: int = 0; var rot_x: int = 0; 
@@ -463,6 +463,34 @@ func detransform_march_ang_inds(patt_i: int, rot_z: int, rot_y: int, rot_x: int,
 			inds[i][j] = PackedByteArray([1,3,0,2,6,4,7,5,9,11,8,10,12,14,16,13,15,17,18,21,19,22,20,25,23,26,24])[inds[i][j]]
 		inds = [inds[1],inds[3],inds[0],inds[2],inds[5],inds[7],inds[4],inds[6]]
 	return inds
+
+const tc27_relmove_to_arrind: Dictionary[Vector3i, int] = {
+	Vector3i(-1,-1,-1): 0, Vector3i(0,-1,-1): 1, Vector3i(1,-1,-1): 2,
+	Vector3i(-1,0,-1): 3, Vector3i(0,0,-1): 4, Vector3i(1,0,-1): 5,
+	Vector3i(-1,1,-1): 6, Vector3i(0,1,-1): 7, Vector3i(1,1,-1): 8,
+	
+	Vector3i(-1,-1,0): 9, Vector3i(0,-1,0): 10, Vector3i(1,-1,0): 11,
+	Vector3i(-1,0,0): 12, Vector3i(0,0,0): -1, Vector3i(1,0,0): 13,
+	Vector3i(-1,1,0): 14, Vector3i(0,1,0): 15, Vector3i(1,1,0): 16,
+	
+	Vector3i(-1,-1,1): 17, Vector3i(0,-1,1): 18, Vector3i(1,-1,1): 19,
+	Vector3i(-1,0,1): 20, Vector3i(0,0,1): 21, Vector3i(1,0,1): 22,
+	Vector3i(-1,1,1): 23, Vector3i(0,1,1): 24, Vector3i(1,1,1): 25,
+}
+
+var tc27_rel_c_i: Array = [
+	
+]
+
+var tc27_rel_t_i: Array = [
+	
+]
+
+func toolfunc_generate_tc27_c_i_precalc_array():
+	pass
+
+func toolfunc_generate_tc27_t_i_precalc_array():
+	pass
 
 func _ready():
 	#generate_march_ang_ind_table()
