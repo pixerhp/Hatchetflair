@@ -749,6 +749,11 @@ func unload_tchunk(tc_xyz: Vector3i):
 func remesh_tchunk(tc_xyz: Vector3i):
 	if not world_tchunks.has(tc_xyz):
 		return
+	for i: int in range(27):
+		if i == 13: continue
+		load_tchunk((
+			tc_xyz + Vector3i((i%3)-1, ((i/3)%3)-1, ((i/9)%3)-1)
+		), false, true, false)
 	tc_meshify(world_tchunks[tc_xyz])
 	if not world_tchunks[tc_xyz].tiles_rend_node.name == xyz_to_name(tc_xyz) + "_tiles_rend_mesh":
 		add_tchunk_mesh_node(tc_xyz)
