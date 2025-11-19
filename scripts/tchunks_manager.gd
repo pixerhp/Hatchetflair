@@ -730,15 +730,18 @@ func load_tchunk(tc_xyz: Vector3i,
 			unload_tchunk(tc_xyz)
 		else: 
 			return
+	print("load called: ", tc_xyz)
 	world_tchunks[tc_xyz] = TChunk.new()
 	world_tchunks[tc_xyz].coords = tc_xyz
 	if not load_data:
 		return
 	# !!! check if chunk is saved in files and load that instead of generating if so.
 	tc_generate(world_tchunks[tc_xyz])
-	if not meshify:
-		return
-	remesh_tchunk(tc_xyz)
+	if meshify:
+		print("WE ARE MESHIFYING")
+		remesh_tchunk(tc_xyz)
+	else:
+		print("Load func not meshifying.")
 
 func unload_tchunk(tc_xyz: Vector3i):
 	if not world_tchunks.has(tc_xyz): 
@@ -747,13 +750,14 @@ func unload_tchunk(tc_xyz: Vector3i):
 	world_tchunks.erase(tc_xyz)
 
 func remesh_tchunk(tc_xyz: Vector3i):
+	print("Meshify called on: ", tc_xyz)
 	if not world_tchunks.has(tc_xyz):
 		return
-	for i: int in range(27):
-		if i == 13: continue
-		load_tchunk((
-			tc_xyz + Vector3i((i%3)-1, ((i/3)%3)-1, ((i/9)%3)-1)
-		), false, true, false)
+	#for i: int in range(27):
+		#if i == 13: continue
+		#load_tchunk((
+			#tc_xyz + Vector3i((i%3)-1, ((i/3)%3)-1, ((i/9)%3)-1)
+		#), false, true, false)
 	tc_meshify(world_tchunks[tc_xyz])
 	if not world_tchunks[tc_xyz].tiles_rend_node.name == xyz_to_name(tc_xyz) + "_tiles_rend_mesh":
 		add_tchunk_mesh_node(tc_xyz)
@@ -781,6 +785,8 @@ func load_tchunks_around(load_tc_xyz: Vector3i, region_cube_length: int = 3, loa
 	if not world_tchunks.has(load_tc_xyz):
 		load_tchunk(load_tc_xyz)
 		load_count += 1
+	if region_cube_length <= 1:
+		return
 	var chunk_coords: Vector3i = Vector3i()
 	for i: int in range(region_cube_length ** 3):
 		if load_count >= load_max:
@@ -806,6 +812,7 @@ func unload_tchunks_around(load_tc_xyz: Vector3i):
 func remesh_non_utd_chunks():
 	for tc_xyz: Vector3i in world_tchunks.keys():
 		if world_tchunks[tc_xyz].are_tiles_meshes_utd == false:
+			print("remesh_non_utd_chunks is calling a remesh on: ", tc_xyz)
 			remesh_tchunk(tc_xyz)
 
 
@@ -844,7 +851,7 @@ func tcmthread_func():
 		
 		load_tc_xyz = Vector3i(floor((load_pos + TCU.TCHUNK_HS) / Vector3(TCU.TCHUNK_S)))
 		unload_tchunks_around(load_tc_xyz)
-		remesh_non_utd_chunks()
+		#remesh_non_utd_chunks() # !!! Now that unmeshed chunks are loaded around meshed, this causes runaway!
 		load_tchunks_around(load_tc_xyz, 3, 1)
 		
 		main_tcmt_mutex.lock()
