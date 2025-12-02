@@ -772,6 +772,7 @@ func add_tchunk_mesh_node(tc_xyz: Vector3i):
 		return
 	chunks_container_node.call_deferred("add_child", world_tchunks[tc_xyz].tiles_rend_node)
 	world_tchunks[tc_xyz].tiles_rend_node.call_deferred("set", "position", Vector3(tc_xyz * 16))
+	world_tchunks[tc_xyz].tiles_rend_node.call_deferred("set", "top_level", true)
 	world_tchunks[tc_xyz].tiles_rend_node.call_deferred("set", "name", xyz_to_name(tc_xyz)+"_tiles_rend_mesh")
 
 func remove_tchunk_mesh_node(tc_xyz: Vector3i):
