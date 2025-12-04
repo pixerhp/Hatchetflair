@@ -658,17 +658,17 @@ func tc_generate(tchunk: TChunk):
 	
 	const SURFACE_HEIGHT_VARIATION: float = 40.0
 	var surface_heights: Array[int] = []
-	surface_heights.resize(TCU.TC_L * TCU.TC_L)
-	for i: int in range(TCU.TC_L * TCU.TC_L):
+	surface_heights.resize(TCU.TC_L ** 2)
+	for i: int in range(surface_heights.size()):
 		surface_heights[i] = int(noise.get_noise_2d(
 			float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
 			float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L)) % TCU.TC_L)),
 		) * SURFACE_HEIGHT_VARIATION)
 	
-	if surface_heights.max() < (tchunk.coords.y * TCU.TC_L):
-		pass # (leave tiles empty)
+	if (tchunk.coords.y * TCU.TC_L) > surface_heights.max():
+		pass # (bottom of chunk is entirely above surface range, leave tiles empty)
 	elif surface_heights.min() > ((tchunk.coords.y * TCU.TC_L) + (TCU.TC_L - 1)):
-		tc_fill_tile(tchunk, TILE_SHAPE.MARCH_ANG, "plainite_white")
+		tc_fill_tile(tchunk, TILE_SHAPE.TESS_CUBE, "plainite_black")
 	else:
 		var set_tiles_indices: PackedInt32Array = []
 		for i: int in range(TCU.TC_L * TCU.TC_L):
@@ -686,10 +686,10 @@ func tc_generate(tchunk: TChunk):
 		
 		var set_tiles_shapes: PackedByteArray = [] 
 		set_tiles_shapes.resize(set_tiles_indices.size())
-		set_tiles_shapes.fill(TILE_SHAPE.MARCH_ANG)
+		set_tiles_shapes.fill(TILE_SHAPE.TESS_CUBE)
 		var set_tiles_substs: PackedInt32Array = [] 
 		set_tiles_substs.resize(set_tiles_indices.size())
-		set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_black", 0))
+		set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_white", 0))
 		tc_set_tiles(tchunk, set_tiles_indices, set_tiles_shapes, set_tiles_substs)
 	
 	
