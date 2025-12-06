@@ -358,18 +358,16 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 func get_tc27_c_i_bulk(tile_indices: PackedInt32Array, movements: Array[Vector3i]) -> PackedInt32Array:
 	var result: PackedInt32Array = []
 	result.resize(tile_indices.size())
-	var new_tile_pos: Vector3i = Vector3i()
+	var tii: int = 0
+	var m: Vector3i = Vector3i()
 	for i in range(tile_indices.size()):
-		var temp_tii := tile_indices[i]
-		new_tile_pos = Vector3i(
-			temp_tii % TCU.TC_L,
-			(temp_tii / TCU.TC_L) % TCU.TC_L,
-			(temp_tii / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L,
-		) + movements[i]
+		tii = tile_indices[i]
+		m = movements[i]
 		result[i] = (
-			(0 if (new_tile_pos.x < 0) else (1 if (new_tile_pos.x < TCU.TC_L) else 2)) +
-			(0 if (new_tile_pos.y < 0) else (3 if (new_tile_pos.y < TCU.TC_L) else 6)) +
-			(0 if (new_tile_pos.z < 0) else (9 if (new_tile_pos.z < TCU.TC_L) else 18)) )
+			(((tii % TCU.TC_L) + m.x + TCU.TC_L) / TCU.TC_L) +
+			(((((tii / TCU.TC_L) % TCU.TC_L) + m.y + TCU.TC_L) / TCU.TC_L) * 3) +
+			(((((tii / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L) + m.z + TCU.TC_L) / TCU.TC_L) * 9) 
+		)
 	return result
 
 # Calculates movewment-relative tc27 tile indices in bulk:
@@ -386,6 +384,7 @@ func get_tc27_t_i_bulk(tile_indices: PackedInt32Array, movements: Array[Vector3i
 				temp_mii.y, TCU.TC_L) * TCU.TC_L +
 			posmod(((temp_tii / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L) + 
 				temp_mii.z, TCU.TC_L) * TCU.TC_L * TCU.TC_L)
+		#result[i] = 0
 	return result
 
 func meshify_append_substance_data_bulk(
