@@ -242,6 +242,11 @@ func get_tc27(tc_xyz: Vector3i) -> Array[TChunk]:
 
 # Mesh stuff is generated using tc27 data, then assigned into tchunk to be used later.
 func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
+	
+	var time_start := Time.get_ticks_usec()
+	
+	
+	
 	if not tc27.size() == 27:
 		push_error("Bad tc27 size, wasn't an array of 27 tchunks."); return;
 	
@@ -317,6 +322,11 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 	
 	tchunk.tiles_rend_node.call_deferred("set", "mesh", tchunk.tiles_rend_arraymesh)
 	tchunk.are_tiles_meshes_utd = true
+	
+	
+	
+	var time_end := Time.get_ticks_usec()
+	print("Meshify took ", time_end - time_start, " microseconds.")
 
 #func get_tc27_c_i_3x3x3(tile_index: int) -> PackedInt32Array:
 	#var result: PackedInt32Array = []
@@ -650,6 +660,12 @@ func meshify_tiles_tess_rhombdo(surface_ref: Dictionary, tc27: Array[TChunk], ti
 	meshify_append_substance_data_bulk(surface_ref, subst_inds, subst_shares)
 
 func tc_generate(tchunk: TChunk):
+	
+	# !!! For testing purposes:
+	var tempt_coords: Vector3i = tchunk.coords
+	tchunk.coords = Vector3i(0,0,0)
+	
+	
 	tc_fill_tile(tchunk, TILE_SHAPE.EMPTY, "nothing")
 	
 	var noise: FastNoiseLite = FastNoiseLite.new()
@@ -711,6 +727,12 @@ func tc_generate(tchunk: TChunk):
 			tc_set_tiles_meshes_ood(Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1)))
 	else:
 		tchunk.are_tiles_meshes_utd = false
+	
+	
+	
+	
+	tchunk.coords = tempt_coords
+	
 
 # All currently loaded world terrain chunks.
 var world_tchunks: Dictionary[Vector3i, TChunk] = {}
@@ -733,7 +755,6 @@ func load_tchunk(tc_xyz: Vector3i,
 			unload_tchunk(tc_xyz)
 		else: 
 			return
-	print("load called: ", tc_xyz)
 	world_tchunks[tc_xyz] = TChunk.new()
 	world_tchunks[tc_xyz].coords = tc_xyz
 	if not load_data:
@@ -741,10 +762,7 @@ func load_tchunk(tc_xyz: Vector3i,
 	# !!! check if chunk is saved in files and load that instead of generating if so.
 	tc_generate(world_tchunks[tc_xyz])
 	if meshify:
-		print("WE ARE MESHIFYING")
 		remesh_tchunk(tc_xyz)
-	else:
-		print("Load func not meshifying.")
 
 func unload_tchunk(tc_xyz: Vector3i):
 	if not world_tchunks.has(tc_xyz): 
@@ -753,7 +771,6 @@ func unload_tchunk(tc_xyz: Vector3i):
 	world_tchunks.erase(tc_xyz)
 
 func remesh_tchunk(tc_xyz: Vector3i):
-	print("Meshify called on: ", tc_xyz)
 	if not world_tchunks.has(tc_xyz):
 		return
 	#for i: int in range(27):
