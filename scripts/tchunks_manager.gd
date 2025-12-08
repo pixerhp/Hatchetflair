@@ -645,60 +645,96 @@ func meshify_tiles_tess_rhombdo(surface_ref: Dictionary, tc27: Array[TChunk], ti
 	meshify_append_substance_data_bulk(surface_ref, subst_inds, subst_shares)
 
 func tc_generate(tchunk: TChunk):
-	tc_fill_tile(tchunk, TILE_SHAPE.EMPTY, "nothing")
+	const SURFACE_HEIGHT_VARIATION: float = 40.0
+	const SURFACE_VOLUME_VARIATION: float = 140.0
 	
 	var noise: FastNoiseLite = FastNoiseLite.new()
 	noise.seed = tchunk.gen_seed
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
 	
-	const SURFACE_HEIGHT_VARIATION: float = 40.0
-	var surface_heights: Array[int] = []
-	surface_heights.resize(TCU.TC_L ** 2)
-	for i: int in range(surface_heights.size()):
-		surface_heights[i] = int(noise.get_noise_2d(
-			float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
-			float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L)) % TCU.TC_L)),
-		) * SURFACE_HEIGHT_VARIATION)
+	var tile_inds: PackedInt32Array = []
+	var tile_shapes: PackedByteArray = [] 
+	var tile_substs: PackedInt32Array = [] 
 	
-	if (tchunk.coords.y * TCU.TC_L) > surface_heights.max():
-		pass # (bottom of chunk is entirely above surface range, leave tiles empty)
-	elif surface_heights.min() > ((tchunk.coords.y * TCU.TC_L) + (TCU.TC_L - 1)):
-		tc_fill_tile(tchunk, TILE_SHAPE.TESS_CUBE, "plainite_black")
+	#tc_fill_tile(tchunk, TILE_SHAPE.EMPTY, "nothing")
+	
+	if (tchunk.coords.y * TCU.TC_L) > (SURFACE_HEIGHT_VARIATION + SURFACE_VOLUME_VARIATION):
+		tc_fill_tile(tchunk, TILE_SHAPE.EMPTY, "nothing")
 	else:
-		var set_tiles_indices: PackedInt32Array = []
-		for i: int in range(TCU.TC_L * TCU.TC_L):
-			if surface_heights[i] < (tchunk.coords.y * TCU.TC_L):
-				pass
-			elif surface_heights[i] > ((tchunk.coords.y * TCU.TC_L) + (TCU.TC_L - 1)):
-				for j in range(TCU.TC_L):
-					set_tiles_indices.append((i%TCU.TC_L) + (j*TCU.TC_L) + 
-						(((i/TCU.TC_L)%TCU.TC_L)*(TCU.TC_L*TCU.TC_L)))
+		tile_inds.resize(TCU.TCHUNK_T)
+		tile_shapes.resize(TCU.TCHUNK_T)
+		tile_substs.resize(TCU.TCHUNK_T)
+		for i: int in range(TCU.TCHUNK_T):
+			tile_inds[i] = i
+			if ((int(noise.get_noise_2d(
+				float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
+				float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L**2)) % TCU.TC_L)),
+			) * SURFACE_HEIGHT_VARIATION) - (
+				(tchunk.coords.y * TCU.TC_L) + ((i/TCU.TC_L) % TCU.TC_L)
+			)) + (noise.get_noise_3d(
+				float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
+				float((tchunk.coords.y * TCU.TC_L) + ((i/TCU.TC_L) % TCU.TC_L)),
+				float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L**2)) % TCU.TC_L)),
+			) * SURFACE_VOLUME_VARIATION)) < 0:
+				tile_shapes[i] = TILE_SHAPE.EMPTY
+				tile_substs[i] = ChemCraft.subst_name_to_i.get("nothing", 0)
 			else:
-				for j in range(TCU.TC_L):
-					if surface_heights[i] >= ((tchunk.coords.y * TCU.TC_L) + j):
-						set_tiles_indices.append((i%TCU.TC_L) + (j*TCU.TC_L) + 
-							(((i/TCU.TC_L)%TCU.TC_L)*(TCU.TC_L*TCU.TC_L)))
-		
-		var set_tiles_shapes: PackedByteArray = [] 
-		set_tiles_shapes.resize(set_tiles_indices.size())
-		set_tiles_shapes.fill(TILE_SHAPE.TESS_CUBE)
-		var set_tiles_substs: PackedInt32Array = [] 
-		set_tiles_substs.resize(set_tiles_indices.size())
-		set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_white", 0))
-		tc_set_tiles(tchunk, set_tiles_indices, set_tiles_shapes, set_tiles_substs)
+				tile_shapes[i] = TILE_SHAPE.TESS_CUBE
+				tile_substs[i] = ChemCraft.subst_name_to_i.get("plainite_white", 0)
+	
+	if not tile_inds.is_empty():
+		tc_set_tiles(tchunk, tile_inds, tile_shapes, tile_substs)
+	
+	#
+	#
+	#var surface_heights: Array[int] = []
+	#surface_heights.resize(TCU.TC_L ** 2)
+	#for i: int in range(surface_heights.size()):
+		#surface_heights[i] = int(noise.get_noise_2d(
+			#float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
+			#float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L)) % TCU.TC_L)),
+		#) * SURFACE_HEIGHT_VARIATION)
+	#
+	#
+	#if (tchunk.coords.y * TCU.TC_L) > surface_heights.max():
+		#pass # (bottom of chunk is entirely above surface range, leave tiles empty)
+	#elif surface_heights.min() > ((tchunk.coords.y * TCU.TC_L) + (TCU.TC_L - 1)):
+		#tc_fill_tile(tchunk, TILE_SHAPE.TESS_CUBE, "plainite_black")
+	#else:
+		#var set_tiles_indices: PackedInt32Array = []
+		#for i: int in range(TCU.TC_L * TCU.TC_L):
+			#if surface_heights[i] < (tchunk.coords.y * TCU.TC_L):
+				#pass
+			#elif surface_heights[i] > ((tchunk.coords.y * TCU.TC_L) + (TCU.TC_L - 1)):
+				#for j in range(TCU.TC_L):
+					#set_tiles_indices.append((i%TCU.TC_L) + (j*TCU.TC_L) + 
+						#(((i/TCU.TC_L)%TCU.TC_L)*(TCU.TC_L*TCU.TC_L)))
+			#else:
+				#for j in range(TCU.TC_L):
+					#if surface_heights[i] >= ((tchunk.coords.y * TCU.TC_L) + j):
+						#set_tiles_indices.append((i%TCU.TC_L) + (j*TCU.TC_L) + 
+							#(((i/TCU.TC_L)%TCU.TC_L)*(TCU.TC_L*TCU.TC_L)))
+		#
+		#var set_tiles_shapes: PackedByteArray = [] 
+		#set_tiles_shapes.resize(set_tiles_indices.size())
+		#set_tiles_shapes.fill(TILE_SHAPE.TESS_CUBE)
+		#var set_tiles_substs: PackedInt32Array = [] 
+		#set_tiles_substs.resize(set_tiles_indices.size())
+		#set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_white", 0))
+		#tc_set_tiles(tchunk, set_tiles_indices, set_tiles_shapes, set_tiles_substs)
 	
 	
-	#var set_tiles_indices: PackedInt32Array = []
-	#for i: int in range(TCU.TCHUNK_T):
-		#if randf() < 0.2:
-			#set_tiles_indices.append(i)
-	#var set_tiles_shapes: PackedByteArray = [] 
-	#set_tiles_shapes.resize(set_tiles_indices.size())
-	#set_tiles_shapes.fill(TILE_SHAPE.MARCH_ANG)
-	#var set_tiles_substs: PackedInt32Array = [] 
-	#set_tiles_substs.resize(set_tiles_indices.size())
-	#set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_white", 0))
-	#tc_set_tiles(tchunk, set_tiles_indices, set_tiles_shapes, set_tiles_substs)
+	##var set_tiles_indices: PackedInt32Array = []
+	##for i: int in range(TCU.TCHUNK_T):
+		##if randf() < 0.2:
+			##set_tiles_indices.append(i)
+	##var set_tiles_shapes: PackedByteArray = [] 
+	##set_tiles_shapes.resize(set_tiles_indices.size())
+	##set_tiles_shapes.fill(TILE_SHAPE.MARCH_ANG)
+	##var set_tiles_substs: PackedInt32Array = [] 
+	##set_tiles_substs.resize(set_tiles_indices.size())
+	##set_tiles_substs.fill(ChemCraft.subst_name_to_i.get("plainite_white", 0))
+	##tc_set_tiles(tchunk, set_tiles_indices, set_tiles_shapes, set_tiles_substs)
 	
 	# Update tchunks' are meshes utd bool/flag:
 	if world_tchunks.has(tchunk.coords):
