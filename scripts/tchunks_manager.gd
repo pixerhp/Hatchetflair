@@ -533,6 +533,9 @@ func meshify_march_ang_sections(
 func meshify_tiles_tess_cube(surface_ref: Dictionary, tc27: Array[TChunk], tile_indices: PackedInt32Array):
 	if tile_indices.is_empty():
 		return
+	
+	var time_precalc_start := Time.get_ticks_usec() #!!! ####################################
+	
 	# Precalculate tc27_c_i and tc27_t_i in bulk:
 	var rel_pos_inds: PackedInt32Array = []
 	var rel_pos_moves: Array[Vector3i] = []
@@ -551,43 +554,48 @@ func meshify_tiles_tess_cube(surface_ref: Dictionary, tc27: Array[TChunk], tile_
 	rel_pos_inds.clear()
 	rel_pos_moves.clear()
 	
+	var time_precalc_end := Time.get_ticks_usec() #!!! ####################################
+	
 	var subst_inds: PackedInt32Array = []
 	var subst_shares: PackedInt32Array = []
 	var subst_shares_in_tile: int = 0
 	var tile_pos: Vector3 = Vector3()
+	var cache_normal_vect: Vector3 = Vector3()
+	var cache_uv_coords: PackedVector2Array = PackedVector2Array([
+		Vector2(0,1), Vector2(0,0), Vector2(1,1), 
+		Vector2(0,0), Vector2(1,0), Vector2(1,1),])
 	for t_ind_i: int in range(tile_indices.size()):
 		subst_shares_in_tile = 0
 		for face_i: int in range(6):
 			match tc27[tc27_c_inds[t_ind_i + (tile_indices.size() * face_i)] # (Situationally cull face)
 			].tiles_shapes[tc27_t_inds[t_ind_i + (tile_indices.size() * face_i)]]:
 				TILE_SHAPE.TESS_CUBE, TILE_SHAPE.TESS_RHOMBDO: continue
-				TILE_SHAPE.MARCH_ANG: pass # !!! do proper culling check later
+				#TILE_SHAPE.MARCH_ANG: pass # !!! do proper culling check later
 			subst_shares_in_tile += 1
 			tile_pos = Vector3(Vector3i(
 				tile_indices[t_ind_i] % TCU.TC_L,
 				(tile_indices[t_ind_i] / TCU.TC_L) % TCU.TC_L,
 				(tile_indices[t_ind_i] / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L,))
 			surface_ref.verts.append_array([
-				TCU.ts_tess_cube_verts[(4*face_i)+0] + tile_pos, 
+				TCU.ts_tess_cube_verts[(4*face_i)  ] + tile_pos, 
 				TCU.ts_tess_cube_verts[(4*face_i)+1] + tile_pos,
 				TCU.ts_tess_cube_verts[(4*face_i)+2] + tile_pos, 
 				TCU.ts_tess_cube_verts[(4*face_i)+1] + tile_pos,
 				TCU.ts_tess_cube_verts[(4*face_i)+3] + tile_pos, 
 				TCU.ts_tess_cube_verts[(4*face_i)+2] + tile_pos,])
+			cache_normal_vect = Vector3(TCU.ts_tess_cube_move[face_i])
 			surface_ref.norms.append_array([
-				Vector3(TCU.ts_tess_cube_move[face_i]), 
-				Vector3(TCU.ts_tess_cube_move[face_i]),
-				Vector3(TCU.ts_tess_cube_move[face_i]), 
-				Vector3(TCU.ts_tess_cube_move[face_i]),
-				Vector3(TCU.ts_tess_cube_move[face_i]), 
-				Vector3(TCU.ts_tess_cube_move[face_i]),])
-			surface_ref.uvs.append_array([
-				Vector2(0,1), Vector2(0,0), Vector2(1,1), 
-				Vector2(0,0), Vector2(1,0), Vector2(1,1),])
+				cache_normal_vect, cache_normal_vect, cache_normal_vect, 
+				cache_normal_vect, cache_normal_vect, cache_normal_vect,])
+			surface_ref.uvs.append_array(cache_uv_coords)
 		if subst_shares_in_tile > 0:
 			subst_inds.append(tc27[13].tiles_substs[tile_indices[t_ind_i]])
 			subst_shares.append(subst_shares_in_tile * 6)
 	meshify_append_substance_data_bulk(surface_ref, subst_inds, subst_shares)
+	
+	var time_meshing_end := Time.get_ticks_usec() #!!! ####################################
+	print("Precalculating c and t inds took ", time_precalc_end - time_precalc_start, " microseconds.")
+	print("Meshing the tess cubes took ", time_meshing_end - time_precalc_end, " microseconds.")
 
 func meshify_tiles_tess_rhombdo(surface_ref: Dictionary, tc27: Array[TChunk], tile_indices: PackedInt32Array):
 	if tile_indices.is_empty():
