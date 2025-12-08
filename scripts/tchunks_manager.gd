@@ -242,11 +242,6 @@ func get_tc27(tc_xyz: Vector3i) -> Array[TChunk]:
 
 # Mesh stuff is generated using tc27 data, then assigned into tchunk to be used later.
 func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
-	
-	var time_start := Time.get_ticks_usec()
-	
-	
-	
 	if not tc27.size() == 27:
 		push_error("Bad tc27 size, wasn't an array of 27 tchunks."); return;
 	
@@ -322,11 +317,6 @@ func tc_meshify(tchunk: TChunk, tc27: Array[TChunk] = get_tc27(tchunk.coords)):
 	
 	tchunk.tiles_rend_node.call_deferred("set", "mesh", tchunk.tiles_rend_arraymesh)
 	tchunk.are_tiles_meshes_utd = true
-	
-	
-	
-	var time_end := Time.get_ticks_usec()
-	print("Meshify took ", time_end - time_start, " microseconds.")
 
 #func get_tc27_c_i_3x3x3(tile_index: int) -> PackedInt32Array:
 	#var result: PackedInt32Array = []
@@ -534,8 +524,6 @@ func meshify_tiles_tess_cube(surface_ref: Dictionary, tc27: Array[TChunk], tile_
 	if tile_indices.is_empty():
 		return
 	
-	var time_precalc_start := Time.get_ticks_usec() #!!! ####################################
-	
 	# Precalculate tc27_c_i and tc27_t_i in bulk:
 	var rel_pos_inds: PackedInt32Array = []
 	var rel_pos_moves: Array[Vector3i] = []
@@ -553,8 +541,6 @@ func meshify_tiles_tess_cube(surface_ref: Dictionary, tc27: Array[TChunk], tile_
 	var tc27_t_inds: PackedInt32Array = get_tc27_t_i_bulk(rel_pos_inds, rel_pos_moves)
 	rel_pos_inds.clear()
 	rel_pos_moves.clear()
-	
-	var time_precalc_end := Time.get_ticks_usec() #!!! ####################################
 	
 	var subst_inds: PackedInt32Array = []
 	var subst_shares: PackedInt32Array = []
@@ -592,10 +578,6 @@ func meshify_tiles_tess_cube(surface_ref: Dictionary, tc27: Array[TChunk], tile_
 			subst_inds.append(tc27[13].tiles_substs[tile_indices[t_ind_i]])
 			subst_shares.append(subst_shares_in_tile * 6)
 	meshify_append_substance_data_bulk(surface_ref, subst_inds, subst_shares)
-	
-	var time_meshing_end := Time.get_ticks_usec() #!!! ####################################
-	print("Precalculating c and t inds took ", time_precalc_end - time_precalc_start, " microseconds.")
-	print("Meshing the tess cubes took ", time_meshing_end - time_precalc_end, " microseconds.")
 
 func meshify_tiles_tess_rhombdo(surface_ref: Dictionary, tc27: Array[TChunk], tile_indices: PackedInt32Array):
 	if tile_indices.is_empty():
@@ -663,12 +645,6 @@ func meshify_tiles_tess_rhombdo(surface_ref: Dictionary, tc27: Array[TChunk], ti
 	meshify_append_substance_data_bulk(surface_ref, subst_inds, subst_shares)
 
 func tc_generate(tchunk: TChunk):
-	
-	# !!! For testing purposes:
-	var tempt_coords: Vector3i = tchunk.coords
-	tchunk.coords = Vector3i(0,0,0)
-	
-	
 	tc_fill_tile(tchunk, TILE_SHAPE.EMPTY, "nothing")
 	
 	var noise: FastNoiseLite = FastNoiseLite.new()
@@ -730,12 +706,6 @@ func tc_generate(tchunk: TChunk):
 			tc_set_tiles_meshes_ood(Vector3i(((i%3)-1), (((i/3)%3)-1), (((i/9)%3)-1)))
 	else:
 		tchunk.are_tiles_meshes_utd = false
-	
-	
-	
-	
-	tchunk.coords = tempt_coords
-	
 
 # All currently loaded world terrain chunks.
 var world_tchunks: Dictionary[Vector3i, TChunk] = {}
@@ -836,7 +806,6 @@ func unload_tchunks_around(load_tc_xyz: Vector3i):
 func remesh_non_utd_chunks():
 	for tc_xyz: Vector3i in world_tchunks.keys():
 		if world_tchunks[tc_xyz].are_tiles_meshes_utd == false:
-			print("remesh_non_utd_chunks is calling a remesh on: ", tc_xyz)
 			remesh_tchunk(tc_xyz)
 
 
