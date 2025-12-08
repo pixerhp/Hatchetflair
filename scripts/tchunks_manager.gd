@@ -375,16 +375,12 @@ func get_tc27_t_i_bulk(tile_indices: PackedInt32Array, movements: Array[Vector3i
 	var result: PackedInt32Array = []
 	result.resize(tile_indices.size())
 	for i in range(tile_indices.size()):
-		var temp_tii := tile_indices[i]
-		var temp_mii := movements[i]
+		var tii := tile_indices[i]
+		var m := movements[i]
 		result[i] = (
-			posmod((temp_tii % TCU.TC_L) + 
-				temp_mii.x, TCU.TC_L) +
-			posmod(((temp_tii / TCU.TC_L) % TCU.TC_L) + 
-				temp_mii.y, TCU.TC_L) * TCU.TC_L +
-			posmod(((temp_tii / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L) + 
-				temp_mii.z, TCU.TC_L) * TCU.TC_L * TCU.TC_L)
-		#result[i] = 0
+			posmod((tii % TCU.TC_L) + m.x, TCU.TC_L) +
+			posmod(((tii / TCU.TC_L) % TCU.TC_L) + m.y, TCU.TC_L) * TCU.TC_L +
+			posmod(((tii / (TCU.TC_L * TCU.TC_L)) % TCU.TC_L) + m.z, TCU.TC_L) * TCU.TC_L * TCU.TC_L)
 	return result
 
 func meshify_append_substance_data_bulk(
