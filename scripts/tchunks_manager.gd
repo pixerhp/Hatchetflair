@@ -666,6 +666,7 @@ func tc_generate(tchunk: TChunk):
 		tile_substs.resize(TCU.TCHUNK_T)
 		for i: int in range(TCU.TCHUNK_T):
 			tile_inds[i] = i
+			noise.seed = tchunk.gen_seed
 			if ((int(noise.get_noise_2d(
 				float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
 				float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L**2)) % TCU.TC_L)),
@@ -679,8 +680,24 @@ func tc_generate(tchunk: TChunk):
 				tile_shapes[i] = TILE_SHAPE.EMPTY
 				tile_substs[i] = ChemCraft.subst_name_to_i.get("nothing", 0)
 			else:
-				tile_shapes[i] = TILE_SHAPE.TESS_CUBE
-				tile_substs[i] = ChemCraft.subst_name_to_i.get("plainite_white", 0)
+				noise.seed = tchunk.gen_seed + 1
+				var stuff_type_math: float = noise.get_noise_3d(
+					float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
+					float((tchunk.coords.y * TCU.TC_L) + ((i/TCU.TC_L) % TCU.TC_L)),
+					float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L**2)) % TCU.TC_L)),
+				)
+				if stuff_type_math > 0.2:
+					tile_shapes[i] = TILE_SHAPE.MARCH_ANG
+					tile_substs[i] = ChemCraft.subst_name_to_i.get("plainite_black", 0)
+				elif stuff_type_math < -0.2:
+					tile_shapes[i] = TILE_SHAPE.TESS_RHOMBDO
+					if stuff_type_math < -0.3:
+						tile_substs[i] = ChemCraft.subst_name_to_i.get("doradium_polished", 0)
+					else:
+						tile_substs[i] = ChemCraft.subst_name_to_i.get("werium_polished", 0)
+				else:
+					tile_shapes[i] = TILE_SHAPE.TESS_CUBE
+					tile_substs[i] = ChemCraft.subst_name_to_i.get("plainite_white", 0)
 	
 	if not tile_inds.is_empty():
 		tc_set_tiles(tchunk, tile_inds, tile_shapes, tile_substs)
