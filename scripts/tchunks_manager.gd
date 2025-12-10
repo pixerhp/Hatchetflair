@@ -649,8 +649,8 @@ func tc_generate(tchunk: TChunk):
 	const SURFACE_VOLUME_VARIATION: float = 140.0
 	
 	var noise: FastNoiseLite = FastNoiseLite.new()
-	noise.seed = tchunk.gen_seed
 	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
+	noise.seed = tchunk.gen_seed
 	
 	var tile_inds: PackedInt32Array = []
 	var tile_shapes: PackedByteArray = [] 
@@ -664,40 +664,49 @@ func tc_generate(tchunk: TChunk):
 		tile_inds.resize(TCU.TCHUNK_T)
 		tile_shapes.resize(TCU.TCHUNK_T)
 		tile_substs.resize(TCU.TCHUNK_T)
-		for i: int in range(TCU.TCHUNK_T):
-			tile_inds[i] = i
+		var tile_pos: Vector3 = Vector3()
+		var material_result: float = 0.0
+		var substs: PackedInt32Array = [
+			ChemCraft.subst_name_to_i.get("doradium_polished", 0),
+			ChemCraft.subst_name_to_i.get("tincium_polished", 0),
+			ChemCraft.subst_name_to_i.get("plainite_black", 0),
+			ChemCraft.subst_name_to_i.get("plainite_white", 0),
+			ChemCraft.subst_name_to_i.get("ferrium_treadplate", 0),
+			ChemCraft.subst_name_to_i.get("werium_polished", 0),
+		]
+		for tile_i: int in range(TCU.TCHUNK_T):
+			tile_inds[tile_i] = tile_i
+			tile_pos = Vector3(
+				float((tchunk.coords.x * TCU.TC_L) + (tile_i % TCU.TC_L)),
+				float((tchunk.coords.y * TCU.TC_L) + ((tile_i/TCU.TC_L) % TCU.TC_L)),
+				float((tchunk.coords.z * TCU.TC_L) + ((tile_i/(TCU.TC_L**2)) % TCU.TC_L)),)
 			noise.seed = tchunk.gen_seed
-			if ((int(noise.get_noise_2d(
-				float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
-				float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L**2)) % TCU.TC_L)),
-			) * SURFACE_HEIGHT_VARIATION) - (
-				(tchunk.coords.y * TCU.TC_L) + ((i/TCU.TC_L) % TCU.TC_L)
-			)) + (noise.get_noise_3d(
-				float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
-				float((tchunk.coords.y * TCU.TC_L) + ((i/TCU.TC_L) % TCU.TC_L)),
-				float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L**2)) % TCU.TC_L)),
+			if ((noise.get_noise_2d(tile_pos.x, tile_pos.z) * SURFACE_HEIGHT_VARIATION - (
+				tile_pos.y)) + (noise.get_noise_3d(tile_pos.x, tile_pos.y, tile_pos.z
 			) * SURFACE_VOLUME_VARIATION)) < 0:
-				tile_shapes[i] = TILE_SHAPE.EMPTY
-				tile_substs[i] = ChemCraft.subst_name_to_i.get("nothing", 0)
+				tile_shapes[tile_i] = TILE_SHAPE.EMPTY
+				tile_substs[tile_i] = ChemCraft.subst_name_to_i.get("nothing", 0)
 			else:
 				noise.seed = tchunk.gen_seed + 1
-				var stuff_type_math: float = noise.get_noise_3d(
-					float((tchunk.coords.x * TCU.TC_L) + (i % TCU.TC_L)),
-					float((tchunk.coords.y * TCU.TC_L) + ((i/TCU.TC_L) % TCU.TC_L)),
-					float((tchunk.coords.z * TCU.TC_L) + ((i/(TCU.TC_L**2)) % TCU.TC_L)),
-				)
-				if stuff_type_math > 0.2:
-					tile_shapes[i] = TILE_SHAPE.MARCH_ANG
-					tile_substs[i] = ChemCraft.subst_name_to_i.get("plainite_black", 0)
-				elif stuff_type_math < -0.2:
-					tile_shapes[i] = TILE_SHAPE.TESS_RHOMBDO
-					if stuff_type_math < -0.3:
-						tile_substs[i] = ChemCraft.subst_name_to_i.get("doradium_polished", 0)
-					else:
-						tile_substs[i] = ChemCraft.subst_name_to_i.get("werium_polished", 0)
+				material_result = noise.get_noise_3d(tile_pos.x, tile_pos.y, tile_pos.z)
+				if material_result < -0.4:
+					tile_shapes[tile_i] = TILE_SHAPE.TESS_RHOMBDO
+					tile_substs[tile_i] = substs[0]
+				elif material_result < -0.2:
+					tile_shapes[tile_i] = TILE_SHAPE.TESS_CUBE
+					tile_substs[tile_i] = substs[1]
+				elif material_result < 0.0:
+					tile_shapes[tile_i] = TILE_SHAPE.MARCH_ANG
+					tile_substs[tile_i] = substs[2]
+				elif material_result < 0.2:
+					tile_shapes[tile_i] = TILE_SHAPE.MARCH_ANG
+					tile_substs[tile_i] = substs[3]
+				elif material_result < 0.4:
+					tile_shapes[tile_i] = TILE_SHAPE.TESS_CUBE
+					tile_substs[tile_i] = substs[4]
 				else:
-					tile_shapes[i] = TILE_SHAPE.TESS_CUBE
-					tile_substs[i] = ChemCraft.subst_name_to_i.get("plainite_white", 0)
+					tile_shapes[tile_i] = TILE_SHAPE.TESS_RHOMBDO
+					tile_substs[tile_i] = substs[5]
 	
 	if not tile_inds.is_empty():
 		tc_set_tiles(tchunk, tile_inds, tile_shapes, tile_substs)

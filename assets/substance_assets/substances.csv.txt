@@ -8,7 +8,7 @@ mossy
 doradium_polished,alb_default,0.9725,0.8784,0.024,norm_default,spec_metal_shiny
 werium_polished,alb_default,1.0,0.0,0.0,norm_default,spec_metal_shiny
 tincium_polished,alb_default,0.5921,0.6,0.5294,norm_default,spec_metal_shiny
-ferrium_treadplate
+ferrium_treadplate,alb_default,0.75,0.75,0.75,norm_treadplate,spec_metal_semishiny
 zirium_treadplate
 hive_yellow
 hive_blue
