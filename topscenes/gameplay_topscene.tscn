@@ -56,3 +56,36 @@ surface_material_override/0 = SubResource("StandardMaterial3D_tgdfa")
 [node name="TChunksContainer" type="Node3D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_yy87l")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -204.0
+offset_bottom = 404.0
+grow_horizontal = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/PanelContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "==-=-== Movement ==-=-==
+Directions	[W, A, S, and D]
+
+Absolute Down	[C]
+Absolute Up	[Space]
+
+Relative Down	[Q]
+Relative Up	[E]
+
+Slower	[Ctrl]
+Faster	[Shift]
+
+==-=-== Other ==-=-==
+Close Game	[Esc]
+Toggle Debug Info	[F5]
+Cycle Debug Borders	[F6]
+Fullscreen Toggle	[F11]"
+vertical_alignment = 1
+justification_flags = 171
