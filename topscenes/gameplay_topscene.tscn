@@ -61,19 +61,22 @@ script = ExtResource("2_yy87l")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
-anchors_preset = 1
+anchors_preset = 6
 anchor_left = 1.0
+anchor_top = 0.5
 anchor_right = 1.0
+anchor_bottom = 0.5
 offset_left = -216.0
-offset_bottom = 495.0
+offset_top = -264.5
+offset_bottom = 264.5
 grow_horizontal = 0
+grow_vertical = 2
 script = ExtResource("4_tgdfa")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/PanelContainer"]
 layout_mode = 2
-bbcode_enabled = true
 text = "==-=-== Movement ==-=-==
-Hold Right Mouse Button To Move And Angle Camera
+(Hold down the right mouse button and move the mouse to angle your view.)
 
 Lateral [W, A, S, and D]
 
@@ -92,5 +95,6 @@ Toggle Controls Info [F1]
 Toggle Debug Info [F5]
 Cycle Debug Borders [F6]
 Fullscreen Toggle [F11]"
+fit_content = true
 vertical_alignment = 1
 justification_flags = 171
