@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bab18etq8rwlt"
-path="res://.godot/imported/hf_icon_v3b.png-23bc5e045c2a5dcb6f7637bb5ef0d5dd.ctex"
+uid="uid://d05hhe4h14a5c"
+path="res://.godot/imported/hatchetflair_2026q1_greenish_large.png-55e06cb8b40e44962ced72e48db59666.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://hf_icon_v3b.png"
-dest_files=["res://.godot/imported/hf_icon_v3b.png-23bc5e045c2a5dcb6f7637bb5ef0d5dd.ctex"]
+source_file="res://assets/game_icons/hatchetflair_2026q1_greenish_large.png"
+dest_files=["res://.godot/imported/hatchetflair_2026q1_greenish_large.png-55e06cb8b40e44962ced72e48db59666.ctex"]
 
 [params]
 

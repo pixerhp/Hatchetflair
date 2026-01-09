@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cugbxqpgcuar1"
-path="res://.godot/imported/hf_icon_v3b_large.png-fc3e090dbbafbd4d83e635c9c8a0f0f9.ctex"
+uid="uid://bftwja5ysjm5j"
+path="res://.godot/imported/hf_dev_icon_2026q1.png-3bc73228cea86dd679f1b3877c1fd76f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://hf_icon_v3b_large.png"
-dest_files=["res://.godot/imported/hf_icon_v3b_large.png-fc3e090dbbafbd4d83e635c9c8a0f0f9.ctex"]
+source_file="res://assets/game_icons/hf_dev_icon_2026q1.png"
+dest_files=["res://.godot/imported/hf_dev_icon_2026q1.png-3bc73228cea86dd679f1b3877c1fd76f.ctex"]
 
 [params]
 
