@@ -690,7 +690,10 @@ func tc_generate(tchunk: TChunk):
 				noise.seed = tchunk.gen_seed + 1
 				material_result = noise.get_noise_3d(tile_pos.x, tile_pos.y, tile_pos.z)
 				if material_result < -0.4:
-					tile_shapes[tile_i] = TILE_SHAPE.TESS_RHOMBDO
+					if int(tile_pos.x + tile_pos.y + tile_pos.z) % 2 == 0:
+						tile_shapes[tile_i] = TILE_SHAPE.TESS_RHOMBDO
+					else:
+						tile_shapes[tile_i] = TILE_SHAPE.EMPTY
 					tile_substs[tile_i] = substs[0]
 				elif material_result < -0.2:
 					tile_shapes[tile_i] = TILE_SHAPE.TESS_CUBE
@@ -705,7 +708,10 @@ func tc_generate(tchunk: TChunk):
 					tile_shapes[tile_i] = TILE_SHAPE.TESS_CUBE
 					tile_substs[tile_i] = substs[4]
 				else:
-					tile_shapes[tile_i] = TILE_SHAPE.TESS_RHOMBDO
+					if int(tile_pos.x + tile_pos.y + tile_pos.z) % 2 == 1:
+						tile_shapes[tile_i] = TILE_SHAPE.TESS_RHOMBDO
+					else:
+						tile_shapes[tile_i] = TILE_SHAPE.EMPTY
 					tile_substs[tile_i] = substs[5]
 	
 	if not tile_inds.is_empty():
