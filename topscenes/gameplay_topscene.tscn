@@ -98,3 +98,6 @@ Fullscreen Toggle [F11]"
 fit_content = true
 vertical_alignment = 1
 justification_flags = 171
+
+[node name="Paige" type="Node3D" parent="."]
+transform = Transform3D(-0.280998, 0.856633, 0.432688, 0.803336, 0.456616, -0.382299, -0.525062, 0.240169, -0.816473, -5.81925, 2.57934, 4.96455)
