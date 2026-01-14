@@ -1,8 +1,11 @@
 <div align="center">
-  <img src="assets/game_icons/hatchetflair_2026q1_transparent_large.png" alt="Hatchetflair icon" width="128" height="auto" />
+	<img src="assets/game_icons/hatchetflair_2026q1_transparent_large.png" alt="Hatchetflair icon" width="128" height="auto" />
+	<h3>HATCHETFLAIR</h3>
 </div>
 
-## Official Links
+## Official Links:
+- Source
+  - https://github.com/pixerhp/Hatchetflair
 - Itch.io Page
   - https://pixerhp.itch.io/hatchetflair
 - Discord Community Server
@@ -11,26 +14,20 @@
   - https://www.youtube.com/@hatchetflair
 
 ## What is Hatchetflair?
-Hatchetflair is an ambitious 3D sandbox survival game, currently very early in development.
+Hatchetflair is 3D sandbox survival game, currently very early in development.
 
-### Planned content and feel of the game:
-- A focus on fun character/entity designs, and social interactions between players and with NPCs.
-  - You can both play as and interact with characters of various sapient species, currently planned to include humans, flerovians, smilies, egrens, amalgamates, jargins, droids, and bonnits.
-  - You can sit, lay down, sleep, dance (etc) most anywhere, and can also perform some emotes with others (high-fiving, hugging, etc).
-  - Creatures/entities will take inspiration from various sources, range from little bugs to massive behemoths, be of flesh to robots to abstract constructs, etc.
-- A focus on materials and material science.
-  - An original list of chemical elements, including both more familiar ones (ferrium which similar to iron, carbonium which is similar to carbon, etc) and more original ones (digodium, veronium, collosium, etc).
-  - Lots of tools, machinery and infrastructure that let you turn things into other things, such as turn woods into woodchips or sawdust, do redox reactions between metals, create fertilizer with sulfuric acid, process both solid and liquid foodstuffs, etc.
-  - Liquids preserve their volume, can be stored in various containers, can interact with some machinery and crafting, and can be transported through piping.
-  - Some materials are much rarer and/or more valuable than others (such as precious metals, exotic woods and organic materials), and may be fun to collect, accumulate, build with and buy/sell.
-- Moderate-to-high game difficulty.
-  - The game's target audience is roughly young-adults-to-adults that've had experience playing games before, and the game should (defaultly) be difficult comparable to games like *Rain World* or *Hollow Knight: Silksong*.
-	- Its difficulty should *not* involve things like button-mashing or other strenuous gameplay.
-	- Regardless of defaults, gameplay difficulty can be adjusted via world and character settings.
-  - Surviving on your own in the wild with no starting equipment or infrastructure should be very dangerous, probably resulting in many deaths. Living in a small community (or even with just a friend) though should be comparably less dangerous.
-  - There will always be at least some critically-dangerous biomes/entities in the world, even by end-game.
-- Other notes:
-  - Some biomes/environments may lend themselves well to temporary expeditions where you need to manage your supplies.
-  - There will be fundamentals like faze (usage comparable to spells in *Secret of Mana* / *Secret of Evermore* or the beams in *Super Metroid*), gamma (associated with space/position/teleportation), digamma (associated with gravity), gray (associated with matter and composition), and mursa.
-	- Some species/technologies may utilize or interact with some fundamentals but not others.
-  - Characters spawning and respawning will probably be canon to how the world of hearth works.
+Some planned content and feel of the game:
+- Being able to play as and interact with characters of diverse sapient species.
+- Some focus on social aspects, including talking with proximity chat, gestures and emotes (both individual and multi-character ones), etc.
+- A focus on materials, processing and building (many metals and alloys, more complex tree functionality and log processing, chemicals and food stuff, etc.)
+- pseudo-infinity tall, deep and wide worlds (utilizing cubic chunks), filled with tons of biomes and entities.
+- High content variety (vastly ranging rarity, difficulty, shape/size, etc. of everything).
+- Some biome environments may slowly warp and regenerate themselves over time (unless the roots of the regeneration are destroyed), allowing for repeated adventures and materials extraction from them after they're given time to recover.
+- An expected gameplay loop of alternating between higher-intensity gameplay (like adventuring in dangerous environments for resources, managing unexpected happenings), and more relaxing gameplay (like processing resources and building, cooking and eating meals together, etc.)
+
+Roughly expected gameplay:
+- Early-game: Struggling to survive in a wild environment (probably dying several times, and dying is harsh), gradually accumulating helpful assets to help you survive better. You may be throwing random scavenged things together for food, and may encounter other spaients for the first time.
+- Mid-game: More stably living with some infrastructure setup, probably with a home base and potentially also with an NPC friend or two, but now craving materials largely found in much more dangerous places for further development. You may prepare for and start expeditioning into places teeming with greater hazards and threatening lifeforms, probably dying several times as you make dicoveries and lay down helpful infrastructure.
+- Late-game: More comfortable living using advanced tech and infrastructure. Along with your closer friends, there may be small towns of NPCs with specialized professions. You'll probably continue returning to already explored regenerating areas for more resources, and may now occasionally explore mysterious yet even more dangerous biomes for valuables/exotics.
+
+<h5>(Updated 2026/1/14)</h5>
