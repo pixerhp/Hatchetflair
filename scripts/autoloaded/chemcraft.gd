@@ -49,6 +49,8 @@ func initialize_substance_textures():
 		if not DirAccess.get_open_error() == OK:
 			push_error("Failed to access a substance rendering texture assets folder.")
 		for filename: String in dir.get_files():
+			if not OS.has_feature("editor"):
+				filename = filename.replace(".import", "")
 			if not filename.get_extension() == "png": continue
 			var img: Image = load(textures_folder_path + filename).get_image()
 			if img == null: continue
