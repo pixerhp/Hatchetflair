@@ -1,6 +1,8 @@
-other games splash references ideas:
-	minecraft
+(This text document is for convenient mixed/miscellaneous development use, where I type whatever.)
+
+other similarish games splash references ideas:
 	hytale
+	minecraft
 	reforj
 	voima
 	lucid blocks
@@ -11,9 +13,12 @@ other games splash references ideas:
 	roblox lumber tycoon 2
 	roblox oaklands
 	roblox cavern crusher (?)
-	
-	roblox databrawl
 	terraria
+	...
+
+other games:
+	roblox databrawl
+	rodland of pipes
 	...
 
 plainite_white,alb_default,1.0,1.0,1.0,norm_default,spec_default
@@ -27,3 +32,10 @@ hive_yellow
 hive_blue
 salt
 bricks
+
+
+Secret developer note (Pixer, 2026/1/14):
+Going over stuff before the v2.0.0.0 release, and admittedly my requirements/standards have fallen
+(probably not going to add/implement more texture assets, etc for other ideas first before release)
+as I kindof just want to get the version out so I can make more real progress with c++ script 
+rewriting stuff and whatnot.
