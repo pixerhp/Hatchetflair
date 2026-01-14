@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="hf_icon_v3b_large.png" alt="Hatchetflair icon" width="128" height="auto" />
+  <img src="assets/game_icons/hatchetflair_2026q1_transparent_large.png" alt="Hatchetflair icon" width="128" height="auto" />
 </div>
 
 ## Official Links
