@@ -61,22 +61,24 @@ script = ExtResource("2_yy87l")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
-anchors_preset = 6
+anchors_preset = -1
 anchor_left = 1.0
-anchor_top = 0.5
+anchor_top = 0.1
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -216.0
-offset_top = -264.5
-offset_bottom = 264.5
+anchor_bottom = 0.9
+offset_left = -210.0
+offset_top = -0.064003
+offset_bottom = 0.0639648
 grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("4_tgdfa")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/PanelContainer"]
+custom_minimum_size = Vector2(210, 0)
 layout_mode = 2
 text = "==-=-== Movement ==-=-==
-(Hold down the right mouse button and move the mouse to angle your view.)
+(Hold down the 
+right mouse button and move the mouse to angle your view.)
 
 Lateral [W, A, S, and D]
 
@@ -95,7 +97,6 @@ Toggle Controls Info [F1]
 Toggle Debug Info [F5]
 Cycle Debug Borders [F6]
 Fullscreen Toggle [F11]"
-fit_content = true
 vertical_alignment = 1
 justification_flags = 171
 
