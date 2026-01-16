@@ -76,7 +76,7 @@ script = ExtResource("4_tgdfa")
 [node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/PanelContainer"]
 custom_minimum_size = Vector2(210, 0)
 layout_mode = 2
-text = "==-=-== Movement ==-=-==
+text = ">> MOVEMENT <<
 (Hold down the 
 right mouse button and move the mouse to angle your view.)
 
@@ -91,7 +91,7 @@ Absolute Down [C]
 Faster [Shift]
 Slower [Ctrl]
 
-==-=-== Other ==-=-==
+>> OTHER <<
 Close Game [Esc]
 Toggle Controls Info [F1]
 Toggle Debug Info [F5]
