@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Hatchetflair"
 config/description="A 3D sandbox survival game with a focus on materials and characters by Pixer H. P., currently very early in development."
-config/version="2.0.0.0"
+config/version="2.1.0.0"
 run/main_scene="uid://caemtw2ni7cl6"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Hatchetflair"
