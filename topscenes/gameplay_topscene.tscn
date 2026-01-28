@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://caemtw2ni7cl6"]
+[gd_scene format=3 uid="uid://caemtw2ni7cl6"]
 
 [ext_resource type="Script" uid="uid://dprqbtapra60j" path="res://scripts/flycam.gd" id="1_3dqie"]
 [ext_resource type="Script" uid="uid://cspicyqlp7atk" path="res://scripts/sun.gd" id="1_08y4y"]
@@ -27,40 +27,40 @@ size = Vector3(0.707, 0.707, 0.707)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tgdfa"]
 albedo_color = Color(1, 0, 0, 1)
 
-[node name="GameplayTopscene" type="Node3D"]
+[node name="GameplayTopscene" type="Node3D" unique_id=758008150]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1064053708]
 environment = SubResource("Environment_yy87l")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=554756490]
 transform = Transform3D(0.866025, 0.1235, -0.484508, 0, 0.969016, 0.246999, 0.5, -0.213907, 0.839192, 0, 0, 0)
 light_color = Color(1, 0.938, 0.83, 1)
 shadow_enabled = true
 script = ExtResource("1_08y4y")
 
-[node name="FlyCam" type="Camera3D" parent="."]
+[node name="FlyCam" type="Camera3D" parent="." unique_id=1379056950]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 script = ExtResource("1_3dqie")
 
-[node name="CenterMarker" type="Node3D" parent="."]
+[node name="CenterMarker" type="Node3D" parent="." unique_id=715464856]
 
-[node name="RedSphere" type="MeshInstance3D" parent="CenterMarker"]
+[node name="RedSphere" type="MeshInstance3D" parent="CenterMarker" unique_id=2006501703]
 mesh = SubResource("SphereMesh_3dqie")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_yy87l")
 
-[node name="RedCube" type="MeshInstance3D" parent="CenterMarker"]
+[node name="RedCube" type="MeshInstance3D" parent="CenterMarker" unique_id=38528305]
 mesh = SubResource("BoxMesh_08y4y")
 surface_material_override/0 = SubResource("StandardMaterial3D_tgdfa")
 
-[node name="TChunksContainer" type="Node3D" parent="."]
+[node name="TChunksContainer" type="Node3D" parent="." unique_id=272623845]
 unique_name_in_owner = true
 script = ExtResource("2_yy87l")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1872278686]
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer" unique_id=394316133]
 anchors_preset = -1
 anchor_left = 1.0
 anchor_top = 0.1
@@ -73,7 +73,7 @@ grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("4_tgdfa")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/PanelContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/PanelContainer" unique_id=1576172860]
 custom_minimum_size = Vector2(210, 0)
 layout_mode = 2
 text = ">> MOVEMENT <<
@@ -100,5 +100,5 @@ Fullscreen Toggle [F11]"
 vertical_alignment = 1
 justification_flags = 171
 
-[node name="Paige" type="Node3D" parent="."]
+[node name="Paige" type="Node3D" parent="." unique_id=1179630598]
 transform = Transform3D(-0.280998, 0.856633, 0.432688, 0.803336, 0.456616, -0.382299, -0.525062, 0.240169, -0.816473, -5.81925, 2.57934, 4.96455)
