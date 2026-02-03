@@ -1,4 +1,56 @@
-# Godot 4+ specific ignores
 .godot/
-/android/
-bin/
+
+bin/*
+!bin/android
+bin/android/*
+!bin/android/.gitkeep
+!bin/linux
+bin/linux/*
+!bin/linux/.gitkeep
+!bin/macos
+bin/macos/*
+!bin/macos/.gitkeep
+!bin/windows
+bin/windows/*
+!bin/windows/.gitkeep
+!bin/*.gdextension
+
+.sconsign*.dblite
+custom.py
+compile_commands.json
+/src/gen
+
+# Binaries
+*.o
+*.os
+*.so
+*.obj
+*.bc
+*.pyc
+*.dblite
+*.pdb
+*.lib
+*.config
+*.creator
+*.creator.user
+*.files
+*.includes
+*.idb
+*.exp
+
+*.exe
+*.x86_64
+
+*.log
+
+# VSCode
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
+# Jetbrains
+.idea/
+
+# Cmake
+cmake-build*
+CMakeUserPresets.json
