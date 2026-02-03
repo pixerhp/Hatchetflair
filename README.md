@@ -1,5 +1,5 @@
 <div align="center">
-	<img src="assets/game_icons/hatchetflair_2026q1_transparent_large.png" alt="Hatchetflair icon" width="128" height="auto" />
+	<img src="godot_project/assets/game_icons/hatchetflair_2026q1_transparent_large.png" alt="Hatchetflair icon" width="128" height="auto" />
 	<h3>HATCHETFLAIR</h3>
 </div>
 
