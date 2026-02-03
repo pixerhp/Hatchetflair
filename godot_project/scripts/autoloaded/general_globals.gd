@@ -16,3 +16,8 @@ func _process(_delta):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	
 	# !!! Can later implement Screenshot, toggle Console window, etc...
+
+
+func _ready():
+	var test: ExampleClass = ExampleClass.new()
+	test.print_type("wowza")

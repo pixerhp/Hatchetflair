@@ -1,0 +1,20 @@
+[configuration]
+
+entry_symbol = "hatchetflair_library_init"
+compatibility_minimum = "4.5"
+reloadable = true
+
+[libraries]
+
+macos.debug = "../bin/macos/libhf_gde_dependency.macos.template_debug.dylib"
+macos.release = "../bin/macos/libhf_gde_dependency.macos.template_release.dylib"
+windows.debug.x86_32 = "../bin/windows/hf_gde_dependency.windows.template_debug.x86_32.dll"
+windows.release.x86_32 = "../bin/windows/hf_gde_dependency.windows.template_release.x86_32.dll"
+windows.debug.x86_64 = "../bin/windows/hf_gde_dependency.windows.template_debug.x86_64.dll"
+windows.release.x86_64 = "../bin/windows/hf_gde_dependency.windows.template_release.x86_64.dll"
+linux.debug.x86_64 = "../bin/linux/libhf_gde_dependency.linux.template_debug.x86_64.so"
+linux.release.x86_64 = "../bin/linux/libhf_gde_dependency.linux.template_release.x86_64.so"
+linux.debug.arm64 = "../bin/linux/libhf_gde_dependency.linux.template_debug.arm64.so"
+linux.release.arm64 = "../bin/linux/libhf_gde_dependency.linux.template_release.arm64.so"
+linux.debug.rv64 = "../bin/linux/libhf_gde_dependency.linux.template_debug.rv64.so"
+linux.release.rv64 = "../bin/linux/libhf_gde_dependency.linux.template_release.rv64.so"
