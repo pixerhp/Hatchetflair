@@ -1,18 +1,19 @@
 The Hatchetflair License
 
-Copyright © 2026/1/14 Pixer H. P.
+Copyright © 2026/2/3 Pixer H. P.
 
 ----
 
-* You may view and learn from this source, and may suggest edits and ideas to the developers of Hatchetflair. 
-* You may compile this source and run the resulting compiled program for personal use.
+(Permissions:)
+* You may view and learn from this source, and may compile this source and run the resulting compiled program for personal use.
+
+(Forbiddances:)
+* You may NOT distribute this source or any resulting compiled binaries, in whole or in part, except for the actions layed out in "License Grant to Other Users" in the GitHub Terms of Service (such as forking the repository), without explicit written permission from Pixer H. P.
+* You may NOT use this source, in whole or in part, for training AI neural networks or any other conventional form of "generative AI", without explicit written permission from Pixer H. P.
 
 ----
 
-* You may NOT copy, modify, distribute, or create forks of this source, in whole or in part, without explicit written permission from Pixer H. P.
-* You may NOT use use this source (in whole or in part) for training AI neural networks or any conventional form of "generative AI", without explicit written permission from Pixer H. P.
-
-----
+The above copyright notice and this permission notice shall be included in all forks, copies, or substantial portions of the Software.
 
 All rights reserved.
 
