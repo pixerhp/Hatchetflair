@@ -4,7 +4,16 @@
 #include "godot_cpp/classes/wrapped.hpp"
 #include "godot_cpp/variant/variant.hpp"
 
+#include <cstdint>
+
 using namespace godot;
+
+class WorldChunk {
+	public:
+		std::uint64_t chunk_coords[3];
+		std::uint64_t seed;
+		unsigned char tile_shapes[4096];
+};
 
 class ExampleClass : public RefCounted {
 	GDCLASS(ExampleClass, RefCounted)
