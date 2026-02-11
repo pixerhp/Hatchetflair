@@ -21,8 +21,8 @@ run/main_scene="uid://caemtw2ni7cl6"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Hatchetflair"
 config/features=PackedStringArray("4.6", "Forward Plus")
-boot_splash/image="uid://bgc6senn56vq4"
-config/icon="uid://bgc6senn56vq4"
+boot_splash/image="uid://bfjqh7b5eq6m5"
+config/icon="uid://bl16lgqqr08fy"
 
 [autoload]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgc6senn56vq4"
-path="res://.godot/imported/hatchetflair_2026q1_transparent_large.png-9839628375a22d86f58628dcde9f4022.ctex"
+uid="uid://bl16lgqqr08fy"
+path="res://.godot/imported/Hatchetflair_2026Q1.svg-627de581e373cd1cffcea847e1623b7a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game_icons/hatchetflair_2026q1_transparent_large.png"
-dest_files=["res://.godot/imported/hatchetflair_2026q1_transparent_large.png-9839628375a22d86f58628dcde9f4022.ctex"]
+source_file="res://assets/game_icons/Hatchetflair_2026Q1.svg"
+dest_files=["res://.godot/imported/Hatchetflair_2026Q1.svg-627de581e373cd1cffcea847e1623b7a.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false
