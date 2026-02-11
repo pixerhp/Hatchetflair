@@ -1,5 +1,5 @@
-#include "chunks_manager.h"
-#include "world_utils.h"
+#include "chunks_manager.hpp"
+#include "world_utils.hpp"
 
 void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("print_type", "variant"), &ExampleClass::print_type);
