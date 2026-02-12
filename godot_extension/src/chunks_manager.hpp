@@ -13,7 +13,10 @@ class WorldChunk {
 		std::uint64_t chunk_coords[3];
 		std::uint64_t seed;
 		unsigned char tile_shapes[4096];
+
+		Error generate();
 };
+
 
 class ExampleClass : public RefCounted {
 	GDCLASS(ExampleClass, RefCounted)

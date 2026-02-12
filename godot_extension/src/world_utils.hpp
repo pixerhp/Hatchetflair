@@ -2,8 +2,8 @@
 
 namespace TILE_SHAPE {
 	enum : unsigned char {
-		EMPTY,
-		FULL,
+		EMPTY = 0,
+		FULL = 1,
 	};
 }
 
