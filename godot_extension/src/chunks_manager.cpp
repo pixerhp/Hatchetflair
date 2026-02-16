@@ -1,9 +1,5 @@
 #include "chunks_manager.hpp"
 
-void WorldChunk::_bind_methods() {
-	godot::ClassDB::bind_method(D_METHOD("generate"), &WorldChunk::generate);
-}
-
 Error WorldChunk::generate() {
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::mt19937 rand_int_generator(seed); // Mersenne Twister engine

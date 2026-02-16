@@ -14,16 +14,11 @@
 
 using namespace godot;
 
-class WorldChunk : public RefCounted  {
-	GDCLASS(WorldChunk, RefCounted)
-
+class WorldChunk {
 	protected:
 		static void _bind_methods();
 
 	public:
-		WorldChunk() = default;
-		~WorldChunk() override = default;
-
 		static const int T_LENGTH = 16;
 		static const int T_COUNT = T_LENGTH * T_LENGTH * T_LENGTH;
 
