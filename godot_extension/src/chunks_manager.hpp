@@ -7,6 +7,10 @@
 
 #include <cstdint>
 #include <map>
+#include <variant>
+#include <random>
+
+#include "world_utils.hpp"
 
 using namespace godot;
 
@@ -20,10 +24,20 @@ class WorldChunk : public RefCounted  {
 		WorldChunk() = default;
 		~WorldChunk() override = default;
 
-		Vector3i chunk_coords;
-		std::uint64_t chunk_seed;
-		unsigned char tile_shapes[4096];
+		static const int T_LENGTH = 16;
+		static const int T_COUNT = T_LENGTH * T_LENGTH * T_LENGTH;
 
+		Vector3i chunk_coords = Vector3i();
+		std::uint64_t chunk_seed = 0;
+		unsigned char terrtile_shapes[4096];
+		std::variant<
+			TERRTILE_DATAFORMAT::NO_DATA, 
+			TERRTILE_DATAFORMAT::EMPTY, 
+			TERRTILE_DATAFORMAT::FULL, 
+			TERRTILE_DATAFORMAT::WEICENORM
+		> terrtile_datas[4096];
+
+	public:
 		Error generate();
 };
 
@@ -37,7 +51,7 @@ class WorldChunksManager : public RefCounted {
 		WorldChunksManager() = default;
 		~WorldChunksManager() override = default;
 
-		std::map<Vector3i, WorldChunk> chunks_map;
+		std::map<Vector3i, WorldChunk> chunks_map = {};
 
 		void example_function();
 };

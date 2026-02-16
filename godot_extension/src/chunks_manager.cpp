@@ -1,6 +1,4 @@
 #include "chunks_manager.hpp"
-#include "world_utils.hpp"
-#include <random>
 
 void WorldChunk::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("generate"), &WorldChunk::generate);
@@ -9,9 +7,9 @@ void WorldChunk::_bind_methods() {
 Error WorldChunk::generate() {
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::mt19937 rand_int_generator(seed); // Mersenne Twister engine
-	std::uniform_int_distribution<int> dist(0, 1); // Random int range
+	std::uniform_int_distribution<int> dist(1, 2); // Random int range
 	for (int i = 0; i < 4096; i++) {
-		tile_shapes[i] = dist(rand_int_generator);
+		terrtile_shapes[i] = dist(rand_int_generator);
 	}
 	return OK;
 }
