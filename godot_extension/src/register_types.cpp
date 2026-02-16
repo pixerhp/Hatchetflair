@@ -15,6 +15,7 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level)
 		return;
 	}
 	//GDREGISTER_CLASS(ExampleClass);
+	GDREGISTER_CLASS(WorldChunk);
 	GDREGISTER_CLASS(WorldChunksManager);
 	
 }

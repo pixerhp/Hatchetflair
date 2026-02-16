@@ -3,7 +3,6 @@
 #include "godot_cpp/classes/ref_counted.hpp"
 #include "godot_cpp/classes/wrapped.hpp"
 #include "godot_cpp/variant/variant.hpp"
-
 #include "godot_cpp/variant/vector3i.hpp"
 
 #include <cstdint>
@@ -11,16 +10,22 @@
 
 using namespace godot;
 
-class WorldChunk {
+class WorldChunk : public RefCounted  {
+	GDCLASS(WorldChunk, RefCounted)
+
+	protected:
+		static void _bind_methods();
+
 	public:
+		WorldChunk() = default;
+		~WorldChunk() override = default;
+
 		Vector3i chunk_coords;
 		std::uint64_t chunk_seed;
 		unsigned char tile_shapes[4096];
 
 		Error generate();
 };
-
-extern std::map<Vector3i, WorldChunk> world_chunks;
 
 class WorldChunksManager : public RefCounted {
 	GDCLASS(WorldChunksManager, RefCounted)
@@ -31,6 +36,8 @@ class WorldChunksManager : public RefCounted {
 	public:
 		WorldChunksManager() = default;
 		~WorldChunksManager() override = default;
+
+		std::map<Vector3i, WorldChunk> chunks_map;
 
 		void example_function();
 };
