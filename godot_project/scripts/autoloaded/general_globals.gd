@@ -19,5 +19,5 @@ func _process(_delta):
 
 
 func _ready():
-	var test: ExampleClass = ExampleClass.new()
-	test.print_type("wowza")
+	var wcm: WorldChunksManager = WorldChunksManager.new()
+	wcm.example_function()

@@ -22,8 +22,22 @@ class WorldChunk {
 
 extern std::map<Vector3i, WorldChunk> world_chunks;
 
+class WorldChunksManager : public RefCounted {
+	GDCLASS(WorldChunksManager, RefCounted)
 
-class ExampleClass : public RefCounted {
+	protected:
+		static void _bind_methods();
+	
+	public:
+		WorldChunksManager() = default;
+		~WorldChunksManager() override = default;
+
+		void example_function();
+};
+
+
+
+/*class ExampleClass : public RefCounted {
 	GDCLASS(ExampleClass, RefCounted)
 
 protected:
@@ -34,4 +48,4 @@ public:
 	~ExampleClass() override = default;
 
 	void print_type(const Variant &p_variant) const;
-};
+};*/

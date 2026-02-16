@@ -15,20 +15,21 @@ Error WorldChunk::generate() {
 std::map<Vector3i, WorldChunk> world_chunks = {};
 
 
-void ExampleClass::_bind_methods() {
+void WorldChunksManager::_bind_methods() {
+	godot::ClassDB::bind_method(D_METHOD("example_function"), &WorldChunksManager::example_function);
+}
+
+void WorldChunksManager::example_function() {
+	print_line("Hello from WorldChunksManager!");
+}
+
+
+
+
+/*void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("print_type", "variant"), &ExampleClass::print_type);
 }
 
 void ExampleClass::print_type(const Variant &p_variant) const {
-	WorldChunk test_chunk = WorldChunk();
 	print_line(vformat("Type: %d", p_variant.get_type()));
-	// print_line(vformat("Hello! %d %d", WorldUtils::get_instance().testval, WorldUtils::get_instance().undefinedint));
-	print_line(vformat("Some tile shapes: %d %d", test_chunk.tile_shapes[0], test_chunk.tile_shapes[4095]));
-	print_line(vformat("Enum test: %d %d", TILE_SHAPE::FULL, TILE_SHAPE::EMPTY));
-	print_line(vformat("Test chunk generation status: %d", test_chunk.generate()));
-	print_line(vformat("First few tiles of test chunk: %d %d %d %d %d %d %d %d", test_chunk.tile_shapes[0], test_chunk.tile_shapes[1], test_chunk.tile_shapes[2], test_chunk.tile_shapes[3], test_chunk.tile_shapes[4], test_chunk.tile_shapes[5], test_chunk.tile_shapes[6], test_chunk.tile_shapes[7]));
-
-	world_chunks[Vector3i(1, 2, 3)] = WorldChunk();
-	world_chunks[Vector3i(1, 2, 3)].chunk_seed = 4567;
-	print_line(vformat("chunk seed of new chunk: %d", world_chunks[Vector3i(1, 2, 3)].chunk_seed));
-}
+}*/
