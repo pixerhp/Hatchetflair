@@ -20,8 +20,6 @@ void WorldChunksManager::example_function() {
 }
 
 
-
-
 /*void ExampleClass::_bind_methods() {
 	godot::ClassDB::bind_method(D_METHOD("print_type", "variant"), &ExampleClass::print_type);
 }

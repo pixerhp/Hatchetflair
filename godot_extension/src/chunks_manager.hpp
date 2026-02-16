@@ -15,9 +15,6 @@
 using namespace godot;
 
 class WorldChunk {
-	protected:
-		static void _bind_methods();
-
 	public:
 		static const int T_LENGTH = 16;
 		static const int T_COUNT = T_LENGTH * T_LENGTH * T_LENGTH;
