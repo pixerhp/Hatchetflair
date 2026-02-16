@@ -4,18 +4,23 @@
 #include "godot_cpp/classes/wrapped.hpp"
 #include "godot_cpp/variant/variant.hpp"
 
+#include "godot_cpp/variant/vector3i.hpp"
+
 #include <cstdint>
+#include <map>
 
 using namespace godot;
 
 class WorldChunk {
 	public:
-		std::uint64_t chunk_coords[3];
-		std::uint64_t seed;
+		Vector3i chunk_coords;
+		std::uint64_t chunk_seed;
 		unsigned char tile_shapes[4096];
 
 		Error generate();
 };
+
+extern std::map<Vector3i, WorldChunk> world_chunks;
 
 
 class ExampleClass : public RefCounted {
