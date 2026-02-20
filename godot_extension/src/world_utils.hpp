@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <vector>
 
+namespace world_utils {
+
 namespace TERRTILE_SHAPE {
 	enum : unsigned char {
 		NO_DATA = 0,
@@ -18,7 +20,7 @@ namespace TERRTILE_SHAPE {
 	};
 }
 
-union TERRTILE_DATAFORMATS_UNION {
+union TERRTILE_DATAFORMATS {
 	struct NO_DATA {};
 	struct EMPTY {};
 	struct FULL {
@@ -53,3 +55,5 @@ union TERRTILE_DATAFORMATS_UNION {
 		int testval;
 		int undefinedint;
 };*/
+
+}

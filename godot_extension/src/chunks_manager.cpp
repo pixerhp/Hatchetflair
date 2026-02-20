@@ -4,9 +4,9 @@ Error WorldChunk::generate() {
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::mt19937 rand_int_generator(seed); // Mersenne Twister engine
 	std::uniform_int_distribution<int> dist(1, 2); // Random int range
-	for (int i = 0; i < 4096; i++) {
-		terrtile_shapes[i] = dist(rand_int_generator);
-	}
+	for (int i = 0; i < 64; i++) { for (int j = 0; j < 64; j++) {
+		terrtile_shapes[i][j] = dist(rand_int_generator);
+	}}
 	return OK;
 }
 
