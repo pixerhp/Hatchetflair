@@ -22,12 +22,7 @@ class WorldChunk {
 		Vector3i chunk_coords = Vector3i();
 		std::uint64_t chunk_seed = 0;
 		unsigned char terrtile_shapes[4096];
-		std::variant<
-			TERRTILE_DATAFORMAT::NO_DATA, 
-			TERRTILE_DATAFORMAT::EMPTY, 
-			TERRTILE_DATAFORMAT::FULL, 
-			TERRTILE_DATAFORMAT::WEICENORM
-		> terrtile_datas[4096];
+		TERRTILE_DATAFORMATS_UNION terrtile_data[4096];
 
 	public:
 		Error generate();

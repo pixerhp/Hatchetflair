@@ -18,7 +18,7 @@ namespace TERRTILE_SHAPE {
 	};
 }
 
-namespace TERRTILE_DATAFORMAT {
+union TERRTILE_DATAFORMATS_UNION {
 	struct NO_DATA {};
 	struct EMPTY {};
 	struct FULL {
@@ -30,7 +30,7 @@ namespace TERRTILE_DATAFORMAT {
 		godot::Vector2 norm = godot::Vector2();
 	};
 	// (... to be continued)
-}
+};
 
 
 /*class WorldUtils {
