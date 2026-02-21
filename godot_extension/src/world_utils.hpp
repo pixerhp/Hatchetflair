@@ -34,6 +34,9 @@ union TERRTILE_DATAFORMATS {
 	// (... to be continued)
 };
 
+void _toolfunc_gen_lattice_dist_shells();
+
+const std::vector<std::vector<char>> lattice_dist_shells;
 
 /*class WorldUtils {
 	public:
