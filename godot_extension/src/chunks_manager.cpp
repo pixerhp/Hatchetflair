@@ -16,7 +16,8 @@ void WorldChunksManager::_bind_methods() {
 }
 
 void WorldChunksManager::example_function() {
-	print_line("Hello from WorldChunksManager!");
+	world_utils::_toolfunc_gen_voxel_dist_shells();
+	//print_line("Hello from WorldChunksManager!");
 }
 
 
