@@ -47,7 +47,6 @@ class WorldChunksManager : public godot::RefCounted {
 		void test_function();
 
 		godot::Vector3i get_nearest_unloaded(godot::Vector3i from, int count_limit = -1);
-			// !!! perhaps cache 'from' and also the found result, so that if the function gets called again with the same 'from' it can resume from where it left off?
 		//Vector3i get_nearest_unloaded_by_cubeshell(Vector3i from, int count_limit = -1);
 		std::vector<godot::Vector3i> get_loaded_beyond_r(godot::Vector3i from, float radius);
 		std::vector<godot::Vector3i> get_loaded_beyond_cubeshell(godot::Vector3i from, float radius);

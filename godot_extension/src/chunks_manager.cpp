@@ -8,6 +8,7 @@ godot::Error WorldChunk::generate() {
 		terrtile_shapes[i][j] = dist(rand_int_generator);
 	}}
 	return godot::OK;
+
 }
 
 
@@ -15,11 +16,35 @@ void WorldChunksManager::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("test_function"), &WorldChunksManager::test_function);
 }
 
+// For use in miscellaneous testing:
 void WorldChunksManager::test_function() {
-	world_utils::_toolfunc_gen_voxel_dist_shells();
+	//world_utils::_toolfunc_gen_voxel_dist_shells();
 	//godot::print_line(world_utils::VOXEL_DIST_SHELLS[27][0]);
-	//print_line("Hello from WorldChunksManager!");
+	//godot::print_line("Hello from WorldChunksManager!");
 }
+
+// !!! consider caching stuff or otherwise so that when situationally acceptable, you skip past an initial bunch of searches.
+godot::Vector3i WorldChunksManager::get_nearest_unloaded(godot::Vector3i from, int count_limit) {
+	int search_count = 0;
+	godot::Vector3i guess = godot::Vector3i();
+	for(int shell_index = 0; shell_index < world_utils::VOXEL_DIST_SHELLS.size(); shell_index++) {
+	for(int subshell_index = 0; subshell_index < world_utils::VOXEL_DIST_SHELLS[shell_index].size(); subshell_index++) {
+		guess = from + world_utils::VOXEL_DIST_SHELLS[shell_index][subshell_index];
+		if(chunks_map.contains(guess)) {
+			return(guess);
+		} else if (count_limit > 0) {
+			search_count++;
+			if(search_count >= count_limit) {
+				goto failcase;
+			}
+		}
+	}}
+	failcase:
+	return(from + godot::Vector3i(INT32_MAX,INT32_MAX,INT32_MAX));
+}
+
+
+
 
 
 /*void ExampleClass::_bind_methods() {
