@@ -16,8 +16,8 @@ void WorldChunksManager::_bind_methods() {
 }
 
 void WorldChunksManager::example_function() {
-	//world_utils::_toolfunc_gen_voxel_dist_shells();
-	godot::print_line(world_utils::voxel_dist_shells[27][0]);
+	world_utils::_toolfunc_gen_voxel_dist_shells();
+	//godot::print_line(world_utils::VOXEL_DIST_SHELLS[27][0]);
 	//print_line("Hello from WorldChunksManager!");
 }
 

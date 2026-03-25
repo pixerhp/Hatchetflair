@@ -37,7 +37,7 @@ union TERRTILE_DATAFORMATS {
 
 void _toolfunc_gen_voxel_dist_shells();
 
-extern const std::vector<std::vector<godot::Vector3i>> voxel_dist_shells;
+extern const std::vector<std::vector<godot::Vector3i>> VOXEL_DIST_SHELLS;
 
 /*class WorldUtils {
 	public:
