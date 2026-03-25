@@ -12,10 +12,10 @@ godot::Error WorldChunk::generate() {
 
 
 void WorldChunksManager::_bind_methods() {
-	godot::ClassDB::bind_method(godot::D_METHOD("example_function"), &WorldChunksManager::example_function);
+	godot::ClassDB::bind_method(godot::D_METHOD("test_function"), &WorldChunksManager::test_function);
 }
 
-void WorldChunksManager::example_function() {
+void WorldChunksManager::test_function() {
 	world_utils::_toolfunc_gen_voxel_dist_shells();
 	//godot::print_line(world_utils::VOXEL_DIST_SHELLS[27][0]);
 	//print_line("Hello from WorldChunksManager!");

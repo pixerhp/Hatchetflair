@@ -20,4 +20,4 @@ func _process(_delta):
 
 func _ready():
 	var wcm: WorldChunksManager = WorldChunksManager.new()
-	wcm.example_function()
+	wcm.test_function()

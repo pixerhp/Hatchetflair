@@ -44,7 +44,7 @@ class WorldChunksManager : public godot::RefCounted {
 		WorldChunksManager() = default;
 		~WorldChunksManager() override = default;
 
-		void example_function();
+		void test_function();
 
 		godot::Vector3i get_nearest_unloaded(godot::Vector3i from, int count_limit = -1);
 			// !!! perhaps cache 'from' and also the found result, so that if the function gets called again with the same 'from' it can resume from where it left off?
