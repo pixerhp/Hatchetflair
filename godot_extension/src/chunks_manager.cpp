@@ -18,9 +18,9 @@ void WorldChunksManager::_bind_methods() {
 
 // For use in miscellaneous testing:
 void WorldChunksManager::test_function() {
+	godot::print_line("Hello from WorldChunksManager's test func!");
 	//world_utils::_toolfunc_gen_voxel_dist_shells();
 	//godot::print_line(world_utils::VOXEL_DIST_SHELLS[27][0]);
-	//godot::print_line("Hello from WorldChunksManager!");
 }
 
 // !!! consider caching stuff or otherwise so that when situationally acceptable, you skip past an initial bunch of searches.
