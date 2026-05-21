@@ -2,8 +2,18 @@ extends Node
 
 var draw_debug_chunkborders: bool = true
 
-func byte_as_string(num: int) -> String:
-	return ("%08s" % String.num_int64(num, 2)).replace(" ", "0")
+func _ready():
+	_initialize_window_title()
+	var wcm: WorldChunksManager = WorldChunksManager.new()
+	wcm.test_function()
+
+func _initialize_window_title():
+	await get_tree().process_frame
+	DisplayServer.window_set_title(
+		ProjectSettings.get_setting("application/config/name")#.to_upper()
+		+ " v" + ProjectSettings.get_setting("application/config/version")
+		+ (" (indev)" if OS.is_debug_build() else "")
+	)
 
 func _process(_delta):
 	# Process inputs that should work regardless of game state:
@@ -17,7 +27,5 @@ func _process(_delta):
 	
 	# !!! Can later implement Screenshot, toggle Console window, etc...
 
-
-func _ready():
-	var wcm: WorldChunksManager = WorldChunksManager.new()
-	wcm.test_function()
+func byte_as_string(num: int) -> String:
+	return ("%08s" % String.num_int64(num, 2)).replace(" ", "0")
