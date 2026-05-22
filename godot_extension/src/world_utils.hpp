@@ -13,9 +13,9 @@ namespace TERRTILE_SHAPE {
 		NO_DATA = 0,
 		EMPTY = 1,
 		FULL,
-		WEICENORM,
+		SLOPESTITCH,
 		TERRACE,
-		CUBIC,
+		CUBIC, //(similar to full, but uses a tileset dependant on adjacent cubic tiles rather than an independant simple texture?)
 		BIG_RHOMBDO,
 		MINI_RHOMBDOS,
 	};
