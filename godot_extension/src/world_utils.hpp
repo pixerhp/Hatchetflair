@@ -28,10 +28,15 @@ union TERRTILE_DATAFORMATS {
 		int material_index = 0;
 	};
 	struct SLOPESTITCH {
+		uint16_t material_inds = 0;
+		float weight = 0.5;
+		godot::Vector2 normal = godot::Vector2();
+	};
+	/*struct SLOPESTITCH { // !!! (may update slopestitching to feature multiple layers of material in a tile in the future.)
 		std::vector<uint16_t> material_inds = {};
 		std::vector<float> weights = {};
 		godot::Vector2 norm = godot::Vector2();
-	};
+	};*/
 	// (... to be continued)
 };
 
