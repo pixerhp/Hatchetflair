@@ -27,7 +27,7 @@ union TERRTILE_DATAFORMATS {
 	struct FULL {
 		int material_index = 0;
 	};
-	struct WEICENORM {
+	struct SLOPESTITCH {
 		std::vector<uint16_t> material_inds = {};
 		std::vector<float> weights = {};
 		godot::Vector2 norm = godot::Vector2();
