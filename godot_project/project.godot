@@ -22,7 +22,7 @@ config/use_custom_user_dir=true
 config/custom_user_dir_name="Hatchetflair"
 config/features=PackedStringArray("4.6", "Forward Plus")
 boot_splash/image="uid://bfjqh7b5eq6m5"
-config/icon="uid://bdkp2pp8c8x0m"
+config/icon="uid://btjmnvgn7hqna"
 
 [autoload]
 

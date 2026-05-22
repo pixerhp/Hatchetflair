@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdkp2pp8c8x0m"
-path="res://.godot/imported/mini_2026q2_1280x.png-ae2abf188a5f5c8ced4505cbc69bc6c4.ctex"
+uid="uid://btjmnvgn7hqna"
+path="res://.godot/imported/mini_2026q2_v3_1280x.png-05aa140e10203831a8d323edb8a5e8bc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game_icons/mini_2026q2_1280x.png"
-dest_files=["res://.godot/imported/mini_2026q2_1280x.png-ae2abf188a5f5c8ced4505cbc69bc6c4.ctex"]
+source_file="res://assets/game_icons/mini_2026q2_v3_1280x.png"
+dest_files=["res://.godot/imported/mini_2026q2_v3_1280x.png-05aa140e10203831a8d323edb8a5e8bc.ctex"]
 
 [params]
 
