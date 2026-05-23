@@ -52,8 +52,8 @@ class WorldChunksManager : public godot::RefCounted {
 
 		godot::Vector3i get_nearest_unloaded_by_dist(godot::Vector3i from, int check_limit = INT32_MAX);
 		godot::Vector3i get_nearest_unloaded_by_cubeshell(godot::Vector3i from, int check_limit = INT32_MAX);
-		std::vector<godot::Vector3i> get_loaded_beyond_dist(godot::Vector3i from, float radius);
-		std::vector<godot::Vector3i> get_loaded_beyond_cubeshell(godot::Vector3i from, int radius);
+		std::vector<godot::Vector3i> get_loaded_beyond_dist(godot::Vector3i from, float radius, int result_limit = INT32_MAX);
+		std::vector<godot::Vector3i> get_loaded_beyond_cubeshell(godot::Vector3i from, int radius, int result_limit = INT32_MAX);
 		// !!! possibly also if needed: get_[single]_farthest_loaded, get_[all]_unloaded_before...
 		godot::Error checkdo_load(godot::Vector3i where);
 		godot::Error checkdo_unload(godot::Vector3i where);

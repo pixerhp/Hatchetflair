@@ -120,14 +120,27 @@ godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vec
 	return(from_chuords + FAIL_CHUORDS);
 }
 
-std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_dist(godot::Vector3i from, float radius) {
+std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_dist(godot::Vector3i from, float radius, int result_limit) {
 	// !!!
+	// !!! binary search tree to find the dist-shell where the limit is?
 	return{};
 }
 
-std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_cubeshell(godot::Vector3i from, int radius) {
-	// !!!
-	return{};
+std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_cubeshell(godot::Vector3i from, int radius, int result_limit) {
+	std::vector<godot::Vector3i> results = {};
+	for(const auto &pair : chunks_map) {
+		godot::Vector3i relative_chuords = pair.first - from;
+		for(int axis = 0; axis < 3; axis++) {
+			if(abs(relative_chuords[axis]) > radius) {
+				results.push_back(pair.first);
+				if(results.size() >= result_limit) {
+					return(results);
+				}
+				break;
+			}
+		}
+	}
+	return(results);
 }
 
 
