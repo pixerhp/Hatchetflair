@@ -120,7 +120,15 @@ godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vec
 	return(from_choords + FAIL_CHOORDS);
 }
 
+std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_dist(godot::Vector3i from, float radius) {
+	// !!!
+	return{};
+}
 
+std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_cubeshell(godot::Vector3i from, int radius) {
+	// !!!
+	return{};
+}
 
 
 /*void ExampleClass::_bind_methods() {
