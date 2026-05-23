@@ -15,16 +15,19 @@ func _initialize_window_title():
 		+ (" (indev)" if OS.is_debug_build() else "")
 	)
 
+var _pre_fullscreen_window_mode: int = ProjectSettings.get_setting("display/window/size/mode")
 func _process(_delta):
-	# Process inputs that should work regardless of game state:
+	# Inputs processed regardless of game state:
 	if Input.is_action_just_pressed("escape"):
 		get_tree().quit()
 	if Input.is_action_just_pressed("fullscreen_toggle"):
 		if not DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+			_pre_fullscreen_window_mode = DisplayServer.window_get_mode()
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		else:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-	
+			if _pre_fullscreen_window_mode == DisplayServer.WINDOW_MODE_FULLSCREEN:
+				_pre_fullscreen_window_mode = DisplayServer.WINDOW_MODE_WINDOWED
+			DisplayServer.window_set_mode(_pre_fullscreen_window_mode)
 	# !!! Can later implement Screenshot, toggle Console window, etc...
 
 func byte_as_string(num: int) -> String:
