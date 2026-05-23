@@ -36,7 +36,9 @@ void WorldChunksManager::test_function() {
 	godot::print_line(WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vector3i(0,0,0), 5));
 }
 
-// !!! consider caching stuff or otherwise so that when situationally acceptable, you skip past an initial bunch of searches.
+// !!! for get nearest unloaded, consider caching stuff or otherwise so that when situationally acceptable, you skip past an initial bunch of searches.
+
+// (Note: Currently limited to size of hardcoded data.)
 godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_r(godot::Vector3i from, int count_limit) {
 	int search_count = 0;
 	godot::Vector3i guess = godot::Vector3i();
