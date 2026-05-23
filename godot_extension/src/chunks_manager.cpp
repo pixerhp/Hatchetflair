@@ -21,15 +21,19 @@ void WorldChunksManager::test_function() {
 	godot::print_line("Hello from WorldChunksManager's test func!");
 	//world_utils::_toolfunc_gen_voxel_dist_shells();
 	chunks_map[godot::Vector3i(0, 0, 0)] = WorldChunk();
-	chunks_map[godot::Vector3i(1, 0, 0)] = WorldChunk();
-	chunks_map[godot::Vector3i(0, 1, 0)] = WorldChunk();
-	chunks_map[godot::Vector3i(0, 0, 1)] = WorldChunk();
-	chunks_map[godot::Vector3i(-1, 0, 0)] = WorldChunk();
-	chunks_map[godot::Vector3i(0, -1, 0)] = WorldChunk();
-	chunks_map[godot::Vector3i(0, 0, -1)] = WorldChunk();
+	// chunks_map[godot::Vector3i(1, 0, 0)] = WorldChunk();
+	// chunks_map[godot::Vector3i(0, 1, 0)] = WorldChunk();
+	// chunks_map[godot::Vector3i(0, 0, 1)] = WorldChunk();
+	// chunks_map[godot::Vector3i(-1, 0, 0)] = WorldChunk();
+	// chunks_map[godot::Vector3i(0, -1, 0)] = WorldChunk();
+	// chunks_map[godot::Vector3i(0, 0, -1)] = WorldChunk();
+	for(int i = 0; i < 9; i++) {
+		chunks_map[godot::Vector3i((i%3)-1, -1, ((i/3)%3)-1)] = WorldChunk();
+	}
+	chunks_map[godot::Vector3i(-1, 0, -1)] = WorldChunk();
 	godot::print_line("Nearest unloaded chunk test: ");
 	godot::print_line(chunks_map.size());
-	godot::print_line(WorldChunksManager::get_nearest_unloaded_by_r(godot::Vector3i(0,0,0)));
+	godot::print_line(WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vector3i(0,0,0), 5));
 }
 
 // !!! consider caching stuff or otherwise so that when situationally acceptable, you skip past an initial bunch of searches.
@@ -39,23 +43,80 @@ godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_r(godot::Vector3i fr
 	for(int shell_index = 0; shell_index < world_utils::VOXEL_DIST_SHELLS.size(); shell_index++) {
 	for(int subshell_index = 0; subshell_index < world_utils::VOXEL_DIST_SHELLS[shell_index].size(); subshell_index++) {
 		guess = from + world_utils::VOXEL_DIST_SHELLS[shell_index][subshell_index];
-		if(!chunks_map.contains(guess)) {
+		if(not chunks_map.contains(guess)) {
 			return(guess);
-		} else if (count_limit > 0) {
-			search_count++;
-			if(search_count >= count_limit) {
-				goto failcase;
-			}
+		}
+		search_count++;
+		if(search_count >= count_limit) {
+			goto failcase;
 		}
 	}}
 	failcase:
 	return(from + godot::Vector3i(INT32_MAX,INT32_MAX,INT32_MAX));
 }
 
-//godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vector3i from, int count_limit) {
-//	int search_count = 0;
-//	int shell_layer = 1;
-//}
+godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vector3i from, int count_limit) {
+	int search_count = 1;
+	int shell_layer = 1;
+	int corner_len = 0;
+	int x = 0, y = 0, z = 0;
+	godot::Vector3i guess = godot::Vector3i();
+	// 'from' central chunk check:
+	if(!chunks_map.contains(from)) {
+		return(from);
+	}
+	if(search_count >= count_limit) {
+		goto failcase;
+	}
+	// shells chunks checking:
+	while(true) {
+		corner_len = shell_layer;
+		x = y = z = corner_len * -1;
+		shell_layer++;
+		for(int i = 0; i < ((24*(shell_layer-2)*shell_layer)+26); i++) {
+			// Check, and increment the search count:
+			guess = from + godot::Vector3i(x, y, z);
+			if(not chunks_map.contains(guess)) {
+				return(guess);
+			}
+			search_count++;
+			if(search_count >= count_limit) {
+				goto failcase;
+			}
+			// Update x, y, z for the next check:
+			if(abs(y) == corner_len) { //(top/bottom full-square slice)
+				if((x == corner_len) and (z == corner_len)) {
+					x = z = corner_len * -1;
+					y++;
+				} else if(x == corner_len) {
+					x = corner_len * -1;
+					z++;
+				} else {
+					x++;
+				}
+			} else { //(middle hollow-square slice)
+				if((x == corner_len) and (z == corner_len)) {
+					x = z = corner_len * -1;
+					y++;
+				} else if(abs(z) == corner_len) {
+					if(x == corner_len){
+						x = corner_len * -1;
+						z++;
+					} else {
+						x++;
+					}
+				} else if(x == corner_len) {
+					x = corner_len * -1;
+					z++;
+				} else {
+					x = corner_len;
+				}
+			}
+		}
+	}
+	failcase:
+	return(from + godot::Vector3i(INT32_MAX,INT32_MAX,INT32_MAX));
+}
 
 
 
