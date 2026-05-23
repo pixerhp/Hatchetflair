@@ -20,17 +20,26 @@ void WorldChunksManager::_bind_methods() {
 void WorldChunksManager::test_function() {
 	godot::print_line("Hello from WorldChunksManager's test func!");
 	//world_utils::_toolfunc_gen_voxel_dist_shells();
-	//godot::print_line(world_utils::VOXEL_DIST_SHELLS[27][0]);
+	chunks_map[godot::Vector3i(0, 0, 0)] = WorldChunk();
+	chunks_map[godot::Vector3i(1, 0, 0)] = WorldChunk();
+	chunks_map[godot::Vector3i(0, 1, 0)] = WorldChunk();
+	chunks_map[godot::Vector3i(0, 0, 1)] = WorldChunk();
+	chunks_map[godot::Vector3i(-1, 0, 0)] = WorldChunk();
+	chunks_map[godot::Vector3i(0, -1, 0)] = WorldChunk();
+	chunks_map[godot::Vector3i(0, 0, -1)] = WorldChunk();
+	godot::print_line("Nearest unloaded chunk test: ");
+	godot::print_line(chunks_map.size());
+	godot::print_line(WorldChunksManager::get_nearest_unloaded_by_r(godot::Vector3i(0,0,0)));
 }
 
 // !!! consider caching stuff or otherwise so that when situationally acceptable, you skip past an initial bunch of searches.
-godot::Vector3i WorldChunksManager::get_nearest_unloaded(godot::Vector3i from, int count_limit) {
+godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_r(godot::Vector3i from, int count_limit) {
 	int search_count = 0;
 	godot::Vector3i guess = godot::Vector3i();
 	for(int shell_index = 0; shell_index < world_utils::VOXEL_DIST_SHELLS.size(); shell_index++) {
 	for(int subshell_index = 0; subshell_index < world_utils::VOXEL_DIST_SHELLS[shell_index].size(); subshell_index++) {
 		guess = from + world_utils::VOXEL_DIST_SHELLS[shell_index][subshell_index];
-		if(chunks_map.contains(guess)) {
+		if(!chunks_map.contains(guess)) {
 			return(guess);
 		} else if (count_limit > 0) {
 			search_count++;
@@ -43,6 +52,10 @@ godot::Vector3i WorldChunksManager::get_nearest_unloaded(godot::Vector3i from, i
 	return(from + godot::Vector3i(INT32_MAX,INT32_MAX,INT32_MAX));
 }
 
+//godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vector3i from, int count_limit) {
+//	int search_count = 0;
+//	int shell_layer = 1;
+//}
 
 
 

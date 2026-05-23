@@ -28,7 +28,7 @@ class WorldChunk {
 		// !!! cache 4x4x4 tile pieces of the chunk mesh, so that when only a small part changes, less remeshing work has to be done?
 
 	public:
-		godot::Error generate();
+		godot::Error generate(); //!!! take in a 64-bit bitmask for which chunkpieces should be generated?
 };
 
 class WorldChunksManager : public godot::RefCounted {
@@ -46,14 +46,13 @@ class WorldChunksManager : public godot::RefCounted {
 
 		void test_function();
 
-		godot::Vector3i get_nearest_unloaded(godot::Vector3i from, int count_limit = -1);
-		//Vector3i get_nearest_unloaded_by_cubeshell(Vector3i from, int count_limit = -1);
+		godot::Vector3i get_nearest_unloaded_by_r(godot::Vector3i from, int count_limit = -1);
+		godot::Vector3i get_nearest_unloaded_by_cubeshell(godot::Vector3i from, int count_limit = -1);
 		std::vector<godot::Vector3i> get_loaded_beyond_r(godot::Vector3i from, float radius);
 		std::vector<godot::Vector3i> get_loaded_beyond_cubeshell(godot::Vector3i from, float radius);
 		godot::Error checkdo_load(godot::Vector3i where);
 		godot::Error checkdo_unload(godot::Vector3i where);
-		godot::Error generate(godot::Vector3i where);
-		godot::Error remeshify(godot::Vector3i where, uint64_t piece_bits);	
+		godot::Error remeshify(godot::Vector3i where, uint64_t pieces_bitmask);	
 };
 
 
