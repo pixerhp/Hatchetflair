@@ -39,7 +39,7 @@ void WorldChunksManager::test_function() {
 // !!! for get nearest unloaded, consider caching stuff or otherwise so that when situationally acceptable, you skip past an initial bunch of searches.
 
 // (Note: Currently limited to size of hardcoded data.)
-godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_dist(godot::Vector3i from_choords, int count_limit) {
+godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_dist(godot::Vector3i from_choords, int check_limit) {
 	int search_count = 0;
 	godot::Vector3i guess = godot::Vector3i();
 	for(int shell_index = 0; shell_index < world_utils::VOXEL_DIST_SHELLS.size(); shell_index++) {
@@ -49,7 +49,7 @@ godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_dist(godot::Vector3i
 			return(guess);
 		}
 		search_count++;
-		if(search_count >= count_limit) {
+		if(search_count >= check_limit) {
 			goto failcase;
 		}
 	}}
@@ -57,7 +57,7 @@ godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_dist(godot::Vector3i
 	return(from_choords + FAIL_CHOORDS);
 }
 
-godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vector3i from_choords, int count_limit) {
+godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vector3i from_choords, int check_limit) {
 	int search_count = 1;
 	int shell_layer = 1;
 	int corner_len = 0;
@@ -67,7 +67,7 @@ godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vec
 	if(!chunks_map.contains(from_choords)) {
 		return(from_choords);
 	}
-	if(search_count >= count_limit) {
+	if(search_count >= check_limit) {
 		goto failcase;
 	}
 	// shells chunks checking:
@@ -82,7 +82,7 @@ godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vec
 				return(guess);
 			}
 			search_count++;
-			if(search_count >= count_limit) {
+			if(search_count >= check_limit) {
 				goto failcase;
 			}
 			// Update x, y, z for the next check:
