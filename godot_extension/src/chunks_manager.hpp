@@ -16,14 +16,14 @@
 
 
 const godot::Vector3 FAIL_COORDS = godot::Vector3(INFINITY, INFINITY, INFINITY);
-const godot::Vector3i FAIL_CHOORDS = godot::Vector3i(INT32_MAX,INT32_MAX,INT32_MAX);
+const godot::Vector3i FAIL_CHUORDS = godot::Vector3i(INT32_MAX,INT32_MAX,INT32_MAX);
 
 class WorldChunk {
 	public:
 		static const int T_LENGTH = 16;
 		static const int T_COUNT = T_LENGTH * T_LENGTH * T_LENGTH;
 
-		godot::Vector3i chunk_coords = godot::Vector3i();
+		godot::Vector3i chuords = godot::Vector3i();
 		std::uint64_t world_seed = 0;
 		unsigned char terrtile_shapes[64][64];
 		world_utils::TERRTILE_DATAFORMATS terrtile_data[64][64];
