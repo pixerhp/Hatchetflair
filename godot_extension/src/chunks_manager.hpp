@@ -14,6 +14,10 @@
 
 //inline int xyz_to_t
 
+
+const godot::Vector3 FAIL_COORDS = godot::Vector3(INFINITY, INFINITY, INFINITY);
+const godot::Vector3i FAIL_CHOORDS = godot::Vector3i(INT32_MAX,INT32_MAX,INT32_MAX);
+
 class WorldChunk {
 	public:
 		static const int T_LENGTH = 16;
@@ -46,10 +50,11 @@ class WorldChunksManager : public godot::RefCounted {
 
 		void test_function();
 
-		godot::Vector3i get_nearest_unloaded_by_r(godot::Vector3i from, int count_limit = INT32_MAX);
+		godot::Vector3i get_nearest_unloaded_by_dist(godot::Vector3i from, int count_limit = INT32_MAX);
 		godot::Vector3i get_nearest_unloaded_by_cubeshell(godot::Vector3i from, int count_limit = INT32_MAX);
-		std::vector<godot::Vector3i> get_loaded_beyond_r(godot::Vector3i from, float radius);
+		std::vector<godot::Vector3i> get_loaded_beyond_dist(godot::Vector3i from, float radius);
 		std::vector<godot::Vector3i> get_loaded_beyond_cubeshell(godot::Vector3i from, float radius);
+		// !!! possibly also if needed: get_[single]_farthest_loaded, get_[all]_unloaded_before...
 		godot::Error checkdo_load(godot::Vector3i where);
 		godot::Error checkdo_unload(godot::Vector3i where);
 		godot::Error remeshify(godot::Vector3i where, uint64_t pieces_bitmask);	
