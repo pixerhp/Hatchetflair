@@ -32,9 +32,12 @@ void WorldChunksManager::test_function() {
 		chunks_map[godot::Vector3i((i%3)-1, -1, ((i/3)%3)-1)] = WorldChunk();
 	}
 	chunks_map[godot::Vector3i(-1, 0, -1)] = WorldChunk();
-	godot::print_line("Nearest unloaded chunk test: ");
-	godot::print_line(chunks_map.size());
-	godot::print_line(WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vector3i(0,0,0), 5));
+	godot::print_line("Chunks currently loaded: ", chunks_map.size());
+	godot::print_line("Get unloaded chunks test: ");
+	std::vector<godot::Vector3i> chunks_found = WorldChunksManager::get_unloaded_before_or_at_cubeshell(godot::Vector3i(0,0,0), 5.0, 200);
+	for(int i = 0; i < chunks_found.size(); i++) {
+		godot::print_line(chunks_found[i]);
+	}
 }
 
 bool WorldChunksManager::chunk_loading_routine(float load_radius, float unload_radius) {
@@ -127,13 +130,78 @@ godot::Vector3i WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vec
 	return(from_chuords + FAIL_CHUORDS);
 }
 
+
+std::vector<godot::Vector3i> WorldChunksManager::get_unloaded_before_or_at_dist(godot::Vector3i from_chuords, float radius, int result_limit) {
+	return{};
+}
+
+std::vector<godot::Vector3i> WorldChunksManager::get_unloaded_before_or_at_cubeshell(godot::Vector3i from_chuords, float radius, int result_limit) {
+	if(result_limit <= 0) {return{};}
+	radius = abs(radius);
+	int radius_ceil = ceilf(radius);
+	std::vector<godot::Vector3i> results = {};
+	if(result_limit != INT32_MAX) {results.reserve(result_limit);}
+
+	if(not chunks_map.contains(from_chuords)) {
+		results.push_back(from_chuords);
+	}
+	if((radius_ceil <= 1) or (results.size() >= result_limit)) {
+		return(results);
+	}
+
+	int octant_length;
+	int x, y, z;
+	for(int shell_layer = 2; shell_layer <= radius_ceil; shell_layer++) {
+		octant_length = shell_layer - 1;
+		x = y = z = octant_length * -1;
+		for(int i = 0; i < ((24*(shell_layer-2)*shell_layer)+26); i++) {
+			if(not chunks_map.contains(from_chuords + godot::Vector3i(x, y, z))) {
+				results.push_back(from_chuords + godot::Vector3i(x, y, z));
+				if(results.size() >= result_limit) {
+					return(results);
+				}
+			}
+			// Update x, y, z for the next check:
+			if(abs(y) == octant_length) { //(top/bottom full-square slice)
+				if((x == octant_length) and (z == octant_length)) {
+					x = z = octant_length * -1;
+					y++;
+				} else if(x == octant_length) {
+					x = octant_length * -1;
+					z++;
+				} else {
+					x++;
+				}
+			} else { //(middle hollow-square slice)
+				if((x == octant_length) and (z == octant_length)) {
+					x = z = octant_length * -1;
+					y++;
+				} else if(abs(z) == octant_length) {
+					if(x == octant_length){
+						x = octant_length * -1;
+						z++;
+					} else {
+						x++;
+					}
+				} else if(x == octant_length) {
+					x = octant_length * -1;
+					z++;
+				} else {
+					x = octant_length;
+				}
+			}
+		}
+	}
+	return(results);
+}
+
 std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_dist(godot::Vector3i from_chuords, float radius, int result_limit) {
 	if(result_limit <= 0) {return{};}
 	radius = abs(radius);
+	float radius_squared = radius*radius;
 	std::vector<godot::Vector3i> results = {};
 	if(result_limit != INT32_MAX) {results.reserve(result_limit);}
-	
-	float radius_squared = radius * radius;
+
 	for(const auto &pair : chunks_map) {
 		godot::Vector3i rel = pair.first - from_chuords;
 		float relative_distance_squared = float((int64_t(rel[0])*int64_t(rel[0])) + (int64_t(rel[1])*int64_t(rel[1])) + (int64_t(rel[2])*int64_t(rel[2])));
@@ -152,11 +220,12 @@ std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_cubeshell(god
 	radius = abs(radius);
 	std::vector<godot::Vector3i> results = {};
 	if(result_limit != INT32_MAX) {results.reserve(result_limit);}
+	int radius_ceil = ceilf(radius);
 
 	for(const auto &pair : chunks_map) {
 		godot::Vector3i relative_chuords = pair.first - from_chuords;
 		for(int axis = 0; axis < 3; axis++) {
-			if(abs(relative_chuords[axis]) > radius) {
+			if(abs(relative_chuords[axis]) > radius_ceil) {
 				results.push_back(pair.first);
 				if(results.size() >= result_limit) {
 					return(results);
