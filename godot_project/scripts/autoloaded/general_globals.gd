@@ -6,6 +6,7 @@ func _ready():
 	_initialize_window_title()
 	var wcm: WorldChunksManager = WorldChunksManager.new()
 	wcm.test_function()
+	
 
 func _initialize_window_title():
 	await get_tree().process_frame

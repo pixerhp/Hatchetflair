@@ -49,6 +49,7 @@ class WorldChunksManager : public godot::RefCounted {
 		~WorldChunksManager() override = default;
 
 		void test_function();
+		bool chunk_loading_routine(float load_radius, float unload_radius);
 
 		godot::Vector3i get_nearest_unloaded_by_dist(godot::Vector3i from_chuords, int check_limit = INT32_MAX);
 		godot::Vector3i get_nearest_unloaded_by_cubeshell(godot::Vector3i from_chuords, int check_limit = INT32_MAX);
@@ -57,7 +58,7 @@ class WorldChunksManager : public godot::RefCounted {
 		// !!! possibly also if needed: get_[single]_farthest_loaded, get_[all]_unloaded_before...
 		godot::Error checkdo_load(godot::Vector3i where);
 		godot::Error checkdo_unload(godot::Vector3i where);
-		godot::Error remeshify(godot::Vector3i where, uint64_t pieces_bitmask);	
+		godot::Error remeshify_terrtiles(godot::Vector3i where, uint64_t pieces_bitmask);	
 };
 
 

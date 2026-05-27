@@ -14,6 +14,7 @@ godot::Error WorldChunk::generate() {
 
 void WorldChunksManager::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("test_function"), &WorldChunksManager::test_function);
+	godot::ClassDB::bind_method(godot::D_METHOD("chunk_loading_routine", "load_radius", "unload_radius"), &WorldChunksManager::chunk_loading_routine);
 }
 
 // For use in miscellaneous testing:
@@ -35,6 +36,12 @@ void WorldChunksManager::test_function() {
 	godot::print_line(chunks_map.size());
 	godot::print_line(WorldChunksManager::get_nearest_unloaded_by_cubeshell(godot::Vector3i(0,0,0), 5));
 }
+
+bool WorldChunksManager::chunk_loading_routine(float load_radius, float unload_radius) {
+	return(true);
+}
+
+
 
 // !!! for get nearest unloaded, consider caching stuff or otherwise so that when situationally acceptable, you skip past an initial bunch of searches.
 
