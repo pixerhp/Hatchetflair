@@ -1,3 +1,5 @@
+# [Script contents sheduled for eventual demolition...]
+
 extends Node
 
 @onready var chunks_container_node: Node = self

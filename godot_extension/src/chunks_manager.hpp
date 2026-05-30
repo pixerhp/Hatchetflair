@@ -20,19 +20,21 @@ const godot::Vector3i FAIL_CHUORDS = godot::Vector3i(INT32_MAX,INT32_MAX,INT32_M
 
 class WorldChunk {
 	public:
-		static const int T_LENGTH = 16;
-		static const int T_COUNT = T_LENGTH * T_LENGTH * T_LENGTH;
-
-		godot::Vector3i chuords = godot::Vector3i();
-		std::uint64_t world_seed = 0;
-		unsigned char terrtile_shapes[64][64];
-		world_utils::TERRTILE_DATAFORMATS terrtile_data[64][64];
-		// !!! node references?
-
-		// !!! cache 4x4x4 tile pieces of the chunk mesh, so that when only a small part changes, less remeshing work has to be done?
-
+		static const int T_LEN = 16;
+		static const int T_COUNT = T_LEN * T_LEN * T_LEN;
+		static const int T_MESHCACHE_LEN = 4;
+		static const int T_MESHCACHE_COUNT = T_MESHCACHE_LEN * T_MESHCACHE_LEN * T_MESHCACHE_LEN;
 	public:
-		godot::Error generate(); //!!! take in a 64-bit bitmask for which chunkpieces should be generated?
+		godot::Vector3i chuords = FAIL_CHUORDS;
+		std::uint64_t world_seed = 0;
+		unsigned char terrtile_shapes[T_LEN][T_LEN][T_LEN];
+		world_utils::TERRTILE_DATAFORMATS terrtile_data[T_LEN][T_LEN][T_LEN];
+		// !!! something_type terrtile_meshing_cache[T_MESHCACHE_LEN][T_MESHCACHE_LEN][T_MESHCACHE_LEN]
+		// !!! store a list of tiles whose meshing was skipped until a surrounding chunk's data was generated?
+		// !!! (structures, etc...)
+		// !!! (store godot mesh/collision node references?)
+	public:
+		void regenerate_terrtiles();
 };
 
 class WorldChunksManager : public godot::RefCounted {
