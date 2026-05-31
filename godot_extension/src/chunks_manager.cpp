@@ -14,11 +14,16 @@ bool is_4x4_menger_sponge(int x, int y, int z) {
 }
 
 void WorldChunk::regenerate_terrtiles() {
-	for(int y=0; y<T_LEN; y++){ for(int z=0; z<T_LEN; z++){ for(int x=0; x<T_LEN; x++){
+	for(int tz=0; tz<T_LEN; tz++) { 
+	for(int ty=0; ty<T_LEN; ty++) { 
+	for(int tx=0; tx<T_LEN; tx++) {
+		int x = tx + (chuords[0] * T_LEN); 
+		int y = ty + (chuords[1] * T_LEN); 
+		int z = tz + (chuords[2] * T_LEN);
 		if(is_4x4_menger_sponge(x, y, z)) {
-			terrtile_shapes[x][y][z] = world_utils::TERRTILE_SHAPE::FULL;
+			terrtile_shapes[tx][ty][tz] = world_utils::TERRTILE_SHAPE::FULL;
 		} else {
-			terrtile_shapes[x][y][z] = world_utils::TERRTILE_SHAPE::EMPTY;
+			terrtile_shapes[tx][ty][tz] = world_utils::TERRTILE_SHAPE::EMPTY;
 		}
 	}}}
 	return;
