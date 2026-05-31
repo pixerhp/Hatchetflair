@@ -1,16 +1,34 @@
 #include "chunks_manager.hpp"
 
+//////////////// v WorldChunk v ////////////////
+
+bool is_4x4_menger_sponge(int x, int y, int z) {
+	x = abs(x); y = abs(y); z = abs(z);
+	while((x > 0) and (y > 0) and (z > 0)) {
+		if(((x%4 == 1)or(x%4 == 2)) and ((y%4 == 1)or(y%4 == 2)) and ((y%4 == 1)or(y%4 == 2))) {
+			return false;
+		}
+		x /= 4; y /= 4; z /= 4;
+	}
+	return true;
+}
+
+void WorldChunk::regenerate_terrtiles() {
+	for(int y=0; y<T_LEN; y++){ for(int z=0; z<T_LEN; z++){ for(int x=0; x<T_LEN; x++){
+		if(is_4x4_menger_sponge(x, y, z)) {
+			terrtile_shapes[x][y][z] = world_utils::TERRTILE_SHAPE::FULL;
+		} else {
+			terrtile_shapes[x][y][z] = world_utils::TERRTILE_SHAPE::EMPTY;
+		}
+	}}}
+	return;
+}
+
+//////////////// v WorldChunksManager v ////////////////
+
 void WorldChunksManager::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("test_function"), &WorldChunksManager::test_function);
 	godot::ClassDB::bind_method(godot::D_METHOD("chunk_loading_routine", "load_radius", "unload_radius"), &WorldChunksManager::chunk_loading_routine);
-}
-
-
-void WorldChunk::regenerate_terrtiles() {
-	
-	
-	
-	return;
 }
 
 // For miscellaneous testing/debugging or usage of toolfuncs:

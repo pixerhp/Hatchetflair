@@ -31,7 +31,7 @@ class WorldChunk {
 		world_utils::TERRTILE_DATAFORMATS terrtile_data[T_LEN][T_LEN][T_LEN];
 		// !!! something_type terrtile_meshing_cache[T_MESHCACHE_LEN][T_MESHCACHE_LEN][T_MESHCACHE_LEN]
 		// !!! store a list of tiles whose meshing was skipped until a surrounding chunk's data was generated?
-		// !!! (structures, etc...)
+		// !!! (structures, etc... probably a vector on the heap)
 		// !!! (store godot mesh/collision node references?)
 	public:
 		void regenerate_terrtiles();
