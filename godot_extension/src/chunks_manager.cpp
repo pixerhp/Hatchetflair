@@ -28,7 +28,7 @@ void WorldChunk::regenerate_terrtiles() {
 
 void WorldChunksManager::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("test_function"), &WorldChunksManager::test_function);
-	godot::ClassDB::bind_method(godot::D_METHOD("chunk_loading_routine", "load_radius", "unload_radius"), &WorldChunksManager::chunk_loading_routine);
+	godot::ClassDB::bind_method(godot::D_METHOD("chunk_loading_routine", "from_coords", "chuords_offset", "load_radius", "unload_radius"), &WorldChunksManager::chunk_loading_routine);
 }
 
 // For miscellaneous testing/debugging or usage of toolfuncs:
@@ -42,8 +42,16 @@ void WorldChunksManager::test_function() {
 	}*/
 }
 
-bool WorldChunksManager::chunk_loading_routine(float load_radius, float unload_radius) {
-	return(true);
+godot::Array WorldChunksManager::chunk_loading_routine(godot::Vector3 from_coords, godot::Vector3i chuords_offset, float load_radius, float unload_radius) {
+	const godot::Vector3i from_chuords = godot::Vector3i(from_coords) + chuords_offset;
+	std::vector<godot::Vector3i> chunks_to_load = WorldChunksManager::get_unloaded_before_or_at_dist(from_chuords, load_radius, 16);
+	std::vector<godot::Vector3i> chunks_to_unload = WorldChunksManager::get_loaded_beyond_dist(from_chuords, unload_radius, 16);
+	
+	godot::Array return_data = godot::Array();
+
+	// !!! load chunks, unload chunks, and return a bunch of data (nodes to remove, meshing data, etc) back to the Godot side.
+
+	return(return_data);
 }
 
 

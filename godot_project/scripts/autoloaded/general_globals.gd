@@ -6,7 +6,7 @@ func _ready():
 	_initialize_window_title()
 	var wcm: WorldChunksManager = WorldChunksManager.new()
 	wcm.test_function()
-	
+	#wcm.chunk_loading_routine() # !!! eventually should be repeatedly/commonly run under the CM thread.
 
 func _initialize_window_title():
 	await get_tree().process_frame

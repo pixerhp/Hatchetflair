@@ -51,7 +51,7 @@ class WorldChunksManager : public godot::RefCounted {
 		~WorldChunksManager() override = default;
 
 		void test_function();
-		bool chunk_loading_routine(float load_radius, float unload_radius);
+		godot::Array chunk_loading_routine(godot::Vector3 from_coords, godot::Vector3i chuords_offset, float load_radius, float unload_radius);
 
 		// !!! func for load materials / generation data / etc from files?
 		
