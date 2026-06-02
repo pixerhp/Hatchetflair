@@ -40,6 +40,9 @@ union TERRTILE_DATAFORMATS {
 	// (... to be continued)
 };
 
+struct TERRTILE_MESHCACHE_SECTION {
+};
+
 void _toolfunc_gen_voxel_dist_shells();
 
 extern const std::vector<std::vector<godot::Vector3i>> VOXEL_DIST_SHELLS;

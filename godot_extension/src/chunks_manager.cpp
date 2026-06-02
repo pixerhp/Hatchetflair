@@ -14,6 +14,7 @@ bool is_4x4_menger_sponge(int x, int y, int z) {
 }
 
 void WorldChunk::regenerate_terrtiles() {
+	terrtile_meshcache_remesh_flags.set();
 	for(int tz=0; tz<T_LEN; tz++) { 
 	for(int ty=0; ty<T_LEN; ty++) { 
 	for(int tx=0; tx<T_LEN; tx++) {

@@ -9,10 +9,9 @@
 #include <map>
 #include <variant>
 #include <random>
+#include <bitset>
 
 #include "world_utils.hpp"
-
-//inline int xyz_to_t
 
 
 const godot::Vector3 FAIL_COORDS = godot::Vector3(INFINITY, INFINITY, INFINITY);
@@ -22,19 +21,24 @@ class WorldChunk {
 	public:
 		static const int T_LEN = 16;
 		static const int T_COUNT = T_LEN * T_LEN * T_LEN;
-		static const int T_MESHCACHE_LEN = 4;
+		static const int T_MESHCACHE_LEN = 4; //(needs to be a factor of T_LEN)
 		static const int T_MESHCACHE_COUNT = T_MESHCACHE_LEN * T_MESHCACHE_LEN * T_MESHCACHE_LEN;
 	public:
 		godot::Vector3i chuords = FAIL_CHUORDS;
-		std::uint64_t world_seed = 0;
+		std::uint64_t gen_seed = 0; // !!! defaultly set to whatever the current world seed is.
 		unsigned char terrtile_shapes[T_LEN][T_LEN][T_LEN];
 		world_utils::TERRTILE_DATAFORMATS terrtile_data[T_LEN][T_LEN][T_LEN];
-		// !!! something_type terrtile_meshing_cache[T_MESHCACHE_LEN][T_MESHCACHE_LEN][T_MESHCACHE_LEN]
+		world_utils::TERRTILE_MESHCACHE_SECTION terrtile_meshcache[T_MESHCACHE_LEN][T_MESHCACHE_LEN][T_MESHCACHE_LEN];
+		std::bitset<WorldChunk::T_MESHCACHE_COUNT> terrtile_meshcache_remesh_flags = ~ std::bitset<WorldChunk::T_MESHCACHE_COUNT>();
+			//(↑ flags representing which meshcache pieces need remeshing, mostly for later use with tile editing.)
 		// !!! store a list of tiles whose meshing was skipped until a surrounding chunk's data was generated?
 		// !!! (structures, etc... probably a vector on the heap)
 		// !!! (store godot mesh/collision node references?)
 	public:
 		void regenerate_terrtiles();
+		WorldChunk(godot::Vector3i chuords_input) {
+			chuords = chuords_input;
+		}
 };
 
 class WorldChunksManager : public godot::RefCounted {
@@ -59,9 +63,10 @@ class WorldChunksManager : public godot::RefCounted {
 		std::vector<godot::Vector3i> get_unloaded_before_or_at_cubeshell(godot::Vector3i from_chuords, int radius, int result_limit = 1);
 		std::vector<godot::Vector3i> get_loaded_beyond_dist(godot::Vector3i from_chuords, float radius, int result_limit = INT32_MAX);
 		std::vector<godot::Vector3i> get_loaded_beyond_cubeshell(godot::Vector3i from_chuords, int radius, int result_limit = INT32_MAX);
+		
 		godot::Error checkdo_load(godot::Vector3i where_chuords);
 		godot::Error checkdo_unload(godot::Vector3i where_chuords);
-		godot::Error remeshify_terrtiles(godot::Vector3i where, uint64_t pieces_bitmask);	
+		godot::Error remeshify_terrtiles(godot::Vector3i where, std::bitset<WorldChunk::T_MESHCACHE_COUNT> meshcache_bitmask); 
 };
 
 
