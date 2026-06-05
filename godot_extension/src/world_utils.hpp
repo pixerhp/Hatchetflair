@@ -43,6 +43,19 @@ union TERRTILE_DATAFORMATS {
 struct TERRTILE_MESHCACHE_SECTION {
 };
 
+// !!! something roughly like this may be used for the position of immobile structure stuff within a chunk:
+struct [[nodiscard]] StructurePos {
+	union {
+		struct {
+			uint8_t x;
+			uint8_t y;
+			uint8_t z;
+		};
+
+		uint8_t coord[3] = {0};
+	};
+};
+
 void _toolfunc_gen_voxel_dist_shells();
 
 extern const std::vector<std::vector<godot::Vector3i>> VOXEL_DIST_SHELLS;

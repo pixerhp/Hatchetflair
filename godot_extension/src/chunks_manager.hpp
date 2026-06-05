@@ -49,6 +49,7 @@ class WorldChunksManager : public godot::RefCounted {
 	
 	public:
 		std::map<godot::Vector3i, WorldChunk> chunks_map = {};
+		std::map<godot::Vector3i, WorldChunk> remesh_after_load = {};
 	
 	public:
 		WorldChunksManager() = default;
