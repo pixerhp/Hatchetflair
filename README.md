@@ -4,13 +4,13 @@
 </div>
 
 ## Official Links:
-- Source
+- Source Repository
   - https://github.com/pixerhp/Hatchetflair
-- Itch.io Page
+- Game Itch.io Page
   - https://pixerhp.itch.io/hatchetflair
-- Discord Community Server
+- Community Discord Server
   - https://discord.gg/4Y3xs8SVqf
-- YouTube Channel
+- Associated YouTube Channel
   - https://www.youtube.com/@hatchetflair
 
 ## What is Hatchetflair?
