@@ -20,7 +20,7 @@ config/version="2.1.0.0"
 run/main_scene="uid://caemtw2ni7cl6"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="Hatchetflair"
-config/features=PackedStringArray("4.6", "Forward Plus")
+config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/image="uid://c4kwmk7n8fvlk"
 config/icon="uid://dukxh3v2rbdf5"
 
