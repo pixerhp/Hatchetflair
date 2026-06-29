@@ -32,3 +32,6 @@ hive_yellow
 hive_blue
 salt
 bricks
+
+consider whether ctrl or c should be used for crouching, 
+and whether crawling should actually be a thing or not (maybe automatic in crawlable spaces rather than manual wherever?)
