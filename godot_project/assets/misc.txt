@@ -1,5 +1,9 @@
 (This text document is for convenient mixed/miscellaneous development use, where I type whatever.)
 
+Versioning formats:
+	MAJOR.CONTENT.PATCH(.DATE)
+	MAJOR.CONTENT-PART.PATCH(.DATE)
+
 other similarish games splash references ideas:
 	hytale
 	minecraft
@@ -14,6 +18,7 @@ other similarish games splash references ideas:
 	roblox oaklands
 	roblox cavern crusher (?)
 	terraria
+	satisfactory (?)
 	...
 
 other games:
