@@ -29,16 +29,6 @@ size = Vector3(0.707, 0.707, 0.707)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tgdfa"]
 albedo_color = Color(1, 0, 0, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xns5g"]
-albedo_color = Color(0.73, 0.13383333, 0, 1)
-metallic = 1.0
-roughness = 0.05
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rmc1u"]
-albedo_color = Color(0.12166655, 0, 0.73, 1)
-metallic = 1.0
-roughness = 0.05
-
 [node name="GameplayTopscene" type="Node3D" unique_id=758008150]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1064053708]
@@ -65,20 +55,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_yy87l")
 [node name="RedCube" type="MeshInstance3D" parent="CenterMarker" unique_id=38528305]
 mesh = SubResource("BoxMesh_08y4y")
 surface_material_override/0 = SubResource("StandardMaterial3D_tgdfa")
-
-[node name="ReflectionTest" type="Node3D" parent="." unique_id=197499778]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 133, 0)
-
-[node name="IndigoSphere" type="MeshInstance3D" parent="ReflectionTest" unique_id=118868382]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
-mesh = SubResource("SphereMesh_3dqie")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_xns5g")
-
-[node name="IndigoCube" type="MeshInstance3D" parent="ReflectionTest" unique_id=1135871075]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
-mesh = SubResource("BoxMesh_08y4y")
-surface_material_override/0 = SubResource("StandardMaterial3D_rmc1u")
 
 [node name="TChunksContainer" type="Node3D" parent="." unique_id=272623845]
 unique_name_in_owner = true
