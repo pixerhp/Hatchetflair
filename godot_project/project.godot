@@ -28,8 +28,6 @@ config/icon="uid://dukxh3v2rbdf5"
 
 DebugDraw="*res://scripts/autoloaded/debug_draw.gd"
 Globals="*res://scripts/autoloaded/general_globals.gd"
-TCU="*res://scripts/autoloaded/tchunks_utils.gd"
-ChemCraft="*res://scripts/autoloaded/chemcraft.gd"
 
 [debug]
 
