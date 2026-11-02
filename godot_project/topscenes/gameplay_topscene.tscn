@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://caemtw2ni7cl6"]
 
-[ext_resource type="Script" uid="uid://dprqbtapra60j" path="res://scripts/flycam.gd" id="1_3dqie"]
-[ext_resource type="Script" uid="uid://cspicyqlp7atk" path="res://scripts/sun.gd" id="1_08y4y"]
-[ext_resource type="Script" uid="uid://bub73ybn6k7oq" path="res://scripts/controls_ui.gd" id="4_tgdfa"]
+[ext_resource type="Script" uid="uid://dprqbtapra60j" path="res://scripts/prefabs/flycam.gd" id="1_3dqie"]
+[ext_resource type="Script" uid="uid://cspicyqlp7atk" path="res://scripts/prefabs/sun.gd" id="1_08y4y"]
+[ext_resource type="Script" uid="uid://dkr1hikg1k7c5" path="res://scripts/topscenes/gameplay_topscene.gd" id="1_tgdfa"]
+[ext_resource type="Script" uid="uid://bub73ybn6k7oq" path="res://scripts/prefabs/controls_ui.gd" id="4_tgdfa"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_hoxm8"]
 sky_top_color = Color(0.797499, 0.834473, 0.886126, 1)
@@ -29,6 +30,7 @@ size = Vector3(0.707, 0.707, 0.707)
 albedo_color = Color(1, 0, 0, 1)
 
 [node name="GameplayTopscene" type="Node3D" unique_id=758008150]
+script = ExtResource("1_tgdfa")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1064053708]
 environment = SubResource("Environment_yy87l")
