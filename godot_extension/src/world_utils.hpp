@@ -13,11 +13,11 @@ namespace TERRTILE_SHAPE {
 		EMPTY = 0,
 		FULL,
 		CUBIC_OCTREE,
-		RHOMBDO_BIG,
+		RHOMBDO_BIG, 
 		RHOMBDO_MINI,
 		DIAG_HEX,
 		TERRACE,
-		//[powder??? there should probably be powder/dust/sand in some way, but not sure how yet.]
+		POWDER,
 		MARCH_SIMPLE,
 		MARCH_SMOOTH,
 		SLOPESTITCH, //(likely won't be implemented unless march stuff doesn't work well)
@@ -25,47 +25,32 @@ namespace TERRTILE_SHAPE {
 	};
 }
 
-// !!! consider removing material index and storing it elsewhere, 
-// given that all tiles would be storing (or at least allocating bytes for) one anyway?:
-
+// TODO probably store substance/material 1-per-tile outside of this dataformat struct.
 union TERRTILE_DATAFORMAT {
 	struct EMPTY {};
-	struct FULL {
-		int material_index = -1;
-	};
+	struct FULL {};
 	struct CUBIC_OCTREE {
-		int material_index = -1;
 		// TODO [+ however the cubic octree data stuff should be stored]
 	};
-	struct RHOMBDO_BIG {
-		int material_index = -1;
-	};
+	struct RHOMBDO_BIG {};
 	struct RHOMBDO_MINI {
-		int material_index = -1; //(could be four materials instead of 1??)
 		unsigned char states = 0b1111; //(bitstates storing whether each of the 4 mini rhombdos is present)
 	};
 	struct DIAG_HEX {
-		int material_index = -1;
-		unsigned char orientation = 0; //(four possible rotations)
+		unsigned char orientation = 0; //(orientation can be four possible rotations)
 	};
-	struct TERRACE {
-		int material_index = -1;
-	};
+	struct TERRACE {};
 	struct MARCH_SIMPLE {
-		int material_index = -1;
-		unsigned char states = 0b00000000; //(represent the states of the 8 corners used for meshing.)
+		unsigned char states = 0b00000000; //(represents the states of the 8 corners used for meshing.)
 	};
 	struct MARCH_SMOOTH {
-		int material_index = -1;
-		// (8 [int or float, not sure which yet] scalars)
+		// TODO (8 [int or float, not sure which yet] scalars)
 	};
 	/*struct SLOPESTITCH {
-		uint16_t material_inds = -1;
 		float weight = 0.5;
 		godot::Vector2 normal = godot::Vector2();
 	};*/
 	/*struct SLOPESTITCH { // !!! (may update slopestitching to feature multiple layers of material in a tile in the future.)
-		std::vector<uint16_t> material_inds = {};
 		std::vector<float> weights = {};
 		godot::Vector2 norm = godot::Vector2();
 	};*/

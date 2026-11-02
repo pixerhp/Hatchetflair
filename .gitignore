@@ -54,3 +54,4 @@ compile_commands.json
 # Cmake
 cmake-build*
 CMakeUserPresets.json
+godot_extension/.vscode/settings.json
