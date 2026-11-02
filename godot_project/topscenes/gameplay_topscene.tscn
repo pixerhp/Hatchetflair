@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://caemtw2ni7cl6"]
 
 [ext_resource type="Script" uid="uid://dprqbtapra60j" path="res://scripts/prefabs/flycam.gd" id="1_3dqie"]
-[ext_resource type="Script" uid="uid://cspicyqlp7atk" path="res://scripts/prefabs/sun.gd" id="1_08y4y"]
 [ext_resource type="Script" uid="uid://dkr1hikg1k7c5" path="res://scripts/topscenes/gameplay_topscene.gd" id="1_tgdfa"]
 [ext_resource type="Script" uid="uid://bub73ybn6k7oq" path="res://scripts/prefabs/controls_ui.gd" id="4_tgdfa"]
 
@@ -35,11 +34,11 @@ script = ExtResource("1_tgdfa")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1064053708]
 environment = SubResource("Environment_yy87l")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=554756490]
+[node name="Sun" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=554756490]
+unique_name_in_owner = true
 transform = Transform3D(0.866025, 0.1235, -0.484508, 0, 0.969016, 0.246999, 0.5, -0.213907, 0.839192, 0, 0, 0)
 light_color = Color(1, 0.938, 0.83, 1)
 shadow_enabled = true
-script = ExtResource("1_08y4y")
 
 [node name="FlyCam" type="Camera3D" parent="." unique_id=1379056950]
 unique_name_in_owner = true
