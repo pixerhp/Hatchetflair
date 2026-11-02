@@ -1,42 +1,7 @@
 (This text document is for convenient mixed/miscellaneous development use, where I type whatever.)
 
+:paige:
+
 Versioning formats:
-	MAJOR.CONTENT.PATCH(.DATE)
-	MAJOR.CONTENT-PART.PATCH(.DATE)
-
-other similarish games splash references ideas:
-	hytale
-	minecraft
-	reforj
-	voima
-	lucid blocks
-	cosmic reach
-	4d miner
-	vintage story
-	allumeria
-	roblox lumber tycoon 2
-	roblox oaklands
-	roblox cavern crusher (?)
-	terraria
-	satisfactory (?)
-	...
-
-other games:
-	roblox databrawl
-	rodland of pipes
-	...
-
-plainite_white,alb_default,1.0,1.0,1.0,norm_default,spec_default
-plainite_black,alb_default,0.0,0.0,0.0,norm_default,spec_default
-mossy
-werium_polished,alb_default,0.983,0.124,0.0,norm_default,spec_metal_shiny
-tincium_polished,alb_default,0.5921,0.6,0.5294,norm_default,spec_metal_shiny
-ferrium_treadplate,alb_default,NUM,NUM,NUM,norm_treadplate,spec_metal_semishiny
-zirium_treadplate,alb_default,NUM,NUM,NUM,norm_treadplate,spec_metal_dull
-hive_yellow
-hive_blue
-salt
-bricks
-
-consider whether ctrl or c should be used for crouching, 
-and whether crawling should actually be a thing or not (maybe automatic in crawlable spaces rather than manual wherever?)
+	MODEL.CONTENT.PATCH (.DATE)
+	MODEL.CONTENT-PART.PATCH (.DATE)
