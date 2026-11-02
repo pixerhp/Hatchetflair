@@ -27,7 +27,7 @@ class WorldChunk {
 		godot::Vector3i chuords = FAIL_CHUORDS;
 		std::uint64_t gen_seed = 0; // !!! defaultly set to whatever the current world seed is.
 		unsigned char terrtile_shapes[T_LEN][T_LEN][T_LEN];
-		world_utils::TERRTILE_DATAFORMATS terrtile_data[T_LEN][T_LEN][T_LEN];
+		world_utils::TERRTILE_DATAFORMAT terrtile_data[T_LEN][T_LEN][T_LEN];
 		world_utils::TERRTILE_MESHCACHE_SECTION terrtile_meshcache[T_MESHCACHE_LEN][T_MESHCACHE_LEN][T_MESHCACHE_LEN];
 		std::bitset<WorldChunk::T_MESHCACHE_COUNT> terrtile_meshcache_remesh_flags = ~ std::bitset<WorldChunk::T_MESHCACHE_COUNT>();
 			//(↑ flags representing which meshcache pieces need remeshing, mostly for later use with tile editing.)
