@@ -4,9 +4,6 @@ var draw_debug_chunkborders: bool = true
 
 func _ready():
 	_initialize_window_title()
-	var wcm: WorldChunksManager = WorldChunksManager.new()
-	wcm.test_function()
-	#wcm.chunk_loading_routine() # !!! 
 
 func _initialize_window_title():
 	await get_tree().process_frame
