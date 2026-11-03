@@ -30,28 +30,28 @@ void WorldChunk::regenerate_terrtiles() {
 	return;
 }
 
-//////////////// v WorldChunksManager v ////////////////
+//////////////// v GDE v ////////////////
 
-void WorldChunksManager::_bind_methods() {
-	godot::ClassDB::bind_method(godot::D_METHOD("test_function"), &WorldChunksManager::test_function);
-	godot::ClassDB::bind_method(godot::D_METHOD("chunk_loading_routine", "from_coords", "chuords_offset", "load_radius", "unload_radius"), &WorldChunksManager::chunk_loading_routine);
+void GDE::_bind_methods() {
+	godot::ClassDB::bind_method(godot::D_METHOD("test_function"), &GDE::test_function);
+	godot::ClassDB::bind_method(godot::D_METHOD("chunk_loading_routine", "from_coords", "chuords_offset", "load_radius", "unload_radius"), &GDE::chunk_loading_routine);
 }
 
 // For miscellaneous testing/debugging or usage of toolfuncs:
-void WorldChunksManager::test_function() {
-	godot::print_line("Hello from WorldChunksManager's test func!");
+void GDE::test_function() {
+	godot::print_line("Hello from GDE's test func!");
 	//world_utils::_toolfunc_gen_voxel_dist_shells();
 	//chunks_map[godot::Vector3i(0, 0, 0)] = WorldChunk();
-	/*std::vector<godot::Vector3i> chunks_found = WorldChunksManager::get_unloaded_before_or_at_cubeshell(godot::Vector3i(0,0,0), 5.0, 200);
+	/*std::vector<godot::Vector3i> chunks_found = GDE::get_unloaded_before_or_at_cubeshell(godot::Vector3i(0,0,0), 5.0, 200);
 	for(int i = 0; i < chunks_found.size(); i++) {
 		godot::print_line(chunks_found[i]);
 	}*/
 }
 
-godot::Array WorldChunksManager::chunk_loading_routine(godot::Vector3 from_coords, godot::Vector3i chuords_offset, float load_radius, float unload_radius) {
+godot::Array GDE::chunk_loading_routine(godot::Vector3 from_coords, godot::Vector3i chuords_offset, float load_radius, float unload_radius) {
 	const godot::Vector3i from_chuords = godot::Vector3i(from_coords) + chuords_offset;
-	std::vector<godot::Vector3i> chunks_to_load = WorldChunksManager::get_unloaded_before_or_at_dist(from_chuords, load_radius, 16);
-	std::vector<godot::Vector3i> chunks_to_unload = WorldChunksManager::get_loaded_beyond_dist(from_chuords, unload_radius, 16);
+	std::vector<godot::Vector3i> chunks_to_load = GDE::get_unloaded_before_or_at_dist(from_chuords, load_radius, 16);
+	std::vector<godot::Vector3i> chunks_to_unload = GDE::get_loaded_beyond_dist(from_chuords, unload_radius, 16);
 	
 	godot::Array return_data = godot::Array();
 
@@ -61,7 +61,7 @@ godot::Array WorldChunksManager::chunk_loading_routine(godot::Vector3 from_coord
 }
 
 
-std::vector<godot::Vector3i> WorldChunksManager::get_unloaded_before_or_at_dist(godot::Vector3i from_chuords, float radius, int result_limit) {
+std::vector<godot::Vector3i> GDE::get_unloaded_before_or_at_dist(godot::Vector3i from_chuords, float radius, int result_limit) {
 	if(result_limit <= 0) {return{};}
 	const int64_t radius_sqrd_flr = static_cast<int64_t>(floor(radius*radius));
 	std::vector<godot::Vector3i> results = {};
@@ -83,7 +83,7 @@ std::vector<godot::Vector3i> WorldChunksManager::get_unloaded_before_or_at_dist(
 	return(results);
 }
 
-std::vector<godot::Vector3i> WorldChunksManager::get_unloaded_before_or_at_cubeshell(godot::Vector3i from_chuords, int radius, int result_limit) {
+std::vector<godot::Vector3i> GDE::get_unloaded_before_or_at_cubeshell(godot::Vector3i from_chuords, int radius, int result_limit) {
 	if(result_limit <= 0) {return{};}
 	radius = abs(radius);
 	std::vector<godot::Vector3i> results = {};
@@ -139,7 +139,7 @@ std::vector<godot::Vector3i> WorldChunksManager::get_unloaded_before_or_at_cubes
 	return(results);
 }
 
-std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_dist(godot::Vector3i from_chuords, float radius, int result_limit) {
+std::vector<godot::Vector3i> GDE::get_loaded_beyond_dist(godot::Vector3i from_chuords, float radius, int result_limit) {
 	if(result_limit <= 0) {return{};}
 	const int64_t radius_sqrd_flr = static_cast<int64_t>(floor(radius*radius));
 	std::vector<godot::Vector3i> results = {};
@@ -157,7 +157,7 @@ std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_dist(godot::V
 	return(results);
 }
 
-std::vector<godot::Vector3i> WorldChunksManager::get_loaded_beyond_cubeshell(godot::Vector3i from_chuords, int radius, int result_limit) {
+std::vector<godot::Vector3i> GDE::get_loaded_beyond_cubeshell(godot::Vector3i from_chuords, int radius, int result_limit) {
 	if(result_limit <= 0) {return{};}
 	radius = abs(radius);
 	std::vector<godot::Vector3i> results = {};

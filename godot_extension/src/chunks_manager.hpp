@@ -41,8 +41,8 @@ class WorldChunk {
 		}
 };
 
-class WorldChunksManager : public godot::RefCounted {
-	GDCLASS(WorldChunksManager, RefCounted)
+class GDE : public godot::RefCounted {
+	GDCLASS(GDE, RefCounted)
 
 	protected:
 		static void _bind_methods();
@@ -52,8 +52,8 @@ class WorldChunksManager : public godot::RefCounted {
 		std::map<godot::Vector3i, WorldChunk> remesh_after_load = {};
 	
 	public:
-		WorldChunksManager() = default;
-		~WorldChunksManager() override = default;
+		GDE() = default;
+		~GDE() override = default;
 
 		void test_function();
 		godot::Array chunk_loading_routine(godot::Vector3 from_coords, godot::Vector3i chuords_offset, float load_radius, float unload_radius);

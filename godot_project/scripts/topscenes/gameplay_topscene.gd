@@ -14,8 +14,7 @@ var workers_halt: bool = false
 var chunk_load_batch_size: int = 8
 
 func _ready():
-	var gde: WorldChunksManager = WorldChunksManager.new()
-	gde.test_function()
+	GDE.test_function()
 
 func _process(delta):
 	%Sun.rotation.y += 0.25 * delta
