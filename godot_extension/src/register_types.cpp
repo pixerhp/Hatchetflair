@@ -13,8 +13,7 @@ using namespace godot;
 
 GDE *gde_singleton = nullptr;
 
-void initialize_gdextension_types(ModuleInitializationLevel p_level)
-{
+void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
@@ -23,7 +22,6 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level)
 	GDREGISTER_CLASS(GDE); 
 	gde_singleton = memnew(GDE);
 	Engine::get_singleton()->register_singleton("GDE", gde_singleton);
-	
 }
 
 void uninitialize_gdextension_types(ModuleInitializationLevel p_level) {
