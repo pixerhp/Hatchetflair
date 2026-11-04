@@ -1,7 +1,7 @@
-#ifndef EXAMPLE_REGISTER_TYPES_H
-#define EXAMPLE_REGISTER_TYPES_H
+#ifndef HF_GDE_REGISTER_TYPES_HPP
+#define HF_GDE_REGISTER_TYPES_HPP
 
 void initialize_gdextension_types();
 void uninitialize_gdextension_types();
 
-#endif // EXAMPLE_REGISTER_TYPES_H
+#endif
