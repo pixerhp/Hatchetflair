@@ -7,13 +7,11 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/godot.hpp>
 
-#include "chunks_manager.hpp"
+#include "gde.hpp"
 
 using namespace godot;
 
-namespace {
 GDE *gde_singleton = nullptr;
-}
 
 void initialize_gdextension_types(ModuleInitializationLevel p_level)
 {
