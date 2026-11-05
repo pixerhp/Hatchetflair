@@ -1,3 +1,8 @@
+/*	GDE OVERVIEW
+	Handles the GDE singleton, 
+	which acts as a bridge between this GDExtension's functionality and the Godot side of the project.
+*/
+
 #pragma once
 
 #include "godot_cpp/classes/ref_counted.hpp"

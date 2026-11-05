@@ -17,9 +17,9 @@ void initialize_gdextension_types(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}
-	/* NOTE using GDREGISTER_INTERNAL_CLASS instead would prevent being able to instance multiple GDE in Godot,
-	but would also require accessing it via Engine.get_singleton("GDE") or with some created wrapper. (I think)*/
 	GDREGISTER_CLASS(GDE); 
+	/* NOTE: using GDREGISTER_INTERNAL_CLASS instead would prevent being able to instance multiple GDE in Godot,
+	but would also require accessing it via Engine.get_singleton("GDE") or with some created wrapper. (I think)*/
 	gde_singleton = memnew(GDE);
 	Engine::get_singleton()->register_singleton("GDE", gde_singleton);
 }
