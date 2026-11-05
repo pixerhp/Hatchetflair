@@ -8,6 +8,7 @@
 
 #include <map>
 #include <cstdint>
+#include <vector>
 
 const int DATA_CHUNK_LEN = 16;
 const int TERRAIN_MESH_CHUNK_LEN = 32;
@@ -27,10 +28,22 @@ namespace TerrtileShape {
     };
 }
 
-struct Terrtile {
+struct TerrTile {
     uint8_t shape = TerrtileShape::NO_DATA;
     uint8_t shape_data = 0b00000000;
     uint16_t substance_id = 0;
 };
 
-//extern std::map<godot::Vector3i, aabbccdd> chunks;
+struct StructurePart {
+    // [what kind of thing the structure part is]
+    // [other data about it, maybe like what it's made up of or its connection shape with surrounding stuff?]
+};
+
+struct DataChunk {
+    TerrTile terrtiles[DATA_CHUNK_LEN][DATA_CHUNK_LEN][DATA_CHUNK_LEN];
+    // [liquids?]
+    //std::vector<StructurePart> structure_parts;
+    // ... [plants if they're not considered structures?, buried objects maybe?]
+};
+
+extern std::map<godot::Vector3i, DataChunk> data_chunks_map;
