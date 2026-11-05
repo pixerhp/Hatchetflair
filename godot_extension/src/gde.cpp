@@ -5,6 +5,7 @@
 
 void GDE::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("test_function"), &GDE::test_function);
+	godot::ClassDB::bind_method(godot::D_METHOD("get_chunk_lengths"), &GDE::get_chunk_lengths);
 	godot::ClassDB::bind_method(godot::D_METHOD("filer_save_chunks"), &GDE::filer_save_chunks);
 	godot::ClassDB::bind_method(godot::D_METHOD("filer_load_chunks"), &GDE::filer_load_chunks);
 	godot::ClassDB::bind_method(godot::D_METHOD("filer_save_all"), &GDE::filer_save_all);
