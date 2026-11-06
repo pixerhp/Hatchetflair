@@ -2,7 +2,7 @@ extends PanelContainer
 
 func _ready():
 	%F1HelpLabel.text += (
-		"\n\nversion " + 
+		"\n\nGAME VERSION: \nv" + 
 		ProjectSettings.get_setting("application/config/version")
 	)
 

@@ -59,42 +59,49 @@ surface_material_override/0 = SubResource("StandardMaterial3D_tgdfa")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1872278686]
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer" unique_id=394316133]
+custom_maximum_size = Vector2(-1, 520)
 anchors_preset = -1
 anchor_left = 1.0
 anchor_top = 0.1
 anchor_right = 1.0
 anchor_bottom = 0.9
-offset_left = -210.0
-offset_top = -0.064003
-offset_bottom = 0.0639648
+offset_left = -387.0
+offset_top = -0.06400299
+offset_bottom = 0.063964844
 grow_horizontal = 0
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("4_tgdfa")
 
-[node name="F1HelpLabel" type="RichTextLabel" parent="CanvasLayer/PanelContainer" unique_id=1576172860]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(210, 0)
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer" unique_id=1878172358]
+custom_maximum_size = Vector2(-1, 520)
 layout_mode = 2
-text = ">> MOVEMENT <<
-(Hold down the 
-right mouse button and move the mouse to angle your view.)
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-Lateral [W, A, S, and D]
+[node name="F1HelpLabel" type="RichTextLabel" parent="CanvasLayer/PanelContainer/MarginContainer" unique_id=1576172860]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, -1)
+custom_maximum_size = Vector2(370, 520)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "CONTROLS GUIDE
+(Toggle this with F1)
 
-Relative Up [E]
-Relative Down [Q]
+MOVEMENT:
+• Hold down right-click and move the mouse to angle your view.
+• Move around laterally with W A S and D.
+• Move up and down with SPACEBAR and C.
+• Move view-relative up and down with E and Q.
+• Speed up and slow down your movement with SHIFT and CTRL.
 
-Absolute Up [Space]
-Absolute Down [C]
-
-Faster [Shift]
-Slower [Ctrl]
-
->> OTHER <<
-Close Game [Esc]
-Toggle Controls Info [F1]
-Toggle Debug Info [F5]
-Cycle Debug Borders [F6]
-Fullscreen Toggle [F11]"
+OTHER:
+• Toggle debug info with F5.
+• Cycle through chunk border styles with F6.
+• Toggle fullscreen with F11 or ALT+ENTER.
+• Quit game with ESCAPE."
 vertical_alignment = 1
 justification_flags = 171
