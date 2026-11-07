@@ -4,8 +4,9 @@
 
 #include <godot_cpp/variant/array.hpp>
 
-std::map<godot::Vector3i, WorldChunk> world_chunks_map;
-std::mutex world_chunks_map_mutex;
+template class ConcurrentMap<godot::Vector3i, WorldChunk>;
+
+WorldChunksMap world_chunks_map;
 
 godot::Array GDE::get_chunk_lengths() {
 	godot::Array chunk_lengths;

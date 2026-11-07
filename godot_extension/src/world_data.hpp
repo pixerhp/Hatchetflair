@@ -4,12 +4,11 @@
 
 #pragma once
 
-#include "godot_cpp/variant/variant.hpp"
+#include "concurrent_map_template.hpp"
+#include "godot_cpp/variant/vector3i.hpp"
 
-#include <map>
 #include <cstdint>
-#include <mutex>
-#include <vector>
+
 
 const int DATA_CHUNK_LEN = 16;
 const int TERRAIN_MESH_CHUNK_LEN = 32;
@@ -46,6 +45,7 @@ struct WorldChunk {
     //std::vector<StructurePart> structure_parts;
     // ... [plants if they're not considered structures?, buried objects maybe?]
 };
+using WorldChunksMap = ConcurrentMap<godot::Vector3i, WorldChunk>;
+extern template class ConcurrentMap<godot::Vector3i, WorldChunk>;
 
-extern std::map<godot::Vector3i, WorldChunk> world_chunks_map;
-extern std::mutex world_chunks_map_mutex;
+extern WorldChunksMap world_chunks_map;
