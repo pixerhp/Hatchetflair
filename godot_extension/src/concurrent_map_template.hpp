@@ -1,3 +1,7 @@
+/*  CONCURRENT_MAP_TEMPLATE OVERVIEW
+    A template for a concurrent (thread safe) map, primarily for use in chunks map classes.
+*/
+
 #pragma once
 
 #include <functional>
@@ -5,6 +9,7 @@
 #include <mutex>
 #include <optional>
 #include <utility>
+#include <vector>
 
 template <typename Key, typename Value, typename Compare = std::less<Key>>
 class ConcurrentMap {
@@ -14,6 +19,16 @@ class ConcurrentMap {
 
     public:
         explicit ConcurrentMap(Compare compare = Compare{}) : data(std::move(compare)) {}
+
+        std::vector<Key> keys() const {
+            std::lock_guard<std::mutex> lock(mutex);
+            std::vector<Key> result;
+            result.reserve(data.size());
+            for (const auto& entry : data) {
+                result.push_back(entry.first);
+            }
+            return result;
+        }
 
         bool contains(const Key& key) const {
             std::lock_guard<std::mutex> lock(mutex);
