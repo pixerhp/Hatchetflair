@@ -8,6 +8,7 @@
 
 #include <map>
 #include <cstdint>
+#include <mutex>
 #include <vector>
 
 const int DATA_CHUNK_LEN = 16;
@@ -39,11 +40,12 @@ struct StructurePart {
     // [other data about it, maybe like what it's made up of or its connection shape with surrounding stuff?]
 };
 
-struct DataChunk {
+struct WorldChunk {
     TerrTile terrtiles[DATA_CHUNK_LEN][DATA_CHUNK_LEN][DATA_CHUNK_LEN];
     // [liquids?]
     //std::vector<StructurePart> structure_parts;
     // ... [plants if they're not considered structures?, buried objects maybe?]
 };
 
-extern std::map<godot::Vector3i, DataChunk> data_chunks_map;
+extern std::map<godot::Vector3i, WorldChunk> world_chunks_map;
+extern std::mutex world_chunks_map_mutex;
