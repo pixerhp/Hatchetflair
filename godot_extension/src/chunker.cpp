@@ -3,6 +3,9 @@
 #include "gde.hpp"
 
 godot::Array GDE::chunker_get_load_work() {
+	// take in a "load around"/"center" chuords position.
+	// get the list of chunk map keys
+
 	return {};
 }
 

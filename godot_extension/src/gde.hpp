@@ -17,6 +17,7 @@ protected:
 
 public:
 	void test_function();
+	void initialize_chunk_load_utils(float new_chunk_onload_radius, float new_chunk_offload_radius);
 	godot::Array get_chunk_lengths();
 	void filer_save_chunks();
 	void filer_load_chunks();

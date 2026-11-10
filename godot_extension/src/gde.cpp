@@ -5,6 +5,7 @@
 
 void GDE::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("test_function"), &GDE::test_function);
+	godot::ClassDB::bind_method(godot::D_METHOD("initialize_chunk_load_utils", "new_chunk_onload_radius", "new_chunk_offload_radius"), &GDE::initialize_chunk_load_utils);
 	godot::ClassDB::bind_method(godot::D_METHOD("get_chunk_lengths"), &GDE::get_chunk_lengths);
 	godot::ClassDB::bind_method(godot::D_METHOD("filer_save_chunks"), &GDE::filer_save_chunks);
 	godot::ClassDB::bind_method(godot::D_METHOD("filer_load_chunks"), &GDE::filer_load_chunks);
@@ -15,5 +16,5 @@ void GDE::_bind_methods() {
 }
 
 void GDE::test_function() {
-	godot::UtilityFunctions::print("Hello from GDE test function!");
+	godot::UtilityFunctions::print("Hello from the GDE test function!");
 }

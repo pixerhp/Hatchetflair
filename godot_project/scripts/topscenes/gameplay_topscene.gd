@@ -6,6 +6,10 @@ extends Node
 
 # !!! [wide saving / autosaving] should probably be higher priority over chunk loading
 
+# !!! when changing the chunk load/unload radii, chunk_load_utils will need to be reinitialized.
+# (to prevent thread conflicts without employing mutexes, wait for worker thread tasks using 
+# chunk_load_utils to finish before reinitializing.)
+
 var mutex: Mutex = Mutex.new()
 var semaphore: Semaphore = Semaphore.new()
 var filer_thread: Thread = Thread.new()
