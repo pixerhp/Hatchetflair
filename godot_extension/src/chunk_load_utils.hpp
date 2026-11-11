@@ -9,8 +9,7 @@
 #include "godot_cpp/variant/vector3i.hpp"
 
 namespace chunk_load_utils {
-    extern float chunk_onload_radius;
-    extern float chunk_offload_radius;
-    extern std::vector<godot::Vector3i> chunk_onload_check_list = {};
-    // TODO function for generating
+    extern float chunk_onload_radius_squared;
+    extern float chunk_offload_radius_squared;
+    extern std::vector<godot::Vector3i> chunk_onload_checks;
 }
