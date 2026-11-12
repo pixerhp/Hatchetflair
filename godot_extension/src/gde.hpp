@@ -5,12 +5,12 @@
 
 #pragma once
 
-#include "godot_cpp/classes/ref_counted.hpp"
+#include "godot_cpp/classes/object.hpp"
 #include "godot_cpp/variant/array.hpp"
 #include "godot_cpp/variant/vector3i.hpp"
 
-class GDE : public godot::RefCounted {
-	GDCLASS(GDE, RefCounted)
+class GDE : public godot::Object {
+	GDCLASS(GDE, Object)
 
 protected:
 	static void _bind_methods();
