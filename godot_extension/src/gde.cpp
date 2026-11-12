@@ -15,6 +15,10 @@ void GDE::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("chunker_offload_chunk", "chunk_coords"), &GDE::chunker_offload_chunk);
 }
 
+#include "chunk_load_utils.hpp"
 void GDE::test_function() {
-	godot::UtilityFunctions::print("Hello from the GDE test function!");
+	godot::UtilityFunctions::print("chunk_onload_checks:");
+	for (const godot::Vector3i &check : chunk_load_utils::chunk_onload_checks) {
+		godot::UtilityFunctions::print(check);
+	}
 }

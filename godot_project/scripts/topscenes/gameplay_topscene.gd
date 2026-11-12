@@ -17,7 +17,11 @@ var workers_halt: bool = false
 
 var chunk_load_batch_size: int = 8
 
+var chunk_onload_radius: float = 1.5
+var chunk_offload_radius: float = 6.75
+
 func _ready():
+	GDE.initialize_chunk_load_utils(chunk_onload_radius, chunk_offload_radius)
 	GDE.test_function()
 
 func _process(delta):
