@@ -22,9 +22,9 @@ public:
 	void filer_save_chunks();
 	void filer_load_chunks();
 	void filer_save_all();
-	godot::Array chunker_get_load_work();
-	void chunker_onload_chunk(godot::Vector3i chunk_coords);
-	void chunker_offload_chunk(godot::Vector3i chunk_coords);
+	godot::Array chunker_get_load_work(godot::Vector3i from_chuords);
+	void chunker_onload_chunk(godot::Vector3i chuords);
+	void chunker_offload_chunk(godot::Vector3i chuords);
 };
 
 //extern GDE *gde_singleton;

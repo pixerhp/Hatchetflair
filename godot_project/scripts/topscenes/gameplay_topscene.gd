@@ -10,6 +10,10 @@ extends Node
 # (to prevent thread conflicts without employing mutexes, wait for worker thread tasks using 
 # chunk_load_utils to finish before reinitializing.)
 
+# !!! the worker threads task list should be mutex protected, 
+# so that a thread can add to the task list (gettings chunks to load/unload)
+# in that case though, maybe also have a variable to intercept starting those tasks if you need to save first.
+
 var mutex: Mutex = Mutex.new()
 var semaphore: Semaphore = Semaphore.new()
 var filer_thread: Thread = Thread.new()

@@ -10,9 +10,9 @@ void GDE::_bind_methods() {
 	godot::ClassDB::bind_method(godot::D_METHOD("filer_save_chunks"), &GDE::filer_save_chunks);
 	godot::ClassDB::bind_method(godot::D_METHOD("filer_load_chunks"), &GDE::filer_load_chunks);
 	godot::ClassDB::bind_method(godot::D_METHOD("filer_save_all"), &GDE::filer_save_all);
-	godot::ClassDB::bind_method(godot::D_METHOD("chunker_get_load_work"), &GDE::chunker_get_load_work);
-	godot::ClassDB::bind_method(godot::D_METHOD("chunker_onload_chunk", "chunk_coords"), &GDE::chunker_onload_chunk);
-	godot::ClassDB::bind_method(godot::D_METHOD("chunker_offload_chunk", "chunk_coords"), &GDE::chunker_offload_chunk);
+	godot::ClassDB::bind_method(godot::D_METHOD("chunker_get_load_work", "from_chuords"), &GDE::chunker_get_load_work);
+	godot::ClassDB::bind_method(godot::D_METHOD("chunker_onload_chunk", "chuords"), &GDE::chunker_onload_chunk);
+	godot::ClassDB::bind_method(godot::D_METHOD("chunker_offload_chunk", "chuords"), &GDE::chunker_offload_chunk);
 }
 
 #include "chunk_load_utils.hpp"
