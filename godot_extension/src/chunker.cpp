@@ -2,7 +2,9 @@
 
 #include "gde.hpp"
 
-godot::Array GDE::chunker_get_load_work(godot::Vector3i from_chuords) {
+godot::Array GDE::chunker_get_load_work(godot::Vector3i from_chuords, int max_onload, int max_offload) {
+	// pseudocode: if max is < 0 then unlimited
+
 	// take in a "load around"/"center" chuords position.
 	// get the list of chunk map keys
 
