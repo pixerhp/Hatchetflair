@@ -10,7 +10,7 @@
 #include <cstdint>
 
 
-const int DATA_CHUNK_LEN = 16;
+const int WORLD_CHUNK_LEN = 16;
 const int TERRAIN_MESH_CHUNK_LEN = 32;
 const int TERRAIN_MESH_SUBCHUNK_LEN = 4;
 
@@ -40,10 +40,13 @@ struct StructurePart {
 };
 
 struct WorldChunk {
-    TerrTile terrtiles[DATA_CHUNK_LEN][DATA_CHUNK_LEN][DATA_CHUNK_LEN];
+    uint64_t seed = 0;
+    TerrTile terrtiles[WORLD_CHUNK_LEN][WORLD_CHUNK_LEN][WORLD_CHUNK_LEN];
     // [liquids?]
     //std::vector<StructurePart> structure_parts;
     // ... [plants if they're not considered structures?, buried objects maybe?]
+
+    //void generate(int seed = 0, maybe also time parameter);
 };
 using WorldChunksMap = ConcurrentMap<godot::Vector3i, WorldChunk>;
 extern template class ConcurrentMap<godot::Vector3i, WorldChunk>;

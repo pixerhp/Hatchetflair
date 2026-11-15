@@ -36,7 +36,10 @@ func _process(delta):
 
 func manage_threads():
 	# unless it's known that there is no loading work until you move to a different chunk,
-	# check chunks to onload/offload.
+	# check chunks to onload/offload (and only repeat doing that AFTER all of the current onload/offload tasks are done).
+	
+	# !!! Maybe when getting load tasks, also have returned info about what mesh pieces each 
+	# onloading chunk should mesh/remesh with the context of what the surrounding chunks will be?
 	
 	# handle worker thread pool
 	

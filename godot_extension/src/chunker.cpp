@@ -5,6 +5,7 @@
 #include "world_data.hpp"
 
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 #include "godot_cpp/variant/vector3i.hpp"
@@ -69,11 +70,13 @@ godot::Array GDE::chunker_get_load_work(godot::Vector3i from_chuord, int max_onl
 }
 
 void GDE::chunker_onload_chunk(godot::Vector3i chuord) {
-	
+	WorldChunk new_world_chunk;
+	//new_world_chunk.generate();
+	world_chunks_map.insert_or_assign(std::pair(chuord, std::move(new_world_chunk)));
 }
 
 void GDE::chunker_offload_chunk(godot::Vector3i chuord) {
-	
+	world_chunks_map.erase(chuord);
 }
 
 void chunker::placeholder_unique_function() {
