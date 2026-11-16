@@ -6,6 +6,7 @@
 #pragma once
 
 #include "godot_cpp/classes/object.hpp"
+#include <godot_cpp/classes/rendering_server.hpp>
 #include "godot_cpp/variant/array.hpp"
 #include "godot_cpp/variant/vector3i.hpp"
 
@@ -16,6 +17,9 @@ protected:
 	static void _bind_methods();
 
 public:
+	godot::RenderingServer *rendering_server;
+	void initialize_rendering_server_pointer();
+	
 	void test_function();
 	void initialize_chunk_load_utils(float new_chunk_onload_radius, float new_chunk_offload_radius);
 	godot::Array get_chunk_lengths();

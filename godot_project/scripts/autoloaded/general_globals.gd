@@ -3,6 +3,7 @@ extends Node
 var draw_debug_chunkborders: bool = true
 
 func _ready():
+	GDE.initialize_rendering_server_pointer()
 	_initialize_window_title()
 
 func _initialize_window_title():
