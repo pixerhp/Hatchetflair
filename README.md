@@ -30,4 +30,9 @@ Roughly expected gameplay:
 - Mid-game: More stably living with some infrastructure setup, probably with a home base and potentially also with an NPC friend or two, but now craving materials largely found in much more dangerous places for further development. You may prepare for and start expeditioning into places teeming with greater hazards and threatening lifeforms, probably dying several times as you make discoveries and lay down helpful infrastructure.
 - Late-game: More comfortable living using advanced tech and infrastructure. Along with your closer friends, there may be small towns of NPCs with specialized professions. You'll probably continue returning to already explored regenerating areas for more resources, and may now occasionally explore mysterious yet-even-more-dangerous biomes for valuables/exotics.
 
-<h5>(Updated 2026/1/14)</h5>
+## AI Usage Disclaimer
+GitHub Copilot is situationally used as a coding assistance tool for the C++ side of the project, typically to check existing code for potential bugs/issues or to help me implement things that I want to implement. (I design the codebase's architecture myself, and I always thoroughly review and commonly make lots of changes to anything that Copilot generates.) I also sometimes use Google's AI Overview while researching things.
+
+No AI was/is used for any of the game's ideas, or for any of its assets (text, art, audio, etc).
+
+<h6>(README last updated 2026/11/16)</h6>
