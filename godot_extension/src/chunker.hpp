@@ -1,6 +1,6 @@
 /*  CHUNKER OVERVIEW
-    Handles chunk loading, terrain generation, and various meshing work, 
-    implemented such that those tasks can be safely run by multiple threads in parallel.
+    Handles the higher-level logic of chunk loading, generation, meshing, (etc.),
+    implemented in a thread-safe way so that multiple threads can work on chunker tasks in parallel.
 */
 
 #pragma once

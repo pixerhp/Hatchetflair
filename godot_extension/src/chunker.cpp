@@ -2,14 +2,17 @@
 #include "gde.hpp"
 
 #include "chunk_load_utils.hpp"
+#include "chunk_mesh_utils.hpp"
 #include "world_data.hpp"
 
 #include <algorithm>
+#include <optional>
 #include <utility>
 #include <vector>
 
-#include "godot_cpp/variant/vector3i.hpp"
 #include <godot_cpp/variant/typed_array.hpp>
+#include "godot_cpp/variant/utility_functions.hpp"
+#include "godot_cpp/variant/vector3i.hpp"
 
 godot::Array GDE::chunker_get_load_work(godot::Vector3i from_chuord, int max_onload, int max_offload) {
 	std::vector<godot::Vector3i> onload_tasks = {};
@@ -70,12 +73,26 @@ godot::Array GDE::chunker_get_load_work(godot::Vector3i from_chuord, int max_onl
 }
 
 void GDE::chunker_onload_chunk(godot::Vector3i chuord) {
+	if (world_chunks_map.contains(chuord)) {
+		godot::UtilityFunctions::push_error(
+			"Attempted to onload chunk that already exists: (", chuord, "), this is likely unintended behavior."
+		);
+	}
 	WorldChunk new_world_chunk;
+	if (!chunk_mesh_utils::create_test_mesh(rendering_server, chuord, new_world_chunk)) { // !!! double check this later
+		return;
+	}
 	//new_world_chunk.generate();
 	world_chunks_map.insert_or_assign(std::pair(chuord, std::move(new_world_chunk)));
 }
 
 void GDE::chunker_offload_chunk(godot::Vector3i chuord) {
+	const std::optional<WorldChunk> world_chunk = world_chunks_map.get(chuord);
+	if (world_chunk.has_value()) {
+		if (!chunk_mesh_utils::free_test_mesh(rendering_server, *world_chunk)) { // !!! double check this later
+			return;
+		}
+	}
 	world_chunks_map.erase(chuord);
 }
 

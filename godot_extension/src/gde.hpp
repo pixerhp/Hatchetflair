@@ -17,9 +17,10 @@ protected:
 	static void _bind_methods();
 
 public:
-	godot::RenderingServer *rendering_server;
+	godot::RenderingServer *rendering_server = nullptr;
 	void initialize_rendering_server_pointer();
-	
+	void initialize_chunks_render_scenario(godot::RID scenario);
+
 	void test_function();
 	void initialize_chunk_load_utils(float new_chunk_onload_radius, float new_chunk_offload_radius);
 	godot::Array get_chunk_lengths();

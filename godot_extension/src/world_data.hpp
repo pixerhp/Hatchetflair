@@ -5,10 +5,12 @@
 #pragma once
 
 #include "concurrent_map_template.hpp"
+#include "godot_cpp/variant/rid.hpp"
 #include "godot_cpp/variant/vector3i.hpp"
 
 #include <cstdint>
 
+godot::RID &get_chunks_render_scenario(); // !!! double check this usage
 
 const int WORLD_CHUNK_LEN = 16;
 const int TERRAIN_MESH_CHUNK_LEN = 32;
@@ -45,6 +47,11 @@ struct WorldChunk {
     // [liquids?]
     //std::vector<StructurePart> structure_parts;
     // ... [plants if they're not considered structures?, buried objects maybe?]
+
+    // !!! Storing these in world chunks is only temporary (for render testing purposes), 
+    // and should be replaced later by proper handling of mesh chunk stuff.
+    godot::RID test_mesh;
+    godot::RID test_mesh_instance;
 
     //void generate(int seed = 0, maybe also time parameter);
 };
