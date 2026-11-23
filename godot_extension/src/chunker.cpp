@@ -15,7 +15,7 @@
 #include "godot_cpp/variant/vector3i.hpp"
 
 godot::Array GDE::chunker_get_load_work(godot::Vector3i from_chuord, int max_onload, int max_offload) {
-	std::vector<godot::Vector3i> onload_tasks = {};
+	godot::TypedArray<godot::Vector3i> onload_tasks = {};
 	if(max_onload == -1) {
 		max_onload = INT_MAX;
 	} else {
@@ -24,7 +24,7 @@ godot::Array GDE::chunker_get_load_work(godot::Vector3i from_chuord, int max_onl
 		}
 		onload_tasks.reserve(max_onload);
 	}
-	std::vector<godot::Vector3i> offload_tasks = {};
+	godot::TypedArray<godot::Vector3i> offload_tasks = {};
 	if(max_offload == -1) {
 		max_offload = INT_MAX;
 	} else {
@@ -57,15 +57,6 @@ godot::Array GDE::chunker_get_load_work(godot::Vector3i from_chuord, int max_onl
 		}
 	}
 
-	// Format the onload/offload work into Godot arrays, and return:
-	godot::TypedArray<godot::Vector3i> godot_onload_array;
-	for(const godot::Vector3i &chuord : onload_tasks) {
-		godot_onload_array.push_back(chuord);
-	}
-	godot::TypedArray<godot::Vector3i> godot_offload_array;
-	for(const godot::Vector3i &chuord : offload_tasks) {
-		godot_offload_array.push_back(chuord);
-	}
 	godot::Array result;
 	result.push_back(godot_onload_array);
 	result.push_back(godot_offload_array);
