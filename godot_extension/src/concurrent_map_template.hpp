@@ -11,6 +11,8 @@
 #include <utility>
 #include <vector>
 
+// !!! TODO Consider using an unordered map instead of ordered map.
+
 template <typename Key, typename Value, typename Compare = std::less<Key>>
 class ConcurrentMap {
     private:

@@ -45,7 +45,7 @@ struct WorldChunk {
     uint64_t seed = 0;
     TerrTile terrtiles[WORLD_CHUNK_LEN][WORLD_CHUNK_LEN][WORLD_CHUNK_LEN];
     // [liquids?]
-    //std::vector<StructurePart> structure_parts;
+    std::vector<StructurePart> structure_parts;
     // ... [plants if they're not considered structures?, buried objects maybe?]
 
     // !!! Storing these in world chunks is only temporary (for render testing purposes), 
